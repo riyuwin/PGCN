@@ -51,7 +51,7 @@ app.get("/accounts", (req, res) => {
         if (err) return res.status(500).json({ error: err });
         res.json(results);
     });
-}); 
+});
 
 app.get("/basic_information", (req, res) => {
     db.query("SELECT * FROM basic_information", (err, results) => {
@@ -93,7 +93,7 @@ app.post("/create_account", (req, res) => {
                     console.error("Transaction Error:", err);
                     return res.status(500).json({ error: err.message });
                 }
-            
+
                 connection.beginTransaction((err) => {
                     if (err) {
                         console.error("Transaction Error:", err);
@@ -101,7 +101,7 @@ app.post("/create_account", (req, res) => {
                             res.status(500).json({ error: err.message });
                         });
                     }
-            
+
                     // Insert into accounts table with hashed password
                     connection.query(insertAccountQuery, [email, hashedPassword, membership, currentDate], (err, accountResult) => {
                         if (err) {
@@ -110,9 +110,9 @@ app.post("/create_account", (req, res) => {
                                 res.status(500).json({ error: err.message });
                             });
                         }
-            
+
                         const accountId = accountResult.insertId;
-            
+
                         // Insert into basic_information table with the account_id
                         connection.query(insertBasicInfoQuery, [accountId, firstName, middleName, lastName, extName, gender, birthday, phoneNumber, address], (err, infoResult) => {
                             if (err) {
@@ -121,7 +121,7 @@ app.post("/create_account", (req, res) => {
                                     res.status(500).json({ error: err.message });
                                 });
                             }
-            
+
                             // Commit transaction
                             connection.commit((err) => {
                                 if (err) {
@@ -137,7 +137,7 @@ app.post("/create_account", (req, res) => {
                     });
                 });
             });
-            
+
         });
     });
 });
@@ -209,7 +209,7 @@ app.post("/logout", (req, res) => {
     if (!req.session) {
         return res.status(400).json({ error: "No active session" });
     }
-    
+
     req.session.destroy((err) => {
         if (err) {
             console.error("Session destruction error:", err);
@@ -221,12 +221,12 @@ app.post("/logout", (req, res) => {
 
 
 app.post("/insert_hospital_bill", (req, res) => {
-    const { 
+    const {
         account_id,
-        patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+        patientFirstName, patientMiddleName, patientLastName, patientExtName,
         patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
-        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount 
-    } = req.body;     
+        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount
+    } = req.body;
 
     const sanitizedHospital = patientHospital && patientHospital.trim() !== "" ? patientHospital : null;
     const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
@@ -256,9 +256,9 @@ app.post("/insert_hospital_bill", (req, res) => {
             connection.query(insertHospitalBillQuery, [
                 account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
                 patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
-                claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, 
+                claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                 claimantAmount, currentDateTime
-            ], (err, result) => {        
+            ], (err, result) => {
                 if (err) {
                     console.error("Hospital Bill Insertion Error:", err.sqlMessage || err);
                     return connection.rollback(() => {
@@ -285,12 +285,12 @@ app.post("/insert_hospital_bill", (req, res) => {
 });
 
 app.post("/update_hospital_bill", (req, res) => {
-    const { 
+    const {
         billId, account_id,
-        patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+        patientFirstName, patientMiddleName, patientLastName, patientExtName,
         patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
-        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount 
-    } = req.body;     
+        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount
+    } = req.body;
 
     const sanitizedHospital = patientHospital && patientHospital.trim() !== "" ? patientHospital : null;
     const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
@@ -334,9 +334,9 @@ app.post("/update_hospital_bill", (req, res) => {
             }
 
             connection.query(updateHospitalBillQuery, [
-                account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+                account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
                 patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
-                claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, 
+                claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                 claimantAmount, currentDateTime, billId
             ], (err, result) => {
                 if (err) {
@@ -369,7 +369,7 @@ app.post("/update_hospital_bill", (req, res) => {
     });
 });
 
- 
+
 app.get("/retrieve_hospital_bill", (req, res) => {
     db.query("SELECT * FROM hospital_bill", (err, results) => {
         if (err) {
@@ -383,7 +383,7 @@ app.get("/retrieve_hospital_bill", (req, res) => {
 
 app.post("/delete_hospital_bill", (req, res) => {
     const { billId } = req.body;
- 
+
 
     // Ensure that billId is provided
     if (!billId) {
@@ -414,15 +414,15 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
 app.post("/insert_burial_assistance", upload.single("deathCertificate"), (req, res) => {
-    const { 
+    const {
         account_id,
-        deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName, 
-        deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate, 
+        deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName,
+        deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
-        contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded, 
+        contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
         burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId, remarks,
         currentDateTime
-    } = req.body;  
+    } = req.body;
 
     console.log(
         contactPersonEncoded, 'Testttt'
@@ -456,13 +456,13 @@ app.post("/insert_burial_assistance", upload.single("deathCertificate"), (req, r
 
             connection.query(insertBurialAssistanceQuery, [
                 account_id,
-                deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName, 
+                deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName,
                 deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate, deathCertificate,
                 contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
-                contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded, 
-                burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId, 
+                contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
+                burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId,
                 remarks, currentDateTime
-            ], (err, result) => {        
+            ], (err, result) => {
                 if (err) {
                     console.error("Burial Assistance Insertion Error:", err.sqlMessage || err);
                     return connection.rollback(() => {
@@ -496,12 +496,43 @@ app.get("/retrieve_burial_assistance", (req, res) => {
         // Convert BLOB to Base64 if it exists
         const burialRecords = results.map(row => ({
             ...row,
-            death_certificate: row.death_certificate 
-                ? Buffer.from(row.death_certificate).toString("base64") 
+            death_certificate: row.death_certificate
+                ? Buffer.from(row.death_certificate).toString("base64")
                 : null
         }));
 
         res.json(burialRecords);
+    });
+});
+
+app.get("/retrieve_burial_assistance_id", (req, res) => {
+    const { burialId } = req.query; // Use req.query instead of req.body for GET requests
+
+    if (!burialId) {
+        return res.status(400).json({ error: "Missing burialId parameter." });
+    }
+
+    const sqlQuery = "SELECT * FROM burial_assistance WHERE burial_id = ?";
+
+    db.query(sqlQuery, [burialId], (err, results) => {
+        if (err) {
+            console.error("Error retrieving burial assistance records:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "No records found." });
+        }
+
+        // Convert BLOB to Base64 if it exists
+        const burialRecords = results.map(row => ({
+            ...row,
+            death_certificate: row.death_certificate
+                ? Buffer.from(row.death_certificate).toString("base64")
+                : null
+        }));
+
+        res.json(burialRecords[0]); // Send only the first record
     });
 });
 
@@ -512,8 +543,8 @@ app.post("/update_burial_assistance", upload.single("deathCertificate"), (req, r
         deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName,
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
-        contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded, 
-        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId, 
+        contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
+        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId,
         remarks, currentDateTime
     } = req.body;
 
@@ -534,8 +565,8 @@ app.post("/update_burial_assistance", upload.single("deathCertificate"), (req, r
         deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName,
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
-        contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded, 
-        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId, 
+        contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
+        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId,
         remarks, currentDateTime
     ];
 
@@ -564,7 +595,7 @@ app.post("/update_burial_assistance", upload.single("deathCertificate"), (req, r
 
 app.post("/delete_burial_assistance", (req, res) => {
     const { burialId } = req.body;
- 
+
     if (!burialId) {
         return res.status(400).json({ error: "burialId is required." });
     }
@@ -582,7 +613,7 @@ app.post("/delete_burial_assistance", (req, res) => {
         if (results.affectedRows === 0) {
             return res.status(404).json({ error: "Burial assistance not found." });
         }
- 
+
         res.json({ message: "Burial assistance deleted successfully!" });
     });
 });
