@@ -196,7 +196,7 @@ function DashboardContent() {
                         <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-body">
-                                    <h5 className="card-title">Patient Records Trend</h5>
+                                    <h5 className="card-title">Patient Records Trend123</h5>
                                     <Chart options={pieChartData.options} series={pieChartData.series} type="pie" height={350} />
                                 </div>
                             </div>
