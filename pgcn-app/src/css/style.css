@@ -4,7 +4,8 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: rgba(249, 249, 249, 0.757);
+  /* background: rgba(249, 249, 249, 0.757); */
+  background: white;
   color: #444444;
   height: 100%;
 }
