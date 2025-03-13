@@ -65,7 +65,7 @@ function ViewBurialRecordContent() {
 
     const fetchBurialAssistance = async (burialId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_burial_assistance_id?burialId=${burialId}`);
+            const response = await fetch(`http://localhost:5000/retrieve_alay_pagdamay_id?burialId=${burialId}`);
             const data = await response.json();
 
             PopulateForms(data);

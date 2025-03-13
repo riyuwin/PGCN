@@ -86,8 +86,47 @@ function ManageReportContent(){
         ]
 
     };
+
+    // BURIAL ASSISTANCE - Variables for inputs -------------------------------------------------------
+    const [burialId, setBurialId] = useState('');
+    const [deceasedFirstName, setDeceasedFirstName] = useState('');
+    const [deceasedMiddleName, setDeceasedMiddleName] = useState('');
+    const [deceasedLastName, setDeceasedLastName] = useState('');
+    const [deceasedExtName, setDeceasedExtName] = useState('');  
+
+    const [deceasedPurok, setDeceasedPurok] = useState('');
+    const [deceasedBarangay, setDeceasedBarangay] = useState('');
+    const [deceasedMunicipality, setDeceasedMunicipality] = useState('');
+    const [deceasedProvince, setDeceasedProvince] = useState('Camarines Norte'); 
+    const [deceasedBarangayList, setDeceasedBarangayList] = useState([]);  
+
+    const [deceasedGender, setDeceasedGender] = useState('');
+    const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
+    const [deathCertificate, setDeathCertificate] = useState(null);
+    const [deathCertificatePreview, setDeathCertificatePreview] = useState(null);
+
+
+    const [contactPersonFirstname, setContactPersonFname] = useState('');
+    const [contactPersonMiddlename, setContactPersonMname] = useState('');
+    const [contactPersonLastname, setContactPersonLname] = useState('');
+    const [contactPersonExtName, setContactPersonExtName] = useState('');
+    const [contactNumber, setContactNumber] = useState('');
+    const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
+    const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
+    const [contactPersonEncoded, setContactPersonEncoded] = useState('');
     
-    // Variables for inputs ------------------------------------------------------------
+    const [burialStatus, setBurialStatus] = useState(''); 
+    const [checkedItems, setCheckedItems] = useState({
+        checkBarangayIndigency: false, 
+        checkDeathCertificate: false,
+        checkFuneralContract: false,
+        checkValidId: false
+    });
+    
+    const [remarks, setRemarks] = useState('');
+    // BURIAL ASSISTANCE - Variables for inputs -------------------------------------------------------
+    
+    // HOSPITAL BILL - Variables for inputs ------------------------------------------------------------
     const [billId, setHospitalId] = useState('');
     const [patientFirstName, setPatientFirstName] = useState('');
     const [patientMiddleName, setPatientMiddleName] = useState('');
@@ -103,10 +142,11 @@ function ManageReportContent(){
     const [claimantRelationship, setClaimantRelationship] = useState('');
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
-    // Variables for inputs ------------------------------------------------------------ 
+    // HOSPITAL BILL - Variables for inputs ------------------------------------------------------------ 
 
     // Variables for hospital bills
     const [hospitalBills, setHospitalBills] = useState([]);
+    const [burialAssistance, setBurialAsisstanceData] = useState([]);
 
     const [selectedBill, setSelectedBill] = useState(null);
 
@@ -115,11 +155,26 @@ function ManageReportContent(){
     useEffect(() => {
         if (transactions !== "" && startDate !== "" && endDate !== "") {
             setGenerateButton(true); 
-            fetchHospitalBills();  
+
+            if (transactions === "Hospital Bill"){
+                fetchHospitalBills();  
+            } else if (transactions === "Burial Assistance"){
+                fetchBurialAssitance();
+            }
         } else {
             setGenerateButton(false);
         }
     }, [transactions, startDate, endDate]); // ✅ Runs when any of these values change 
+
+    const fetchBurialAssitance = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_burial_assistance");
+            const data = await response.json();
+            setBurialAsisstanceData(data);
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
 
     const fetchHospitalBills = async () => {
         try {
@@ -130,9 +185,47 @@ function ManageReportContent(){
             console.error("Error fetching hospital bills:", error);
         }
     };
+    
+    const [filteredRecords, setAssistanceRecord] = useState([]);
+    useEffect(() => {
+        if (transactions === "Hospital Bill") {
+            const records = hospitalBills.filter((bill) => {
+                const billDate = new Date(bill.datetime_added);
+                const start = startDate ? new Date(startDate) : null;
+                const end = endDate ? new Date(endDate) : null;
+    
+                return (
+                    (!start || billDate >= start) &&
+                    (!end || billDate <= end) &&
+                    (patientMunicipality === "All" || bill.patient_municipality === patientMunicipality || patientMunicipality === "") &&
+                    (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "")
+                );
+            });
+    
+            setAssistanceRecord(records);
+        } 
+        else if (transactions === "Burial Assistance") {
+            const records = burialAssistance.filter((burial) => { 
+                const burialDate = new Date(burial.savedAt);
+                const start = startDate ? new Date(startDate) : null;
+                const end = endDate ? new Date(endDate) : null;
+    
+                return (
+                    (!start || burialDate >= start) &&
+                    (!end || burialDate <= end) &&
+                    (patientMunicipality === "All" || burial.deceased_municipality === patientMunicipality || patientMunicipality === "") &&
+                    (patientBarangay === "All" || burial.deceased_barangay === patientBarangay || patientBarangay === "")
+                );
+            });
+            
+            console.log("Test burial: ", records)
+    
+            setAssistanceRecord(records);
+        }
+    }, [transactions, hospitalBills, burialAssistance, startDate, endDate, patientMunicipality, patientBarangay, deceasedMunicipality, deceasedBarangay]);     
 
-    // Filter hospital bills based on startDate and endDate 
-    const filteredRecords = hospitalBills.filter((bill) => {
+
+    /* filteredRecords = hospitalBills.filter((bill) => {
         const billDate = new Date(bill.datetime_added);
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
@@ -143,11 +236,7 @@ function ManageReportContent(){
             (patientMunicipality === "All" || bill.patient_municipality === patientMunicipality || patientMunicipality === "") &&
             (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "")
         );
-    });
-    
-    
-    
-    
+    }); */
 
     // Pagination Logic
     const [currentPage, setCurrentPage] = useState(1);
@@ -160,33 +249,77 @@ function ManageReportContent(){
 
     
     // Open modal and set selected bill
-    const handlePopulateDetails = (bill) => {
-        setSelectedBill(bill); 
-        PopulateForms(bill);
+    const handlePopulateDetails = (data, transactionName) => {
+        PopulateForms(data, transactionName);
     };
 
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
     
-    const PopulateForms = (bill) => {
-        setHospitalId(bill['hospital_bill_id']);
-        setPatientFirstName(bill['patient_fname']);
-        setPatientMiddleName(bill['patient_mname']);
-        setPatientLastName(bill['patient_lname']);
-        setPatientExtName(bill['patient_ext_name']);
-        setPatientPurok(bill['patient_purok']);
-        setPatientBarangay(bill['patient_barangay']);
-        setPatientMunicipality(bill['patient_municipality']);
-        setPatientProvince(bill['patient_province']);
-        setPatientHospital(bill['patient_hospital']);
-        setClaimantFname(bill['claimant_fname']);
-        setClaimantMname(bill['claimant_mname']);
-        setClaimantLname(bill['claimant_lname']);
-        setClaimantExtName(bill['claimant_extname']);
-        setClaimantRelationship(bill['claimant_relationship']);
-        setClaimantContact(bill['claimant_contact']);
-        setClaimantAmount(bill['claimant_amount']); 
+    const PopulateForms = (data, transactionName) => {
+        if (transactionName === "Hospital Bill"){
+            setHospitalId(data['hospital_bill_id']);
+            setPatientFirstName(data['patient_fname']);
+            setPatientMiddleName(data['patient_mname']);
+            setPatientLastName(data['patient_lname']);
+            setPatientExtName(data['patient_ext_name']);
+            setPatientPurok(data['patient_purok']);
+            setPatientBarangay(data['patient_barangay']);
+            setPatientMunicipality(data['patient_municipality']);
+            setPatientProvince(data['patient_province']);
+            setPatientHospital(data['patient_hospital']);
+            setClaimantFname(data['claimant_fname']);
+            setClaimantMname(data['claimant_mname']);
+            setClaimantLname(data['claimant_lname']);
+            setClaimantExtName(data['claimant_extname']);
+            setClaimantRelationship(data['claimant_relationship']);
+            setClaimantContact(data['claimant_contact']);
+            setClaimantAmount(data['claimant_amount']);     
+
+        } else if (transactionName === "Burial Assistance"){
+
+            setBurialId(data['burial_id']);
+            setDeceasedFirstName(data['deceased_fname']);
+            setDeceasedMiddleName(data['deceased_mname']);
+            setDeceasedLastName(data['deceased_lname']);
+            setDeceasedExtName(data['deceased_ext_name']); 
+            setDeceasedPurok(data['deceased_purok']);
+            setDeceasedBarangay(data['deceased_barangay']);
+            setDeceasedMunicipality(data['deceased_municipality']);
+            setDeceasedProvince(data['deceased_province']);
+            setDeceasedGender(data['deceased_gender']);
+            setDeceasedDeathDate(data['deceased_deathdate']);
+            setContactPersonFname(data['contact_fname']);
+            setContactPersonMname(data['contact_mname']);
+            setContactPersonLname(data['contact_lname']);
+            setContactPersonExtName(data['contact_ext_name']);
+            setContactNumber(data['contact_number']);
+            setContactPersonServiceCovered(data['contact_service_covered']);
+            setContactPersonFuneralCovered(data['contact_funeral_service']);
+            setContactPersonEncoded(data['contact_person_encoded']);
+            
+            setBurialStatus(data['burial_status']); 
+            setCheckedItems({
+                checkBarangayIndigency: data['check_barangay_indigency'] === 1 || data['check_barangay_indigency'] === "true",
+                checkDeathCertificate: data['check_death_certificate'] === 1 || data['check_death_certificate'] === "true",
+                checkFuneralContract: data['check_funeral_contract'] === 1 || data['check_funeral_contract'] === "true",
+                checkValidId: data['check_valid_id'] === 1 || data['check_valid_id'] === "true",
+            });
+            
+    
+            setRemarks(data['remarks']);
+            
+            // Convert BLOB to Base64 if it's present
+            if (data['death_certificate']) {
+                const base64String = `data:image/png;base64,${data['death_certificate']}`;
+                setDeathCertificate(base64String); // Set as image src
+                setDeathCertificatePreview(base64String);
+            } else {
+                setDeathCertificate(null);
+                setDeathCertificatePreview(null);
+            }
+        }
     }
 
     const ResetForms = () => {
@@ -398,32 +531,7 @@ function ManageReportContent(){
                                                                                     <th>Action</th>
                                                                                 </tr>
                                                                             </thead>
-                                                                            <tbody>
-                                                                                {/* {currentRecords.length > 0 ? (
-                                                                                    currentRecords.map((bill, index) => (
-                                                                                        <tr key={bill.id}>
-                                                                                            <td>{indexOfFirstRecord + index + 1}</td>
-                                                                                            <td>{`${bill.patient_fname} ${bill.patient_mname} ${bill.patient_lname} ${bill.patient_ext_name || ""}`}</td>
-                                                                                            <td>{`${bill.claimant_fname} ${bill.claimant_mname} ${bill.claimant_lname} ${bill.claimant_extname || ""}`}</td>
-                                                                                            <td>{bill.patient_municipality}</td>
-                                                                                            <td>{bill.patient_barangay}</td>
-                                                                                            <td>{bill.claimant_contact}</td>
-                                                                                            <td>{new Date(bill.datetime_added).toLocaleString()}</td>
-                                                                                            <td>
-                                                                                                <button className="btn btn-link" 
-                                                                                                    onClick={() => handlePopulateDetails(bill)}
-                                                                                                    data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
-                                                                                                    View
-                                                                                                </button> 
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    ))
-                                                                                ) : (
-                                                                                    <tr>
-                                                                                        <td colSpan="6" className="text-center">No records found</td>
-                                                                                    </tr>
-                                                                                )} */}
+                                                                            <tbody> 
                                                                                 {filteredRecords.length > 0 ? (
                                                                                     filteredRecords.map((bill, index) => (
                                                                                         <tr key={bill.id}>
@@ -436,7 +544,144 @@ function ManageReportContent(){
                                                                                             <td>{new Date(bill.datetime_added).toLocaleString()}</td>
                                                                                             <td>
                                                                                                 <button className="btn btn-link" 
-                                                                                                    onClick={() => handlePopulateDetails(bill)}
+                                                                                                    onClick={() => handlePopulateDetails(bill, transactions)}
+                                                                                                    data-bs-toggle="modal"
+                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    View
+                                                                                                </button> 
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    ))
+                                                                                ) : (
+                                                                                    <tr>
+                                                                                        <td colSpan="8" className="text-center">No records found</td>
+                                                                                    </tr>
+                                                                                )}
+
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                        <br />
+
+                                                                        {/* Pagination Controls */}
+                                                                        <div className="d-flex justify-content-between mt-3">
+                                                                            <button 
+                                                                                className="btn btn-secondary"
+                                                                                disabled={currentPage === 1}
+                                                                                onClick={() => setCurrentPage(currentPage - 1)}
+                                                                            >
+                                                                                Previous
+                                                                            </button>
+                                                                            <span>Page {currentPage} of {totalPages}</span>
+                                                                            <button 
+                                                                                className="btn btn-secondary"
+                                                                                disabled={currentPage === totalPages}
+                                                                                onClick={() => setCurrentPage(currentPage + 1)}
+                                                                            >
+                                                                                Next
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> 
+                                                            </div>
+                                                        </> 
+                                                    }
+
+
+                                                    { transactions === "Burial Assistance" && 
+                                                        <> 
+                                                            <div className="row">
+                                                                
+                                                                <div className="col-sm-12">
+                                                                    <hr/><br/>
+                                                                    <label className="form-label mb-0">Filter Address:</label>
+                                                                    <br/><br/>
+                                                                </div>
+ 
+                                                                
+                                                                <div className="col-sm-3"> 
+                                                                    <div className="input-group">
+                                                                        <label className="form-label">Province: </label>
+                                                                        
+                                                                        <select
+                                                                            className="form-control"
+                                                                            id="hospital"
+                                                                            disabled={true}>
+                                                                                <option value="">Camarines Norte</option> 
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div className="col-3"> 
+                                                                    <label className="form-label">Municipality:</label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        value={patientMunicipality}
+                                                                        onChange={handleMunicipalityChange}
+                                                                    >
+                                                                        <option value="All">All</option>
+                                                                        {Object.keys(municipalityBarangays).map((municipality) => (
+                                                                            <option key={municipality} value={municipality}>
+                                                                                {municipality}
+                                                                            </option>
+                                                                        ))}
+                                                                    </select>
+                                                                </div>
+                            
+                                                                <div className="col-3"> 
+                                                                    <label className="form-label">Barangay:</label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        value={patientBarangay}
+                                                                        onChange={(e) => setPatientBarangay(e.target.value.trim())}
+                                                                        /* disabled={barangayList.length === 0} */
+                                                                    >
+                                                                        <option value="">All</option>
+                                                                        {barangayList.map((barangay) => (
+                                                                            <option key={barangay} value={barangay}>
+                                                                                {barangay}
+                                                                            </option>
+                                                                        ))} : {
+                                                                            <option key={patientBarangay} value={patientBarangay}>
+                                                                                {patientBarangay}
+                                                                            </option>
+                                                                        }
+                                                            
+                                                                    </select>
+                                                                </div>
+
+                                                                <div className="col-sm-12">
+                                                                    <br />
+                                                                    <div className="table-responsive">
+                                                                        <table className="table datatable table-custom">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>No.</th>
+                                                                                    <th>Deceased Name</th>
+                                                                                    <th>Date of Death</th>
+                                                                                    <th>Deceased Municipality</th>
+                                                                                    <th>Deceased Barangay</th>
+                                                                                    <th>Contact Person</th>
+                                                                                    <th>Contact Number</th>
+                                                                                    <th>Date Registered</th> 
+                                                                                    <th>Action</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody> 
+                                                                                {filteredRecords.length > 0 ? (
+                                                                                    filteredRecords.map((burial, index) => (
+                                                                                        <tr key={burial.burial_id}>
+                                                                                            <td>{indexOfFirstRecord + index + 1}</td>
+                                                                                            <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
+                                                                                            <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
+                                                                                            <td>{burial.deceased_municipality}</td> 
+                                                                                            <td>{burial.deceased_barangay}</td>
+                                                                                            <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_ext_name || ""}`}</td>
+                                                                                            <td>{burial.contact_number}</td> 
+                                                                                            <td>{new Date(burial.savedAt).toLocaleString()}</td>
+                                                                                            <td>
+                                                                                                <button className="btn btn-link" 
+                                                                                                    onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
                                                                                                     data-bs-target="#viewReportModal">
                                                                                                     View
@@ -506,120 +751,189 @@ function ManageReportContent(){
 
                         <div className="modal-body">
 
-                            <div className="generateContainer">
-                                
-                                <h5>Generate Reports: </h5>
-                                <br />
-                                <div className="row">  
-                                    <div className="col-4">
-                                        <button 
-                                            type="button" 
-                                            className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`} 
-                                            onClick={() => handleFormPageUpdate("Form 1")}
-                                        >
-                                            <i className='bx bxs-file-pdf' ></i> Form 1
-                                        </button>
-                                    </div>
+                            { transactions === "Hospital Bill" && 
+                                <>
+                                    <div className="generateContainer">
+                                        <h5>Generate Forms: </h5>
+                                        <br />
 
-                                    <div className="col-4">
-                                        <button 
-                                            type="button" 
-                                            className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`} 
-                                            onClick={() => handleFormPageUpdate("Form 2")}
-                                        >
-                                            <i className='bx bxs-file-pdf' ></i> Form 2
-                                        </button>
-                                    </div>
+                                        <div className="row">  
+                                            <div className="col-4">
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Form 1")}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Form 1
+                                                </button>
+                                            </div>
 
-                                    <div className="col-4">
-                                        <button 
-                                            type="button" 
-                                            className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`} 
-                                            onClick={() => handleFormPageUpdate("Form 3")}
-                                        >
-                                            <i className='bx bxs-file-pdf' ></i> Form 3
-                                        </button>
-                                    </div>
+                                            <div className="col-4">
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Form 2")}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Form 2
+                                                </button>
+                                            </div>
 
-  
+                                            <div className="col-4">
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Form 3")}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Form 3
+                                                </button>
+                                            </div>
 
-                                </div>  
-                            </div> 
+        
 
-                            <div className="generateContainer"> 
-                                <br />
- 
-                                { formPage == "Form 1" && 
-                                    <>
-                                        <div className="col-12 d-flex justify-content-end"> 
-                                            <button 
-                                                type="button" 
-                                                className={`btn w-500  btn-secondary`}  
-                                                onClick={handleDownload}
-                                            >
-                                                <i className='bx bxs-file-pdf' ></i> Download
-                                            </button>
-                                        </div><br />
+                                        </div>  
+                                    </div> 
 
-                                        
-                                        <div className="formContainer">
-                                            <div className="row"> 
+                                    <div className="generateContainer"> 
+                                        <br />
+        
+                                        { formPage == "Form 1" && 
+                                            <>
+                                                <div className="col-12 d-flex justify-content-end"> 
+                                                    <button 
+                                                        type="button" 
+                                                        className={`btn w-500  btn-secondary`}  
+                                                        onClick={handleDownload}
+                                                    >
+                                                        <i className='bx bxs-file-pdf' ></i> Download
+                                                    </button>
+                                                </div><br />
 
-                                                <div className="col-12">
-                                                    <br />
-                                                    <br />
-                                                </div>
+                                                
+                                                <div className="formContainer">
+                                                    <div className="row"> 
 
-                                                <div className="col-4 d-flex justify-content-center">
-                                                    <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
-                                                </div>
+                                                        <div className="col-12">
+                                                            <br />
+                                                            <br />
+                                                        </div>
 
-                                                <div className="col-4 d-flex flex-column align-items-center header_form"> 
-                                                    <p>Republic of the Philippines</p> 
-                                                    <p>Province of the Camarines Norte</p> 
-                                                    <p>Dong Tulong</p> 
-                                                </div>
-            
-                                                <div className="col-4 d-flex justify-content-center">
-                                                    <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
-                                                </div>
+                                                        <div className="col-4 d-flex justify-content-center">
+                                                            <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
+                                                        </div>
 
-                                                <div className="col-12">
-                                                    <br/><hr/><br/>
-                                                </div>
+                                                        <div className="col-4 d-flex flex-column align-items-center header_form"> 
+                                                            <p>Republic of the Philippines</p> 
+                                                            <p>Province of the Camarines Norte</p> 
+                                                            <p>Dong Tulong</p> 
+                                                        </div>
+                    
+                                                        <div className="col-4 d-flex justify-content-center">
+                                                            <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
+                                                        </div>
+
+                                                        <div className="col-12">
+                                                            <br/><hr/><br/>
+                                                        </div>
 
 
-                                                <div className="col-12  d-flex flex-column align-items-start body_form">
-                                                    <div className="body_container">
-                                                        <h1>OFFICE OF THE GOVERNOR</h1><br/>
-                                                        <h2>GUARANTEE LETTER</h2><br/>
-                                                        <h3>{currentDate}</h3><br/><br/>
-                                                        <p className="guaranteeLetterContent"> 
-                                                            Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
-                                                        </p><br/><br/>
+                                                        <div className="col-12  d-flex flex-column align-items-start body_form">
+                                                            <div className="body_container">
+                                                                <h1>OFFICE OF THE GOVERNOR</h1><br/>
+                                                                <h2>GUARANTEE LETTER</h2><br/>
+                                                                <h3>{currentDate}</h3><br/><br/>
+                                                                <p className="guaranteeLetterContent"> 
+                                                                    Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
+                                                                </p><br/><br/>
 
-                                                        <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br/>
-                                                        <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+                                                                <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br/>
+                                                                <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
 
-                                                    </div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>   
                                                 </div> 
-                                            </div>   
-                                        </div> 
-                                    </> 
+                                            </> 
 
-                                    
-                                }
+                                        }
 
-                                { formPage == "Form 2" && 
-                                    <> 
+                                        { formPage == "Form 2" && 
+                                            <> 
 
-                                    </> 
-                                }
-                                
+                                            </> 
+                                        }
+                                        
 
-                            </div> 
+                                    </div>    
+                                </>
+                            }
 
-                            
+                            { transactions === "Burial Assistance" && 
+                                <>
+                                    <div className="generateContainer">
+                                        <h5>Generate Forms: </h5>
+                                        <br />
+
+                                        <div className="row">  
+                                            <div className="col-4">
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Form 1")}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Form 1
+                                                </button>
+                                            </div>
+
+                                            <div className="col-4">
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Form 2")}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Form 2
+                                                </button>
+                                            </div>
+
+                                            <div className="col-4">
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Form 3")}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Form 3
+                                                </button>
+                                            </div>
+
+        
+
+                                        </div>  
+                                    </div> 
+
+                                    <div className="generateContainer"> 
+                                        <br />
+        
+                                        { formPage == "Form 1" && 
+                                            <>
+                                                <div className="col-12 d-flex justify-content-end"> 
+                                                    <button 
+                                                        type="button" 
+                                                        className={`btn w-500  btn-secondary`}  
+                                                        onClick={handleDownload}
+                                                    >
+                                                        <i className='bx bxs-file-pdf' ></i> Download
+                                                    </button>
+                                                </div><br />
+ 
+                                            </> 
+
+                                        }
+ 
+                                        
+
+                                    </div>    
+                                </>
+                            }
+
                             
 
                         </div>

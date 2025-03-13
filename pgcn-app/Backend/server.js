@@ -413,7 +413,7 @@ app.post("/delete_hospital_bill", (req, res) => {
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
-app.post("/insert_burial_assistance", upload.single("deathCertificate"), (req, res) => {
+app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) => {
     const {
         account_id,
         deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName,
@@ -431,7 +431,7 @@ app.post("/insert_burial_assistance", upload.single("deathCertificate"), (req, r
     const deathCertificate = req.file ? req.file.path : null; // Store file path instead of binary
 
     const insertBurialAssistanceQuery = `
-        INSERT INTO burial_assistance 
+        INSERT INTO alay_pagdamay 
         (account_id, deceased_fname, deceased_mname, deceased_lname, deceased_ext_name, 
         deceased_purok, deceased_barangay, deceased_municipality, deceased_province, 
         deceased_gender, deceased_deathdate, death_certificate, contact_fname, contact_mname, contact_lname, contact_ext_name, contact_number,
@@ -486,8 +486,8 @@ app.post("/insert_burial_assistance", upload.single("deathCertificate"), (req, r
 });
 
 
-app.get("/retrieve_burial_assistance", (req, res) => {
-    db.query("SELECT * FROM burial_assistance", (err, results) => {
+app.get("/retrieve_alay_pagdamay", (req, res) => {
+    db.query("SELECT * FROM alay_pagdamay", (err, results) => {
         if (err) {
             console.error("Error retrieving burial assistance records:", err);
             return res.status(500).json({ error: "Database error." });
@@ -505,14 +505,14 @@ app.get("/retrieve_burial_assistance", (req, res) => {
     });
 });
 
-app.get("/retrieve_burial_assistance_id", (req, res) => {
+app.get("/retrieve_alay_pagdamay_id", (req, res) => {
     const { burialId } = req.query; // Use req.query instead of req.body for GET requests
 
     if (!burialId) {
         return res.status(400).json({ error: "Missing burialId parameter." });
     }
 
-    const sqlQuery = "SELECT * FROM burial_assistance WHERE burial_id = ?";
+    const sqlQuery = "SELECT * FROM alay_pagdamay WHERE burial_id = ?";
 
     db.query(sqlQuery, [burialId], (err, results) => {
         if (err) {
@@ -537,7 +537,7 @@ app.get("/retrieve_burial_assistance_id", (req, res) => {
 });
 
 
-app.post("/update_burial_assistance", upload.single("deathCertificate"), (req, res) => {
+app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) => {
     const {
         burialId, account_id,
         deceasedFirstName, deceasedMiddleName, deceasedLastName, deceasedExtName,
@@ -551,7 +551,7 @@ app.post("/update_burial_assistance", upload.single("deathCertificate"), (req, r
     const deathCertificate = req.file ? req.file.buffer : null;
 
     let updateBurialAssistanceQuery = `
-        UPDATE burial_assistance SET 
+        UPDATE alay_pagdamay SET 
         account_id = ?, deceased_fname = ?, deceased_mname = ?, deceased_lname = ?, deceased_ext_name = ?, 
         deceased_purok = ?, deceased_barangay = ?, deceased_municipality = ?, deceased_province = ?,
         deceased_gender = ?, deceased_deathdate = ?, contact_fname = ?, contact_mname = ?, contact_lname = ?, contact_ext_name = ?, contact_number = ?,
@@ -593,7 +593,7 @@ app.post("/update_burial_assistance", upload.single("deathCertificate"), (req, r
 });
 
 
-app.post("/delete_burial_assistance", (req, res) => {
+app.post("/delete_alay_pagdamay", (req, res) => {
     const { burialId } = req.body;
 
     if (!burialId) {
@@ -601,7 +601,7 @@ app.post("/delete_burial_assistance", (req, res) => {
     }
 
     // SQL query to delete the hospital bill by billId
-    const deleteBurialAssistanceQuery = "DELETE FROM burial_assistance WHERE burial_id = ?";
+    const deleteBurialAssistanceQuery = "DELETE FROM alay_pagdamay WHERE burial_id = ?";
 
     // Execute the DELETE query
     db.query(deleteBurialAssistanceQuery, [burialId], (err, results) => {

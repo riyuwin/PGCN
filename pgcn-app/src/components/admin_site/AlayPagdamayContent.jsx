@@ -6,7 +6,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import FetchLocalUserDetails from "./scripts/FetchLocalUser";  
 
-function ManageBurialContent(){
+function AlayPagdamayContent(){
     const { localUserDetails } = FetchLocalUserDetails();
     const [ account_id, setLocalUserId ] = useState(null);
     
@@ -135,7 +135,7 @@ function ManageBurialContent(){
         }
     
         try {
-            const response = await fetch("http://localhost:5000/insert_burial_assistance", {
+            const response = await fetch("http://localhost:5000/insert_alay_pagdamay", {
                 method: "POST",
                 body: formData // No need for `Content-Type`, fetch will set it automatically
             });
@@ -181,7 +181,7 @@ function ManageBurialContent(){
             if (swalResult.isConfirmed) {
                 try {
                     // Sending DELETE request to the backend
-                    const response = await fetch('http://localhost:5000/delete_burial_assistance', {
+                    const response = await fetch('http://localhost:5000/delete_alay_pagdamay', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -245,7 +245,7 @@ function ManageBurialContent(){
         }
     
         try {
-            const response = await fetch("http://localhost:5000/update_burial_assistance", {
+            const response = await fetch("http://localhost:5000/update_alay_pagdamay", {
                 method: "POST",
                 body: formData
             });
@@ -276,7 +276,7 @@ function ManageBurialContent(){
 
     const fetchBurialAssistance = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_burial_assistance");
+            const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay");
             const data = await response.json();
             setBurialAssitance(data);
 
@@ -500,13 +500,13 @@ function ManageBurialContent(){
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Manage Burial Assistance</h1>
+                    <h1>Alay Pagdamay</h1>
                     <nav>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">
                                 <a>Admin</a>
                             </li>
-                            <li className="breadcrumb-item active">Manage Burial Assistance</li>
+                            <li className="breadcrumb-item active">Alay Pagdamay</li>
                         </ol>
                     </nav>
                 </div>
@@ -524,7 +524,7 @@ function ManageBurialContent(){
                                             <div className="card info-card sales-card">
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <h5 className="card-title">List of Burial Assistance</h5>
+                                                        <h5 className="card-title">List of Alay Pagdamay</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
@@ -549,7 +549,7 @@ function ManageBurialContent(){
                                                                     data-bs-target="#addHospitalBillModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
                                                                 >
-                                                                    + Add Burial Assistance
+                                                                    + Add Alay Pagdamay
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -647,7 +647,7 @@ function ManageBurialContent(){
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="addHospitalBillModalLabel">
-                                + Bukas ang Pag-asa
+                                + RECORD OF DECEASED SERVICE  BY ALAY PAG-DAMAY
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -688,7 +688,7 @@ function ManageBurialContent(){
                                     { formPage == "Basic Information" && 
                                         <>
 
-                                            <h3>Client Information</h3><br />
+                                            <h3>Deceased Information</h3><br />
                                             <div className="row"> 
                                                 <div className="col-3">               
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -803,34 +803,6 @@ function ManageBurialContent(){
 
                                                 
                                                 <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Relationship:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Type of Assistance</option>  
-                                                        <option value="Burial Assistance">Burial Assistance</option>
-                                                        <option value="Burial Assistance">Burial Assistance</option>
-                                                        <option value="Burial Assistance">Burial Assistance</option>  
-                                                    </select>
-                                                </div>
-                                                
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label className="form-label">Contact Number:</label>
-                                                    <input
-                                                        type="number"
-                                                        className="form-control"
-                                                        value={deceasedPurok}
-                                                        onChange={(e) => setDeceasedPurok(e.target.value)}
-                                                    />
-                                                </div>   
-
-                                                
-                                                <div className="col-3">
                                                     <br /> 
                                                     <label htmlFor="extName" className="form-label">Gender:</label>
                                                     
@@ -847,149 +819,176 @@ function ManageBurialContent(){
 
                                                 <div className="col-3">
                                                     <br /> 
-                                                    <label htmlFor="extName" className="form-label">Age:</label>
+                                                    <label htmlFor="extName" className="form-label">Death of Death:</label>
                                                     
                                                     <input
-                                                        type="number"
+                                                        type="date"
                                                         className="form-control"
                                                         value={deceasedDeathDate}
                                                         onChange={(e) => setDeceasedDeathDate(e.target.value)}
                                                     />
                                                 </div>
                                                 
-                                                <div className="col-3">
+                                                <div className="col-6">
                                                     <br /> 
-                                                    <label htmlFor="extName" className="form-label">Amount:</label>
+                                                    <label htmlFor="extName" className="form-label">Death Certificate:</label>
                                                     
                                                     <input
-                                                        type="number"
+                                                        type="file"
                                                         className="form-control"
-                                                        value={deceasedDeathDate}
-                                                        onChange={(e) => setDeceasedDeathDate(e.target.value)}
+                                                        /* value={deathCertificate} */
+                                                        /* onChange={(e) => setDeathCertificate(e.target.files[0])} */
+
+                                                        accept="image/*"
+                                                        onChange={handleFileChange} 
                                                     />
                                                 </div>
 
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Type of Assistance:</label>
-                                                    <select
+                                                {/* {deathCertificate && (
+                                                    <div className="col-12">
+                                                        <br />
+                                                            <img 
+                                                                src={deathCertificate} 
+                                                                alt="Death Certificate" 
+                                                                style={{ width: "300px", height: "auto", border: "1px solid #ccc" }} 
+                                                            />
+                                                    </div>
+                                                )} */}
+
+                                                {/* Display the preview dynamically */}
+                                                {deathCertificatePreview && (
+                                                    <div className="col-12">
+                                                        <br />
+                                                        <img 
+                                                            src={deathCertificatePreview} 
+                                                            alt="Death Certificate Preview" 
+                                                            style={{ width: "300px", height: "auto", border: "1px solid #ccc" }} 
+                                                        />
+                                                    </div>
+                                                )}
+            
+                                            </div> 
+                                            <br />  
+                                            <h3>Contact Person</h3><br />
+                                            <div className="row">
+                                                <div className="col-3"> 
+                                                    <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                    <input
+                                                        type="text"
                                                         className="form-control"
-                                                        id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Type of Assistance</option>
-                                                        <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Laboratory Test</option> 
-                                                        <option value="Medical Assistance / Maintenance of Medicine">Medical Assistance / Maintenance of Medicine</option> 
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Operation</option> 
-                                                        <option value="Burial Assistance">Burial Assistance</option> 
-                                                        <option value="Food Assistance">Food Assistance</option> 
-                                                        <option value="Transportation Assistance">Transportation Assistance</option> 
-                                                        <option value="Educational Assistance">Educational Assistance</option> 
-                                                        <option value="Livelihood Assistance">Livelihood Assistance</option> 
-                                                        <option value="Others">Others</option> 
-                                                    </select>
+                                                        id="firstName"
+                                                        value={contactPersonFirstname}
+                                                        onChange={(e) => setContactPersonFname(e.target.value)} 
+                                                    />
                                                 </div>
-                                                                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Type of Assistance:</label>
-                                                    <select
+
+                                                <div className="col-3"> 
+                                                    <label htmlFor="middleName" className="form-label">Middle Name:</label>
+                                                    <input
+                                                        type="text"
                                                         className="form-control"
-                                                        id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Type of Assistance</option>
-                                                        <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Laboratory Test</option> 
-                                                        <option value="Medical Assistance / Maintenance of Medicine">Medical Assistance / Maintenance of Medicine</option> 
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Operation</option> 
-                                                        <option value="Burial Assistance">Burial Assistance</option> 
-                                                        <option value="Food Assistance">Food Assistance</option> 
-                                                        <option value="Transportation Assistance">Transportation Assistance</option> 
-                                                        <option value="Educational Assistance">Educational Assistance</option> 
-                                                        <option value="Livelihood Assistance">Livelihood Assistance</option> 
-                                                        <option value="Others">Others</option> 
-                                                    </select>
-                                                </div>
-                                                
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Status / Remarks:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Status / Remarks</option>
-                                                        <option value="Refer to PSWDO">Refer to PSWDO</option>
-                                                        <option value="Refer to Malasakit Center / MAIP">Refer to Malasakit Center / MAIP</option>
-                                                        <option value="Refer to CNPH">Refer to CNPH</option>
-                                                        <option value="Refer to OPAG">Refer to OPAG</option>
-                                                        <option value="Refer to Dong Tulong CNPH">Refer to Dong Tulong CNPH</option>
-                                                        <option value="Refer to Ako Bicol">Refer to Ako Bicol</option>
-                                                        <option value="Refer to Leon Hernandez MAIP from Senator Dela Rosa">Refer to Leon Hernandez MAIP from Senator Dela Rosa</option>
-                                                        <option value="Refer to Ako Bicol">Refer to PCSO</option>
-                                                        <option value="Refer to DSWD">Refer to Ako DSWD</option> 
-                                                    </select>
+                                                        id="middleName"
+                                                        value={contactPersonMiddlename}
+                                                        onChange={(e) => setContactPersonMname(e.target.value)} 
+                                                    />
                                                 </div>
                                                 
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Status of Application:</label>
-                                                    <select
+                                                <div className="col-3"> 
+                                                    <label htmlFor="lastName" className="form-label">Last Name:</label>
+                                                    <input
+                                                        type="text"
                                                         className="form-control"
-                                                        id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Status of Application</option>
-                                                        <option value="Claimed / Released / Payout Governors Office">Claimed / Released / Payout Governors Office</option>
-                                                        <option value="Claimed / Released / Payout PSWDO">Claimed / Released / Payout PSWDO</option>
-                                                        <option value="Pending / Waiting">Pending / Waiting</option>
-                                                        <option value="MAIP / Guarantee Letter">MAIP / Guarantee Letter</option> 
-                                                    </select>
+                                                        id="lastName"
+                                                        value={contactPersonLastname}
+                                                        onChange={(e) => setContactPersonLname(e.target.value)}
+                                                    />
+                                                </div>
+                                                
+                                                <div className="col-3">              
+                                                    <label htmlFor="extName" className="form-label">Ext Name:</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="extName"
+                                                        value={contactPersonExtName}
+                                                        onChange={(e) => setContactPersonExtName(e.target.value)}
+                                                    />
+                                                </div>
+                                                
+                                                <div className="col-3">          
+                                                    <br />    
+                                                    <label htmlFor="extName" className="form-label">Contact Number:</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="contactNumber"
+                                                        value={contactNumber}
+                                                        onChange={(e) => setContactNumber(e.target.value)}
+                                                    />
                                                 </div>
 
                                                 
                                                 <div className="col-3">
                                                     <br />
-                                                    <label htmlFor="relationship" className="form-label">Interviewer:</label>
+                                                    <label htmlFor="relationship" className="form-label">Service Covered:</label>
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
                                                         value={contactPersonServiceCovered}
                                                         onChange={(e) => setContactPersonServiceCovered(e.target.value)}
                                                     >
-                                                        <option value="">Select Interviewer</option>
-                                                        <option value="Dennis S. Ballosa">Dennis S. Ballosa</option>
-                                                        <option value="Marimar P. Llego">Marimar P. Llego</option>
-                                                        <option value="John Dave R. Buitre">John Dave R. Buitre</option>
-                                                        <option value="Charlene C. Mabeza">Charlene C. Mabeza</option>
-                                                        <option value="Madilyn M. Fresco">Madilyn M. Fresco</option>
-                                                        <option value="Wilma P. Soriano">Wilma P. Soriano</option>
-                                                        <option value="Mark Aedrian A. Baigan">Mark Aedrian A. Baigan</option>
-                                                        <option value="Nellie G. Araneta">Nellie G. Araneta</option>
-                                                        <option value="Dayang Euvee E. Talavera">Dayang Euvee E. Talavera</option>
-                                                        <option value="Mary Grace Magana">Mary Grace Magana</option>
-                                                        <option value="Marissa Buena">Marissa Buena</option>
-                                                        <option value="John Paul Aguirre">John Paul Aguirre</option>
-                                                        <option value="Aurea Pamela Tacalan (Panganiban)">Aurea Pamela Tacalan (Panganiban)</option>
-                                                        <option value="Ian Enero (Capalonga)">Ian Enero (Capalonga)</option>
-                                                        <option value="Realyn O. Luchavez (Capalonga)">Realyn O. Luchavez (Capalonga)</option>
-                                                        <option value="Venus Espina (Labo)">Venus Espina (Labo)</option>
-                                                        <option value="Dhanica Jean Delos Santos (Labo)">Dhanica Jean Delos Santos (Labo)</option>
-                                                        <option value="Carl James Gianan (Sta. Elena)">Carl James Gianan (Sta. Elena)</option>
-                                                        <option value="Sherwin Zafe (Sta. Elena)">Sherwin Zafe (Sta. Elena)</option>
-                                                        <option value="Keith Jasper Barnedo">Keith Jasper Barnedo</option>
-                                                        <option value="Loue Tolin">Loue Tolin</option> 
+                                                        <option value="">Select Service Covered</option>
+                                                        <option value="Full Service">Full Service</option>
+                                                        <option value="Viewing">Viewing</option> 
                                                     </select>
                                                 </div>
                                                 
-                                                 
-                                            </div> 
+                                                <div className="col-3">
+                                                    <br />
+                                                    <label htmlFor="relationship" className="form-label">Funeral Service:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        id="relationship"
+                                                        value={contactPersonFuneralService}
+                                                        onChange={(e) => setContactPersonFuneralCovered(e.target.value)}
+                                                    >
+                                                        <option value="">Select Funeral Service</option>
+                                                        <option value="SAAVEDRA FUNERAL">SAAVEDRA FUNERAL</option>
+                                                        <option value="ARANA FUNERAL">ARANA FUNERAL</option>
+                                                        <option value="BELMONTE DAET">BELMONTE DAET</option>
+                                                        <option value="ADEA OF JOSE PANGANIBAN">ADEA OF JOSE PANGANIBAN</option>
+                                                        <option value="ST RAPHAEL FUNERARIA">ST RAPHAEL FUNERARIA</option>  
+                                                    </select>
+                                                </div>
+                                                
+                                                <div className="col-3">
+                                                    <br />
+                                                    <label htmlFor="relationship" className="form-label">ENCODED/REVIEWED BY:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        id="relationship"
+                                                        value={contactPersonEncoded}
+                                                        onChange={(e) => setContactPersonEncoded(e.target.value)}
+                                                    >
+                                                        <option value="">Select Encoded/Reviewed By:</option>
+                                                        <option value="DENNIS">DENNIS</option>
+                                                        <option value="JAYSON OF GSO SE">JAYSON OF GSO SE</option>
+                                                        <option value="LARRY CASTRO">LARRY CASTRO</option>
+                                                        <option value="ROBERT PARIS">ROBERT PARIS</option>
+                                                        <option value="REYNNIER VINLUAN">REYNNIER VINLUAN</option>
+                                                        <option value="OWEN ABANTO">OWEN ABANTO</option>
+                                                        <option value="CHRIS CAMA">CHRIS CAMA</option>
+                                                        <option value="MARI MAR">MARI MAR</option>
+                                                        <option value="DAVE BUITRE">DAVE BUITRE</option>
+                                                        <option value="MARY GRACE MAGANA">MARY GRACE MAGANA</option>
+                                                        <option value="DAYANG TALAVERA">DAYANG TALAVERA</option>  
+                                                    </select>
+                                                </div>
+            
+                                                
+                                                
+                                            </div>
+
                                             <br />
                                         
                                         </>
@@ -1105,5 +1104,5 @@ function ManageBurialContent(){
     )
 }
 
-export default ManageBurialContent;
+export default AlayPagdamayContent;
  
