@@ -685,34 +685,13 @@ app.post("/insert_burial_assistance", (req, res) => {
     });
 });
 
-app.get("/retrieve_burial_assistance", (req, res) => {
-    const { burialId } = req.query; // Use req.query instead of req.body for GET requests
-
-    if (!burialId) {
-        return res.status(400).json({ error: "Missing burialId parameter." });
-    }
-
-    const sqlQuery = "SELECT * FROM burial_assistance WHERE burial_assistance_id = ?";
-
-    db.query(sqlQuery, [burialId], (err, results) => {
+app.get("/retrieve_burial_assistance", (req, res) => { 
+    db.query("SELECT * FROM burial_assistance", (err, results) => {
         if (err) {
-            console.error("Error retrieving burial assistance records:", err);
+            console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-
-        if (results.length === 0) {
-            return res.status(404).json({ error: "No records found." });
-        }
-
-        // Convert BLOB to Base64 if it exists
-        const burialRecords = results.map(row => ({
-            ...row,
-            death_certificate: row.death_certificate
-                ? Buffer.from(row.death_certificate).toString("base64")
-                : null
-        }));
-
-        res.json(burialRecords[0]); // Send only the first record
+        res.json(results); // Ensure this is an array
     });
 });
 
