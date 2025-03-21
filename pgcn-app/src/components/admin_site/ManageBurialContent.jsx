@@ -509,10 +509,10 @@ function ManageBurialContent(){
                                                             <thead>
                                                                 <tr>
                                                                     <th>No.</th>
-                                                                    <th>Deceased Name</th>
-                                                                    <th>Date of Death</th>
-                                                                    <th>Contact Person</th>
-                                                                    <th>Contact Number</th>
+                                                                    <th>Client Name</th>
+                                                                    <th>Municipality</th>
+                                                                    <th>Barangay</th>
+                                                                    <th>Amount</th>
                                                                     <th>Date Registered</th>
                                                                     <th>Action</th>
                                                                 </tr>
@@ -522,10 +522,10 @@ function ManageBurialContent(){
                                                                     currentRecords.map((burial, index) => (
                                                                         <tr key={burial.id}>
                                                                             <td>{indexOfFirstRecord + index + 1}</td>
-                                                                            <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
-                                                                            <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
-                                                                            <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
-                                                                            <td>{burial.contact_number}</td>
+                                                                            <td>{`${burial.client_fname} ${burial.client_mname} ${burial.client_lname} ${burial.client_ext_name || ""}`}</td>
+                                                                            <td>{new Date(burial.client_municipality).toLocaleString()}</td>
+                                                                            <td>{`${burial.client_barangay}`}</td>
+                                                                            <td>{burial.amount}</td>
                                                                             <td>{new Date(burial.savedAt).toLocaleString()}</td>
                                                                             <td>
                                                                                 <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}
