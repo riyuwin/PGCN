@@ -417,8 +417,8 @@ function ManageBurialContent(){
 
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
-        setDeceasedMunicipality(selectedMunicipality);
-        setDeceasedBarangay(''); // Reset barangay selection
+        setClientMunicipality(selectedMunicipality);
+        setClientBarangay(''); // Reset barangay selection
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
     };  
  
@@ -513,6 +513,9 @@ function ManageBurialContent(){
                                                                     <th>Municipality</th>
                                                                     <th>Barangay</th>
                                                                     <th>Amount</th>
+                                                                    <th>Status / Remarks</th>
+                                                                    <th>Status of Application</th>
+                                                                    <th>Interviewer</th>
                                                                     <th>Date Registered</th>
                                                                     <th>Action</th>
                                                                 </tr>
@@ -523,9 +526,12 @@ function ManageBurialContent(){
                                                                         <tr key={burial.id}>
                                                                             <td>{indexOfFirstRecord + index + 1}</td>
                                                                             <td>{`${burial.client_fname} ${burial.client_mname} ${burial.client_lname} ${burial.client_ext_name || ""}`}</td>
-                                                                            <td>{new Date(burial.client_municipality).toLocaleString()}</td>
+                                                                            <td>{burial.client_municipality}</td>
                                                                             <td>{`${burial.client_barangay}`}</td>
                                                                             <td>{burial.amount}</td>
+                                                                            <td>{burial.type_assistance}</td>
+                                                                            <td>{burial.status_application}</td>
+                                                                            <td>{burial.interviewer}</td>
                                                                             <td>{new Date(burial.savedAt).toLocaleString()}</td>
                                                                             <td>
                                                                                 <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}
@@ -547,7 +553,7 @@ function ManageBurialContent(){
                                                                     ))
                                                                 ) : (
                                                                     <tr>
-                                                                        <td colSpan="6" className="text-center">No records found</td>
+                                                                        <td colSpan="10" className="text-center">No records found</td>
                                                                     </tr>
                                                                 )}
                                                             </tbody>
