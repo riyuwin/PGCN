@@ -14,33 +14,28 @@ function ManageBurialContent(){
 
     // Variables for inputs ------------------------------------------------------------
     const [burialId, setBurialId] = useState('');
-    const [deceasedFirstName, setDeceasedFirstName] = useState('');
-    const [deceasedMiddleName, setDeceasedMiddleName] = useState('');
-    const [deceasedLastName, setDeceasedLastName] = useState('');
-    const [deceasedExtName, setDeceasedExtName] = useState('');  
+    const [clientFirstName, setClientFirstName] = useState('');
+    const [clientMiddleName, setClientMiddleName] = useState('');
+    const [clientLastName, setClientLastName] = useState('');
+    const [clientExtName, setClientExtName] = useState('');  
 
-    const [deceasedPurok, setDeceasedPurok] = useState('');
-    const [deceasedBarangay, setDeceasedBarangay] = useState('');
-    const [deceasedMunicipality, setDeceasedMunicipality] = useState('');
-    const [deceasedProvince, setDeceasedProvince] = useState('Camarines Norte'); 
+    const [clientProvince, setClientProvince] = useState('Camarines Norte');
+    const [clientMunicipality, setClientMunicipality] = useState(''); 
+    const [clientBarangay, setClientBarangay] = useState('');
     const [barangayList, setBarangayList] = useState([]);  
+    const [clientPurok, setClientPurok] = useState('');
 
-    const [deceasedGender, setDeceasedGender] = useState('');
-    const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
-    const [deathCertificate, setDeathCertificate] = useState(null);
-    const [deathCertificatePreview, setDeathCertificatePreview] = useState(null);
-
-
-    const [contactPersonFirstname, setContactPersonFname] = useState('');
-    const [contactPersonMiddlename, setContactPersonMname] = useState('');
-    const [contactPersonLastname, setContactPersonLname] = useState('');
-    const [contactPersonExtName, setContactPersonExtName] = useState('');
-    const [contactNumber, setContactNumber] = useState('');
-    const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
-    const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
-    const [contactPersonEncoded, setContactPersonEncoded] = useState('');
-    
-    const [burialStatus, setBurialStatus] = useState(''); 
+    const [clientRelationship, setClientRelationship] = useState('');
+    const [clientContactNumber, setClientContactNumber] = useState('');
+    const [clientGender, setClientGender] = useState(null);
+    const [clientAge, setClientAge] = useState(null);
+    const [clientAmount, setClientAmount] = useState(null);
+    const [clientTypeAssistance, setClientTypeAssistance] = useState(null);
+    const [clientStatusRemarks, setClientStatusRemarks] = useState(null);
+    const [clientApplication, setClientApplication] = useState(null);
+    const [clientInterviewer, setClientInterviewer] = useState(null); 
+ 
+    const [burialAssistanceStatus, setBurialAssistanceStatus] = useState(''); 
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false, 
         checkDeathCertificate: false,
@@ -69,101 +64,55 @@ function ManageBurialContent(){
 
     const handleAddBurialAssistance = async (e) => {
         e.preventDefault();
-
-        console.log("Test Add: ", 
-            {
-                account_id: account_id,
-                deceasedFirstName: deceasedFirstName,
-                deceasedMiddleName: deceasedMiddleName,
-                deceasedLastName: deceasedLastName,
-                deceasedExtName: deceasedExtName,
-                deceasedPurok: deceasedPurok,
-                deceasedBarangay: deceasedBarangay,
-                deceasedMunicipality: deceasedMunicipality,
-                deceasedProvince: deceasedProvince,
-                deceasedGender: deceasedGender,
-                deceasedDeathDate: deceasedDeathDate,
-                contactPersonFirstname: contactPersonFirstname,
-                contactPersonMiddlename: contactPersonMiddlename,
-                contactPersonLastname: contactPersonLastname,
-                contactPersonExtName: contactPersonExtName,
-                contactNumber: contactNumber,
-                contactPersonServiceCovered: contactPersonServiceCovered, 
-                contactPersonFuneralService: contactPersonFuneralService,
-                contactPersonEncoded: contactPersonEncoded,
-                burialStatus: burialStatus,
-                barangayIndigency: checkedItems.checkBarangayIndigency, 
-                deathCertificate: checkedItems.checkDeathCertificate,
-                funeralContract: checkedItems.checkFuneralContract, 
-                validId: checkedItems.checkValidId, 
-                remarks: remarks
-            }
-        );
-        
     
-        const formData = new FormData();
-        formData.append("account_id", account_id);
-        formData.append("deceasedFirstName", deceasedFirstName);
-        formData.append("deceasedMiddleName", deceasedMiddleName);
-        formData.append("deceasedLastName", deceasedLastName);
-        formData.append("deceasedExtName", deceasedExtName);
-        formData.append("deceasedPurok", deceasedPurok);
-        formData.append("deceasedBarangay", deceasedBarangay);
-        formData.append("deceasedMunicipality", deceasedMunicipality);
-        formData.append("deceasedProvince", deceasedProvince);
-        formData.append("deceasedGender", deceasedGender);
-        formData.append("deceasedDeathDate", deceasedDeathDate);
-        formData.append("contactPersonFirstname", contactPersonFirstname);
-        formData.append("contactPersonMiddlename", contactPersonMiddlename);
-        formData.append("contactPersonLastname", contactPersonLastname);
-        formData.append("contactPersonExtName", contactPersonExtName);
-        formData.append("contactNumber", contactNumber);
-        formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
-        formData.append("contactPersonFuneralService", contactPersonFuneralService);
-        formData.append("contactPersonEncoded", contactPersonEncoded);
-        formData.append("burialStatus", burialStatus);
-        formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
-        formData.append("checkDeathCertificate", checkedItems.checkDeathCertificate);
-        formData.append("funeralContract", checkedItems.checkFuneralContract);
-        formData.append("validId", checkedItems.checkValidId);
-        formData.append("remarks", remarks);
-        formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
+        // Get current date-time in yyyy-mm-dd HH:mm:ss format
+        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
     
-        // Append the file (deathCertificate should be from an <input type="file"> element)
-        if (deathCertificate) {
-            formData.append("deathCertificate", deathCertificate);
-        }
+        console.log("Submitting burial assistance with data:", {
+            account_id,
+            clientFirstName, clientMiddleName, clientLastName, clientExtName,
+            clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
+            clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
+            clientApplication, clientInterviewer
+        });
     
         try {
             const response = await fetch("http://localhost:5000/insert_burial_assistance", {
                 method: "POST",
-                body: formData // No need for `Content-Type`, fetch will set it automatically
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    account_id,
+                    clientFirstName, clientMiddleName, clientLastName, clientExtName,
+                    clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
+                    clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
+                    clientApplication, clientInterviewer
+                })                
             });
     
             const data = await response.json();
     
             if (!response.ok) {
-                throw new Error(data.error || "Failed to insert hospital bill.");
+                throw new Error(data.error || "Failed to insert burial assistance.");
             }
     
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
-                text: "Hospital bill has been recorded successfully!",
+                text: "Burial assistance has been recorded successfully!",
             }).then(() => {
-                ResetForms(); // Reset the forms after success
+                ResetForms(); // Reset the forms after the user clicks "OK"
             });
+            
     
         } catch (err) {
             console.error("Error:", err.message);
             Swal.fire({
                 icon: "error",
                 title: "Transaction Failed",
-                text: err.message || "An error occurred while saving the hospital bill.",
+                text: err.message || "An error occurred while saving the burial assistance.",
             });
         }
-    };
-    
+    }; 
 
     const handleDeleteBurialAssistance = async (e, burialId) => {
         e.preventDefault();
@@ -696,8 +645,8 @@ function ManageBurialContent(){
                                                         type="text"
                                                         className="form-control"
                                                         id="firstName"
-                                                        value={deceasedFirstName}
-                                                        onChange={(e) => setDeceasedFirstName(e.target.value)} 
+                                                        value={clientFirstName}
+                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                         placeholder="First Name"
                                                     />
                                                 </div>
@@ -709,8 +658,8 @@ function ManageBurialContent(){
                                                         className="form-control"
                                                         id="middleName"
                                                         placeholder="Middle Name"
-                                                        value={deceasedMiddleName}
-                                                        onChange={(e) => setDeceasedMiddleName(e.target.value)} 
+                                                        value={clientMiddleName}
+                                                        onChange={(e) => setClientMiddleName(e.target.value)} 
                                                     />
                                                 </div>
                                                 
@@ -721,8 +670,8 @@ function ManageBurialContent(){
                                                         className="form-control"
                                                         id="lastName"
                                                         placeholder="Last Name"
-                                                        value={deceasedLastName}
-                                                        onChange={(e) => setDeceasedLastName(e.target.value)} 
+                                                        value={clientLastName}
+                                                        onChange={(e) => setClientLastName(e.target.value)} 
                                                     />
                                                 </div>
                                                 
@@ -732,9 +681,9 @@ function ManageBurialContent(){
                                                         type="text"
                                                         className="form-control"
                                                         id="extName"
-                                                        value={deceasedExtName}
+                                                        value={clientExtName}
                                                         placeholder="Ext Name"
-                                                        onChange={(e) => setDeceasedExtName(e.target.value)} 
+                                                        onChange={(e) => setClientExtName(e.target.value)} 
                                                     />
                                                 </div>    
 
@@ -743,7 +692,7 @@ function ManageBurialContent(){
                                                     <label className="form-label">Province:</label>
                                                     <select
                                                         className="form-control"
-                                                        value={deceasedProvince}
+                                                        value={clientProvince}
                                                         disabled
                                                     >
                                                         <option value="Camarines Norte">Camarines Norte</option>
@@ -755,7 +704,7 @@ function ManageBurialContent(){
                                                     <label className="form-label">Municipality:</label>
                                                     <select
                                                         className="form-control"
-                                                        value={deceasedMunicipality} 
+                                                        value={clientMunicipality} 
                                                         onChange={handleMunicipalityChange}
                                                     >
                                                         <option value="">Select Municipality</option>
@@ -772,8 +721,8 @@ function ManageBurialContent(){
                                                     <label className="form-label">Barangay:</label>
                                                     <select
                                                         className="form-control"
-                                                        value={deceasedBarangay}
-                                                        onChange={(e) => setDeceasedBarangay(e.target.value.trim())}
+                                                        value={clientBarangay}
+                                                        onChange={(e) => setClientBarangay(e.target.value.trim())}
                                                         disabled={barangayList.length === 0}
                                                     >
                                                         <option value="">Select Barangay</option>
@@ -782,8 +731,8 @@ function ManageBurialContent(){
                                                                 {barangay}
                                                             </option>
                                                         ))} : {
-                                                            <option key={deceasedBarangay} value={deceasedBarangay}>
-                                                                {deceasedBarangay}
+                                                            <option key={clientBarangay} value={clientBarangay}>
+                                                                {clientBarangay}
                                                             </option>
                                                         }
                                             
@@ -796,8 +745,8 @@ function ManageBurialContent(){
                                                     <input
                                                         type="text"
                                                         className="form-control"
-                                                        value={deceasedPurok}
-                                                        onChange={(e) => setDeceasedPurok(e.target.value)}
+                                                        value={clientPurok}
+                                                        onChange={(e) => setClientPurok(e.target.value)}
                                                     />
                                                 </div>   
 
@@ -808,13 +757,19 @@ function ManageBurialContent(){
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Type of Assistance</option>  
-                                                        <option value="Burial Assistance">Burial Assistance</option>
-                                                        <option value="Burial Assistance">Burial Assistance</option>
-                                                        <option value="Burial Assistance">Burial Assistance</option>  
+                                                        value={clientRelationship}
+                                                        onChange={(e) => setClientRelationship(e.target.value)}
+                                                    > 
+                                                        <option value="">Select Relationship</option>
+                                                        <option value="Parent">Parent</option>
+                                                        <option value="Sibling">Sibling</option>
+                                                        <option value="Spouse">Spouse</option>
+                                                        <option value="Child">Child</option>
+                                                        <option value="Grandparent">Grandparent</option>
+                                                        <option value="Relative">Relative</option>
+                                                        <option value="Friend">Friend</option>
+                                                        <option value="Guardian">Guardian</option>
+                                                        <option value="Other">Other</option>
                                                     </select>
                                                 </div>
                                                 
@@ -824,8 +779,8 @@ function ManageBurialContent(){
                                                     <input
                                                         type="number"
                                                         className="form-control"
-                                                        value={deceasedPurok}
-                                                        onChange={(e) => setDeceasedPurok(e.target.value)}
+                                                        value={clientContactNumber}
+                                                        onChange={(e) => setClientContactNumber(e.target.value)}
                                                     />
                                                 </div>   
 
@@ -837,8 +792,8 @@ function ManageBurialContent(){
                                                     <select
                                                         className="form-control"
                                                         id="hospital"   
-                                                        value={deceasedGender}
-                                                        onChange={(e) => setDeceasedGender(e.target.value)} >
+                                                        value={clientGender}
+                                                        onChange={(e) => setClientGender(e.target.value)} >
                                                             <option value="">Select Gender</option> 
                                                             <option value="Male">Male</option> 
                                                             <option value="Female">Female</option> 
@@ -852,8 +807,8 @@ function ManageBurialContent(){
                                                     <input
                                                         type="number"
                                                         className="form-control"
-                                                        value={deceasedDeathDate}
-                                                        onChange={(e) => setDeceasedDeathDate(e.target.value)}
+                                                        value={clientAge}
+                                                        onChange={(e) => setClientAge(e.target.value)}
                                                     />
                                                 </div>
                                                 
@@ -864,8 +819,8 @@ function ManageBurialContent(){
                                                     <input
                                                         type="number"
                                                         className="form-control"
-                                                        value={deceasedDeathDate}
-                                                        onChange={(e) => setDeceasedDeathDate(e.target.value)}
+                                                        value={clientAmount}
+                                                        onChange={(e) => setClientAmount(e.target.value)}
                                                     />
                                                 </div>
 
@@ -875,30 +830,8 @@ function ManageBurialContent(){
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
-                                                    >
-                                                        <option value="">Select Type of Assistance</option>
-                                                        <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Laboratory Test</option> 
-                                                        <option value="Medical Assistance / Maintenance of Medicine">Medical Assistance / Maintenance of Medicine</option> 
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Operation</option> 
-                                                        <option value="Burial Assistance">Burial Assistance</option> 
-                                                        <option value="Food Assistance">Food Assistance</option> 
-                                                        <option value="Transportation Assistance">Transportation Assistance</option> 
-                                                        <option value="Educational Assistance">Educational Assistance</option> 
-                                                        <option value="Livelihood Assistance">Livelihood Assistance</option> 
-                                                        <option value="Others">Others</option> 
-                                                    </select>
-                                                </div>
-                                                                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Type of Assistance:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
+                                                        value={clientTypeAssistance}
+                                                        onChange={(e) => setClientTypeAssistance(e.target.value)}
                                                     >
                                                         <option value="">Select Type of Assistance</option>
                                                         <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
@@ -920,8 +853,8 @@ function ManageBurialContent(){
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
+                                                        value={clientStatusRemarks}
+                                                        onChange={(e) => setClientStatusRemarks(e.target.value)}
                                                     >
                                                         <option value="">Select Status / Remarks</option>
                                                         <option value="Refer to PSWDO">Refer to PSWDO</option>
@@ -942,8 +875,8 @@ function ManageBurialContent(){
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
+                                                        value={clientApplication}
+                                                        onChange={(e) => setClientApplication(e.target.value)}
                                                     >
                                                         <option value="">Select Status of Application</option>
                                                         <option value="Claimed / Released / Payout Governors Office">Claimed / Released / Payout Governors Office</option>
@@ -960,8 +893,8 @@ function ManageBurialContent(){
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
-                                                        value={contactPersonServiceCovered}
-                                                        onChange={(e) => setContactPersonServiceCovered(e.target.value)}
+                                                        value={clientInterviewer}
+                                                        onChange={(e) => setClientInterviewer(e.target.value)}
                                                     >
                                                         <option value="">Select Interviewer</option>
                                                         <option value="Dennis S. Ballosa">Dennis S. Ballosa</option>
@@ -1000,14 +933,14 @@ function ManageBurialContent(){
                                             <div className="row"> 
                                                 <div className="col-12">
                                                     <div className="formContainer">
-                                                        <h3>Burial Status: </h3><br/>
+                                                        <h3>Burial Assistance Status: </h3><br/>
                                                         <p>Current Status: <b>Pending</b></p><br/>  
  
                                                         <select
                                                             className="form-control"
                                                             id="relationship"
-                                                            value={burialStatus}
-                                                            onChange={(e) => setBurialStatus(e.target.value)}
+                                                            value={burialAssistanceStatus}
+                                                            onChange={(e) => setBurialAssistanceStatus(e.target.value)}
                                                         > 
                                                             <option value="Pending">Pending</option>
                                                             <option value="Pending">Completed</option>
@@ -1086,7 +1019,7 @@ function ManageBurialContent(){
                                             <>
                                                 <button type="submit" className="btn btn-primary"
                                                 onClick={handleUpdateBurialAssistance}>
-                                                    Save
+                                                    Save Changes
                                                 </button> 
                                             </>
                                         }

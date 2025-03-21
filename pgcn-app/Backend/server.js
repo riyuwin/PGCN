@@ -618,5 +618,102 @@ app.post("/delete_alay_pagdamay", (req, res) => {
     });
 });
 
+app.post("/insert_burial_assistance", (req, res) => {
+    const {
+        account_id,
+        clientFirstName, clientMiddleName, clientLastName, clientExtName,
+        clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
+        clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
+        clientApplication, clientInterviewer
+    } = req.body;
+
+    console.log("Account ID Test: ", clientFirstName);
+
+    const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    const insertBurialAssistanceQuery = `
+        INSERT INTO burial_assistance
+        (account_id, client_fname, client_mname, client_lname, client_ext_name, 
+        client_province, client_municipality, client_barangay, client_purok, client_relationship, 
+        client_contact_num, client_gender, client_age, amount, type_assistance, status_remarks, 
+        status_application, interviewer, savedAt) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.getConnection((err, connection) => {
+        if (err) {
+            console.error("Database Connection Error:", err);
+            return res.status(500).json({ error: "Database connection failed." });
+        }
+
+        connection.beginTransaction((err) => {
+            if (err) {
+                console.error("Transaction Error:", err);
+                connection.release();
+                return res.status(500).json({ error: "Transaction initialization failed." });
+            }
+
+            connection.query(insertBurialAssistanceQuery, [
+                account_id,
+                clientFirstName, clientMiddleName, clientLastName, clientExtName,
+                clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
+                clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
+                clientApplication, clientInterviewer, currentDateTime
+            ], (err, result) => {
+                if (err) {
+                    console.error("Burial Assistance Insertion Error:", err.sqlMessage || err);
+                    return connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ error: "Failed to insert burial assistance." });
+                    });
+                }
+
+                connection.commit((err) => {
+                    if (err) {
+                        console.error("Transaction Commit Error:", err);
+                        return connection.rollback(() => {
+                            connection.release();
+                            res.status(500).json({ error: "Transaction commit failed." });
+                        });
+                    }
+
+                    connection.release();
+                    res.json({ message: "Burial Assistance inserted successfully!", account_id: result.insertId });
+                });
+            });
+        });
+    });
+});
+
+app.get("/retrieve_burial_assistance", (req, res) => {
+    const { burialId } = req.query; // Use req.query instead of req.body for GET requests
+
+    if (!burialId) {
+        return res.status(400).json({ error: "Missing burialId parameter." });
+    }
+
+    const sqlQuery = "SELECT * FROM burial_assistance WHERE burial_assistance_id = ?";
+
+    db.query(sqlQuery, [burialId], (err, results) => {
+        if (err) {
+            console.error("Error retrieving burial assistance records:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "No records found." });
+        }
+
+        // Convert BLOB to Base64 if it exists
+        const burialRecords = results.map(row => ({
+            ...row,
+            death_certificate: row.death_certificate
+                ? Buffer.from(row.death_certificate).toString("base64")
+                : null
+        }));
+
+        res.json(burialRecords[0]); // Send only the first record
+    });
+});
 
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));
