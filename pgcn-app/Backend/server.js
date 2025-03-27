@@ -618,72 +618,100 @@ app.post("/delete_alay_pagdamay", (req, res) => {
     });
 });
 
-app.post("/insert_burial_assistance", (req, res) => {
+app.post("/update_burial_assistance", (req, res) => {
     const {
-        account_id,
+        burialId, account_id,
         clientFirstName, clientMiddleName, clientLastName, clientExtName,
-        clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
+        clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
         clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
-        clientApplication, clientInterviewer
+        clientApplication, clientInterviewer, burialAssistanceStatus,
+        checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId,
+        remarks, currentDateTime
     } = req.body;
 
-    console.log("Account ID Test: ", clientFirstName);
-
-    const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-
-    const insertBurialAssistanceQuery = `
-        INSERT INTO burial_assistance
-        (account_id, client_fname, client_mname, client_lname, client_ext_name, 
-        client_province, client_municipality, client_barangay, client_purok, client_relationship, 
-        client_contact_num, client_gender, client_age, amount, type_assistance, status_remarks, 
-        status_application, interviewer, savedAt) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    const updateBurialAssistanceQuery = `
+        UPDATE burial_assistance
+        SET 
+            account_id = ?, 
+            client_fname = ?, 
+            client_mname = ?, 
+            client_lname = ?, 
+            client_ext_name = ?, 
+            client_province = ?, 
+            client_municipality = ?, 
+            client_barangay = ?, 
+            client_purok = ?, 
+            client_relationship = ?, 
+            client_contact_num = ?, 
+            client_gender = ?, 
+            client_age = ?, 
+            amount = ?, 
+            type_assistance = ?, 
+            status_remarks = ?, 
+            status_application = ?, 
+            interviewer = ?, 
+            savedAt = ?, 
+            burial_status = ?, 
+            check_barangay_indigency = ?, 
+            check_death_certificate = ?, 
+            check_funeral_contract = ?, 
+            check_valid_id = ?, 
+            remarks = ?
+        WHERE burial_assistance_id = ?;
     `;
 
     db.getConnection((err, connection) => {
         if (err) {
-            console.error("Database Connection Error:", err);
+            console.error("Database Connection Error:", err.message);
             return res.status(500).json({ error: "Database connection failed." });
         }
 
         connection.beginTransaction((err) => {
             if (err) {
-                console.error("Transaction Error:", err);
+                console.error("Transaction Error:", err.message);
                 connection.release();
                 return res.status(500).json({ error: "Transaction initialization failed." });
             }
 
-            connection.query(insertBurialAssistanceQuery, [
-                account_id,
-                clientFirstName, clientMiddleName, clientLastName, clientExtName,
-                clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
-                clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
-                clientApplication, clientInterviewer, currentDateTime
+            connection.query(updateBurialAssistanceQuery, [
+                account_id, clientFirstName, clientMiddleName, clientLastName, clientExtName,
+                clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
+                clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+                clientStatusRemarks, clientApplication, clientInterviewer, currentDateTime, burialAssistanceStatus,
+                checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId,
+                remarks, burialId
             ], (err, result) => {
                 if (err) {
-                    console.error("Burial Assistance Insertion Error:", err.sqlMessage || err);
+                    console.error("Burial Assistance Update Error:", err.sqlMessage || err);
                     return connection.rollback(() => {
                         connection.release();
-                        res.status(500).json({ error: "Failed to insert burial assistance." });
+                        res.status(500).json({ error: "Failed to update burial assistance." });
                     });
                 }
 
                 connection.commit((err) => {
                     if (err) {
-                        console.error("Transaction Commit Error:", err);
+                        console.error("Transaction Commit Error:", err.message);
                         return connection.rollback(() => {
                             connection.release();
                             res.status(500).json({ error: "Transaction commit failed." });
                         });
                     }
 
+                    if (result.affectedRows === 0) {
+                        connection.release();
+                        return res.status(404).json({ error: "Burial assistance not found for update." });
+                    }
+
                     connection.release();
-                    res.json({ message: "Burial Assistance inserted successfully!", account_id: result.insertId });
+                    res.json({ message: "Burial assistance updated successfully!" });
                 });
             });
         });
     });
 });
+
+ 
 
 app.get("/retrieve_burial_assistance", (req, res) => { 
     db.query("SELECT * FROM burial_assistance", (err, results) => {

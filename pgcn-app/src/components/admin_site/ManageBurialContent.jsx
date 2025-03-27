@@ -65,44 +65,44 @@ function ManageBurialContent(){
     const handleAddBurialAssistance = async (e) => {
         e.preventDefault();
     
-        // Get current date-time in yyyy-mm-dd HH:mm:ss format
+        // Convert boolean values using !!
+        const checkBarangayIndigency = checkedItems?.checkBarangayIndigency === true || checkedItems?.checkBarangayIndigency === 'true';
+        const checkDeathCertificate = checkedItems?.checkDeathCertificate === true || checkedItems?.checkDeathCertificate === 'true';
+        const checkFuneralContract = checkedItems?.checkFuneralContract === true || checkedItems?.checkFuneralContract === 'true';
+        const checkValidId = checkedItems?.checkValidId === true || checkedItems?.checkValidId === 'true';
+            
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
     
-        console.log("Submitting burial assistance with data:", {
+        const data = {
             account_id,
             clientFirstName, clientMiddleName, clientLastName, clientExtName,
-            clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
-            clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
-            clientApplication, clientInterviewer
-        });
+            clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
+            clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+            clientStatusRemarks, clientApplication, clientInterviewer, burialAssistanceStatus,
+            checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId,
+            remarks, currentDateTime
+        };
     
         try {
             const response = await fetch("http://localhost:5000/insert_burial_assistance", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    account_id,
-                    clientFirstName, clientMiddleName, clientLastName, clientExtName,
-                    clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship, 
-                    clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance, clientStatusRemarks,
-                    clientApplication, clientInterviewer
-                })                
+                body: JSON.stringify(data),
             });
     
-            const data = await response.json();
+            const result = await response.json();
     
             if (!response.ok) {
-                throw new Error(data.error || "Failed to insert burial assistance.");
+                throw new Error(result.error || "Failed to insert burial assistance.");
             }
     
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
                 text: "Burial assistance has been recorded successfully!",
-            }).then(() => {
-                ResetForms(); // Reset the forms after the user clicks "OK"
-            });
-            
+            })/* .then(() => {
+                ResetForms();
+            }); */
     
         } catch (err) {
             console.error("Error:", err.message);
@@ -112,7 +112,7 @@ function ManageBurialContent(){
                 text: err.message || "An error occurred while saving the burial assistance.",
             });
         }
-    }; 
+    };
 
     const handleDeleteBurialAssistance = async (e, burialId) => {
         e.preventDefault();
@@ -159,44 +159,26 @@ function ManageBurialContent(){
 
     const handleUpdateBurialAssistance = async (e) => {
         e.preventDefault();
+
+        console.log("Burial ID: ", burialId);
     
-        const formData = new FormData();
-        formData.append("burialId", burialId);
-        formData.append("account_id", account_id);
-        formData.append("deceasedFirstName", deceasedFirstName);
-        formData.append("deceasedMiddleName", deceasedMiddleName);
-        formData.append("deceasedLastName", deceasedLastName);
-        formData.append("deceasedExtName", deceasedExtName);
-        formData.append("deceasedPurok", deceasedPurok);
-        formData.append("deceasedBarangay", deceasedBarangay);
-        formData.append("deceasedMunicipality", deceasedMunicipality);
-        formData.append("deceasedProvince", deceasedProvince);
-        formData.append("deceasedGender", deceasedGender);
-        formData.append("deceasedDeathDate", deceasedDeathDate);
-        formData.append("contactPersonFirstname", contactPersonFirstname);
-        formData.append("contactPersonMiddlename", contactPersonMiddlename);
-        formData.append("contactPersonLastname", contactPersonLastname);
-        formData.append("contactPersonExtName", contactPersonExtName);
-        formData.append("contactNumber", contactNumber);
-        formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
-        formData.append("contactPersonFuneralService", contactPersonFuneralService);
-        formData.append("contactPersonEncoded", contactPersonEncoded);
-        formData.append("burialStatus", burialStatus);
-        formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
-        formData.append("checkDeathCertificate", checkedItems.checkDeathCertificate);
-        formData.append("funeralContract", checkedItems.checkFuneralContract);
-        formData.append("validId", checkedItems.checkValidId);
-        formData.append("remarks", remarks);
-        formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
-    
-        if (deathCertificate) {
-            formData.append("deathCertificate", deathCertificate);
-        }
+        const requestData = {
+            burialId, account_id, clientFirstName, clientMiddleName, clientLastName, clientExtName,
+            clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
+            clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+            clientStatusRemarks, clientApplication, clientInterviewer, burialAssistanceStatus,
+            checkBarangayIndigency: checkedItems?.checkBarangayIndigency,
+            checkDeathCertificate: checkedItems?.checkDeathCertificate,
+            checkFuneralContract: checkedItems?.checkFuneralContract,
+            checkValidId: checkedItems?.checkValidId,
+            remarks, currentDateTime: new Date().toISOString().slice(0, 19).replace("T", " "),
+        };
     
         try {
             const response = await fetch("http://localhost:5000/update_burial_assistance", {
                 method: "POST",
-                body: formData
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData),
             });
     
             const data = await response.json();
@@ -210,7 +192,7 @@ function ManageBurialContent(){
                 title: "Transaction Successful",
                 text: "Burial assistance has been updated successfully!",
             }).then(() => {
-                /* window.location.reload(); */
+                ResetForms();
             });
         } catch (err) {
             console.error("Error:", err.message);
@@ -221,6 +203,8 @@ function ManageBurialContent(){
             });
         }
     };
+    
+    
     
 
     const fetchBurialAssistance = async () => {
@@ -258,10 +242,10 @@ function ManageBurialContent(){
         setModalName(modalName);
         PopulateForms(burial);  
 
-        if (modalName == "View"){
+        /* if (modalName == "View"){
             
             navigate(`/admin/view_burial_assistance/${burial['burial_id']}`);
-        }   
+        }    */
     }; 
  
     const handleAddRecord = (editMode = false, modalName) => { 
@@ -273,27 +257,26 @@ function ManageBurialContent(){
     const PopulateForms = (burial) => {
         console.log("Populating forms with:", burial); // Check all values 
     
-        setBurialId(burial['burial_id']);
-        setDeceasedFirstName(burial['deceased_fname']);
-        setDeceasedMiddleName(burial['deceased_mname']);
-        setDeceasedLastName(burial['deceased_lname']);
-        setDeceasedExtName(burial['deceased_ext_name']); 
-        setDeceasedPurok(burial['deceased_purok']);
-        setDeceasedBarangay(burial['deceased_barangay']);
-        setDeceasedMunicipality(burial['deceased_municipality']);
-        setDeceasedProvince(burial['deceased_province']);
-        setDeceasedGender(burial['deceased_gender']);
-        setDeceasedDeathDate(burial['deceased_deathdate']);
-        setContactPersonFname(burial['contact_fname']);
-        setContactPersonMname(burial['contact_mname']);
-        setContactPersonLname(burial['contact_lname']);
-        setContactPersonExtName(burial['contact_ext_name']);
-        setContactNumber(burial['contact_number']);
-        setContactPersonServiceCovered(burial['contact_service_covered']);
-        setContactPersonFuneralCovered(burial['contact_funeral_service']);
-        setContactPersonEncoded(burial['contact_person_encoded']);
+        setBurialId(burial['burial_assistance_id']);
+        setClientFirstName(burial['client_fname']);
+        setClientMiddleName(burial['client_mname']);
+        setClientLastName(burial['client_lname']);
+        setClientExtName(burial['client_ext_name']); 
+        setClientPurok(burial['client_purok']);
+        setClientBarangay(burial['client_barangay']);
+        setClientMunicipality(burial['client_municipality']);
+        setClientProvince(burial['client_province']);
+        setClientRelationship(burial['client_relationship']);
+        setClientContactNumber(burial['client_contact_num']);
+        setClientGender(burial['client_gender']);
+        setClientAge(burial['client_age']);
+        setClientAmount(burial['amount']);
+        setClientTypeAssistance(burial['type_assistance']);
+        setClientStatusRemarks(burial['status_remarks']);
+        setClientApplication(burial['status_application']);
+        setClientInterviewer(burial['interviewer']);
         
-        setBurialStatus(burial['burial_status']); 
+        setBurialAssistanceStatus(burial['burial_status']); 
         setCheckedItems({
             checkBarangayIndigency: burial['check_barangay_indigency'] === 1 || burial['check_barangay_indigency'] === "true",
             checkDeathCertificate: burial['check_death_certificate'] === 1 || burial['check_death_certificate'] === "true",
@@ -305,14 +288,14 @@ function ManageBurialContent(){
         setRemarks(burial['remarks']);
         
         // Convert BLOB to Base64 if it's present
-        if (burial['death_certificate']) {
+        /* if (burial['death_certificate']) {
             const base64String = `data:image/png;base64,${burial['death_certificate']}`;
             setDeathCertificate(base64String); // Set as image src
             setDeathCertificatePreview(base64String);
         } else {
             setDeathCertificate(null);
             setDeathCertificatePreview(null);
-        }
+        } */
     }; 
     
 
@@ -320,25 +303,29 @@ function ManageBurialContent(){
     const ResetForms = () => {
         // ✅ Reset all input fields after successful save
         setBurialId('');
-        setDeceasedFirstName('');
-        setDeceasedMiddleName('');
-        setDeceasedLastName('');
-        setDeceasedExtName(''); 
-        setDeceasedPurok('');
-        setDeceasedBarangay('');
-        setDeceasedMunicipality('');
-        setDeceasedProvince('');
-        setDeceasedGender('');
-        setDeceasedDeathDate('');
-        setContactPersonFname('');
-        setContactPersonMname('');
-        setContactPersonLname('');
-        setContactPersonExtName('');
-        setContactNumber('');
-        setContactPersonServiceCovered('');
-        setContactPersonFuneralCovered('');
-        setContactPersonEncoded('');
-        setDeathCertificate(null);        
+        setClientFirstName('');
+        setClientMiddleName('');
+        setClientLastName('');
+        setClientExtName(''); 
+        setClientProvince('');
+        setClientMunicipality('');
+        setBarangayList('');
+        setClientPurok('');
+        setClientRelationship('');
+        setClientContactNumber('');
+        setClientGender('');
+        setClientAge('');
+        setClientTypeAssistance('');
+        setClientStatusRemarks('');
+        setClientApplication('');
+        setClientInterviewer('');
+        setBurialAssistanceStatus('');
+        setCheckedItems({
+            checkBarangayIndigency: false,
+            checkDeathCertificate: false,
+            checkFuneralContract: false,
+            checkValidId: false,
+        });
     }  
 
     useEffect(() => {
@@ -495,7 +482,7 @@ function ManageBurialContent(){
                                                                 <button
                                                                     className="btn btn-primary btn-sm"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#addHospitalBillModal"
+                                                                    data-bs-target="#addBurialContentModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
                                                                 >
                                                                     + Add Burial Assistance
@@ -510,11 +497,11 @@ function ManageBurialContent(){
                                                                 <tr>
                                                                     <th>No.</th>
                                                                     <th>Client Name</th>
-                                                                    <th>Municipality</th>
-                                                                    <th>Barangay</th>
-                                                                    <th>Amount</th>
+                                                                    {/* <th>Municipality</th>
+                                                                    <th>Barangay</th> */}
                                                                     <th>Status / Remarks</th>
                                                                     <th>Status of Application</th>
+                                                                    <th>Amount</th>
                                                                     <th>Interviewer</th>
                                                                     <th>Date Registered</th>
                                                                     <th>Action</th>
@@ -526,26 +513,26 @@ function ManageBurialContent(){
                                                                         <tr key={burial.id}>
                                                                             <td>{indexOfFirstRecord + index + 1}</td>
                                                                             <td>{`${burial.client_fname} ${burial.client_mname} ${burial.client_lname} ${burial.client_ext_name || ""}`}</td>
-                                                                            <td>{burial.client_municipality}</td>
-                                                                            <td>{`${burial.client_barangay}`}</td>
-                                                                            <td>{burial.amount}</td>
+                                                                            {/* <td>{burial.client_municipality}</td>
+                                                                            <td>{`${burial.client_barangay}`}</td> */}
                                                                             <td>{burial.type_assistance}</td>
                                                                             <td>{burial.status_application}</td>
+                                                                            <td><b>{burial.amount}</b></td>
                                                                             <td>{burial.interviewer}</td>
                                                                             <td>{new Date(burial.savedAt).toLocaleString()}</td>
                                                                             <td>
                                                                                 <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}
-                                                                                    /* data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal" */>
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#addBurialContentModal">
                                                                                     <i className='bx bx-info-circle' ></i> View
                                                                                 </button>
                                                                                 <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
                                                                                     data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal">
+                                                                                    data-bs-target="#addBurialContentModal">
                                                                                     <i className='bx bx-edit' ></i> Edit
                                                                                 </button>
                                                                                 <button className="btn btn-danger" 
-                                                                                    onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_id'])} >
+                                                                                    onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_assistance_id'])} >
                                                                                     <i className='bx bx-trash' ></i> Delete
                                                                                 </button>
                                                                             </td>
@@ -597,7 +584,7 @@ function ManageBurialContent(){
             </main>
 
             {/* Modal */}
-            <div className="modal fade" id="addHospitalBillModal" tabIndex="-1" aria-labelledby="addHospitalBillModal" aria-hidden="true">
+            <div className="modal fade" id="addBurialContentModal" tabIndex="-1" aria-labelledby="addBurialContentModal" aria-hidden="true">
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -729,18 +716,19 @@ function ManageBurialContent(){
                                                         className="form-control"
                                                         value={clientBarangay}
                                                         onChange={(e) => setClientBarangay(e.target.value.trim())}
-                                                        disabled={barangayList.length === 0}
+                                                        disabled={barangayList.length === 1}
                                                     >
                                                         <option value="">Select Barangay</option>
-                                                        {barangayList.map((barangay) => (
+                                                        {(barangayList && Array.isArray(barangayList)) ? (
+                                                        barangayList.map((barangay) => (
                                                             <option key={barangay} value={barangay}>
-                                                                {barangay}
+                                                            {barangay}
                                                             </option>
-                                                        ))} : {
-                                                            <option key={clientBarangay} value={clientBarangay}>
-                                                                {clientBarangay}
-                                                            </option>
-                                                        }
+                                                        ))
+                                                        ) : (
+                                                        <option disabled>No barangays available</option>
+                                                        )}
+
                                             
                                                     </select>
                                                 </div>

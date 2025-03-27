@@ -637,7 +637,7 @@ function ManageHospitalBillContent(){
                                                     <select
                                                         className="form-control"
                                                         value={patientBarangay}
-                                                        onChange={(e) => setPatientBarangay(e.target.value.trim())}
+                                                        onChange={(e) => setBarangayList(e.target.value.trim())}
                                                         disabled={barangayList.length === 0}
                                                     >
                                                         <option value="">Select Barangay</option>
