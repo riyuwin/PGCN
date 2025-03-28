@@ -29,6 +29,17 @@ function ManageHospitalBillContent(){
     const [claimantRelationship, setClaimantRelationship] = useState('');
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
+
+    const [hospitalBillStatus, setHospitalBillStatus] = useState(''); 
+    const [checkedItems, setCheckedItems] = useState({
+        checkBarangayIndigency: false, 
+        checkMedicalCertificate: false,
+        checkFinalBill: false,
+        checkValidId: false
+    });
+    
+    const [remarks, setRemarks] = useState('');
+        
     // Variables for inputs ------------------------------------------------------------
 
     // Variables for hospital bills -------------------------------
@@ -57,7 +68,13 @@ function ManageHospitalBillContent(){
             account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
             patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-            claimantAmount, currentDateTime
+            claimantAmount, hospitalBillStatus, 
+            barangayIndigency: checkedItems.checkBarangayIndigency, 
+            checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+            checkFinalBill: checkedItems.checkFinalBill, 
+            validId: checkedItems.checkValidId, 
+            remarks,
+            currentDateTime
         });
     
         try {
@@ -68,7 +85,13 @@ function ManageHospitalBillContent(){
                     account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
                     patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-                    claimantAmount, currentDateTime
+                    claimantAmount, hospitalBillStatus,
+                    barangayIndigency: checkedItems.checkBarangayIndigency, 
+                    checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+                    checkFinalBill: checkedItems.checkFinalBill, 
+                    validId: checkedItems.checkValidId, 
+                    remarks,
+                    currentDateTime
                 })                
             });
     
@@ -154,7 +177,13 @@ function ManageHospitalBillContent(){
             patientFirstName, patientMiddleName, patientLastName, patientExtName, 
             patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-            claimantAmount, currentDateTime
+            claimantAmount, 
+            barangayIndigency: checkedItems.checkBarangayIndigency, 
+            checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+            checkFinalBill: checkedItems.checkFinalBill, 
+            validId: checkedItems.checkValidId, 
+            remarks,
+            currentDateTime
         });
     
         try {
@@ -166,7 +195,13 @@ function ManageHospitalBillContent(){
                     patientFirstName, patientMiddleName, patientLastName, patientExtName, 
                     patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-                    claimantAmount, currentDateTime
+                    claimantAmount, 
+                    barangayIndigency: checkedItems.checkBarangayIndigency, 
+                    checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+                    checkFinalBill: checkedItems.checkFinalBill, 
+                    validId: checkedItems.checkValidId, 
+                    remarks,
+                    currentDateTime
                 })                
             });
     
@@ -366,6 +401,15 @@ function ManageHospitalBillContent(){
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
+
+    const handleCheckboxChange = (event) => {
+        const { id, checked } = event.target;
+        setCheckedItems((prevState) => ({
+            ...prevState,
+            [id]: checked
+        }));
+    };
+
     
     return(
         <>
@@ -811,8 +855,8 @@ function ManageHospitalBillContent(){
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
-                                                        /* value={burialStatus}
-                                                        onChange={(e) => setBurialStatus(e.target.value)} */
+                                                        value={hospitalBillStatus}
+                                                        onChange={(e) => setHospitalBillStatus(e.target.value)}
                                                     > 
                                                         <option value="Pending">Pending</option>
                                                         <option value="Pending">Completed</option>
@@ -830,26 +874,26 @@ function ManageHospitalBillContent(){
                                                     <ul className="list-group">
                                                         <li className="list-group-item">
                                                             <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency" 
-                                                                /* checked={checkedItems.checkBarangayIndigency} // Matches state key
-                                                                onChange={handleCheckboxChange} *//>
+                                                                checked={checkedItems.checkBarangayIndigency} // Matches state key
+                                                                onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkBarangayIndigency">&nbsp; Barangay Indigency (2 Original)</label>
                                                         </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkDeathCertificate" 
-                                                                /* checked={checkedItems.checkDeathCertificate} 
-                                                                onChange={handleCheckboxChange} *//>
-                                                            <label className="form-check-label" htmlFor="checkDeathCertificate">&nbsp; Death Certificate (2 Copies)</label>
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedicalCertificate" 
+                                                                checked={checkedItems.checkMedicalCertificate} 
+                                                                onChange={handleCheckboxChange} />
+                                                            <label className="form-check-label" htmlFor="checkMedicalCertificate">&nbsp; Medical Certificate or Medical Abstract (2 Copies)</label>
                                                         </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkFuneralContract" 
-                                                                /* checked={checkedItems.checkFuneralContract}
-                                                                onChange={handleCheckboxChange} *//>
-                                                            <label className="form-check-label" htmlFor="checkFuneralContract">&nbsp; Funeral Contract (2 Copies)</label>
-                                                        </li>
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkFinalBill" 
+                                                                checked={checkedItems.checkFinalBill}
+                                                                onChange={handleCheckboxChange} />
+                                                            <label className="form-check-label" htmlFor="checkFinalBill">&nbsp; Hospital Bill (2 Copies)</label>
+                                                        </li> 
                                                         <li className="list-group-item">
                                                             <input className="form-check-input me-1" type="checkbox" id="checkValidId" 
-                                                                /* checked={checkedItems.checkValidId}
-                                                                onChange={handleCheckboxChange} */ />
+                                                                checked={checkedItems.checkValidId}
+                                                                onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkValidId">&nbsp; Valid Identification (2 Copies)</label>
                                                         </li>
                                                     </ul>
@@ -863,8 +907,8 @@ function ManageHospitalBillContent(){
                                                     <br/>
 
                                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
-                                                        /* value={remarks}
-                                                        onChange={(e) => setRemarks(e.target.value)} */ > 
+                                                        value={remarks}
+                                                        onChange={(e) => setRemarks(e.target.value)} > 
                                                     </textarea>
 
                                                 </div>

@@ -219,13 +219,18 @@ app.post("/logout", (req, res) => {
     });
 });
 
-
 app.post("/insert_hospital_bill", (req, res) => {
     const {
         account_id,
         patientFirstName, patientMiddleName, patientLastName, patientExtName,
         patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
-        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount
+        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount,
+        hospitalBillStatus,
+        barangayIndigency, 
+        checkMedicalCertificate,
+        checkFinalBill, 
+        validId,
+        remarks // Added remarks
     } = req.body;
 
     const sanitizedHospital = patientHospital && patientHospital.trim() !== "" ? patientHospital : null;
@@ -236,8 +241,10 @@ app.post("/insert_hospital_bill", (req, res) => {
         (account_id, patient_fname, patient_mname, patient_lname, patient_ext_name, 
         patient_purok, patient_barangay, patient_municipality, patient_province, 
         patient_hospital, claimant_fname, claimant_mname, claimant_lname, claimant_extname, 
-        claimant_relationship, claimant_contact, claimant_amount, datetime_added) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        claimant_relationship, claimant_contact, claimant_amount, 
+        hospital_bill_status, check_barangay_indigency, check_med_certificate, check_hospital_bill, check_valid_id, remarks, 
+        datetime_added) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.getConnection((err, connection) => {
@@ -257,7 +264,14 @@ app.post("/insert_hospital_bill", (req, res) => {
                 account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
                 patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
                 claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-                claimantAmount, currentDateTime
+                claimantAmount,  // Fixed order
+                hospitalBillStatus,
+                barangayIndigency === 1, 
+                checkMedicalCertificate === 1,
+                checkFinalBill === 1, 
+                validId === 1, 
+                remarks,  // Included remarks
+                currentDateTime
             ], (err, result) => {
                 if (err) {
                     console.error("Hospital Bill Insertion Error:", err.sqlMessage || err);
@@ -289,7 +303,13 @@ app.post("/update_hospital_bill", (req, res) => {
         billId, account_id,
         patientFirstName, patientMiddleName, patientLastName, patientExtName,
         patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
-        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount
+        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, 
+        claimantAmount, hospitalBillStatus,
+        barangayIndigency, 
+        checkMedicalCertificate,
+        checkFinalBill, 
+        validId, 
+
     } = req.body;
 
     const sanitizedHospital = patientHospital && patientHospital.trim() !== "" ? patientHospital : null;
@@ -314,7 +334,12 @@ app.post("/update_hospital_bill", (req, res) => {
             claimant_extname = ?, 
             claimant_relationship = ?, 
             claimant_contact = ?, 
-            claimant_amount = ?, 
+            claimant_amount = ?,
+            check_barangay_indigency = ?,
+            check_med_certificate = ?,
+            check_hospital_bill = ?,
+            check_valid_id = ?,
+            remarks = ?,
             datetime_added = ?
         WHERE hospital_bill_id = ?;
     `;
@@ -337,7 +362,12 @@ app.post("/update_hospital_bill", (req, res) => {
                 account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
                 patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
                 claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-                claimantAmount, currentDateTime, billId
+                claimantAmount, hospitalBillStatus,
+                barangayIndigency, 
+                checkMedicalCertificate,
+                checkFinalBill, 
+                validId, 
+                currentDateTime, billId
             ], (err, result) => {
                 if (err) {
                     console.error("Hospital Bill Update Error:", err.sqlMessage || err);
@@ -629,6 +659,12 @@ app.post("/update_burial_assistance", (req, res) => {
         remarks, currentDateTime
     } = req.body;
 
+    // Convert 1 or 0 to true or false
+    const checkBarangayIndigencyBool = Boolean(checkBarangayIndigency);
+    const checkDeathCertificateBool = Boolean(checkDeathCertificate);
+    const checkFuneralContractBool = Boolean(checkFuneralContract);
+    const checkValidIdBool = Boolean(checkValidId);
+
     const updateBurialAssistanceQuery = `
         UPDATE burial_assistance
         SET 
@@ -678,7 +714,7 @@ app.post("/update_burial_assistance", (req, res) => {
                 clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
                 clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
                 clientStatusRemarks, clientApplication, clientInterviewer, currentDateTime, burialAssistanceStatus,
-                checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId,
+                checkBarangayIndigencyBool, checkDeathCertificateBool, checkFuneralContractBool, checkValidIdBool,
                 remarks, burialId
             ], (err, result) => {
                 if (err) {
@@ -711,7 +747,74 @@ app.post("/update_burial_assistance", (req, res) => {
     });
 });
 
- 
+
+
+app.post("/insert_burial_assistance", (req, res) => {
+    const {
+        account_id,
+        clientFirstName, clientMiddleName, clientLastName, clientExtName,
+        clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
+        clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+        clientStatusRemarks, clientApplication, clientInterviewer, burialAssistanceStatus,
+        checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId,
+        remarks, currentDateTime
+    } = req.body;
+
+    const insertBurialAssistanceQuery = `
+        INSERT INTO burial_assistance (
+            account_id, client_fname, client_mname, client_lname, client_ext_name,
+            client_province, client_municipality, client_barangay, client_purok, client_relationship,
+            client_contact_num, client_gender, client_age, amount, type_assistance,
+            status_remarks, status_application, interviewer, savedAt, burial_status,
+            check_barangay_indigency, check_death_certificate, check_funeral_contract, check_valid_id, remarks
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
+
+    db.getConnection((err, connection) => {
+        if (err) {
+            console.error("Database Connection Error:", err.message);
+            return res.status(500).json({ error: "Database connection failed." });
+        }
+
+        connection.beginTransaction((err) => {
+            if (err) {
+                console.error("Transaction Error:", err.message);
+                connection.release();
+                return res.status(500).json({ error: "Transaction initialization failed." });
+            }
+
+            connection.query(insertBurialAssistanceQuery, [
+                account_id, clientFirstName, clientMiddleName, clientLastName, clientExtName,
+                clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
+                clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+                clientStatusRemarks, clientApplication, clientInterviewer, currentDateTime, burialAssistanceStatus,
+                checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId, remarks
+            ], (err, result) => {
+                if (err) {
+                    console.error("Burial Assistance Insert Error:", err.sqlMessage || err);
+                    return connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ error: "Failed to insert burial assistance." });
+                    });
+                }
+
+                connection.commit((err) => {
+                    if (err) {
+                        console.error("Transaction Commit Error:", err.message);
+                        return connection.rollback(() => {
+                            connection.release();
+                            res.status(500).json({ error: "Transaction commit failed." });
+                        });
+                    }
+
+                    connection.release();
+                    res.json({ message: "Burial assistance added successfully!" });
+                });
+            });
+        });
+    });
+});
+
 
 app.get("/retrieve_burial_assistance", (req, res) => { 
     db.query("SELECT * FROM burial_assistance", (err, results) => {
@@ -720,6 +823,31 @@ app.get("/retrieve_burial_assistance", (req, res) => {
             return res.status(500).json({ error: "Database error." });
         }
         res.json(results); // Ensure this is an array
+    });
+});
+
+app.post("/delete_burial_assistance", (req, res) => {
+    const { burialId } = req.body;
+
+    if (!burialId) {
+        return res.status(400).json({ error: "burialId is required." });
+    }
+
+    // SQL query to delete the hospital bill by billId
+    const deleteBurialAssistanceQuery = "DELETE FROM burial_assistance WHERE burial_assistance_id = ?";
+
+    // Execute the DELETE query
+    db.query(deleteBurialAssistanceQuery, [burialId], (err, results) => {
+        if (err) {
+            console.error("Database Error:", err);
+            return res.status(500).json({ error: "Internal server error." });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: "Burial assistance not found." });
+        }
+
+        res.json({ message: "Burial assistance deleted successfully!" });
     });
 });
 

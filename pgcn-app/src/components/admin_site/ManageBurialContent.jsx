@@ -278,11 +278,12 @@ function ManageBurialContent(){
         
         setBurialAssistanceStatus(burial['burial_status']); 
         setCheckedItems({
-            checkBarangayIndigency: burial['check_barangay_indigency'] === 1 || burial['check_barangay_indigency'] === "true",
-            checkDeathCertificate: burial['check_death_certificate'] === 1 || burial['check_death_certificate'] === "true",
-            checkFuneralContract: burial['check_funeral_contract'] === 1 || burial['check_funeral_contract'] === "true",
-            checkValidId: burial['check_valid_id'] === 1 || burial['check_valid_id'] === "true",
+            checkBarangayIndigency: burial['check_barangay_indigency'] == 1,  
+            checkDeathCertificate: burial['check_death_certificate'] == 1,  
+            checkFuneralContract: burial['check_funeral_contract'] == 1,  
+            checkValidId: burial['check_valid_id'] == 1,  
         });
+        
         
 
         setRemarks(burial['remarks']);

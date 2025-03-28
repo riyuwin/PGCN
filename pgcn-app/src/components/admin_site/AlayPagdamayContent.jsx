@@ -121,11 +121,11 @@ function AlayPagdamayContent(){
         formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
         formData.append("contactPersonFuneralService", contactPersonFuneralService);
         formData.append("contactPersonEncoded", contactPersonEncoded);
-        formData.append("burialStatus", burialStatus);
         formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
         formData.append("checkDeathCertificate", checkedItems.checkDeathCertificate);
         formData.append("funeralContract", checkedItems.checkFuneralContract);
         formData.append("validId", checkedItems.checkValidId);
+        formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
         formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
     
@@ -232,11 +232,11 @@ function AlayPagdamayContent(){
         formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
         formData.append("contactPersonFuneralService", contactPersonFuneralService);
         formData.append("contactPersonEncoded", contactPersonEncoded);
-        formData.append("burialStatus", burialStatus);
         formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
         formData.append("checkDeathCertificate", checkedItems.checkDeathCertificate);
         formData.append("funeralContract", checkedItems.checkFuneralContract);
         formData.append("validId", checkedItems.checkValidId);
+        formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
         formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
     

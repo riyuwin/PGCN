@@ -124,6 +124,8 @@ function ManageReportContent(){
     });
     
     const [remarks, setRemarks] = useState('');
+    
+    const [currentDateToday, setCurrentDateToday] = useState(''); 
     // BURIAL ASSISTANCE - Variables for inputs -------------------------------------------------------
     
     // HOSPITAL BILL - Variables for inputs ------------------------------------------------------------
@@ -374,6 +376,21 @@ function ManageReportContent(){
 
         saveAs(blob, 'Guarantee_Letter.pdf');
     };
+ 
+
+    useEffect(() => {
+        const date = new Date();
+        const formattedDate = date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+        });
+    
+        console.log("Formatted Date:", formattedDate); // Debugging
+        setCurrentDateToday(formattedDate);
+    }, []);
+    
+
  
     return(
         <>
@@ -798,66 +815,167 @@ function ManageReportContent(){
         
                                         { formPage == "Form 1" && 
                                             <>
-                                                <div className="col-12 d-flex justify-content-end"> 
-                                                    <button 
-                                                        type="button" 
-                                                        className={`btn w-500  btn-secondary`}  
-                                                        onClick={handleDownload}
-                                                    >
-                                                        <i className='bx bxs-file-pdf' ></i> Download
-                                                    </button>
-                                                </div><br />
+
+                                                <div className="formContent">
+                                                    <div className="col-12 d-flex justify-content-end"> 
+                                                        <button 
+                                                            type="button" 
+                                                            className={`btn w-500  btn-secondary`}  
+                                                            onClick={handleDownload}
+                                                        >
+                                                            <i className='bx bxs-file-pdf' ></i> Download
+                                                        </button>
+                                                    </div><br />
+
+
+                                                    <div className="formContainer">
+                                                        <div className="row"> 
+
+                                                            <div className="col-12">
+                                                                <br />
+                                                                <br />
+                                                            </div>
+
+                                                            <div className="col-4 d-flex justify-content-center">
+                                                                <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
+                                                            </div>
+
+                                                            <div className="col-4 d-flex flex-column align-items-center header_form"> 
+                                                                <p>Republic of the Philippines</p> 
+                                                                <p>Province of the Camarines Norte</p> 
+                                                                <p>Dong Tulong</p> 
+                                                            </div>
+                        
+                                                            <div className="col-4 d-flex justify-content-center">
+                                                                <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
+                                                            </div>
+
+                                                            <div className="col-12">
+                                                                <br/><hr/><br/>
+                                                            </div>
+
+
+                                                            <div className="col-12  d-flex flex-column align-items-start body_form">
+                                                                <div className="body_container">
+                                                                    <h1>OFFICE OF THE GOVERNOR</h1><br/>
+                                                                    <h2>GUARANTEE LETTER</h2><br/>
+                                                                    <h3>{currentDate}</h3><br/><br/>
+                                                                    <p className="guaranteeLetterContent"> 
+                                                                        Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
+                                                                    </p><br/><br/>
+
+                                                                    <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br/>
+                                                                    <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+
+                                                                </div>
+                                                            </div> 
+                                                        </div>   
+                                                    </div> 
+
+                                                </div>
 
                                                 
-                                                <div className="formContainer">
-                                                    <div className="row"> 
-
-                                                        <div className="col-12">
-                                                            <br />
-                                                            <br />
-                                                        </div>
-
-                                                        <div className="col-4 d-flex justify-content-center">
-                                                            <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
-                                                        </div>
-
-                                                        <div className="col-4 d-flex flex-column align-items-center header_form"> 
-                                                            <p>Republic of the Philippines</p> 
-                                                            <p>Province of the Camarines Norte</p> 
-                                                            <p>Dong Tulong</p> 
-                                                        </div>
-                    
-                                                        <div className="col-4 d-flex justify-content-center">
-                                                            <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
-                                                        </div>
-
-                                                        <div className="col-12">
-                                                            <br/><hr/><br/>
-                                                        </div>
-
-
-                                                        <div className="col-12  d-flex flex-column align-items-start body_form">
-                                                            <div className="body_container">
-                                                                <h1>OFFICE OF THE GOVERNOR</h1><br/>
-                                                                <h2>GUARANTEE LETTER</h2><br/>
-                                                                <h3>{currentDate}</h3><br/><br/>
-                                                                <p className="guaranteeLetterContent"> 
-                                                                    Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
-                                                                </p><br/><br/>
-
-                                                                <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br/>
-                                                                <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
-
-                                                            </div>
-                                                        </div> 
-                                                    </div>   
-                                                </div> 
                                             </> 
 
                                         }
 
                                         { formPage == "Form 2" && 
                                             <> 
+
+                                                <div className="formContent"> 
+                                                    
+                                                    <div className="col-12 d-flex justify-content-end"> 
+                                                        <button 
+                                                            type="button" 
+                                                            className={`btn w-500  btn-secondary`}  
+                                                            onClick={handleDownload}
+                                                        >
+                                                            <i className='bx bxs-file-pdf' ></i> Download
+                                                        </button>
+                                                    </div><br />
+
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td colSpan="2" class="text-center">
+                                                                    <b>PETTY CASH VOUCHER</b> <br/>
+                                                                    Provincial Government of Camarines Norte <br/>
+                                                                    LGU
+                                                                </td>   
+                                                            </tr>
+                                                            
+                                                            <tr>
+                                                                <td colSpan="2" class="text-start">
+                                                                    <b>Payee / Office:</b> {claimantFirstname} {claimantMiddlename} {claimantLastname} {claimantExtName}
+                                                                </td>   
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colSpan="2" class="text-start">
+                                                                    <b>Address:</b> Purok - {patientPurok} Barangay {patientBarangay}, {patientMunicipality} {patientProvince}
+                                                                </td>   
+                                                            </tr> 
+
+                                                            <tr>
+                                                                <td colSpan="2" class="text-start">
+                                                                    <b>I. To be filled up upon request</b>
+                                                                </td>   
+                                                            </tr> 
+
+                                                            <tr>
+                                                                <td class="text-center">
+                                                                    Particulars
+                                                                </td>   
+                                                                <td class="text-center">
+                                                                    Amount
+                                                                </td>   
+                                                            </tr> 
+                                                            
+                                                            <tr>
+                                                                <td class="text-center">
+                                                                    <b>Hospital Bill</b>
+                                                                </td>   
+                                                                <td class="text-center">
+                                                                    <b>{claimantAmount}</b>
+                                                                </td>   
+                                                            </tr> 
+                                                            
+                                                            <tr>
+                                                                <td colSpan="2" > 
+                                                                    <p class="text-start"><b>A. </b> Approved by: </p>  
+                                                                    <p class="text-center"><b>CYNTHIA R. DELA CRUZ</b></p>  
+                                                                </td> 
+                                                            </tr> 
+                                                            
+                                                            <tr>
+                                                                <td colSpan="2" > 
+                                                                    <p class="text-start"><b>B. </b> Paid by: </p>  
+                                                                    <p class="text-center"><b class="text-center">RITA G. GUEVARRA</b> <br/> Social Worker </p>  
+                                                                </td> 
+                                                            </tr> 
+                                                            
+                                                            <tr>
+                                                                <td colSpan="2">
+                                                                    <p class="text-start"><b>C. </b> Cash Received by: </p>  
+                                                                    <p class="text-center"><b class="text-center">{claimantFirstname} {claimantMiddlename} {claimantLastname} {claimantExtName}</b></p>   
+                                                                </td> 
+                                                            </tr> 
+                                                            
+                                                            <tr>
+                                                                <td colSpan="2">
+                                                                    <p class="text-center">Signature over Printed Name of Payee</p>    
+                                                                    <p class="text-start">Date: <u>{currentDateToday}</u></p>
+                                                                </td> 
+                                                            </tr> 
+
+                                                        </tbody>
+                                                    </table>
+
+                                                 </div> 
 
                                             </> 
                                         }

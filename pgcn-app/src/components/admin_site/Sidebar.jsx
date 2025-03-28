@@ -65,7 +65,7 @@ function Sidebar({ isVisible }) {
 
                         <li className="nav-item">
                             <Link className={`nav-link ${isActive('/admin/hospital_bill') ? '' : 'collapsed'}`} to="/admin/hospital_bill">
-                                <i className="bx bxs-briefcase"></i>
+                                <i className="bx bxs-briefcase"></i> 
                                 <span>Hospital Bill</span>
                             </Link>
                         </li>
