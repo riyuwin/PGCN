@@ -9,6 +9,8 @@ import { PDFViewer } from '@react-pdf/renderer';
 import { GuaranteeLetterLayout } from "./reports/GuaranteeLetterLayout";
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
+import { PettyCashLayout } from "./reports/PettyCashLayout";
+import { PSWDOLayout } from "./reports/PSWDOLayout";
 
 function ManageReportContent(){ 
     const [transactions, setTransactions] = useState('');
@@ -466,7 +468,14 @@ function ManageReportContent(){
                                                                 <label className="form-label">Generate Masterlist: </label>   
                                                                 <ExcelExport data={currentRecords} buttonStatus={generateButton} />
                                                             </div> 
-                                                        </div> 
+                                                        </div>
+
+                                                        
+                                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                                            <PSWDOLayout             
+                                                            
+                                                            />
+                                                        </PDFViewer> 
 
                                                     </div> 
 
@@ -741,8 +750,7 @@ function ManageReportContent(){
                                                         </> 
                                                     }
                                                     
-                                                </div>
-
+                                                </div>  
 
                                             </div>
                                         </div>
@@ -841,9 +849,11 @@ function ManageReportContent(){
                                                             </div>
 
                                                             <div className="col-4 d-flex flex-column align-items-center header_form"> 
-                                                                <p>Republic of the Philippines</p> 
-                                                                <p>Province of the Camarines Norte</p> 
-                                                                <p>Dong Tulong</p> 
+                                                                <p className="d-flex flex-column align-items-center text-center m-auto">
+                                                                    Republic of the Philippines<br/>
+                                                                    Province of Camarines Norte<br/>
+                                                                    Dong Tulong
+                                                                </p> 
                                                             </div>
                         
                                                             <div className="col-4 d-flex justify-content-center">
@@ -857,15 +867,15 @@ function ManageReportContent(){
 
                                                             <div className="col-12  d-flex flex-column align-items-start body_form">
                                                                 <div className="body_container">
-                                                                    <h1>OFFICE OF THE GOVERNOR</h1><br/>
-                                                                    <h2>GUARANTEE LETTER</h2><br/>
-                                                                    <h3>{currentDate}</h3><br/><br/>
+                                                                    <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br/>
+                                                                    <h4 className="headerFormText">GUARANTEE LETTER</h4><br/>
+                                                                    <h6 className="headerFormText">{currentDate}</h6><br/><br/>
                                                                     <p className="guaranteeLetterContent"> 
                                                                         Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
                                                                     </p><br/><br/>
 
-                                                                    <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br/>
-                                                                    <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+                                                                    <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
+                                                                    <h3 className="headerFormText">P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
 
                                                                 </div>
                                                             </div> 
@@ -902,9 +912,11 @@ function ManageReportContent(){
                                                         <tbody>
                                                             <tr>
                                                                 <td colSpan="2" class="text-center">
+                                                                    <br/>
                                                                     <b>PETTY CASH VOUCHER</b> <br/>
                                                                     Provincial Government of Camarines Norte <br/>
                                                                     LGU
+                                                                    <br/><br/>
                                                                 </td>   
                                                             </tr>
                                                             
@@ -961,16 +973,11 @@ function ManageReportContent(){
                                                             <tr>
                                                                 <td colSpan="2">
                                                                     <p class="text-start"><b>C. </b> Cash Received by: </p>  
-                                                                    <p class="text-center"><b class="text-center">{claimantFirstname} {claimantMiddlename} {claimantLastname} {claimantExtName}</b></p>   
-                                                                </td> 
-                                                            </tr> 
-                                                            
-                                                            <tr>
-                                                                <td colSpan="2">
+                                                                    <p class="text-center"><u><b class="text-center">{claimantFirstname} {claimantMiddlename} {claimantLastname} {claimantExtName}</b></u></p>  
                                                                     <p class="text-center">Signature over Printed Name of Payee</p>    
-                                                                    <p class="text-start">Date: <u>{currentDateToday}</u></p>
+                                                                    <p class="text-start">Date: <u>{currentDateToday}</u></p> 
                                                                 </td> 
-                                                            </tr> 
+                                                            </tr>  
 
                                                         </tbody>
                                                     </table>
@@ -979,6 +986,24 @@ function ManageReportContent(){
 
                                             </> 
                                         }
+
+                                        { formPage == "Form 3" && 
+                                            <>
+                                                <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                                    <PettyCashLayout                                            
+                                                        claimantFirstname={claimantFirstname}                   
+                                                        claimantMiddlename={claimantMiddlename}                   
+                                                        claimantLastname={claimantLastname}                   
+                                                        claimantExtName={claimantExtName}                   
+                                                        patientPurok={patientPurok}                   
+                                                        patientBarangay={patientBarangay}                   
+                                                        patientMunicipality={patientMunicipality}                   
+                                                        patientProvince={patientProvince}                   
+                                                        claimantAmount={claimantAmount}
+                                                    />
+                                                </PDFViewer>
+                                            </>
+                                        } 
                                         
 
                                     </div>    
