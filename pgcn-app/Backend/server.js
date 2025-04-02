@@ -851,4 +851,28 @@ app.post("/delete_burial_assistance", (req, res) => {
     });
 });
 
+app.get("/retrieve_hospital_bill_id", (req, res) => {
+    const { hospitalId } = req.query; // Correct parameter
+
+    if (!hospitalId) {  // Fix the incorrect variable name
+        return res.status(400).json({ error: "Missing hospitalId parameter." });
+    }
+
+    const sqlQuery = "SELECT * FROM hospital_bill WHERE hospital_bill_id = ?";
+
+    db.query(sqlQuery, [hospitalId], (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bill records:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "No records found." });
+        }
+
+        res.status(200).json(results[0]); // Send the retrieved data
+    });
+});
+
+
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));

@@ -8,6 +8,7 @@ import { ManageBurial } from "./pages/admin_site/ManageBurial";
 import ReportStatistics from "./pages/admin_site/ReportStatistics";
 import ViewBurialRecord from "./pages/admin_site/ViewBurialRecord";
 import AlayPagdamay from "./pages/admin_site/AlayPagdamay";
+import ViewHospitalBill from "./pages/admin_site/ViewHospitalBill";
 
 function App() { 
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/admin/report_statistics" element={<ReportStatistics />} /> 
         <Route path="/admin/view_burial_assistance/:id" element={<ViewBurialRecord />} />
         <Route path="/admin/alay_pagdamay" element={<AlayPagdamay />} />
+        <Route path="/admin/view_hospital_bill/:id" element={<ViewHospitalBill />} />
 
 
       </Routes>

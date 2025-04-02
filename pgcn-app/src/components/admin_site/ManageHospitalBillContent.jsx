@@ -9,6 +9,8 @@ function ManageHospitalBillContent(){
     const { localUserDetails } = FetchLocalUserDetails();
     const [ account_id, setLocalUserId ] = useState(null);
 
+    const navigate = useNavigate(); // Use navigate for redirection 
+
     // Variables for inputs ------------------------------------------------------------
     const [billId, setHospitalId] = useState('');
     const [patientFirstName, setPatientFirstName] = useState('');
@@ -259,6 +261,11 @@ function ManageHospitalBillContent(){
         setIsEditMode(editMode);
         setModalName(modalName);
         PopulateForms(bill);  
+
+        if (modalName == "View"){
+            
+            navigate(`/admin/view_hospital_bill/${bill['hospital_bill_id']}`);
+        }   
     }; 
  
     const handleAddRecord = (editMode = false, modalName) => { 
@@ -493,8 +500,8 @@ function ManageHospitalBillContent(){
                                                                             <td>{new Date(bill.datetime_added).toLocaleString()}</td>
                                                                             <td>
                                                                                 <button className="btn btn-success" onClick={() => handleOpenModal(bill, true, "View")}
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal">
+                                                                                    /* data-bs-toggle="modal"
+                                                                                    data-bs-target="#addHospitalBillModal" */>
                                                                                     <i className='bx bx-info-circle' ></i> View
                                                                                 </button>
                                                                                 <button className="btn btn-primary" onClick={() => handleOpenModal(bill, true, "Edit")}
