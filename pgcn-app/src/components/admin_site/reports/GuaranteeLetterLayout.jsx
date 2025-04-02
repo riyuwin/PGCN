@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     logo: {
-        width: 80,
-        height: 70,
+        width: 50,
+        height: 42,
     },
     body: {
         textAlign: 'center',

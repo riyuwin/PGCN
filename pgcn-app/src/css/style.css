@@ -1209,4 +1209,8 @@ hr {
 .formContent{
   padding: 10px 50px 10px 50px; 
   border-radius: 2px;
+} 
+
+.headerFormText{
+  font-weight: 600;
 }
