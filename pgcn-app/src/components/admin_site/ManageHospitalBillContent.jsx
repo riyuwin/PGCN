@@ -227,7 +227,7 @@ function ManageHospitalBillContent(){
                 text: err.message || "An error occurred while saving the hospital bill.",
             });
         }
-    }; 
+    };  
 
     const fetchHospitalBills = async () => {
         try {
@@ -243,7 +243,7 @@ function ManageHospitalBillContent(){
     // Handle any real-time updates (for example, using WebSockets or polling)
     useEffect(() => { 
         const interval = setInterval(() => {
-            fetchHospitalBills(); // Refresh the records periodically
+            fetchHospitalBills();  
         }, 2000); // Refresh every 5 seconds (you can adjust the time)
 
         return () => clearInterval(interval); // Cleanup interval when the component unmounts

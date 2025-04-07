@@ -22,7 +22,7 @@ function ViewHospitalBillContent() {
     // Variables for hospital bills -------------------------------
 
     // Variables for inputs ------------------------------------------------------------
-    const [hospitalId, setHospitalId] = useState('');
+    const [burialId, setBurialId] = useState('');
     const [clientFirstName, setClientFirstName] = useState('');
     const [clientMiddleName, setClientMiddleName] = useState('');
     const [clientLastName, setClientLastName] = useState('');
@@ -46,19 +46,6 @@ function ViewHospitalBillContent() {
     const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
     const [contactPersonEncoded, setContactPersonEncoded] = useState('');
 
-    const [PSWDOInterviewId, setPSWDOInterviewId] = useState('');
-    const [contactPersonAge, setContactPersonAge] = useState('');
-    const [contactPersonCivilStatus, setContactPersonCivilStatus] = useState('');
-    const [contactPersonOccupation, setContactPersonOccupation] = useState('');
-    const [contactPersonIncome, setContactPersonIncome] = useState('');
-    const [contactPersonGender, setContactPersonGender] = useState('');
-    const [contactPersonMobileNum, setContactPersonMobileNum] = useState('');
-    const [contactPersonPettyAmount, setContactPersonPettyAmount] = useState('');
-    const [contactPersonTransactionName, setContactPersonTransactionName] = useState('');
-    const [contactPersonProvince, setContactPersonProvince] = useState('Camarines Norte');
-    const [contactPersonMunicipality, setContactPersonMuncipality] = useState('');
-    const [contactPersonBarangay, setContactPersonBarangay] = useState('');
-    const [contactPersonPurok, setContactPersonPurok] = useState('');
     
     const [patientPurok, setPatientPurok] = useState('');
     const [patientBarangay, setPatientBarangay] = useState('');
@@ -76,29 +63,11 @@ function ViewHospitalBillContent() {
 
     const [remarks, setRemarks] = useState('');
     const [savedAt, setSavedAt] = useState('');
-
-    const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
-
     // Variables for inputs ------------------------------------------------------------
 
-    const fetchPSWDOInterviewId = async (hospitalId) => {
-        try {
-            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?hospitalId=${hospitalId}`);
-            const data = await response.json();
-
-            console.log("Test: ", data)
-            PopulatePSWDOInterview(data);
-
-        } catch (error) {
-            console.error("Error fetching hospital bill assistance:", error); // Fix the log message
-        }
-    };    
-
-    
     useEffect(() => {
         if (id) {
             fetchHospitalBillAssistance(id);
-            fetchPSWDOInterviewId(id);
         }
     }, [id]);
 
@@ -113,50 +82,10 @@ function ViewHospitalBillContent() {
         }
     };    
 
-    const PopulatePSWDOInterview = (PSWDOInterview) => {  
-        if (PSWDOInterview){
-            setPSWDOInterviewStatus(true);
-            
-            setContactPersonAge(PSWDOInterview.interview['age']); 
-            setContactPersonCivilStatus(PSWDOInterview.interview['civil_status']); 
-            setContactPersonOccupation(PSWDOInterview.interview['occupation']); 
-            setContactPersonIncome(PSWDOInterview.interview['monthly_income']); 
-            setContactPersonGender(PSWDOInterview.interview['gender']); 
-            setContactPersonMobileNum(PSWDOInterview.interview['mobile_num']); 
-            setContactPersonPettyAmount(PSWDOInterview.interview['petty_amount']); 
-            setPatientProvince(PSWDOInterview.interview['province']); 
-            setPatientMunicipality(PSWDOInterview.interview['municipality']); 
-            setPatientBarangay(PSWDOInterview.interview['barangay']); 
-            setPatientPurok(PSWDOInterview.interview['purok']); 
-            setContactPersonTransactionName(PSWDOInterview.interview['transaction_name']);  
-            
-            if (PSWDOInterview.familyComposition) {
-                const data = PSWDOInterview.familyComposition;
-        
-                setFamilyCount(data.length); // sets number of family members
-        
-                const filledData = data.map(member => ({
-                    name: member.family_member_name || '',
-                    relationship: member.relationship || '',
-                    age: member.age || '',
-                    civilStatus: member.civil_status || '',
-                    occupation: member.occupation || '',
-                    monthlyIncome: member.monthly_income || '',
-                }));
-        
-                setFamilyComposition(filledData);
-            }
-        }
-
-        console.log("Testtt: ", PSWDOInterviewStatus)
-
-
-    };
-
     const PopulateForms = (bill) => {
         console.log("Populating forms with:", bill); // Check all values 
 
-        setPSWDOInterviewId(bill['pswdo_id']);
+        setBurialId(bill['hospital_bill_id']);
         setClientFirstName(bill['patient_fname']);
         setClientMiddleName(bill['patient_mname']);
         setClientLastName(bill['patient_lname']);
@@ -175,6 +104,8 @@ function ViewHospitalBillContent() {
         setHospitalStatus(bill['hospital_bill_status']);
         setSavedAt(bill['datetime_added']);
         setRemarks(bill['remarks']);
+        
+
     };
 
     const formatDate = (dateString) => {
@@ -262,104 +193,6 @@ function ViewHospitalBillContent() {
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
     };
 
-    const handleUpdatePSWDOInterview = async (e) => {
-        e.preventDefault();
-        const transactionName = "Hospital Bill";
-    
-        try {
-            const response = await fetch("http://localhost:5000/update_pswdo_interview", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id,
-                    contactPersonAge,
-                    contactPersonCivilStatus,
-                    contactPersonOccupation,
-                    contactPersonIncome,
-                    contactPersonGender,
-                    contactPersonMobileNum,
-                    contactPersonPettyAmount,
-                    patientProvince,
-                    patientMunicipality,
-                    patientBarangay,
-                    patientPurok,
-                    transactionName,
-                    familyComposition: familyComposition.map(member => ({
-                        id: member.id || null, // Include ID if it's an existing record
-                        name: member.name,
-                        relationship: member.relationship,
-                        age: member.age,
-                        civilStatus: member.civilStatus,
-                        occupation: member.occupation,
-                        monthlyIncome: member.monthlyIncome,
-                    })),
-                }),
-            });
-    
-            const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to update PSWDO data.");
-            }
-    
-            Swal.fire({
-                icon: "success",
-                title: "Update Successful",
-                text: "PSWDO interview and family data updated!",
-            });
-    
-        } catch (err) {
-            console.error("Update Error:", err.message);
-            Swal.fire({
-                icon: "error",
-                title: "Update Failed",
-                text: err.message || "An error occurred during update.",
-            });
-        }
-    };
-    
-    
-
-    const handleAddPSWDOInterview = async (e) => {
-        e.preventDefault();
-    
-        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-        const transactionName = "Hospital Bill";
-        try {
-            const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
-                    contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
-                    patientProvince, patientMunicipality, patientBarangay, patientPurok,
-                    familyComposition, transactionName
-                })
-            });
-    
-            const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to insert PSWDO data.");
-            }
-    
-            Swal.fire({
-                icon: "success",
-                title: "Transaction Successful",
-                text: "PSWDO interview and family data saved!",
-            }) 
-        } catch (err) {
-            console.error("Error:", err.message);
-            Swal.fire({
-                icon: "error",
-                title: "Transaction Failed",
-                text: err.message || "An error occurred.",
-            });
-        }
-    };
-    
-         
-
     return (
         <>
             <main id="main" className="main">
@@ -379,8 +212,7 @@ function ViewHospitalBillContent() {
                     <div className="container-fluid">
                         <section className="section dashboard">
                             <div className="row">
-
-                                <div className="col-lg-7">
+                                <div className="col-lg-12">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
@@ -388,7 +220,7 @@ function ViewHospitalBillContent() {
 
                                                     <div className="row mb-3">
                                                         <div className="row">
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-7">
                                                                 <br />
                                                                 <div className="row">
 
@@ -605,32 +437,16 @@ function ViewHospitalBillContent() {
 
                                                             </div>
 
-                                                            
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div className="col-lg-5">
-                                    <div className="row">
-                                        <div className="col-xxl-12 col-md-12">
-                                            <div className="card info-card sales-card">
-                                                <div className="card-body">
-
-                                                    <div className="row mb-3">
-                                                        <div className="row">
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-5">
                                                                 <br />
                                                                 <div className="row">
+                                                                    <div className="col-sm-12"> 
 
                                                                         <div className="columnContainer">
                                                                             <b className="form-label">PSWDO Interview</b>
-                                                                            <br/><hr/> 
+                                                                            <br/>
+                                                                            <hr/>
+
                                                                             
                                                                             <div className="row"> 
                                                                                 
@@ -644,8 +460,8 @@ function ViewHospitalBillContent() {
                                                                                         type="text"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonFirstname}
-                                                                                        onChange={(e) => setContactPersonFname(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="First Name"
                                                                                         disabled={true}
                                                                                     />
@@ -657,8 +473,8 @@ function ViewHospitalBillContent() {
                                                                                         type="text"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonMiddlename}
-                                                                                        onChange={(e) => setContactPersonMname(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="First Name"
                                                                                         disabled={true}
                                                                                     />
@@ -670,8 +486,8 @@ function ViewHospitalBillContent() {
                                                                                         type="text"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonLastname}
-                                                                                        onChange={(e) => setContactPersonLname(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="First Name"
                                                                                         disabled={true}
                                                                                     />
@@ -683,8 +499,8 @@ function ViewHospitalBillContent() {
                                                                                         type="text"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonExtName}
-                                                                                        onChange={(e) => setContactPersonExtName(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="First Name"
                                                                                         disabled={true}
                                                                                     />
@@ -698,8 +514,8 @@ function ViewHospitalBillContent() {
                                                                                         type="number"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonAge}
-                                                                                        onChange={(e) => setContactPersonAge(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="Age" 
                                                                                     />
                                                                                 </div>
@@ -709,8 +525,7 @@ function ViewHospitalBillContent() {
                                                                                     <label htmlFor="firstName" className="form-label">Civil Status:</label> 
                                                                                     <select
                                                                                         className="form-control"
-                                                                                        value={contactPersonCivilStatus} 
-                                                                                        onChange={(e) => setContactPersonCivilStatus(e.target.value)}>
+                                                                                        value={clientProvince} >
                                                                                         <option value="">Select Civil Status</option>
                                                                                         <option value="Single">Single</option>
                                                                                         <option value="Married">Married</option>
@@ -729,8 +544,8 @@ function ViewHospitalBillContent() {
                                                                                         type="text"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonOccupation}
-                                                                                        onChange={(e) => setContactPersonOccupation(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="Occupation" 
                                                                                     />
                                                                                 </div>
@@ -739,11 +554,11 @@ function ViewHospitalBillContent() {
                                                                                     <br/>              
                                                                                     <label htmlFor="firstName" className="form-label">Income:</label>
                                                                                     <input
-                                                                                        type="number"
+                                                                                        type="text"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonIncome}
-                                                                                        onChange={(e) => setContactPersonIncome(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="Income" 
                                                                                     />
                                                                                 </div>
@@ -753,8 +568,7 @@ function ViewHospitalBillContent() {
                                                                                     <label htmlFor="firstName" className="form-label">Gender:</label> 
                                                                                     <select
                                                                                         className="form-control"
-                                                                                        value={contactPersonGender} 
-                                                                                        onChange={(e) => setContactPersonGender(e.target.value)} >
+                                                                                        value={clientProvince} >
                                                                                         <option value="">Select Gender</option>
                                                                                         <option value="Male">Male</option>
                                                                                         <option value="Female">Female</option> 
@@ -768,8 +582,8 @@ function ViewHospitalBillContent() {
                                                                                         type="number"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonMobileNum}
-                                                                                        onChange={(e) => setContactPersonMobileNum(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="Income" 
                                                                                     />
                                                                                 </div>
@@ -781,8 +595,8 @@ function ViewHospitalBillContent() {
                                                                                         type="number"
                                                                                         className="form-control"
                                                                                         id="firstName"
-                                                                                        value={contactPersonPettyAmount}
-                                                                                        onChange={(e) => setContactPersonPettyAmount(e.target.value)} 
+                                                                                        value={clientFirstName}
+                                                                                        onChange={(e) => setClientFirstName(e.target.value)} 
                                                                                         placeholder="Income" 
                                                                                     />
                                                                                 </div>
@@ -796,7 +610,7 @@ function ViewHospitalBillContent() {
                                                                                     <label className="form-label">Province:</label>
                                                                                     <select
                                                                                         className="form-control"
-                                                                                        value={contactPersonProvince}
+                                                                                        value={patientProvince}
                                                                                         disabled
                                                                                     >
                                                                                         <option value="Camarines Norte">Camarines Norte</option>
@@ -956,29 +770,14 @@ function ViewHospitalBillContent() {
 
                                                                                     <div className="col-4">
                                                                                         <br />
-                                                                                        <label className="form-label">Occupation:</label>
+                                                                                        <label className="form-label">Purok:</label>
                                                                                         <input
                                                                                             type="text"
                                                                                             className="form-control"
-                                                                                            value={member.occupation}
+                                                                                            value={member.purok}
                                                                                             onChange={(e) => {
                                                                                                 const updated = [...familyComposition];
-                                                                                                updated[index].occupation = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
-                                                                                    
-                                                                                    <div className="col-4">
-                                                                                        <br />
-                                                                                        <label className="form-label">Monthly Income:</label>
-                                                                                        <input
-                                                                                            type="number"
-                                                                                            className="form-control"
-                                                                                            value={member.monthlyIncome}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].monthlyIncome = e.target.value;
+                                                                                                updated[index].purok = e.target.value;
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
@@ -991,49 +790,44 @@ function ViewHospitalBillContent() {
                                                                                 </Fragment>
                                                                             ))}
 
+
+ 
+ 
+ 
+
+
+
                                                                             </div>
  
                                                                             <br/>
                                                                             
-                                                                            { PSWDOInterviewStatus === true && 
-                                                                                <>
-                                                                                    <button
-                                                                                        className="btn btn-primary btn-sm w-100" 
-                                                                                        type="submit" 
-                                                                                        onClick={handleUpdatePSWDOInterview} 
-                                                                                    >
-                                                                                        Edit PSWDO Interview Details 
-                                                                                    </button>
-                                                                                </>
-                                                                            }
-
-                                                                            { PSWDOInterviewStatus === false && 
-                                                                                <>
-                                                                                    <button
-                                                                                        className="btn btn-primary btn-sm w-100" 
-                                                                                        type="submit" 
-                                                                                        onClick={handleAddPSWDOInterview}
-                                                                                    >
-                                                                                        Save PSWDO Interview Details
-                                                                                    </button>
-                                                                                </>
-                                                                            }
+                                                                            <button
+                                                                                className="btn btn-primary btn-sm w-100"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addBurialContentModal" 
+                                                                            >
+                                                                                Save PSWDO Interview 
+                                                                            </button>
  
 
                                                                         </div>
 
+                                                                        
+
+
+
+                                                                    </div>
+
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-
                             </div>
                         </section>
                     </div>

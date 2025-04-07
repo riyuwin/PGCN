@@ -452,7 +452,8 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId, remarks,
+        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
+        remarks,
         currentDateTime
     } = req.body;
 
@@ -468,7 +469,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceased_purok, deceased_barangay, deceased_municipality, deceased_province, 
         deceased_gender, deceased_deathdate, death_certificate, contact_fname, contact_mname, contact_lname, contact_ext_name, contact_number,
         contact_service_covered, contact_funeral_service, contact_person_encoded, 
-        burial_status, check_barangay_indigency, check_death_certificate, check_funeral_contract, check_valid_id, 
+        check_barangay_indigency, check_death_certificate, check_funeral_contract, check_valid_id, burial_status, 
         remarks, savedAt) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
@@ -492,7 +493,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
                 deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate, deathCertificate,
                 contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
                 contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-                burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId,
+                barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
                 remarks, currentDateTime
             ], (err, result) => {
                 if (err) {
@@ -576,7 +577,7 @@ app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId,
+        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
         remarks, currentDateTime
     } = req.body;
 
@@ -598,7 +599,7 @@ app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-        burialStatus, barangayIndigency, checkDeathCertificate, funeralContract, validId,
+        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
         remarks, currentDateTime
     ];
 
@@ -875,6 +876,255 @@ app.get("/retrieve_hospital_bill_id", (req, res) => {
         res.status(200).json(results[0]); // Send the retrieved data
     });
 });
+
+app.post("/insert_pswdo_interview", (req, res) => {
+    const {
+        id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+        contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
+        patientProvince, patientMunicipality, patientBarangay, patientPurok, 
+        familyComposition = [], transactionName
+    } = req.body;
+
+    const savedAt = new Date().toISOString().slice(0, 19).replace("T", " "); 
+
+    const insertInterviewQuery = `
+        INSERT INTO pswdo_interview
+        (hospital_bill_id, age, civil_status, occupation, monthly_income, gender, 
+        mobile_num, petty_amount, province, municipality, barangay, purok, transaction_name, savedAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const insertFamilyQuery = `
+        INSERT INTO family_composition
+        (pswdo_interview_id, family_member_name, relationship, age, civil_status, occupation, monthly_income, savedAt)
+        VALUES ?
+    `;
+
+    db.getConnection((err, connection) => {
+        if (err) return res.status(500).json({ error: "Database connection failed." });
+
+        connection.beginTransaction(err => {
+            if (err) {
+                connection.release();
+                return res.status(500).json({ error: "Transaction start failed." });
+            }
+
+            connection.query(insertInterviewQuery, [
+                id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+                contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
+                patientProvince, patientMunicipality, patientBarangay, patientPurok, transactionName, savedAt
+            ], (err, result) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ error: "Failed to insert PSWDO interview." });
+                    });
+                }
+
+                const interviewId = result.insertId;
+
+                // Prepare bulk family insert values
+                const familyValues = familyComposition.map(member => [
+                    interviewId,
+                    member.name || "",
+                    member.relationship || "",
+                    member.age || "",
+                    member.civilStatus || "",
+                    member.occupation || "",
+                    member.monthlyIncome || "",
+                    savedAt
+                ]);
+
+                if (familyValues.length === 0) {
+                    // No family members, commit directly
+                    return connection.commit(err => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                connection.release();
+                                res.status(500).json({ error: "Transaction commit failed." });
+                            });
+                        }
+                        connection.release();
+                        res.json({ message: "PSWDO interview inserted with no family data." });
+                    });
+                }
+
+                // Insert family composition
+                connection.query(insertFamilyQuery, [familyValues], (err) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            connection.release();
+                            res.status(500).json({ error: "Failed to insert family data." });
+                        });
+                    }
+
+                    connection.commit(err => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                connection.release();
+                                res.status(500).json({ error: "Final commit failed." });
+                            });
+                        }
+
+                        connection.release();
+                        res.json({ message: "PSWDO interview and family data inserted successfully!" });
+                    });
+                });
+            });
+        });
+    });
+});
+ 
+app.get("/retrieve_pswdo_interview_id", (req, res) => {
+    const { hospitalId } = req.query;
+
+    if (!hospitalId) {
+        return res.status(400).json({ error: "Missing hospitalId parameter." });
+    }
+
+    const interviewQuery = "SELECT * FROM pswdo_interview WHERE hospital_bill_id = ?";
+    
+    db.query(interviewQuery, [hospitalId], (err, interviewResults) => {
+        if (err) {
+            console.error("Error retrieving interview:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+
+        if (interviewResults.length === 0) {
+            return res.status(404).json({ error: "No interview found." });
+        }
+
+        const interview = interviewResults[0];
+
+        const compositionQuery = "SELECT * FROM family_composition WHERE pswdo_interview_id = ?";
+ 
+        db.query(compositionQuery, [interview.pswdo_id], (err, compositionResults) => {
+            if (err) {
+                console.error("Error retrieving family composition:", err);
+                return res.status(500).json({ error: "Database error (composition)." });
+            }
+
+            res.status(200).json({
+                interview,
+                familyComposition: compositionResults
+            });
+        });
+    });
+});
+
+
+app.put("/update_pswdo_interview", (req, res) => {
+    const {
+        id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
+        contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
+        patientProvince, patientMunicipality, patientBarangay, patientPurok,
+        familyComposition = [], transactionName
+    } = req.body;
+
+    const updateInterviewQuery = `
+        UPDATE pswdo_interview SET
+        age = ?, civil_status = ?, occupation = ?, monthly_income = ?, gender = ?, 
+        mobile_num = ?, petty_amount = ?, province = ?, municipality = ?, barangay = ?, 
+        purok = ?, transaction_name = ?
+        WHERE hospital_bill_id = ?
+    `;
+
+    const updateFamilyQuery = `
+        UPDATE family_composition SET
+        family_member_name = ?, relationship = ?, age = ?, civil_status = ?, 
+        occupation = ?, monthly_income = ?
+        WHERE id = ?
+    `;
+
+    const insertFamilyQuery = `
+        INSERT INTO family_composition
+        (pswdo_interview_id, family_member_name, relationship, age, civil_status, occupation, monthly_income)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.getConnection((err, connection) => {
+        if (err) {
+            console.error("Database connection error:", err);
+            return res.status(500).json({ error: "Database connection failed." });
+        }
+
+        connection.beginTransaction(err => {
+            if (err) {
+                console.error("Transaction start error:", err);
+                connection.release();
+                return res.status(500).json({ error: "Transaction start failed." });
+            }
+
+            connection.query(updateInterviewQuery, [
+                contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
+                contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
+                patientProvince, patientMunicipality, patientBarangay, patientPurok, transactionName, id
+            ], (err) => {
+                if (err) {
+                    console.error("Update interview error:", err);
+                    return connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ error: "Failed to update PSWDO interview." });
+                    });
+                }
+
+                const updateOrInsertFamily = async () => {
+                    for (const member of familyComposition) {
+                        const values = [
+                            member.name || '',
+                            member.relationship || '',
+                            member.age || '',
+                            member.civilStatus || '',
+                            member.occupation || '',
+                            member.monthlyIncome || ''
+                        ];
+
+                        if (member.id) {
+                            // Update existing member
+                            await new Promise((resolve, reject) => {
+                                connection.query(updateFamilyQuery, [...values, member.id], (err) => {
+                                    if (err) return reject(err);
+                                    resolve();
+                                });
+                            });
+                        } else {
+                            // Insert new member
+                            await new Promise((resolve, reject) => {
+                                connection.query(insertFamilyQuery, [id, ...values], (err) => {
+                                    if (err) return reject(err);
+                                    resolve();
+                                });
+                            });
+                        }
+                    }
+                };
+
+                updateOrInsertFamily().then(() => {
+                    connection.commit(err => {
+                        if (err) {
+                            console.error("Commit error:", err);
+                            return connection.rollback(() => {
+                                connection.release();
+                                res.status(500).json({ error: "Final commit failed." });
+                            });
+                        }
+
+                        connection.release();
+                        res.json({ message: "PSWDO interview and family data updated successfully!" });
+                    });
+                }).catch(err => {
+                    console.error("Family update error:", err);
+                    connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ error: "Failed to update family data." });
+                    });
+                });
+            });
+        });
+    });
+});
+
+
 
 
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));
