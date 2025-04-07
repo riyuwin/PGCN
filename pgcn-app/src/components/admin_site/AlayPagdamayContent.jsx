@@ -1000,8 +1000,8 @@ function AlayPagdamayContent(){
                                                 <div className="col-12">
                                                     <div className="formContainer">
                                                         <h3>Burial Status: </h3><br/>
-                                                        <p>Current Status: <b>Pending</b></p><br/>  
- 
+                                                        <p>Current Status: <b>{burialStatus}</b></p><br/>  
+
                                                         <select
                                                             className="form-control"
                                                             id="relationship"
@@ -1009,13 +1009,14 @@ function AlayPagdamayContent(){
                                                             onChange={(e) => setBurialStatus(e.target.value)}
                                                         > 
                                                             <option value="Pending">Pending</option>
-                                                            <option value="Pending">Completed</option>
+                                                            <option value="Completed">Completed</option> 
                                                             <option value="Cancelled">Cancelled</option> 
                                                         </select>
 
                                                     </div>
                                                     <br/>
                                                 </div>
+
                                                 
                                                 <div className="col-12">  
                                                     <div className="formContainer">

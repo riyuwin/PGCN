@@ -35,7 +35,7 @@ function ManageHospitalBillContent(){
     const [hospitalBillStatus, setHospitalBillStatus] = useState(''); 
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false, 
-        checkMedicalCertificate: false,
+        checkMedCertificate: false,
         checkFinalBill: false,
         checkValidId: false
     });
@@ -179,9 +179,9 @@ function ManageHospitalBillContent(){
             patientFirstName, patientMiddleName, patientLastName, patientExtName, 
             patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-            claimantAmount, 
+            claimantAmount, hospitalBillStatus,
             barangayIndigency: checkedItems.checkBarangayIndigency, 
-            checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+            checkMedicalCertificate: checkedItems.checkMedCertificate,
             checkFinalBill: checkedItems.checkFinalBill, 
             validId: checkedItems.checkValidId, 
             remarks,
@@ -197,9 +197,9 @@ function ManageHospitalBillContent(){
                     patientFirstName, patientMiddleName, patientLastName, patientExtName, 
                     patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-                    claimantAmount, 
+                    claimantAmount, hospitalBillStatus,
                     barangayIndigency: checkedItems.checkBarangayIndigency, 
-                    checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+                    checkMedicalCertificate: checkedItems.checkMedCertificate,
                     checkFinalBill: checkedItems.checkFinalBill, 
                     validId: checkedItems.checkValidId, 
                     remarks,
@@ -259,7 +259,7 @@ function ManageHospitalBillContent(){
     const handleOpenModal = (bill, editMode = false, modalName) => {
         setSelectedBill(bill);
         setIsEditMode(editMode);
-        setModalName(modalName);
+        setModalName(modalName); 
         PopulateForms(bill);  
 
         if (modalName == "View"){
@@ -300,6 +300,16 @@ function ManageHospitalBillContent(){
         setClaimantAmount(bill['claimant_amount']);  
 
         document.getElementById("relationship").value = bill['claimant_relationship']
+ 
+        setHospitalBillStatus(bill['hospital_bill_status']); 
+        setCheckedItems({
+            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,  
+            checkMedCertificate: bill['check_med_certificate'] == 1,  
+            checkFinalBill: bill['check_hospital_bill'] == 1,  
+            checkValidId: bill['check_valid_id'] == 1,  
+        });
+         
+        setRemarks(bill['remarks']);
     };
 
 
@@ -321,6 +331,14 @@ function ManageHospitalBillContent(){
         setClaimantRelationship('');
         setClaimantContact('');
         setClaimantAmount('');
+        setHospitalBillStatus('');
+        setCheckedItems({
+            checkBarangayIndigency: false,
+            checkMedCertificate: false,
+            checkHospitalBill: false,
+            checkValidId: false,
+        });
+        setRemarks('');
         
     }  
 
@@ -857,7 +875,7 @@ function ManageHospitalBillContent(){
                                             <div className="col-12">
                                                 <div className="formContainer">
                                                     <h3>Hospital Bill Status: </h3><br/>
-                                                    <p>Current Status: <b>Pending</b></p><br/>  
+                                                    <p>Current Status: <b>{hospitalBillStatus}</b></p><br/>  
 
                                                     <select
                                                         className="form-control"
@@ -866,13 +884,14 @@ function ManageHospitalBillContent(){
                                                         onChange={(e) => setHospitalBillStatus(e.target.value)}
                                                     > 
                                                         <option value="Pending">Pending</option>
-                                                        <option value="Pending">Completed</option>
+                                                        <option value="Completed">Completed</option> 
                                                         <option value="Cancelled">Cancelled</option> 
                                                     </select>
 
                                                 </div>
                                                 <br/>
                                             </div>
+
                                             
                                             <div className="col-12">  
                                                 <div className="formContainer">
@@ -881,13 +900,13 @@ function ManageHospitalBillContent(){
                                                     <ul className="list-group">
                                                         <li className="list-group-item">
                                                             <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency" 
-                                                                checked={checkedItems.checkBarangayIndigency} // Matches state key
+                                                                checked={checkedItems.checkBarangayIndigency}
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkBarangayIndigency">&nbsp; Barangay Indigency (2 Original)</label>
                                                         </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedicalCertificate" 
-                                                                checked={checkedItems.checkMedicalCertificate} 
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate" 
+                                                                checked={checkedItems.checkMedCertificate} 
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkMedicalCertificate">&nbsp; Medical Certificate or Medical Abstract (2 Copies)</label>
                                                         </li>

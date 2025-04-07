@@ -307,12 +307,15 @@ app.post("/update_hospital_bill", (req, res) => {
         claimantAmount, hospitalBillStatus,
         barangayIndigency, 
         checkMedicalCertificate,
-        checkFinalBill, 
+        checkFinalBill, // Ensure consistency
         validId, 
-
     } = req.body;
 
-    const sanitizedHospital = patientHospital && patientHospital.trim() !== "" ? patientHospital : null;
+    if (!billId) {
+        return res.status(400).json({ error: "Missing hospital bill ID." });
+    }
+
+    const sanitizedHospital = patientHospital?.trim() || null;
     const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
 
     const updateHospitalBillQuery = `
@@ -335,16 +338,15 @@ app.post("/update_hospital_bill", (req, res) => {
             claimant_relationship = ?, 
             claimant_contact = ?, 
             claimant_amount = ?,
+            hospital_bill_status = ?,
             check_barangay_indigency = ?,
             check_med_certificate = ?,
-            check_hospital_bill = ?,
+            check_hospital_bill = ?, 
             check_valid_id = ?,
-            remarks = ?,
             datetime_added = ?
         WHERE hospital_bill_id = ?;
     `;
 
-    // Get a connection from the pool
     db.getConnection((err, connection) => {
         if (err) {
             console.error("Database Connection Error:", err);
@@ -365,7 +367,7 @@ app.post("/update_hospital_bill", (req, res) => {
                 claimantAmount, hospitalBillStatus,
                 barangayIndigency, 
                 checkMedicalCertificate,
-                checkFinalBill, 
+                checkFinalBill, // Ensure consistency
                 validId, 
                 currentDateTime, billId
             ], (err, result) => {
@@ -377,6 +379,11 @@ app.post("/update_hospital_bill", (req, res) => {
                     });
                 }
 
+                if (result.affectedRows === 0) {
+                    connection.release();
+                    return res.status(404).json({ error: "Hospital bill not found for update." });
+                }
+
                 connection.commit((err) => {
                     if (err) {
                         console.error("Transaction Commit Error:", err);
@@ -384,11 +391,6 @@ app.post("/update_hospital_bill", (req, res) => {
                             connection.release();
                             res.status(500).json({ error: "Transaction commit failed." });
                         });
-                    }
-
-                    if (result.affectedRows === 0) {
-                        connection.release();
-                        return res.status(404).json({ error: "Hospital bill not found for update." });
                     }
 
                     connection.release();

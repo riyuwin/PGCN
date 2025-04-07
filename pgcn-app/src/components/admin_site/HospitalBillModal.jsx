@@ -31,6 +31,16 @@ function HospitalBillModal(){
     const [claimantAmount, setClaimantAmount] = useState('');
     // Variables for inputs ------------------------------------------------------------
 
+    const [hospitalBillStatus, setHospitalBillStatus] = useState('');
+    const [checkedItems, setCheckedItems] = useState({
+        checkBarangayIndigency: false, 
+        checkMedCertificate: false,
+        checkHospitalBill: false,
+        checkValidId: false
+    });
+    
+    const [remarks, setRemarks] = useState('');
+
     // Variables for hospital bills -------------------------------
     const [hospitalBills, setHospitalBills] = useState([]);
     // Variables for hospital bills -------------------------------
@@ -229,6 +239,16 @@ function HospitalBillModal(){
         setClaimantRelationship(bill['claimant_relationship']);
         setClaimantContact(bill['claimant_contact']);
         setClaimantAmount(bill['claimant_amount']); 
+
+        setHospitalBillStatus(bill['hospital_bill_status']); 
+        setCheckedItems({
+            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,  
+            checkMedCertificate: bill['check_med_certificate'] == 1,  
+            checkHospitalBill: bill['check_hospital_bill'] == 1,  
+            checkValidId: bill['check_valid_id'] == 1,  
+        });
+         
+        setRemarks(bill['remarks']);
     }
 
     const ResetForms = () => {
@@ -249,6 +269,14 @@ function HospitalBillModal(){
         setClaimantRelationship('');
         setClaimantContact('');
         setClaimantAmount('');
+        setHospitalBillStatus('');
+        setCheckedItems({
+            checkBarangayIndigency: false,
+            checkMedCertificate: false,
+            checkHospitalBill: false,
+            checkValidId: false,
+        });
+        setRemarks('');
         
     }  
 

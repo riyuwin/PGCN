@@ -31,9 +31,7 @@ function ViewHospitalBillContent() {
     const [clientProvince, setClientProvince] = useState('Camarines Norte'); 
 
     const [clientGender, setClientGender] = useState('');
-    const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
-    const [deathCertificate, setDeathCertificate] = useState(null);
-    const [deathCertificatePreview, setDeathCertificatePreview] = useState(null);
+    const [deceasedDeathDate, setDeceasedDeathDate] = useState(''); 
 
 
     const [contactPersonFirstname, setContactPersonFname] = useState('');
@@ -52,7 +50,7 @@ function ViewHospitalBillContent() {
     const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
     const [barangayList, setBarangayList] = useState([]);  
 
-    const [burialStatus, setBurialStatus] = useState('');
+    const [hospitalStatus, setHospitalStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false,
         checkDeathCertificate: false,
@@ -61,6 +59,7 @@ function ViewHospitalBillContent() {
     });
 
     const [remarks, setRemarks] = useState('');
+    const [savedAt, setSavedAt] = useState('');
     // Variables for inputs ------------------------------------------------------------
 
     useEffect(() => {
@@ -80,24 +79,28 @@ function ViewHospitalBillContent() {
         }
     };    
 
-    const PopulateForms = (burial) => {
-        console.log("Populating forms with:", burial); // Check all values 
+    const PopulateForms = (bill) => {
+        console.log("Populating forms with:", bill); // Check all values 
 
-        setBurialId(burial['hospital_bill_id']);
-        setClientFirstName(burial['patient_fname']);
-        setClientMiddleName(burial['patient_mname']);
-        setClientLastName(burial['patient_lname']);
-        setClientExtName(burial['patient_ext_name']);
-        setClientPurok(burial['patient_purok']);
-        setClientBarangay(burial['patient_barangay']);
-        setClientMunicipality(burial['patient_municipality']);
-        setClientProvince(burial['patient_province']); 
+        setBurialId(bill['hospital_bill_id']);
+        setClientFirstName(bill['patient_fname']);
+        setClientMiddleName(bill['patient_mname']);
+        setClientLastName(bill['patient_lname']);
+        setClientExtName(bill['patient_ext_name']);
+        setClientPurok(bill['patient_purok']);
+        setClientBarangay(bill['patient_barangay']);
+        setClientMunicipality(bill['patient_municipality']);
+        setClientProvince(bill['patient_province']); 
         
-        setContactPersonFname(burial['claimant_fname']); 
-        setContactPersonMname(burial['claimant_mname']); 
-        setContactPersonLname(burial['claimant_lname']); 
-        setContactPersonExtName(burial['claimant_extname']); 
-        setContactNumber(burial['claimant_contact']); 
+        setContactPersonFname(bill['claimant_fname']); 
+        setContactPersonMname(bill['claimant_mname']); 
+        setContactPersonLname(bill['claimant_lname']); 
+        setContactPersonExtName(bill['claimant_extname']); 
+        setContactNumber(bill['claimant_contact']); 
+
+        setHospitalStatus(bill['hospital_bill_status']);
+        setSavedAt(bill['datetime_added']);
+        setRemarks(bill['remarks']);
         
 
     };
@@ -230,15 +233,15 @@ function ViewHospitalBillContent() {
                                                                                 </div>
                                                                                 <div className="col-sm-4">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Burial Status:<br /><b>{burialStatus}</b></label>
+                                                                                        <label className="form-label">Hospital Bill Status:<br /><b>{hospitalStatus}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-4">
                                                                                     <div className="input-group">
                                                                                         <label className="form-label">
-                                                                                            Date of Death:<br />
-                                                                                            <b>{formatDate(deceasedDeathDate)}</b>
+                                                                                            Date of Registered:<br />
+                                                                                            <b>{formatDate(savedAt)}</b>
                                                                                         </label>
                                                                                         <br />
                                                                                     </div>
@@ -383,7 +386,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-sm-12">
                                                                                 <div className="input-group">
-                                                                                    <b className="form-label">Burial Requirements</b> 
+                                                                                    <b className="form-label">Hospital Bill Requirements</b> 
                                                                                 </div>
                                                                             </div>
 
@@ -401,14 +404,14 @@ function ViewHospitalBillContent() {
                                                                                         <input className="form-check-input me-1" type="checkbox" id="checkDeathCertificate"
                                                                                             checked={Boolean(checkedItems?.checkDeathCertificate)} />
                                                                                         <label className="form-check-label" htmlFor="checkDeathCertificate">
-                                                                                            &nbsp; Death Certificate (2 Copies)
+                                                                                            &nbsp; Medical Certificate (2 Copies)
                                                                                         </label>
                                                                                     </li>
                                                                                     <li className="list-group-item">
                                                                                         <input className="form-check-input me-1" type="checkbox" id="checkFuneralContract"
                                                                                             checked={Boolean(checkedItems?.checkFuneralContract)} />
                                                                                         <label className="form-check-label" htmlFor="checkFuneralContract">
-                                                                                            &nbsp; Funeral Contract (2 Copies)
+                                                                                            &nbsp; Final Bill (2 Copies)
                                                                                         </label>
                                                                                     </li>
                                                                                     <li className="list-group-item">
@@ -443,6 +446,11 @@ function ViewHospitalBillContent() {
 
                                                                             
                                                                             <div className="row"> 
+                                                                                
+                                                                                <div className="col-12">               
+                                                                                    <p htmlFor="firstName" className="form-label"><i>Claimant Information </i></p><br/>
+                                                                                </div>
+    
                                                                                 <div className="col-3">               
                                                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
                                                                                     <input
@@ -655,13 +663,164 @@ function ViewHospitalBillContent() {
                                                                                     />
                                                                                 </div>  
                                                                                 
+                                                                                <div className="col-12">    
+                                                                                    <br/>         
+                                                                                    <p htmlFor="firstName" className="form-label"><i>Family Composition </i></p> 
+                                                                                </div>
 
+                                                                                {/* --------- */}
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Family Member:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Relationship:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Age:</label>
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+ 
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Civil Status:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Purok:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Purok:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-12">
+                                                                                    <br /> 
+                                                                                    <hr/> 
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Family Member:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Relationship:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Age:</label>
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+ 
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Civil Status:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Purok:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Purok:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={patientPurok}
+                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                    />
+                                                                                </div>  
+
+                                                                                <div className="col-12">
+                                                                                    <br /> 
+                                                                                    <hr/> 
+                                                                                </div>  
+
+ 
+ 
+ 
 
 
 
                                                                             </div>
-
-                                                                            <br/>
+ 
                                                                             <br/>
                                                                             
                                                                             <button

@@ -929,8 +929,8 @@ function ManageBurialContent(){
                                                 <div className="col-12">
                                                     <div className="formContainer">
                                                         <h3>Burial Assistance Status: </h3><br/>
-                                                        <p>Current Status: <b>Pending</b></p><br/>  
- 
+                                                        <p>Current Status: <b>{burialAssistanceStatus}</b></p><br/>  
+
                                                         <select
                                                             className="form-control"
                                                             id="relationship"
@@ -938,13 +938,14 @@ function ManageBurialContent(){
                                                             onChange={(e) => setBurialAssistanceStatus(e.target.value)}
                                                         > 
                                                             <option value="Pending">Pending</option>
-                                                            <option value="Pending">Completed</option>
+                                                            <option value="Completed">Completed</option> 
                                                             <option value="Cancelled">Cancelled</option> 
                                                         </select>
 
                                                     </div>
                                                     <br/>
                                                 </div>
+
                                                 
                                                 <div className="col-12">  
                                                     <div className="formContainer">
