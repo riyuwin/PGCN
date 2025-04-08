@@ -1020,6 +1020,7 @@ app.put("/update_pswdo_interview", (req, res) => {
         patientProvince, patientMunicipality, patientBarangay, patientPurok,
         familyComposition = [], transactionName
     } = req.body;
+    console.log("Test123: ", id)
 
     const updateInterviewQuery = `
         UPDATE pswdo_interview SET
@@ -1029,8 +1030,11 @@ app.put("/update_pswdo_interview", (req, res) => {
         WHERE hospital_bill_id = ?
     `;
 
-    const deleteFamilyQuery = `
-        DELETE FROM family_composition WHERE pswdo_interview_id = ?
+    const updateFamilyQuery = `
+        UPDATE family_composition SET
+        family_member_name = ?, relationship = ?, age = ?, civil_status = ?, 
+        occupation = ?, monthly_income = ?
+        WHERE pswdo_interview_id = ?
     `;
 
     const insertFamilyQuery = `
@@ -1052,12 +1056,10 @@ app.put("/update_pswdo_interview", (req, res) => {
                 return res.status(500).json({ error: "Transaction start failed." });
             }
 
-            // Step 1: Update pswdo_interview record
             connection.query(updateInterviewQuery, [
                 contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
-                patientProvince, patientMunicipality, patientBarangay, patientPurok,
-                transactionName, id
+                patientProvince, patientMunicipality, patientBarangay, patientPurok, transactionName, id
             ], (err) => {
                 if (err) {
                     console.error("Update interview error:", err);
@@ -1067,58 +1069,56 @@ app.put("/update_pswdo_interview", (req, res) => {
                     });
                 }
 
-                // Step 2: Delete existing family members
-                connection.query(deleteFamilyQuery, [PSWDOId], (err) => {
-                    if (err) {
-                        console.error("Delete family composition error:", err);
-                        return connection.rollback(() => {
-                            connection.release();
-                            res.status(500).json({ error: "Failed to delete old family composition." });
-                        });
+                const updateOrInsertFamily = async () => {
+                    for (const member of familyComposition) {
+                        const values = [
+                            member.name || '',
+                            member.relationship || '',
+                            member.age || '',
+                            member.civilStatus || '',
+                            member.occupation || '',
+                            member.monthlyIncome || ''
+                        ];
+
+                        if (PSWDOId) {
+                            // Update existing member
+                            await new Promise((resolve, reject) => {
+                                connection.query(updateFamilyQuery, [...values, PSWDOId], (err) => {
+                                    if (err) return reject(err);
+                                    resolve();
+                                });
+                            });
+                        } else {
+                            // Insert new member
+                            await new Promise((resolve, reject) => {
+                                connection.query(insertFamilyQuery, [id, ...values], (err) => {
+                                    if (err) return reject(err);
+                                    resolve();
+                                });
+                            });
+                        }
                     }
+                };
 
-                    // Step 3: Insert new family members
-                    const insertPromises = familyComposition.map(member => {
-                        return new Promise((resolve, reject) => {
-                            const values = [
-                                PSWDOId,
-                                member.name || '',
-                                member.relationship || '',
-                                member.age || '',
-                                member.civilStatus || '',
-                                member.occupation || '',
-                                member.monthlyIncome || ''
-                            ];
-                            connection.query(insertFamilyQuery, values, (err) => {
-                                if (err) return reject(err);
-                                resolve();
+                updateOrInsertFamily().then(() => {
+                    connection.commit(err => {
+                        if (err) {
+                            console.error("Commit error:", err);
+                            return connection.rollback(() => {
+                                connection.release();
+                                res.status(500).json({ error: "Final commit failed." });
                             });
-                        });
+                        }
+
+                        connection.release();
+                        res.json({ message: "PSWDO interview and family data updated successfully!" });
                     });
-
-                    Promise.all(insertPromises)
-                        .then(() => {
-                            // Step 4: Commit transaction
-                            connection.commit(err => {
-                                if (err) {
-                                    console.error("Commit error:", err);
-                                    return connection.rollback(() => {
-                                        connection.release();
-                                        res.status(500).json({ error: "Final commit failed." });
-                                    });
-                                }
-
-                                connection.release();
-                                res.json({ message: "PSWDO interview and family data updated successfully!" });
-                            });
-                        })
-                        .catch(err => {
-                            console.error("Insert family composition error:", err);
-                            connection.rollback(() => {
-                                connection.release();
-                                res.status(500).json({ error: "Failed to insert updated family composition." });
-                            });
-                        });
+                }).catch(err => {
+                    console.error("Family update error:", err);
+                    connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ error: "Failed to update family data." });
+                    });
                 });
             });
         });

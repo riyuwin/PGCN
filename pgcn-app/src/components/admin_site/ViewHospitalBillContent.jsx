@@ -10,6 +10,8 @@ import { GuaranteeLetterLayout } from "./reports/GuaranteeLetterLayout";
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
+import { PettyCashLayout } from "./reports/PettyCashLayout";
+import { PSWDOLayout } from "./reports/PSWDOLayout";
 
 function ViewHospitalBillContent() {
 
@@ -41,10 +43,8 @@ function ViewHospitalBillContent() {
     const [contactPersonMiddlename, setContactPersonMname] = useState('');
     const [contactPersonLastname, setContactPersonLname] = useState('');
     const [contactPersonExtName, setContactPersonExtName] = useState('');
-    const [contactNumber, setContactNumber] = useState('');
-    const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
-    const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
-    const [contactPersonEncoded, setContactPersonEncoded] = useState('');
+    const [contactNumber, setContactNumber] = useState(''); 
+    const [contactPersonAmount, setContactPersonAmount] = useState(''); 
 
     const [PSWDOInterviewId, setPSWDOInterviewId] = useState('');
     const [contactPersonAge, setContactPersonAge] = useState('');
@@ -78,8 +78,14 @@ function ViewHospitalBillContent() {
     const [savedAt, setSavedAt] = useState('');
 
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
+    const [PSWDOId, setPSWDOId] = useState("");
 
+    const [formPage, setFormPage] = useState("Guarantee Letter");
     // Variables for inputs ------------------------------------------------------------
+
+    const handleFormPageUpdate = (formPageNumber) => {
+        setFormPage(formPageNumber);
+    }
 
     const fetchPSWDOInterviewId = async (hospitalId) => {
         try {
@@ -117,6 +123,7 @@ function ViewHospitalBillContent() {
         if (PSWDOInterview){
             setPSWDOInterviewStatus(true);
             
+            setPSWDOId(PSWDOInterview.interview['pswdo_id']);
             setContactPersonAge(PSWDOInterview.interview['age']); 
             setContactPersonCivilStatus(PSWDOInterview.interview['civil_status']); 
             setContactPersonOccupation(PSWDOInterview.interview['occupation']); 
@@ -153,6 +160,46 @@ function ViewHospitalBillContent() {
 
     };
 
+    const handleDownload = async () => {
+        const blob = await pdf(
+            <GuaranteeLetterLayout
+                patientFirstName={clientFirstName}
+                patientMiddleName={clientMiddleName}
+                patientLastName={clientLastName}
+                patientExtName={clientExtName}
+                claimantFirstName={contactPersonFirstname}
+                claimantMiddleName={contactPersonMiddlename}
+                claimantLastName={contactPersonLastname}
+                claimantExtName={contactPersonExtName}
+                patientPurok={clientPurok}
+                patientBarangay={clientBarangay}
+                patientMunicipality={clientMunicipality}
+                patientProvince={clientProvince}
+                claimantAmount={contactPersonAmount}
+            />
+        ).toBlob();
+
+        saveAs(blob, 'Guarantee_Letter.pdf');
+    };
+
+    const handlePettyCashDownload = async () => {
+        const blob = await pdf(
+            <PettyCashLayout                         
+                claimantFirstname={contactPersonFirstname}                   
+                claimantMiddlename={contactPersonMiddlename}                   
+                claimantLastname={contactPersonLastname}                   
+                claimantExtName={contactPersonExtName}                   
+                patientPurok={contactPersonPurok}                   
+                patientBarangay={patientBarangay}                   
+                patientMunicipality={patientMunicipality}                   
+                patientProvince={patientProvince}                   
+                claimantAmount={contactPersonAmount}
+            />
+        ).toBlob();
+
+        saveAs(blob, 'Petty-Cash-Voucer.pdf');
+    };
+
     const PopulateForms = (bill) => {
         console.log("Populating forms with:", bill); // Check all values 
 
@@ -171,10 +218,19 @@ function ViewHospitalBillContent() {
         setContactPersonLname(bill['claimant_lname']); 
         setContactPersonExtName(bill['claimant_extname']); 
         setContactNumber(bill['claimant_contact']); 
+        setContactPersonAmount(bill['claimant_amount']); 
 
         setHospitalStatus(bill['hospital_bill_status']);
         setSavedAt(bill['datetime_added']);
         setRemarks(bill['remarks']);
+
+        setCheckedItems({
+            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,  
+            checkMedCertificate: bill['check_med_certificate'] == 1,  
+            checkFinalBill: bill['check_hospital_bill'] == 1,  
+            checkValidId: bill['check_valid_id'] == 1,  
+        });
+        
     };
 
     const formatDate = (dateString) => {
@@ -187,7 +243,12 @@ function ViewHospitalBillContent() {
             day: "numeric",
         });
     };
-
+     
+    const currentDate = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
 
     const municipalityBarangays = {
         "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay", 
@@ -272,6 +333,7 @@ function ViewHospitalBillContent() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     id,
+                    PSWDOId,
                     contactPersonAge,
                     contactPersonCivilStatus,
                     contactPersonOccupation,
@@ -285,7 +347,7 @@ function ViewHospitalBillContent() {
                     patientPurok,
                     transactionName,
                     familyComposition: familyComposition.map(member => ({
-                        id: member.id || null, // Include ID if it's an existing record
+                        id: member.family_id || null, // Include ID if it's an existing record
                         name: member.name,
                         relationship: member.relationship,
                         age: member.age,
@@ -380,6 +442,76 @@ function ViewHospitalBillContent() {
                         <section className="section dashboard">
                             <div className="row">
 
+                                <div className="col-lg-12">
+                                    <div className="row">
+                                        <div className="col-xxl-12 col-md-12">
+                                            <div className="card info-card sales-card">
+                                                <div className="card-body">
+
+                                                    <div className="row mb-3">
+                                                        <div className="row">
+
+                                                            <div className="col-sm-12">
+                                                                <br />
+                                                                <div className="row">
+
+                                                                    <div /* className="columnContainer" */>
+                                                                        <h5>Generate Reports</h5><br />
+
+                                                                        <div className="row"> 
+                                                                            <div className="col-4">
+                                                                                <button 
+                                                                                    type="button" 
+                                                                                    className={`btn w-100 btn-success`} 
+                                                                                    onClick={() => handleFormPageUpdate("Guarantee Letter")}
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#viewReportModal"
+                                                                                >
+                                                                                    <i className='bx bxs-file-pdf' ></i> Guarantee Letter
+                                                                                </button>
+                                                                            </div>
+
+                                                                            <div className="col-4">
+                                                                                <button 
+                                                                                    type="button" 
+                                                                                    className={`btn w-100 btn-success`}
+                                                                                    onClick={() => handleFormPageUpdate("Petty Cash Voucher")}
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#viewReportModal"
+                                                                                >
+                                                                                    <i className='bx bxs-file-pdf' ></i> Petty Cash Voucher
+                                                                                </button>
+                                                                            </div>
+
+                                                                            <div className="col-4">
+                                                                                <button 
+                                                                                    type="button" 
+                                                                                    className={`btn w-100 btn-success`}
+                                                                                    onClick={() => handleFormPageUpdate("PSWDO Interview")}
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#viewReportModal"
+                                                                                >
+                                                                                    <i className='bx bxs-file-pdf' ></i> PSWDO Interview
+                                                                                </button>
+                                                                            </div> 
+                                                                        </div>
+ 
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="col-lg-7">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
@@ -388,6 +520,7 @@ function ViewHospitalBillContent() {
 
                                                     <div className="row mb-3">
                                                         <div className="row">
+
                                                             <div className="col-sm-12">
                                                                 <br />
                                                                 <div className="row">
@@ -530,25 +663,7 @@ function ViewHospitalBillContent() {
                                                                                         <label className="form-label">Contact Number:<br /> <b>{contactNumber}</b></label>
                                                                                     </div>
                                                                                 </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Serviced Covered:<br /> <b>{contactPersonFuneralService}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Funeral Covered:<br /> <b>{contactPersonFuneralService}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Encoded/Reviewed By:<br /> <b>{contactPersonEncoded}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
+ 
                                                                             </div>
                                                                         </div>
 
@@ -573,14 +688,14 @@ function ViewHospitalBillContent() {
                                                                                     </li>
                                                                                     <li className="list-group-item">
                                                                                         <input className="form-check-input me-1" type="checkbox" id="checkDeathCertificate"
-                                                                                            checked={Boolean(checkedItems?.checkDeathCertificate)} />
+                                                                                            checked={Boolean(checkedItems?.checkMedCertificate)} />
                                                                                         <label className="form-check-label" htmlFor="checkDeathCertificate">
                                                                                             &nbsp; Medical Certificate (2 Copies)
                                                                                         </label>
                                                                                     </li>
                                                                                     <li className="list-group-item">
                                                                                         <input className="form-check-input me-1" type="checkbox" id="checkFuneralContract"
-                                                                                            checked={Boolean(checkedItems?.checkFuneralContract)} />
+                                                                                            checked={Boolean(checkedItems?.checkFinalBill)} />
                                                                                         <label className="form-check-label" htmlFor="checkFuneralContract">
                                                                                             &nbsp; Final Bill (2 Copies)
                                                                                         </label>
@@ -887,109 +1002,117 @@ function ViewHospitalBillContent() {
 
                                                                                 {/* --------- */}
                                                                                 {familyComposition.map((member, index) => (
-                                                                                <Fragment key={index}>
-                                                                                    <div className="col-12">
-                                                                                        <br/>
-                                                                                        <label className="form-label"><i>Family Member {index + 1}</i></label>
-                                                                                    </div>
+                                                                                    <Fragment key={member.id || index}>
+                                                                                        <div className="col-12">
+                                                                                            <br />
+                                                                                            <label className="form-label"><i>Family Member {index + 1}</i></label>
+                                                                                        </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br/>
-                                                                                        <label className="form-label">Family Member:</label>
-                                                                                        <input
-                                                                                            type="text"
-                                                                                            className="form-control"
-                                                                                            value={member.name}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].name = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
+                                                                                        <div className="col-4">
+                                                                                            <br />
+                                                                                            <label className="form-label">Family Member:</label>
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                className="form-control"
+                                                                                                value={member.name || ''}
+                                                                                                onChange={(e) => {
+                                                                                                    const updated = familyComposition.map((item, i) =>
+                                                                                                        i === index ? { ...item, name: e.target.value } : item
+                                                                                                    );
+                                                                                                    setFamilyComposition(updated);
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
-                                                                                        <label className="form-label">Relationship:</label>
-                                                                                        <input
-                                                                                            type="text"
-                                                                                            className="form-control"
-                                                                                            value={member.relationship}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].relationship = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
+                                                                                        <div className="col-4">
+                                                                                            <br />
+                                                                                            <label className="form-label">Relationship:</label>
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                className="form-control"
+                                                                                                value={member.relationship || ''}
+                                                                                                onChange={(e) => {
+                                                                                                    const updated = familyComposition.map((item, i) =>
+                                                                                                        i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                    );
+                                                                                                    setFamilyComposition(updated);
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
-                                                                                        <label className="form-label">Age:</label>
-                                                                                        <input
-                                                                                            type="number"
-                                                                                            className="form-control"
-                                                                                            min="0"
-                                                                                            value={member.age}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].age = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
+                                                                                        <div className="col-4">
+                                                                                            <br />
+                                                                                            <label className="form-label">Age:</label>
+                                                                                            <input
+                                                                                                type="number"
+                                                                                                className="form-control"
+                                                                                                min="0"
+                                                                                                value={member.age || ''}
+                                                                                                onChange={(e) => {
+                                                                                                    const updated = familyComposition.map((item, i) =>
+                                                                                                        i === index ? { ...item, age: e.target.value } : item
+                                                                                                    );
+                                                                                                    setFamilyComposition(updated);
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
-                                                                                        <label className="form-label">Civil Status:</label>
-                                                                                        <input
-                                                                                            type="text"
-                                                                                            className="form-control"
-                                                                                            value={member.civilStatus}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].civilStatus = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
+                                                                                        <div className="col-4">
+                                                                                            <br />
+                                                                                            <label className="form-label">Civil Status:</label>
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                className="form-control"
+                                                                                                value={member.civilStatus || ''}
+                                                                                                onChange={(e) => {
+                                                                                                    const updated = familyComposition.map((item, i) =>
+                                                                                                        i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                                    );
+                                                                                                    setFamilyComposition(updated);
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
-                                                                                        <label className="form-label">Occupation:</label>
-                                                                                        <input
-                                                                                            type="text"
-                                                                                            className="form-control"
-                                                                                            value={member.occupation}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].occupation = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
-                                                                                    
-                                                                                    <div className="col-4">
-                                                                                        <br />
-                                                                                        <label className="form-label">Monthly Income:</label>
-                                                                                        <input
-                                                                                            type="number"
-                                                                                            className="form-control"
-                                                                                            value={member.monthlyIncome}
-                                                                                            onChange={(e) => {
-                                                                                                const updated = [...familyComposition];
-                                                                                                updated[index].monthlyIncome = e.target.value;
-                                                                                                setFamilyComposition(updated);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
+                                                                                        <div className="col-4">
+                                                                                            <br />
+                                                                                            <label className="form-label">Occupation:</label>
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                className="form-control"
+                                                                                                value={member.occupation || ''}
+                                                                                                onChange={(e) => {
+                                                                                                    const updated = familyComposition.map((item, i) =>
+                                                                                                        i === index ? { ...item, occupation: e.target.value } : item
+                                                                                                    );
+                                                                                                    setFamilyComposition(updated);
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
 
-                                                                                    <div className="col-12">
-                                                                                        <br />
-                                                                                        <hr />
-                                                                                    </div>
-                                                                                </Fragment>
-                                                                            ))}
+                                                                                        <div className="col-4">
+                                                                                            <br />
+                                                                                            <label className="form-label">Monthly Income:</label>
+                                                                                            <input
+                                                                                                type="number"
+                                                                                                className="form-control"
+                                                                                                value={member.monthlyIncome || ''}
+                                                                                                onChange={(e) => {
+                                                                                                    const updated = familyComposition.map((item, i) =>
+                                                                                                        i === index ? { ...item, monthlyIncome: e.target.value } : item
+                                                                                                    );
+                                                                                                    setFamilyComposition(updated);
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
+
+                                                                                        <div className="col-12">
+                                                                                            <br />
+                                                                                            <hr />
+                                                                                        </div>
+                                                                                    </Fragment>
+                                                                                ))}
+
+
 
                                                                             </div>
  
@@ -1039,6 +1162,211 @@ function ViewHospitalBillContent() {
                     </div>
                 </main>
             </main>
+
+            {/* Modal */}
+            <div className="modal fade" id="viewReportModal" tabIndex="-1" aria-labelledby="viewReportModal" aria-hidden="true">
+                <div className="modal-dialog modal-xl">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="viewReportModal">
+                                {formPage}
+                            </h5>  
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div className="modal-body">
+  
+                            <div className="generateContainer"> 
+                                <br />
+
+                                { formPage == "Guarantee Letter" && 
+                                    <>
+
+                                        <div  >
+                                            <div className="col-12 d-flex justify-content-end"> 
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-500  btn-secondary`}  
+                                                    onClick={handleDownload}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Download
+                                                </button>
+                                            </div><br />
+
+
+                                            <div className="formContainer">
+                                                <div className="row"> 
+ 
+
+                                                    <div className="col-4 d-flex justify-content-center">
+                                                        <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
+                                                    </div>
+
+                                                    <div className="col-4 d-flex flex-column align-items-center header_form"> 
+                                                        <p className="d-flex flex-column align-items-center text-center m-auto">
+                                                            Republic of the Philippines<br/>
+                                                            Province of Camarines Norte<br/>
+                                                            Dong Tulong
+                                                        </p> 
+                                                    </div>
+                
+                                                    <div className="col-4 d-flex justify-content-center">
+                                                        <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
+                                                    </div>
+
+                                                    <div className="col-12">
+                                                        <br/><hr/><br/>
+                                                    </div>
+
+
+                                                    <div className="col-12  d-flex flex-column align-items-start body_form">
+                                                        <div className="body_container">
+                                                            <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br/>
+                                                            <h4 className="headerFormText">GUARANTEE LETTER</h4><br/>
+                                                            <h5 className="headerFormText">{currentDate}</h5><br/><br/>
+                                                            <p className="guaranteeLetterContent"> 
+                                                                Respectfully referred to <b>{clientFirstName} {clientMiddleName} {clientLastName} {clientExtName}</b>, the herein attached approved request of <b>MR/MS. {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
+                                                            </p><br/><br/>
+
+                                                            <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
+                                                            <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+
+                                                        </div>
+                                                    </div> 
+                                                </div>   
+                                            </div> 
+
+                                        </div>
+
+                                        
+                                    </> 
+
+                                }
+
+                                { formPage == "Petty Cash Voucher" && 
+                                    <> 
+
+                                        <div className="formContent"> 
+                                            
+                                            <div className="col-12 d-flex justify-content-end"> 
+                                                <button 
+                                                    type="button" 
+                                                    className={`btn w-500  btn-secondary`}  
+                                                    onClick={handlePettyCashDownload}
+                                                >
+                                                    <i className='bx bxs-file-pdf' ></i> Download
+                                                </button>
+                                            </div><br />
+
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td colSpan="2" class="text-center">
+                                                            <br/>
+                                                            <b>PETTY CASH VOUCHER</b> <br/>
+                                                            Provincial Government of Camarines Norte <br/>
+                                                            LGU
+                                                            <br/><br/>
+                                                        </td>   
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <td colSpan="2" class="text-start">
+                                                            <b>Payee / Office:</b> {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}
+                                                        </td>   
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colSpan="2" class="text-start">
+                                                            <b>Address:</b> Purok - {patientPurok} Barangay {patientBarangay}, {patientMunicipality} {patientProvince}
+                                                        </td>   
+                                                    </tr> 
+
+                                                    <tr>
+                                                        <td colSpan="2" class="text-start">
+                                                            <b>I. To be filled up upon request</b>
+                                                        </td>   
+                                                    </tr> 
+
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            Particulars
+                                                        </td>   
+                                                        <td class="text-center">
+                                                            Amount
+                                                        </td>   
+                                                    </tr> 
+                                                    
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <b>Hospital Bill</b>
+                                                        </td>   
+                                                        <td class="text-center">
+                                                            <b>{Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</b>
+                                                        </td>   
+                                                    </tr> 
+                                                    
+                                                    <tr>
+                                                        <td colSpan="2" > 
+                                                            <p class="text-start"><b>A. </b> Approved by: </p>  
+                                                            <p class="text-center"><b>CYNTHIA R. DELA CRUZ</b></p>  
+                                                        </td> 
+                                                    </tr> 
+                                                    
+                                                    <tr>
+                                                        <td colSpan="2" > 
+                                                            <p class="text-start"><b>B. </b> Paid by: </p>  
+                                                            <p class="text-center"><b class="text-center">RITA G. GUEVARRA</b> <br/> Social Worker </p>  
+                                                        </td> 
+                                                    </tr> 
+                                                    
+                                                    <tr>
+                                                        <td colSpan="2">
+                                                            <p class="text-start"><b>C. </b> Cash Received by: </p>  
+                                                            <p class="text-center"><u><b class="text-center">{contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b></u></p>  
+                                                            <p class="text-center">Signature over Printed Name of Payee</p>    
+                                                            <p class="text-start">Date: <u>{currentDate}</u></p> 
+                                                        </td> 
+                                                    </tr>  
+
+                                                </tbody>
+                                            </table>
+
+                                        </div> 
+
+                                    </> 
+                                }
+
+                                { formPage == "PSWDO Interview" && 
+                                    <>
+                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                            <PSWDOLayout             
+                                            
+                                            />
+                                        </PDFViewer> 
+
+                                    </>
+                                } 
+                                
+
+                            </div>     
+
+                            
+
+                        </div>
+                        
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div> 
+            </div>
 
 
         </>

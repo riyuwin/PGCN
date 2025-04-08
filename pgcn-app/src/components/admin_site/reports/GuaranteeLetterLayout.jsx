@@ -147,7 +147,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                 <Text style={styles.dateText}>{currentDate}</Text>
                 <Text style={styles.contentText}>
                     Respectfully referred to <Text style={styles.boldText}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
-                    MR./MS. <Text style={styles.boldText}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
+                    MR/MS. <Text style={styles.boldText}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
                 </Text>
                 <Text style={styles.amountText}>
                     AMOUNT OF THE HOSPITAL BILL ASSISTANCE

@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'left',
-        borderWidth: 1,
-        borderColor: '#000',
+        /* borderWidth: 1,
+        borderColor: '#000', */
     },
     mobileNumberContent: {
         position: 'absolute',
@@ -126,8 +126,474 @@ const styles = StyleSheet.create({
         alignItems: 'left',
         borderWidth: 1,
         borderColor: '#000',
+    }, 
+
+    /* Family Member 1 */
+    familyMember1Content: {
+        position: 'absolute',
+        top: 255,
+        left: 35,
+        width: 155,
+        paddingLeft: 5,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11, 
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    relationship1Content: {
+        position: 'absolute',
+        top: 255,
+        left: 190,
+        width: 87,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    age1Content: {
+        position: 'absolute',
+        top: 255,
+        left: 275,
+        width: 45,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    civilStatus1Content: {
+        position: 'absolute',
+        top: 255,
+        left: 320,
+        width: 73,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    occupation1Content: {
+        position: 'absolute',
+        top: 255,
+        left: 393,
+        width: 91,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    monthlyIncome1Content: {
+        position: 'absolute',
+        top: 255,
+        left: 483,
+        width: 78,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
     },
 
+    /* Family Member 2 */
+    familyMember2Content: {
+        position: 'absolute',
+        top: 268,
+        left: 35,
+        width: 155,
+        paddingLeft: 5,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11, 
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    relationship2Content: {
+        position: 'absolute',
+        top: 268,
+        left: 190,
+        width: 87,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    age2Content: {
+        position: 'absolute',
+        top: 268,
+        left: 275,
+        width: 45,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    civilStatus2Content: {
+        position: 'absolute',
+        top: 268,
+        left: 320,
+        width: 73,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    occupation2Content: {
+        position: 'absolute',
+        top: 268,
+        left: 393,
+        width: 91,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    monthlyIncome2Content: {
+        position: 'absolute',
+        top: 268,
+        left: 483,
+        width: 78,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+
+    /* Family Member 3 */
+    familyMember3Content: {
+        position: 'absolute',
+        top: 281,
+        left: 35,
+        width: 155,
+        paddingLeft: 5,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11, 
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    relationship3Content: {
+        position: 'absolute',
+        top: 281,
+        left: 190,
+        width: 87,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    age3Content: {
+        position: 'absolute',
+        top: 281,
+        left: 275,
+        width: 45,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    civilStatus3Content: {
+        position: 'absolute',
+        top: 281,
+        left: 320,
+        width: 73,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    occupation3Content: {
+        position: 'absolute',
+        top: 281,
+        left: 393,
+        width: 91,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    monthlyIncome3Content: {
+        position: 'absolute',
+        top: 281,
+        left: 483,
+        width: 78,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    
+    /* Family Member 4 */
+    familyMember4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 35,
+        width: 155,
+        paddingLeft: 5,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11, 
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    relationship4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 190,
+        width: 87,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    age4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 275,
+        width: 45,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    civilStatus4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 320,
+        width: 73,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    occupation4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 393,
+        width: 91,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    monthlyIncome4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 483,
+        width: 78,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+
+    /* Family Member 4 */
+    familyMember4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 35,
+        width: 155,
+        paddingLeft: 5,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11, 
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    relationship4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 190,
+        width: 87,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    age4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 275,
+        width: 45,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    civilStatus4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 320,
+        width: 73,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    occupation4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 393,
+        width: 91,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    monthlyIncome4Content: {
+        position: 'absolute',
+        top: 294,
+        left: 483,
+        width: 78,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    
+    /* Family Member 5 */
+    familyMember5Content: {
+        position: 'absolute',
+        top: 308,
+        left: 35,
+        width: 155,
+        paddingLeft: 5,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11, 
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    relationship5Content: {
+        position: 'absolute',
+        top: 308,
+        left: 190,
+        width: 87,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    age5Content: {
+        position: 'absolute',
+        top: 308,
+        left: 275,
+        width: 45,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    civilStatus5Content: {
+        position: 'absolute',
+        top: 308,
+        left: 320,
+        width: 73,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    occupation5Content: {
+        position: 'absolute',
+        top: 308,
+        left: 393,
+        width: 91,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+    monthlyIncome5Content: {
+        position: 'absolute',
+        top: 308,
+        left: 483,
+        width: 78,
+        textAlign: 'center', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
+
+    /* Brief Background */
+    briefBackgroundContent: {
+        position: 'absolute',
+        top: 345,
+        left: 35,
+        width: 525,
+        height: 70,
+        paddingLeft: 10,
+        textAlign: 'left', 
+        overflow: 'hidden', 
+        whiteSpace: 'nowrap', 
+        fontSize: 11,
+        borderWidth: 1,
+        borderColor: '#000',
+        lineHeight: 1.3
+    },
 });
 
 // ✅ PDF Layout
@@ -176,9 +642,135 @@ export const PSWDOLayout = () => {
                 <View style={styles.monthlyIncomeContent}>
                     <Text>10,000</Text> 
                 </View>
+                
+                {/* Family Member 1 */}
+                <View style={styles.familyMember1Content}>
+                    <Text>John Erwin S. Albos</Text> 
+                </View>
 
-                <View style={[styles.familyName, styles.textContainer]}>
-                    <Text style={{ fontSize: familyNameFontSize }}>{familyName}</Text> 
+                <View style={styles.relationship1Content}>
+                    <Text>Mother</Text> 
+                </View>
+
+                <View style={styles.age1Content}>
+                    <Text>12</Text> 
+                </View>
+                
+                <View style={styles.civilStatus1Content}>
+                    <Text>Single</Text> 
+                </View>
+                
+                <View style={styles.occupation1Content}>
+                    <Text>Farmer</Text> 
+                </View>
+
+                <View style={styles.monthlyIncome1Content}>
+                    <Text>15,000</Text> 
+                </View>
+
+                {/* Family Member 2 */} 
+                <View style={styles.familyMember2Content}>
+                    <Text>John Erwin S. Albos</Text> 
+                </View>
+
+                <View style={styles.relationship2Content}>
+                    <Text>Mother</Text> 
+                </View>
+
+                <View style={styles.age2Content}>
+                    <Text>12</Text> 
+                </View>
+                
+                <View style={styles.civilStatus2Content}>
+                    <Text>Single</Text> 
+                </View>
+                
+                <View style={styles.occupation2Content}>
+                    <Text>Farmer</Text> 
+                </View>
+
+                <View style={styles.monthlyIncome2Content}>
+                    <Text>15,000</Text> 
+                </View>
+
+                {/* Family Member 3 */} 
+                <View style={styles.familyMember3Content}>
+                    <Text>John Erwin S. Albos</Text> 
+                </View>
+
+                <View style={styles.relationship3Content}>
+                    <Text>Mother</Text> 
+                </View>
+
+                <View style={styles.age3Content}>
+                    <Text>12</Text> 
+                </View>
+                
+                <View style={styles.civilStatus3Content}>
+                    <Text>Single</Text> 
+                </View>
+                
+                <View style={styles.occupation3Content}>
+                    <Text>Farmer</Text> 
+                </View>
+
+                <View style={styles.monthlyIncome3Content}>
+                    <Text>15,000</Text> 
+                </View>
+
+                {/* Family Member 4 */} 
+                <View style={styles.familyMember4Content}>
+                    <Text>John Erwin S. Albos</Text> 
+                </View>
+
+                <View style={styles.relationship4Content}>
+                    <Text>Mother</Text> 
+                </View>
+
+                <View style={styles.age4Content}>
+                    <Text>12</Text> 
+                </View>
+                
+                <View style={styles.civilStatus4Content}>
+                    <Text>Single</Text> 
+                </View>
+                
+                <View style={styles.occupation4Content}>
+                    <Text>Farmer</Text> 
+                </View>
+
+                <View style={styles.monthlyIncome4Content}>
+                    <Text>15,000</Text> 
+                </View>
+
+
+                {/* Family Member 4 */} 
+                <View style={styles.familyMember5Content}>
+                    <Text>John Erwin S. Albos</Text> 
+                </View>
+
+                <View style={styles.relationship5Content}>
+                    <Text>Mother</Text> 
+                </View>
+
+                <View style={styles.age5Content}>
+                    <Text>12</Text> 
+                </View>
+                
+                <View style={styles.civilStatus5Content}>
+                    <Text>Single</Text> 
+                </View>
+                
+                <View style={styles.occupation5Content}>
+                    <Text>Farmer</Text> 
+                </View>
+
+                <View style={styles.monthlyIncome5Content}>
+                    <Text>15,000</Text> 
+                </View>
+                
+                <View style={styles.briefBackgroundContent}>
+                    <Text>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </Text> 
                 </View>
 
             </Page>
