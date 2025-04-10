@@ -123,7 +123,7 @@ function ViewHospitalBillContent() {
         if (PSWDOInterview){
             setPSWDOInterviewStatus(true);
             
-            setPSWDOId(PSWDOInterview.interview['pswdo_id']);
+            setPSWDOId(PSWDOInterview.interview['pswdo_interview_id']);
             setContactPersonAge(PSWDOInterview.interview['age']); 
             setContactPersonCivilStatus(PSWDOInterview.interview['civil_status']); 
             setContactPersonOccupation(PSWDOInterview.interview['occupation']); 
@@ -203,7 +203,7 @@ function ViewHospitalBillContent() {
     const PopulateForms = (bill) => {
         console.log("Populating forms with:", bill); // Check all values 
 
-        setPSWDOInterviewId(bill['pswdo_id']);
+        setHospitalId(bill['hospital_bill_id']);
         setClientFirstName(bill['patient_fname']);
         setClientMiddleName(bill['patient_mname']);
         setClientLastName(bill['patient_lname']);
@@ -355,6 +355,7 @@ function ViewHospitalBillContent() {
                         occupation: member.occupation,
                         monthlyIncome: member.monthlyIncome,
                     })),
+                    hospitalId
                 }),
             });
     
@@ -1344,7 +1345,12 @@ function ViewHospitalBillContent() {
                                 { formPage == "PSWDO Interview" && 
                                     <>
                                         <PDFViewer style={{ width: "100%", height: "800px" }}>
-                                            <PSWDOLayout             
+                                            <PSWDOLayout    
+                                                claimantFirstname={contactPersonFirstname}
+                                                claimantMiddlename={contactPersonMiddlename}
+                                                claimantLastname={contactPersonLastname}
+                                                claimantExtName={contactPersonExtName}    
+
                                             
                                             />
                                         </PDFViewer> 

@@ -998,7 +998,7 @@ app.get("/retrieve_pswdo_interview_id", (req, res) => {
 
         const compositionQuery = "SELECT * FROM family_composition WHERE pswdo_interview_id = ?";
  
-        db.query(compositionQuery, [interview.pswdo_id], (err, compositionResults) => {
+        db.query(compositionQuery, [interview.pswdo_interview_id], (err, compositionResults) => {
             if (err) {
                 console.error("Error retrieving family composition:", err);
                 return res.status(500).json({ error: "Database error (composition)." });
