@@ -882,7 +882,7 @@ app.post("/insert_pswdo_interview", (req, res) => {
         id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
         contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
         patientProvince, patientMunicipality, patientBarangay, patientPurok, 
-        familyComposition = [], transactionName
+        familyComposition = [], transactionName, typeOfAssistance, member4Ps
     } = req.body;
 
     const savedAt = new Date().toISOString().slice(0, 19).replace("T", " "); 
@@ -890,8 +890,8 @@ app.post("/insert_pswdo_interview", (req, res) => {
     const insertInterviewQuery = `
         INSERT INTO pswdo_interview
         (hospital_bill_id, age, civil_status, occupation, monthly_income, gender, 
-        mobile_num, petty_amount, province, municipality, barangay, purok, transaction_name, savedAt)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        mobile_num, petty_amount, province, municipality, barangay, purok, type_assistance, member_4ps, transaction_name, savedAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const insertFamilyQuery = `
@@ -912,7 +912,7 @@ app.post("/insert_pswdo_interview", (req, res) => {
             connection.query(insertInterviewQuery, [
                 id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
-                patientProvince, patientMunicipality, patientBarangay, patientPurok, transactionName, savedAt
+                patientProvince, patientMunicipality, patientBarangay, patientPurok, typeOfAssistance, member4Ps, transactionName, savedAt
             ], (err, result) => {
                 if (err) {
                     return connection.rollback(() => {
@@ -1018,14 +1018,14 @@ app.put("/update_pswdo_interview", (req, res) => {
         id, PSWDOId, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
         contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
         patientProvince, patientMunicipality, patientBarangay, patientPurok,
-        familyComposition = [], transactionName
+        familyComposition = [], transactionName, typeOfAssistance, member4Ps,
     } = req.body;
 
     const updateInterviewQuery = `
         UPDATE pswdo_interview SET
         age = ?, civil_status = ?, occupation = ?, monthly_income = ?, gender = ?, 
         mobile_num = ?, petty_amount = ?, province = ?, municipality = ?, barangay = ?, 
-        purok = ?, transaction_name = ?
+        purok = ?, type_assistance = ?, member_4ps = ?, transaction_name = ?
         WHERE hospital_bill_id = ?
     `;
 
@@ -1057,7 +1057,7 @@ app.put("/update_pswdo_interview", (req, res) => {
                 contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
                 patientProvince, patientMunicipality, patientBarangay, patientPurok,
-                transactionName, id
+                typeOfAssistance, member4Ps, transactionName, id
             ], (err) => {
                 if (err) {
                     console.error("Update interview error:", err);

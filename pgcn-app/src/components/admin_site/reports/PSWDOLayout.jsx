@@ -13,7 +13,14 @@ Font.register({
 
 
 // ✅ PDF Layout
-export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName}) => {
+export const PSWDOLayout = ({ 
+                            claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantAge, claimantCivilStatus, 
+                            claimantPurok, claimantBarangay, claimantMunicipality, claimantProvince,
+                            claimantMobileNum, claimantOccupation, claimantMonthlyIncome, familyComposition, claimantRelationship,
+                            dateOfDeath, typeOfAssistance, member4Ps
+                        }) => {                                   
+
+    const maxWidth = 260;
         
     // Function to dynamically adjust font size based on width
     const getResponsiveFontSize = (text, maxWidth, baseFontSize) => {
@@ -33,22 +40,38 @@ export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLas
 
         if (estimatedTextWidth > maxWidth) {
             const scaleFactor = maxWidth / estimatedTextWidth; // Shrink factor
-            return Math.max(baseFontSize * scaleFactor, 7.8); // Ensure font is at least size 6
+            return Math.max(baseFontSize * scaleFactor, 10); // Ensure font is at least size 6
         }
         return baseFontSize;
     };
 
+    function formatToPesos(amount) {
+        return new Intl.NumberFormat('en-PH', {
+          minimumFractionDigits: 0
+        }).format(Math.abs(amount));
+      } 
 
     // Sample data
     const payeeName = `${claimantFirstname} ${claimantMiddlename} ${claimantLastname} ${claimantExtName}`;
-    const addressName = "P-1 Brgy. Camambugan Daet, Camarines Norte";
+    const addressName = `P-${claimantPurok} Brgy. ${claimantBarangay} ${claimantMunicipality}, ${claimantProvince}`;
     const baseFontSize = 11;
-    const briefBackground = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry123. Lorem Ipsum is simply dummy text of the printing and typesetting industry123435s. Lorem Ipsum is simply dummy text of the printing and typesetting industry123435124s.";
+    /* const briefBackground = `Client’s ${claimantRelationship} died last ${dateOfDeath} due to {}. The client's family is in dire need of financial help to cover the needs of the deceased.  As claimed, the client has no financial and no sufficient source of income as she only depends on ${claimantOccupation}, which is not enough to support the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance. `; */
+
+    const briefBackground = `
+            Client’s <span class="boldLetter">${claimantRelationship}</span> died last 
+            <span class="boldLetter">${dateOfDeath}</span> due to 
+            <span class="boldLetter">{causeOfDeath}</span>. The client's family is in dire need of financial help 
+            to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income 
+            as she only depends on <span class="boldLetter  ">${claimantOccupation}</span>, which is not enough to support 
+            the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
+            `;
+
+
     const amount = "FIFTEEN THOUSAND PESOS ONLY ";
     const amountNumber = 15000;
 
     const familyName = "Juan Dela Cruz Cruz Jr";
-    const clientName = "Juan Dela Cruz";
+    const clientName = "Juan Dela Cruz ";
 
     // ✅ Styles
     const styles = StyleSheet.create({
@@ -104,14 +127,13 @@ export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLas
             position: 'absolute',
             top: 164,
             left: 88,
-            width: 212,
+            width: 215,
             height: 13,
+            fontSize: 11,
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left',
-            /* borderWidth: 1,
-            borderColor: '#000', */
+            alignItems: 'left', 
         },
         mobileNumberContent: {
             position: 'absolute',
@@ -479,12 +501,16 @@ export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLas
             left: 35,
             width: 525,
             height: 75,
-            paddingLeft: 3,
+            paddingLeft: 0,
+            paddingRight: 0,
             textAlign: 'left', 
             overflow: 'hidden', 
             whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            fontSize: 11,
+            letterSpacing: 0.1, 
             lineHeight: 1.3,
+            /* borderWidth: 1,
+            borderColor: '#000', */
         },
 
         
@@ -704,13 +730,17 @@ export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLas
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'left', 
+        },
+        boldLetter:{ 
+            fontFamily: 'Roboto',
+            fontWeight: 'bold',    
         }
     });
 
     const nameFontSize = getResponsiveFontSize(payeeName, maxWidth, baseFontSize);
-    const addressFontSize = getResponsiveFontSize(addressName, maxWidth, baseFontSize);
+    const addressFontSize = getResponsiveFontSize(addressName, 230, baseFontSize);
     const familyNameFontSize = getResponsiveFontSize(familyName, maxWidth, baseFontSize);
-    const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 250, baseFontSize);
+    const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 200, baseFontSize);
     const certifyNameFontSize = getResponsiveFontSize(payeeName, 150, 10);
     const amountFontSize = getResponsiveFontSize(amount, 120, 11);
     const amountNumberFontSize = getResponsiveFontSize(amountNumber, maxWidth, baseFontSize);
@@ -734,11 +764,11 @@ export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLas
                 </View>
  
                 <View style={styles.ageContent}>
-                    <Text>12</Text> 
+                    <Text>{claimantAge}</Text> 
                 </View>
 
                 <View style={styles.civilStatusContent}>
-                    <Text>Single</Text> 
+                    <Text>{claimantCivilStatus}</Text> 
                 </View> 
                 
                 <View style={[styles.addressContent, styles.textContainer]}>
@@ -746,182 +776,249 @@ export const PSWDOLayout = ({ claimantFirstname, claimantMiddlename, claimantLas
                 </View>
 
                 <View style={styles.mobileNumberContent}>
-                    <Text>09126992952</Text> 
+                    <Text>{claimantMobileNum}</Text> 
                 </View>
 
                 <View style={styles.occupationContent}>
-                    <Text>Farmer</Text> 
+                    <Text>{claimantOccupation}</Text> 
                 </View>
  
                 <View style={styles.monthlyIncomeContent}>
-                    <Text>10,000</Text> 
+                    <Text>{formatToPesos(claimantMonthlyIncome)}</Text> 
                 </View>
                 
                 {/* Family Member 1 */}
-                <View style={styles.familyMember1Content}>
-                    <Text>John Erwin S. Albos</Text> 
-                </View>
+                { familyComposition[0] && 
+                    <>
+                        <View style={styles.familyMember1Content}>
+                            <Text>{familyComposition[0].name}</Text> 
+                        </View>
 
-                <View style={styles.relationship1Content}>
-                    <Text>Mother</Text> 
-                </View>
+                        <View style={styles.relationship1Content}>
+                            <Text>{familyComposition[0].relationship}</Text> 
+                        </View>
 
-                <View style={styles.age1Content}>
-                    <Text>12</Text> 
-                </View>
+                        <View style={styles.age1Content}>
+                            <Text>{familyComposition[0].age}</Text> 
+                        </View>
+                        
+                        <View style={styles.civilStatus1Content}>
+                            <Text>{familyComposition[0].civilStatus}</Text> 
+                        </View>
+                        
+                        <View style={styles.occupation1Content}>
+                            <Text>{familyComposition[0].occupation}</Text> 
+                        </View>
+
+                        <View style={styles.monthlyIncome1Content}>
+                            <Text>{formatToPesos(familyComposition[0].monthlyIncome)}</Text> 
+                        </View>
+                    </>
+                }
                 
-                <View style={styles.civilStatus1Content}>
-                    <Text>Single</Text> 
-                </View>
+                { familyComposition[1] && 
+                    <>
+                        {/* Family Member 2 */} 
+                        <View style={styles.familyMember2Content}>
+                            <Text>{familyComposition[1].name}</Text> 
+                        </View>
+
+                        <View style={styles.relationship2Content}>
+                            <Text>{familyComposition[1].relationship}</Text> 
+                        </View>
+
+                        <View style={styles.age2Content}>
+                            <Text>{familyComposition[1].age}</Text> 
+                        </View>
+                        
+                        <View style={styles.civilStatus2Content}>
+                            <Text>{familyComposition[1].civilStatus}</Text> 
+                        </View>
+                        
+                        <View style={styles.occupation2Content}>
+                            <Text>{familyComposition[1].occupation}</Text> 
+                        </View>
+
+                        <View style={styles.monthlyIncome2Content}>
+                            <Text>{formatToPesos(familyComposition[1].monthlyIncome)}</Text> 
+                        </View>
+                    </>
+                }
                 
-                <View style={styles.occupation1Content}>
-                    <Text>Farmer</Text> 
-                </View>
+                { familyComposition[2] && 
+                    <> 
+                        {/* Family Member 3 */} 
+                        <View style={styles.familyMember3Content}>
+                            <Text>{familyComposition[2].name}</Text> 
+                        </View>
 
-                <View style={styles.monthlyIncome1Content}>
-                    <Text>15,000</Text> 
-                </View>
+                        <View style={styles.relationship3Content}>
+                            <Text>{familyComposition[2].relationship}</Text> 
+                        </View>
 
-                {/* Family Member 2 */} 
-                <View style={styles.familyMember2Content}>
-                    <Text>John Erwin S. Albos</Text> 
-                </View>
+                        <View style={styles.age3Content}>
+                            <Text>{familyComposition[3].relationship}</Text> 
+                        </View>
+                        
+                        <View style={styles.civilStatus3Content}>
+                            <Text>{familyComposition[3].civilStatus}</Text> 
+                        </View>
+                        
+                        <View style={styles.occupation3Content}>
+                            <Text>{familyComposition[3].occupation}</Text> 
+                        </View>
 
-                <View style={styles.relationship2Content}>
-                    <Text>Mother</Text> 
-                </View>
+                        <View style={styles.monthlyIncome3Content}>
+                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text> 
+                        </View>
+                    </>
+                }
 
-                <View style={styles.age2Content}>
-                    <Text>12</Text> 
-                </View>
-                
-                <View style={styles.civilStatus2Content}>
-                    <Text>Single</Text> 
-                </View>
-                
-                <View style={styles.occupation2Content}>
-                    <Text>Farmer</Text> 
-                </View>
+                { familyComposition[3] && 
+                    <> 
+                        {/* Family Member 4 */} 
+                        <View style={styles.familyMember4Content}>
+                            <Text>{familyComposition[3].name}</Text> 
+                        </View>
 
-                <View style={styles.monthlyIncome2Content}>
-                    <Text>15,000</Text> 
-                </View>
+                        <View style={styles.relationship4Content}>
+                            <Text>{familyComposition[3].relationship}</Text> 
+                        </View>
 
-                {/* Family Member 3 */} 
-                <View style={styles.familyMember3Content}>
-                    <Text>John Erwin S. Albos</Text> 
-                </View>
+                        <View style={styles.age4Content}>
+                            <Text>{familyComposition[3].age}</Text> 
+                        </View>
+                        
+                        <View style={styles.civilStatus4Content}>
+                            <Text>{familyComposition[3].civilStatus}</Text> 
+                        </View>
+                        
+                        <View style={styles.occupation4Content}>
+                            <Text>{familyComposition[3].occupation}</Text> 
+                        </View>
 
-                <View style={styles.relationship3Content}>
-                    <Text>Mother</Text> 
-                </View>
+                        <View style={styles.monthlyIncome4Content}>
+                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text> 
+                        </View>
+                    </>
+                }
 
-                <View style={styles.age3Content}>
-                    <Text>12</Text> 
-                </View>
-                
-                <View style={styles.civilStatus3Content}>
-                    <Text>Single</Text> 
-                </View>
-                
-                <View style={styles.occupation3Content}>
-                    <Text>Farmer</Text> 
-                </View>
+                { familyComposition[4] && 
+                    <> 
+                        {/* Family Member 5 */} 
+                        <View style={styles.familyMember5Content}>
+                            <Text>{familyComposition[4].name}</Text> 
+                        </View>
 
-                <View style={styles.monthlyIncome3Content}>
-                    <Text>15,000</Text> 
-                </View>
+                        <View style={styles.relationship5Content}>
+                            <Text>{familyComposition[4].relationship}</Text> 
+                        </View>
 
-                {/* Family Member 4 */} 
-                <View style={styles.familyMember4Content}>
-                    <Text>John Erwin S. Albos</Text> 
-                </View>
+                        <View style={styles.age5Content}>
+                            <Text>{familyComposition[4].age}</Text> 
+                        </View>
+                        
+                        <View style={styles.civilStatus5Content}>
+                            <Text>{familyComposition[4].civilStatus}</Text> 
+                        </View>
+                        
+                        <View style={styles.occupation5Content}>
+                            <Text>{familyComposition[4].occupation}</Text> 
+                        </View>
 
-                <View style={styles.relationship4Content}>
-                    <Text>Mother</Text> 
-                </View>
-
-                <View style={styles.age4Content}>
-                    <Text>12</Text> 
-                </View>
-                
-                <View style={styles.civilStatus4Content}>
-                    <Text>Single</Text> 
-                </View>
-                
-                <View style={styles.occupation4Content}>
-                    <Text>Farmer</Text> 
-                </View>
-
-                <View style={styles.monthlyIncome4Content}>
-                    <Text>15,000</Text> 
-                </View>
-
-
-                {/* Family Member 4 */} 
-                <View style={styles.familyMember5Content}>
-                    <Text>John Erwin S. Albos</Text> 
-                </View>
-
-                <View style={styles.relationship5Content}>
-                    <Text>Mother</Text> 
-                </View>
-
-                <View style={styles.age5Content}>
-                    <Text>12</Text> 
-                </View>
-                
-                <View style={styles.civilStatus5Content}>
-                    <Text>Single</Text> 
-                </View>
-                
-                <View style={styles.occupation5Content}>
-                    <Text>Farmer</Text> 
-                </View>
-
-                <View style={styles.monthlyIncome5Content}>
-                    <Text>15,000</Text> 
-                </View>
-                
-                <View style={styles.briefBackgroundContent}>
+                        <View style={styles.monthlyIncome5Content}>
+                            <Text>{formatToPesos(familyComposition[4].monthlyIncome)}</Text> 
+                        </View>
+                    </>
+                }
+ 
+                {/* <View style={[styles.briefBackgroundContent, styles.textContainer]} >
                     <Text style={{ fontSize: briefBackgroundFontSize }}>{briefBackground}</Text> 
+                </View> */}
+
+                <View style={[styles.briefBackgroundContent, styles.textContainer]}>
+                    <Text style={{ fontSize: briefBackgroundFontSize }}>
+                        Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last{" "}
+                        <Text style={styles.boldLetter}>{dateOfDeath}</Text> due to{" "}
+                        <Text style={styles.boldLetter}>{}</Text>. The client's family is in dire need of financial help
+                        to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
+                        as she only depends on <Text style={styles.boldLetter}>{formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
+                        the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
+                    </Text>
                 </View>
 
-                <View style={styles.medicalTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
+                { typeOfAssistance == "Medical" && 
+                    <>
+                        <View style={styles.medicalTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>                    
+                    </>
+                }
                 
-                <View style={styles.burialTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
+                { typeOfAssistance == "Burial" && 
+                    <>
+                        <View style={styles.burialTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>            
+                    </>
+                }
+
+                { typeOfAssistance == "Food" && 
+                    <>
+                        <View style={styles.foodTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>          
+                    </>
+                }
+
                 
-                <View style={styles.foodTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
+                { typeOfAssistance == "Education" && 
+                    <>
+                        <View style={styles.educationTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>  
+                    </>
+                }
+                
+                { typeOfAssistance == "Transportation" && 
+                    <>
+                        <View style={styles.transportationTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>
+                    </>
+                }
 
-                <View style={styles.educationTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
-
-                <View style={styles.transportationTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
-
-                <View style={styles.emergencyShelterTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
-
-                <View style={styles.otherTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
-
-                <View style={styles.yes4PsTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
-
-                <View style={styles.no4PsTypeAssistanceContent}>
-                    <Text>/</Text> 
-                </View>
+                { typeOfAssistance == "Emergency Shelter" && 
+                    <>
+                        <View style={styles.emergencyShelterTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>
+                    </>
+                }
+                
+                { typeOfAssistance == "Others" && 
+                    <>
+                        <View style={styles.otherTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>
+                    </>
+                }
+                
+                { member4Ps == "Yes" && 
+                    <>
+                        <View style={styles.yes4PsTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>
+                    </>
+                }
+                
+                { member4Ps == "No" && 
+                    <>
+                        <View style={styles.no4PsTypeAssistanceContent}>
+                            <Text>/</Text> 
+                        </View>
+                    </>
+                }
  
                 <View style={[styles.certifyNameContent, styles.textContainer]}>
                     <Text style={{ fontSize: certifyNameFontSize }}>{payeeName}</Text> 

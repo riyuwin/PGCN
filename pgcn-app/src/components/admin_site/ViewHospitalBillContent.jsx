@@ -55,6 +55,7 @@ function ViewHospitalBillContent() {
     const [contactPersonMobileNum, setContactPersonMobileNum] = useState('');
     const [contactPersonPettyAmount, setContactPersonPettyAmount] = useState('');
     const [contactPersonTransactionName, setContactPersonTransactionName] = useState('');
+    const [contactPersonRelationship, setContactPersonRelationship] = useState('');
     const [contactPersonProvince, setContactPersonProvince] = useState('Camarines Norte');
     const [contactPersonMunicipality, setContactPersonMuncipality] = useState('');
     const [contactPersonBarangay, setContactPersonBarangay] = useState('');
@@ -79,8 +80,11 @@ function ViewHospitalBillContent() {
 
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
+    const [typeOfAssistance, setTypeOfAssistance] = useState('');
+    const [member4Ps, setMember4Ps] = useState('');
 
     const [formPage, setFormPage] = useState("Guarantee Letter");
+
     // Variables for inputs ------------------------------------------------------------
 
     const handleFormPageUpdate = (formPageNumber) => {
@@ -136,6 +140,8 @@ function ViewHospitalBillContent() {
             setPatientBarangay(PSWDOInterview.interview['barangay']); 
             setPatientPurok(PSWDOInterview.interview['purok']); 
             setContactPersonTransactionName(PSWDOInterview.interview['transaction_name']);  
+            setTypeOfAssistance(PSWDOInterview.interview['type_assistance']);  
+            setMember4Ps(PSWDOInterview.interview['member_4ps']);  
             
             if (PSWDOInterview.familyComposition) {
                 const data = PSWDOInterview.familyComposition;
@@ -150,6 +156,10 @@ function ViewHospitalBillContent() {
                     occupation: member.occupation || '',
                     monthlyIncome: member.monthly_income || '',
                 }));
+                
+                /* setFamilyMember1(filledData[0]); */
+
+                console.log("Sample : ", filledData)
         
                 setFamilyComposition(filledData);
             }
@@ -219,6 +229,8 @@ function ViewHospitalBillContent() {
         setContactPersonExtName(bill['claimant_extname']); 
         setContactNumber(bill['claimant_contact']); 
         setContactPersonAmount(bill['claimant_amount']); 
+
+        setContactPersonRelationship(bill['claimant_relationship']);
 
         setHospitalStatus(bill['hospital_bill_status']);
         setSavedAt(bill['datetime_added']);
@@ -345,6 +357,8 @@ function ViewHospitalBillContent() {
                     patientMunicipality,
                     patientBarangay,
                     patientPurok,
+                    typeOfAssistance, 
+                    member4Ps,
                     transactionName,
                     familyComposition: familyComposition.map(member => ({
                         id: member.family_id || null, // Include ID if it's an existing record
@@ -396,7 +410,7 @@ function ViewHospitalBillContent() {
                     id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
                     contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
                     patientProvince, patientMunicipality, patientBarangay, patientPurok,
-                    familyComposition, transactionName
+                    familyComposition, transactionName, typeOfAssistance, member4Ps
                 })
             });
     
@@ -665,6 +679,12 @@ function ViewHospitalBillContent() {
                                                                                     </div>
                                                                                 </div>
  
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Claimant Relationship:<br /> <b>{contactPersonRelationship}</b></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
                                                                             </div>
                                                                         </div>
 
@@ -968,6 +988,43 @@ function ViewHospitalBillContent() {
                                                                                     />
                                                                                 </div>  
                                                                                 
+                                                                                <div className="col-12">    
+                                                                                    <br/>         
+                                                                                    <hr/>
+                                                                                    <p htmlFor="firstName" className="form-label"><i>Type of Assistance </i></p> 
+                                                                                </div>
+
+                                                                                <div className="col-12">         
+                                                                                    <br/>           
+                                                                                    <label htmlFor="firstName" className="form-label">Select Type of Assistance:</label> 
+                                                                                    <select
+                                                                                        className="form-control"
+                                                                                        value={typeOfAssistance} 
+                                                                                        onChange={(e) => setTypeOfAssistance(e.target.value)}>
+                                                                                        <option value="">Select Type of Assistance</option>
+                                                                                        <option value="Medical">Medical</option>
+                                                                                        <option value="Burial">Burial</option>
+                                                                                        <option value="Food">Food</option>
+                                                                                        <option value="Educational">Educational</option>
+                                                                                        <option value="Transportation">Transportation</option>
+                                                                                        <option value="Emergency Shelter">Emergency Shelter</option>
+                                                                                        <option value="Others">Others</option>  
+                                                                                    </select>
+                                                                                </div>
+
+                                                                                
+                                                                                <div className="col-12">         
+                                                                                    <br/>           
+                                                                                    <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label> 
+                                                                                    <select
+                                                                                        className="form-control"
+                                                                                        value={member4Ps} 
+                                                                                        onChange={(e) => setMember4Ps(e.target.value)}> 
+                                                                                        <option value="No">No</option> 
+                                                                                        <option value="Yes">Yes</option>
+                                                                                    </select>
+                                                                                </div>
+
                                                                                 <div className="col-12">    
                                                                                     <br/>         
                                                                                     <hr/>
@@ -1350,6 +1407,21 @@ function ViewHospitalBillContent() {
                                                 claimantMiddlename={contactPersonMiddlename}
                                                 claimantLastname={contactPersonLastname}
                                                 claimantExtName={contactPersonExtName}    
+                                                claimantAge={contactPersonAge}    
+                                                claimantCivilStatus={contactPersonCivilStatus} 
+                                                claimantPurok={patientPurok}    
+                                                claimantBarangay={patientBarangay}    
+                                                claimantMunicipality={patientMunicipality}    
+                                                claimantProvince={patientProvince}     
+                                                claimantMobileNum={contactPersonMobileNum}
+                                                claimantOccupation={contactPersonOccupation}    
+                                                claimantMonthlyIncome={contactPersonIncome}
+                                                familyComposition={familyComposition}
+                                                claimantRelationship={contactPersonRelationship}
+                                                dateOfDeath={deceasedDeathDate} 
+                                                typeOfAssistance={typeOfAssistance}
+                                                member4Ps={member4Ps}
+
 
                                             
                                             />
