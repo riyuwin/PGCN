@@ -453,7 +453,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
         barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
-        remarks,
+        remarks, pettyCashAmount,
         currentDateTime
     } = req.body;
 
@@ -469,9 +469,9 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceased_purok, deceased_barangay, deceased_municipality, deceased_province, 
         deceased_gender, deceased_deathdate, death_certificate, contact_fname, contact_mname, contact_lname, contact_ext_name, contact_number,
         contact_service_covered, contact_funeral_service, contact_person_encoded, 
-        check_barangay_indigency, check_death_certificate, check_funeral_contract, check_valid_id, burial_status, 
+        check_barangay_indigency, check_death_certificate, check_funeral_contract, check_valid_id, burial_status, petty_cash,
         remarks, savedAt) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.getConnection((err, connection) => {
@@ -494,7 +494,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
                 contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
                 contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
                 barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
-                remarks, currentDateTime
+                remarks, pettyCashAmount, currentDateTime
             ], (err, result) => {
                 if (err) {
                     console.error("Burial Assistance Insertion Error:", err.sqlMessage || err);
@@ -578,7 +578,7 @@ app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
         barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
-        remarks, currentDateTime
+        remarks, pettyCashAmount, currentDateTime
     } = req.body;
 
     const deathCertificate = req.file ? req.file.buffer : null;
@@ -590,7 +590,7 @@ app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceased_gender = ?, deceased_deathdate = ?, contact_fname = ?, contact_mname = ?, contact_lname = ?, contact_ext_name = ?, contact_number = ?,
         contact_service_covered = ?, contact_funeral_service = ?, contact_person_encoded = ?, 
         check_barangay_indigency = ?, check_death_certificate = ?, check_funeral_contract = ?, check_valid_id = ?, burial_status = ?,
-        remarks = ?, savedAt = ?
+        remarks = ?, petty_cash = ?, savedAt = ?
     `;
 
     const queryParams = [
@@ -600,7 +600,7 @@ app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
         barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
-        remarks, currentDateTime
+        remarks, pettyCashAmount, currentDateTime
     ];
 
     if (deathCertificate) {
@@ -879,7 +879,7 @@ app.get("/retrieve_hospital_bill_id", (req, res) => {
 
 app.post("/insert_pswdo_interview", (req, res) => {
     const {
-        id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+        hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
         contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
         patientProvince, patientMunicipality, patientBarangay, patientPurok, 
         familyComposition = [], transactionName, typeOfAssistance, member4Ps
@@ -889,9 +889,9 @@ app.post("/insert_pswdo_interview", (req, res) => {
 
     const insertInterviewQuery = `
         INSERT INTO pswdo_interview
-        (hospital_bill_id, age, civil_status, occupation, monthly_income, gender, 
+        (hospital_bill_id, burial_id, age, civil_status, occupation, monthly_income, gender, 
         mobile_num, petty_amount, province, municipality, barangay, purok, type_assistance, member_4ps, transaction_name, savedAt)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const insertFamilyQuery = `
@@ -910,7 +910,7 @@ app.post("/insert_pswdo_interview", (req, res) => {
             }
 
             connection.query(insertInterviewQuery, [
-                id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+                hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
                 patientProvince, patientMunicipality, patientBarangay, patientPurok, typeOfAssistance, member4Ps, transactionName, savedAt
             ], (err, result) => {

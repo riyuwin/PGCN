@@ -39,6 +39,7 @@ function AlayPagdamayContent(){
     const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
     const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
     const [contactPersonEncoded, setContactPersonEncoded] = useState('');
+    const [pettyCashAmount, setPettyCashAmount] = useState('');
     
     const [burialStatus, setBurialStatus] = useState(''); 
     const [checkedItems, setCheckedItems] = useState({
@@ -127,6 +128,7 @@ function AlayPagdamayContent(){
         formData.append("validId", checkedItems.checkValidId);
         formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
+        formData.append("pettyCashAmount", pettyCashAmount);
         formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
     
         // Append the file (deathCertificate should be from an <input type="file"> element)
@@ -238,6 +240,7 @@ function AlayPagdamayContent(){
         formData.append("validId", checkedItems.checkValidId);
         formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
+        formData.append("pettyCashAmount", pettyCashAmount);
         formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
     
         if (deathCertificate) {
@@ -311,7 +314,7 @@ function AlayPagdamayContent(){
 
         if (modalName == "View"){
             
-            navigate(`/admin/view_burial_assistance/${burial['burial_id']}`);
+            navigate(`/admin/view_alay_pagdamay/${burial['burial_id']}`);
         }   
     }; 
  
@@ -343,6 +346,7 @@ function AlayPagdamayContent(){
         setContactPersonServiceCovered(burial['contact_service_covered']);
         setContactPersonFuneralCovered(burial['contact_funeral_service']);
         setContactPersonEncoded(burial['contact_person_encoded']);
+        setPettyCashAmount(burial['petty_cash']);
         
         setBurialStatus(burial['burial_status']); 
         setCheckedItems({
@@ -390,6 +394,7 @@ function AlayPagdamayContent(){
         setContactPersonFuneralCovered('');
         setContactPersonEncoded('');
         setDeathCertificate(null);        
+        setPettyCashAmount('');
     }  
 
     useEffect(() => {
@@ -985,7 +990,18 @@ function AlayPagdamayContent(){
                                                     </select>
                                                 </div>
             
-                                                
+                                                                                                
+                                                <div className="col-3">
+                                                    <br />
+                                                    <label htmlFor="relationship" className="form-label">Petty Cash Amount:</label>
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        id="contactNumber"
+                                                        value={pettyCashAmount}
+                                                        onChange={(e) => setPettyCashAmount(e.target.value)}
+                                                    />
+                                                </div>  
                                                 
                                             </div>
 

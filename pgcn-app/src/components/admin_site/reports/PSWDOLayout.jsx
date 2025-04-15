@@ -17,10 +17,27 @@ export const PSWDOLayout = ({
                             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantAge, claimantCivilStatus, 
                             claimantPurok, claimantBarangay, claimantMunicipality, claimantProvince,
                             claimantMobileNum, claimantOccupation, claimantMonthlyIncome, familyComposition, claimantRelationship,
-                            dateOfDeath, typeOfAssistance, member4Ps
+                            dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount
                         }) => {                                   
 
     const maxWidth = 260;
+
+    const formatDate = (dateString) => {
+        if (!dateString) return "N/A"; // Handle null or undefined dates
+
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    };
+     
+    const currentDate = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
         
     // Function to dynamically adjust font size based on width
     const getResponsiveFontSize = (text, maxWidth, baseFontSize) => {
@@ -72,6 +89,31 @@ export const PSWDOLayout = ({
 
     const familyName = "Juan Dela Cruz Cruz Jr";
     const clientName = "Juan Dela Cruz ";
+
+    function numberToWords(num) {
+        const ones = [
+          '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six',
+          'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
+          'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+          'Seventeen', 'Eighteen', 'Nineteen'
+        ];
+      
+        const tens = [
+          '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
+          'Sixty', 'Seventy', 'Eighty', 'Ninety'
+        ];
+      
+        function convertToWords(n) {
+          if (n < 20) return ones[n];
+          if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + ones[n % 10] : '');
+          if (n < 1000) return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + convertToWords(n % 100) : '');
+          if (n < 1000000) return convertToWords(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 !== 0 ? ' ' + convertToWords(n % 1000) : '');
+          return 'Amount too large';
+        }
+      
+        const words = convertToWords(num);
+        return (words ? words + ' PESOS' : 'ZERO PESOS').toUpperCase();
+      }       
 
     // ✅ Styles
     const styles = StyleSheet.create({
@@ -669,7 +711,7 @@ export const PSWDOLayout = ({
             left: 365,
             width: 110,
             height: 15,
-            fontSize: 10,
+            fontSize: 11,
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
@@ -683,7 +725,7 @@ export const PSWDOLayout = ({
             left: 190,
             width: 90,
             height: 15,
-            fontSize: 10,
+            fontSize: 11,
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
@@ -737,14 +779,17 @@ export const PSWDOLayout = ({
         }
     });
 
+    console.log("He", contactPersonPettyAmount)
+
     const nameFontSize = getResponsiveFontSize(payeeName, maxWidth, baseFontSize);
     const addressFontSize = getResponsiveFontSize(addressName, 230, baseFontSize);
     const familyNameFontSize = getResponsiveFontSize(familyName, maxWidth, baseFontSize);
     const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 200, baseFontSize);
-    const certifyNameFontSize = getResponsiveFontSize(payeeName, 150, 10);
-    const amountFontSize = getResponsiveFontSize(amount, 120, 11);
-    const amountNumberFontSize = getResponsiveFontSize(amountNumber, maxWidth, baseFontSize);
+    const certifyNameFontSize = getResponsiveFontSize(payeeName, 160, 10);
+    const amountFontSize = getResponsiveFontSize(contactPersonPettyAmount, 160, 11);
+    const amountNumberFontSize = getResponsiveFontSize(contactPersonPettyAmount, maxWidth, baseFontSize);
     const clientNameFontSize = getResponsiveFontSize(clientName, maxWidth, baseFontSize);
+    const currentDataFontSize = getResponsiveFontSize(currentDate, 88, baseFontSize);
 
     return (
         <Document>
@@ -772,7 +817,11 @@ export const PSWDOLayout = ({
                 </View> 
                 
                 <View style={[styles.addressContent, styles.textContainer]}>
-                    <Text style={{ fontSize: addressFontSize }}>{addressName}</Text> 
+                    { claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                        <>
+                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>            
+                        </>
+                    }
                 </View>
 
                 <View style={styles.mobileNumberContent}>
@@ -937,14 +986,18 @@ export const PSWDOLayout = ({
                 </View> */}
 
                 <View style={[styles.briefBackgroundContent, styles.textContainer]}>
-                    <Text style={{ fontSize: briefBackgroundFontSize }}>
-                        Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last{" "}
-                        <Text style={styles.boldLetter}>{dateOfDeath}</Text> due to{" "}
-                        <Text style={styles.boldLetter}>{}</Text>. The client's family is in dire need of financial help
-                        to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
-                        as she only depends on <Text style={styles.boldLetter}>{formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
-                        the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
-                    </Text>
+                    { typeOfAssistance === "Medical" && 
+                        <>
+                            <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last{" "}
+                                <Text style={styles.boldLetter}>{dateOfDeath}</Text> due to{" "}
+                                <Text style={styles.boldLetter}>{}</Text>. The client's family is in dire need of financial help
+                                to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
+                                as she only depends on <Text style={styles.boldLetter}>{formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
+                                the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
+                            </Text>                        
+                        </>
+                    }
                 </View>
 
                 { typeOfAssistance == "Medical" && 
@@ -1025,28 +1078,47 @@ export const PSWDOLayout = ({
                 </View>
  
                 <View style={[styles.certifyAddressContent, styles.textContainer]}>
-                    <Text style={{ fontSize: addressFontSize }}>{addressName}</Text> 
+                    { claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                        <>     
+                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>        
+                        </>
+                    }
                 </View>
 
                 <View style={[styles.eligbleToContent, styles.textContainer]}>
-                    <Text >Financial Assistance</Text> 
+                    { typeOfAssistance && 
+                        <>
+                            <Text >{typeOfAssistance} Assistance</Text>
+                        </>
+                    } 
                 </View>
 
-                <View style={[styles.caseDateContent, styles.textContainer]}>
-                    <Text >January 05, 2005</Text> 
+                <View style={[styles.caseDateContent, styles.textContainer]}> 
+                    <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>  
                 </View>
  
                 <View style={[styles.amountContent, styles.textContainer]}>
-                    <Text style={{ fontSize: amountFontSize }}>{amount}</Text>  
+                    { contactPersonPettyAmount && 
+                        <>
+                            <Text style={{ fontSize: amountFontSize }}>{numberToWords(contactPersonPettyAmount)} ONLY</Text>  
+                        </>
+                    } 
                 </View>
 
                 <View style={[styles.amountNumberContent, styles.textContainer]}>
-                    <Text style={{ fontSize: addressFontSize }}>{amountNumber}</Text>  
+                    { contactPersonPettyAmount && 
+                        <>
+                            <Text style={{ fontSize: addressFontSize }}>{formatToPesos(contactPersonPettyAmount)}</Text>  
+                        </>
+                    } 
                 </View>
 
                 <View style={[styles.clientCompleteNameContent, styles.textContainer]}>
-                    <Text style={{ fontSize: clientNameFontSize }}>{clientName}</Text>  
+                    <Text style={[{ fontSize: clientNameFontSize }, styles.boldLetter]}>
+                        {clientName}
+                    </Text>  
                 </View>
+
                 
             </Page>
         </Document>

@@ -1,4 +1,4 @@
-import { React, useState, useEffect, Fragment } from "react";
+import { React, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
@@ -10,41 +10,45 @@ import { GuaranteeLetterLayout } from "./reports/GuaranteeLetterLayout";
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
-import { PettyCashLayout } from "./reports/PettyCashLayout";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
 
-function ViewHospitalBillContent() {
+function ViewAlayPagdamayContent() {
 
     const [familyCount, setFamilyCount] = useState(0);
     const [familyComposition, setFamilyComposition] = useState([]);
-    
+
     const { id } = useParams(); // Get burialId from URL
     // Variables for hospital bills -------------------------------
     const [burialAssitance, setBurialAssitance] = useState([]);
     // Variables for hospital bills -------------------------------
 
     // Variables for inputs ------------------------------------------------------------
-    const [hospitalId, setHospitalId] = useState('');
-    const [clientFirstName, setClientFirstName] = useState('');
-    const [clientMiddleName, setClientMiddleName] = useState('');
-    const [clientLastName, setClientLastName] = useState('');
-    const [clientExtName, setClientExtName] = useState('');
+    const [hospitalId, setBurialId] = useState('');
+    const [deceasedFirstName, setDeceasedFirstName] = useState('');
+    const [deceasedMiddleName, setDeceasedMiddleName] = useState('');
+    const [deceasedLastName, setDeceasedLastName] = useState('');
+    const [deceasedExtName, setDeceasedExtName] = useState('');
 
-    const [clientPurok, setClientPurok] = useState('');
-    const [clientBarangay, setClientBarangay] = useState('');
-    const [clientMunicipality, setClientMunicipality] = useState('');
-    const [clientProvince, setClientProvince] = useState('Camarines Norte'); 
+    const [deceasedPurok, setDeceasedPurok] = useState('');
+    const [deceasedBarangay, setDeceasedBarangay] = useState('');
+    const [deceasedMunicipality, setDeceasedMunicipality] = useState('');
+    const [deceasedProvince, setDeceasedProvince] = useState('Camarines Norte');
+    const [barangayList, setBarangayList] = useState([]);
 
-    const [clientGender, setClientGender] = useState('');
-    const [deceasedDeathDate, setDeceasedDeathDate] = useState(''); 
+    const [deceasedGender, setDeceasedGender] = useState('');
+    const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
+    const [deathCertificate, setDeathCertificate] = useState(null);
+    const [deathCertificatePreview, setDeathCertificatePreview] = useState(null);
 
 
     const [contactPersonFirstname, setContactPersonFname] = useState('');
     const [contactPersonMiddlename, setContactPersonMname] = useState('');
     const [contactPersonLastname, setContactPersonLname] = useState('');
     const [contactPersonExtName, setContactPersonExtName] = useState('');
-    const [contactNumber, setContactNumber] = useState(''); 
-    const [contactPersonAmount, setContactPersonAmount] = useState(''); 
+    const [contactNumber, setContactNumber] = useState('');
+    const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
+    const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
+    const [contactPersonEncoded, setContactPersonEncoded] = useState('');
 
     const [PSWDOInterviewId, setPSWDOInterviewId] = useState('');
     const [contactPersonAge, setContactPersonAge] = useState('');
@@ -56,18 +60,15 @@ function ViewHospitalBillContent() {
     const [contactPersonPettyAmount, setContactPersonPettyAmount] = useState('');
     const [contactPersonTransactionName, setContactPersonTransactionName] = useState('');
     const [contactPersonRelationship, setContactPersonRelationship] = useState('');
-    const [contactPersonProvince, setContactPersonProvince] = useState('Camarines Norte');
-    const [contactPersonMunicipality, setContactPersonMuncipality] = useState('');
-    const [contactPersonBarangay, setContactPersonBarangay] = useState('');
-    const [contactPersonPurok, setContactPersonPurok] = useState('');
-    
-    const [patientPurok, setPatientPurok] = useState('');
-    const [patientBarangay, setPatientBarangay] = useState('');
-    const [patientMunicipality, setPatientMunicipality] = useState('');
-    const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
-    const [barangayList, setBarangayList] = useState([]);  
+    const [patientProvince, setContactPersonProvince] = useState('Camarines Norte');
+    const [patientMunicipality, setContactPersonMuncipality] = useState('');
+    const [patientBarangay, setContactPersonBarangay] = useState('');
+    const [patientPurok, setContactPersonPurok] = useState('');
+    const [contactPersonBarangayList, setContactPersonBarangayList] = useState([]);
 
-    const [hospitalStatus, setHospitalStatus] = useState('');
+
+
+    const [burialStatus, setBurialStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false,
         checkDeathCertificate: false,
@@ -76,175 +77,208 @@ function ViewHospitalBillContent() {
     });
 
     const [remarks, setRemarks] = useState('');
-    const [savedAt, setSavedAt] = useState('');
+    // Variables for inputs ------------------------------------------------------------
 
+    const [formPage, setFormPage] = useState("Guarantee Letter");
+    
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
     const [typeOfAssistance, setTypeOfAssistance] = useState('');
     const [member4Ps, setMember4Ps] = useState('');
 
-    const [formPage, setFormPage] = useState("Guarantee Letter");
-
     // Variables for inputs ------------------------------------------------------------
+
+    const currentDate = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
 
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
 
-    const fetchPSWDOInterviewId = async (hospitalId) => {
-        try {
-            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?hospitalId=${hospitalId}`);
-            const data = await response.json();
-
-            console.log("Test: ", data)
-            PopulatePSWDOInterview(data);
-
-        } catch (error) {
-            console.error("Error fetching hospital bill assistance:", error); // Fix the log message
-        }
-    };    
-
-    
-    useEffect(() => {
-        if (id) {
-            fetchHospitalBillAssistance(id);
-            fetchPSWDOInterviewId(id);
-        }
-    }, [id]);
-
-    const fetchHospitalBillAssistance = async (hospitalId) => {
-        try {
-            const response = await fetch(`http://localhost:5000/retrieve_hospital_bill_id?hospitalId=${hospitalId}`);
-            const data = await response.json();
-    
-            PopulateForms(data);
-        } catch (error) {
-            console.error("Error fetching hospital bill assistance:", error); // Fix the log message
-        }
-    };    
-
-    console.log("HHAHHAHA", PSWDOInterviewStatus)
-
-    const PopulatePSWDOInterview = (PSWDOInterview) => {  
-    console.log("HHAHHAHA", PSWDOInterview['error'])
-        
-        if (!PSWDOInterview?.error) {
-            const interview = PSWDOInterview.interview || {};
-        
-            setPSWDOInterviewStatus(true);
-        
-            setPSWDOId(interview.pswdo_interview_id || '');
-            setContactPersonAge(interview.age || '');
-            setContactPersonCivilStatus(interview.civil_status || '');
-            setContactPersonOccupation(interview.occupation || '');
-            setContactPersonIncome(interview.monthly_income || '');
-            setContactPersonGender(interview.gender || '');
-            setContactPersonMobileNum(interview.mobile_num || '');
-            setContactPersonPettyAmount(interview.petty_amount || '');
-            setPatientProvince(interview.province || '');
-            setPatientMunicipality(interview.municipality || '');
-            setPatientBarangay(interview.barangay || '');
-            setPatientPurok(interview.purok || '');
-            setContactPersonTransactionName(interview.transaction_name || '');
-            setTypeOfAssistance(interview.type_assistance || '');
-            setMember4Ps(interview.member_4ps || '');
-        
-            if (Array.isArray(PSWDOInterview.familyComposition)) {
-                const filledData = PSWDOInterview.familyComposition.map(member => ({
-                    name: member.family_member_name || '',
-                    relationship: member.relationship || '',
-                    age: member.age || '',
-                    civilStatus: member.civil_status || '',
-                    occupation: member.occupation || '',
-                    monthlyIncome: member.monthly_income || '',
-                }));
-        
-                setFamilyCount(filledData.length);
-                setFamilyComposition(filledData);
-        
-                console.log("Family Composition:", filledData);
-            }
-        }
-    
-
-        console.log("Testtt: ", PSWDOInterviewStatus)
-
-
-    };
-
     const handleDownload = async () => {
         const blob = await pdf(
             <GuaranteeLetterLayout
-                patientFirstName={clientFirstName}
-                patientMiddleName={clientMiddleName}
-                patientLastName={clientLastName}
-                patientExtName={clientExtName}
+                patientFirstName={deceasedFirstName}
+                patientMiddleName={deceasedMiddleName}
+                patientLastName={deceasedLastName}
+                patientExtName={deceasedExtName}
                 claimantFirstName={contactPersonFirstname}
                 claimantMiddleName={contactPersonMiddlename}
                 claimantLastName={contactPersonLastname}
                 claimantExtName={contactPersonExtName}
-                patientPurok={clientPurok}
-                patientBarangay={clientBarangay}
-                patientMunicipality={clientMunicipality}
-                patientProvince={clientProvince}
-                claimantAmount={contactPersonAmount}
+                patientPurok={deceasedPurok}
+                patientBarangay={deceasedBarangay}
+                patientMunicipality={deceasedMunicipality}
+                patientProvince={deceasedProvince}
+                claimantAmount={deceasedProvince}
             />
         ).toBlob();
 
         saveAs(blob, 'Guarantee_Letter.pdf');
     };
 
-    const handlePettyCashDownload = async () => {
-        const blob = await pdf(
-            <PettyCashLayout                         
-                claimantFirstname={contactPersonFirstname}                   
-                claimantMiddlename={contactPersonMiddlename}                   
-                claimantLastname={contactPersonLastname}                   
-                claimantExtName={contactPersonExtName}                   
-                patientPurok={contactPersonPurok}                   
-                patientBarangay={patientBarangay}                   
-                patientMunicipality={patientMunicipality}                   
-                patientProvince={patientProvince}                   
-                claimantAmount={contactPersonAmount}
-            />
-        ).toBlob();
-
-        saveAs(blob, 'Petty-Cash-Voucer.pdf');
+    const handleAddPSWDOInterview = async (e) => {
+        e.preventDefault();
+    
+        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+        const transactionName = "Alay Pagdamay";
+        try {
+            const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+                    contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
+                    patientProvince, patientMunicipality, patientBarangay, patientPurok,
+                    familyComposition, transactionName, typeOfAssistance, member4Ps
+                })
+            });
+    
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to insert PSWDO data.");
+            }
+    
+            Swal.fire({
+                icon: "success",
+                title: "Transaction Successful",
+                text: "PSWDO interview and family data saved!",
+            }) 
+        } catch (err) {
+            console.error("Error:", err.message);
+            Swal.fire({
+                icon: "error",
+                title: "Transaction Failed",
+                text: err.message || "An error occurred.",
+            });
+        }
     };
 
-    const PopulateForms = (bill) => {
-        console.log("Populating forms with:", bill); // Check all values 
+    const handleUpdatePSWDOInterview = async (e) => {
+        e.preventDefault();
+        const transactionName = "Alay Pagdamay";
+    
+        try {
+            const response = await fetch("http://localhost:5000/update_pswdo_interview", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id,
+                    PSWDOId,
+                    contactPersonAge,
+                    contactPersonCivilStatus,
+                    contactPersonOccupation,
+                    contactPersonIncome,
+                    contactPersonGender,
+                    contactPersonMobileNum,
+                    contactPersonPettyAmount,
+                    patientProvince,
+                    patientMunicipality,
+                    patientBarangay,
+                    patientPurok,
+                    typeOfAssistance, 
+                    member4Ps,
+                    transactionName,
+                    familyComposition: familyComposition.map(member => ({
+                        id: member.family_id || null, // Include ID if it's an existing record
+                        name: member.name,
+                        relationship: member.relationship,
+                        age: member.age,
+                        civilStatus: member.civilStatus,
+                        occupation: member.occupation,
+                        monthlyIncome: member.monthlyIncome,
+                    })),
+                    hospitalId
+                }),
+            });
+    
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to update PSWDO data.");
+            }
+    
+            Swal.fire({
+                icon: "success",
+                title: "Update Successful",
+                text: "PSWDO interview and family data updated!",
+            });
+    
+        } catch (err) {
+            console.error("Update Error:", err.message);
+            Swal.fire({
+                icon: "error",
+                title: "Update Failed",
+                text: err.message || "An error occurred during update.",
+            });
+        }
+    };
+    
 
-        setHospitalId(bill['hospital_bill_id']);
-        setClientFirstName(bill['patient_fname']);
-        setClientMiddleName(bill['patient_mname']);
-        setClientLastName(bill['patient_lname']);
-        setClientExtName(bill['patient_ext_name']);
-        setClientPurok(bill['patient_purok']);
-        setClientBarangay(bill['patient_barangay']);
-        setClientMunicipality(bill['patient_municipality']);
-        setClientProvince(bill['patient_province']); 
-        
-        setContactPersonFname(bill['claimant_fname']); 
-        setContactPersonMname(bill['claimant_mname']); 
-        setContactPersonLname(bill['claimant_lname']); 
-        setContactPersonExtName(bill['claimant_extname']); 
-        setContactNumber(bill['claimant_contact']); 
-        setContactPersonAmount(bill['claimant_amount']); 
+    useEffect(() => {
+        if (id) {
+            fetchBurialAssistance(id);
+        }
+    }, [id]);
 
-        setContactPersonRelationship(bill['claimant_relationship']);
+    const fetchBurialAssistance = async (burialId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/retrieve_alay_pagdamay_id?burialId=${burialId}`);
+            const data = await response.json();
 
-        setHospitalStatus(bill['hospital_bill_status']);
-        setSavedAt(bill['datetime_added']);
-        setRemarks(bill['remarks']);
+            PopulateForms(data);
+        } catch (error) {
+            console.error("Error fetching burial assistance:", error);
+        }
+    };
 
+    const PopulateForms = (burial) => {
+        console.log("Populating forms with:", burial); // Check all values 
+
+        setBurialId(burial['burial_id']);
+        setDeceasedFirstName(burial['deceased_fname']);
+        setDeceasedMiddleName(burial['deceased_mname']);
+        setDeceasedLastName(burial['deceased_lname']);
+        setDeceasedExtName(burial['deceased_ext_name']);
+        setDeceasedPurok(burial['deceased_purok']);
+        setDeceasedBarangay(burial['deceased_barangay']);
+        setDeceasedMunicipality(burial['deceased_municipality']);
+        setDeceasedProvince(burial['deceased_province']);
+        setDeceasedGender(burial['deceased_gender']);
+        setDeceasedDeathDate(burial['deceased_deathdate']);
+        setContactPersonFname(burial['contact_fname']);
+        setContactPersonMname(burial['contact_mname']);
+        setContactPersonLname(burial['contact_lname']);
+        setContactPersonExtName(burial['contact_ext_name']);
+        setContactNumber(burial['contact_number']);
+        setContactPersonServiceCovered(burial['contact_service_covered']);
+        setContactPersonFuneralCovered(burial['contact_funeral_service']);
+        setContactPersonEncoded(burial['contact_person_encoded']);
+
+        setBurialStatus(burial['burial_status']);
         setCheckedItems({
-            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,  
-            checkMedCertificate: bill['check_med_certificate'] == 1,  
-            checkFinalBill: bill['check_hospital_bill'] == 1,  
-            checkValidId: bill['check_valid_id'] == 1,  
+            checkBarangayIndigency: burial['check_barangay_indigency'] === 1 || burial['check_barangay_indigency'] === "true",
+            checkDeathCertificate: burial['check_death_certificate'] === 1 || burial['check_death_certificate'] === "true",
+            checkFuneralContract: burial['check_funeral_contract'] === 1 || burial['check_funeral_contract'] === "true",
+            checkValidId: burial['check_valid_id'] === 1 || burial['check_valid_id'] === "true",
         });
-        
+
+
+        setRemarks(burial['remarks']);
+
+        // Convert BLOB to Base64 if it's present
+        if (burial['death_certificate']) {
+            const base64String = `data:image/png;base64,${burial['death_certificate']}`;
+            setDeathCertificate(base64String); // Set as image src
+            setDeathCertificatePreview(base64String);
+        } else {
+            setDeathCertificate(null);
+            setDeathCertificatePreview(null);
+        }
     };
 
     const formatDate = (dateString) => {
@@ -257,13 +291,8 @@ function ViewHospitalBillContent() {
             day: "numeric",
         });
     };
-     
-    const currentDate = new Date().toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
 
+    
     const municipalityBarangays = {
         "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay", 
             "Mantugawe", "Matnog", "Mocong", "Oliva", "Pagsangahan", "Pinagwarasan", "Plaridel", "Poblacion 1", "Poblacion 2", "San Felipe", "San Jose", "San Pascual", "Taba-taba", "Tacad", "Taisan", "Tuaca"],
@@ -328,130 +357,24 @@ function ViewHospitalBillContent() {
         ]
 
     };
-    
-
+     
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
-        setPatientMunicipality(selectedMunicipality);
-        setPatientBarangay(''); // Reset barangay selection
+        setContactPersonMuncipality(selectedMunicipality);
+        setContactPersonBarangay(''); // Reset barangay selection
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
     };
 
-    const handleUpdatePSWDOInterview = async (e) => {
-        e.preventDefault();
-        const transactionName = "Hospital Bill";
-    
-        const alayPagDamayID = null;
-        const hospitalId = id;
-
-        try {
-            const response = await fetch("http://localhost:5000/update_pswdo_interview", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id,
-                    PSWDOId,
-                    contactPersonAge,
-                    contactPersonCivilStatus,
-                    contactPersonOccupation,
-                    contactPersonIncome,
-                    contactPersonGender,
-                    contactPersonMobileNum,
-                    contactPersonPettyAmount,
-                    patientProvince,
-                    patientMunicipality,
-                    patientBarangay,
-                    patientPurok,
-                    typeOfAssistance, 
-                    member4Ps,
-                    transactionName,
-                    familyComposition: familyComposition.map(member => ({
-                        id: member.family_id || null, // Include ID if it's an existing record
-                        name: member.name,
-                        relationship: member.relationship,
-                        age: member.age,
-                        civilStatus: member.civilStatus,
-                        occupation: member.occupation,
-                        monthlyIncome: member.monthlyIncome,
-                    })),
-                    hospitalId
-                }),
-            });
-    
-            const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to update PSWDO data.");
-            }
-    
-            Swal.fire({
-                icon: "success",
-                title: "Update Successful",
-                text: "PSWDO interview and family data updated!",
-            });
-    
-        } catch (err) {
-            console.error("Update Error:", err.message);
-            Swal.fire({
-                icon: "error",
-                title: "Update Failed",
-                text: err.message || "An error occurred during update.",
-            });
-        }
-    }; 
-
-    const handleAddPSWDOInterview = async (e) => {
-        e.preventDefault();
-
-        const alayPagDamayID = null;
-        const hospitalId = id;
-    
-        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-        const transactionName = "Hospital Bill";
-        try {
-            const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
-                    contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
-                    patientProvince, patientMunicipality, patientBarangay, patientPurok,
-                    familyComposition, transactionName, typeOfAssistance, member4Ps
-                })
-            });
-    
-            const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to insert PSWDO data.");
-            }
-    
-            Swal.fire({
-                icon: "success",
-                title: "Transaction Successful",
-                text: "PSWDO interview and family data saved!",
-            }) 
-        } catch (err) {
-            console.error("Error:", err.message);
-            Swal.fire({
-                icon: "error",
-                title: "Transaction Failed",
-                text: err.message || "An error occurred.",
-            });
-        }
-    };
-    
-         
 
     return (
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Hospital Bill Details</h1>
+                    <h1>Alay Pagdamay Details</h1>
                     <nav>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Hospital Bill Details</li>
+                            <li className="breadcrumb-item active">Alay Pagdamay Details</li>
                         </ol>
                     </nav>
                 </div>
@@ -463,7 +386,7 @@ function ViewHospitalBillContent() {
                         <section className="section dashboard">
                             <div className="row">
 
-                                <div className="col-lg-12">
+                            <div className="col-lg-12">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
@@ -533,6 +456,8 @@ function ViewHospitalBillContent() {
                                     </div>
                                 </div>
 
+
+
                                 <div className="col-lg-7">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
@@ -541,7 +466,6 @@ function ViewHospitalBillContent() {
 
                                                     <div className="row mb-3">
                                                         <div className="row">
-
                                                             <div className="col-sm-12">
                                                                 <br />
                                                                 <div className="row">
@@ -553,20 +477,20 @@ function ViewHospitalBillContent() {
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Hospital Bill Information</b> <hr />
+                                                                                        <b className="form-label">Burial Assistance Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-4">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Hospital Bill Status:<br /><b>{hospitalStatus}</b></label>
+                                                                                        <label className="form-label">Burial Status:<br /><b>{burialStatus}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-4">
                                                                                     <div className="input-group">
                                                                                         <label className="form-label">
-                                                                                            Date of Registered:<br />
-                                                                                            <b>{formatDate(savedAt)}</b>
+                                                                                            Date of Death:<br />
+                                                                                            <b>{formatDate(deceasedDeathDate)}</b>
                                                                                         </label>
                                                                                         <br />
                                                                                     </div>
@@ -588,28 +512,28 @@ function ViewHospitalBillContent() {
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Patient Information</b> <hr />
+                                                                                        <b className="form-label">Deceased Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">First Name:<br /> <b>{clientFirstName}</b></label>
+                                                                                        <label className="form-label">First Name:<br /> <b>{deceasedFirstName}</b></label>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Middle Name:<br /> <b>{clientMiddleName}</b></label>
+                                                                                        <label className="form-label">Middle Name:<br /> <b>{deceasedMiddleName}</b></label>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">First Name:<br /> <b>{clientLastName}</b></label>
+                                                                                        <label className="form-label">First Name:<br /> <b>{deceasedLastName}</b></label>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Ext Name:<br /> <b>{clientExtName}</b></label>
+                                                                                        <label className="form-label">Ext Name:<br /> <b>{deceasedExtName}</b></label>
                                                                                     </div>
                                                                                 </div>
 
@@ -619,31 +543,30 @@ function ViewHospitalBillContent() {
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Purok:<br /> <b>{clientPurok}</b></label>
+                                                                                        <label className="form-label">Purok:<br /> <b>{deceasedPurok}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Barangay:<br /> <b>{clientBarangay}</b></label>
+                                                                                        <label className="form-label">Barangay:<br /> <b>{deceasedBarangay}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Municipality:<br /> <b>{clientMunicipality}</b></label>
+                                                                                        <label className="form-label">Municipality:<br /> <b>{deceasedMunicipality}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Province:<br /> <b>{clientProvince}</b></label>
+                                                                                        <label className="form-label">Province:<br /> <b>{deceasedProvince}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                             </div>
-                                                                        </div>
-                                                                        <br />
+                                                                        </div> 
 
                                                                         <div className="infoContainer">
                                                                             <div className="row">
@@ -684,24 +607,45 @@ function ViewHospitalBillContent() {
                                                                                         <label className="form-label">Contact Number:<br /> <b>{contactNumber}</b></label>
                                                                                     </div>
                                                                                 </div>
- 
+
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Claimant Relationship:<br /> <b>{contactPersonRelationship}</b></label>
+                                                                                        <label className="form-label">Serviced Covered:<br /> <b>{contactPersonFuneralService}</b></label>
                                                                                     </div>
                                                                                 </div>
-                                                                                
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Funeral Covered:<br /> <b>{contactPersonFuneralService}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Encoded/Reviewed By:<br /> <b>{contactPersonEncoded}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="infoContainer">
 
 
-                                                                            <div className="col-sm-12">
-                                                                                <div className="input-group">
-                                                                                    <b className="form-label">Hospital Bill Requirements</b> 
-                                                                                </div>
-                                                                            </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div className="col-sm-12">
+                                                                <br />
+                                                                <div className="row">
+                                                                    <div className="col-sm-12">
+
+
+                                                                        <div className="columnContainer">
+
+                                                                            <b className="form-label">Burial Requirements:</b>
 
                                                                             <div className="col-sm-12">
                                                                                 <br />
@@ -715,16 +659,16 @@ function ViewHospitalBillContent() {
                                                                                     </li>
                                                                                     <li className="list-group-item">
                                                                                         <input className="form-check-input me-1" type="checkbox" id="checkDeathCertificate"
-                                                                                            checked={Boolean(checkedItems?.checkMedCertificate)} />
+                                                                                            checked={Boolean(checkedItems?.checkDeathCertificate)} />
                                                                                         <label className="form-check-label" htmlFor="checkDeathCertificate">
-                                                                                            &nbsp; Medical Certificate (2 Copies)
+                                                                                            &nbsp; Death Certificate (2 Copies)
                                                                                         </label>
                                                                                     </li>
                                                                                     <li className="list-group-item">
                                                                                         <input className="form-check-input me-1" type="checkbox" id="checkFuneralContract"
-                                                                                            checked={Boolean(checkedItems?.checkFinalBill)} />
+                                                                                            checked={Boolean(checkedItems?.checkFuneralContract)} />
                                                                                         <label className="form-check-label" htmlFor="checkFuneralContract">
-                                                                                            &nbsp; Final Bill (2 Copies)
+                                                                                            &nbsp; Funeral Contract (2 Copies)
                                                                                         </label>
                                                                                     </li>
                                                                                     <li className="list-group-item">
@@ -740,14 +684,36 @@ function ViewHospitalBillContent() {
 
 
                                                                         </div>
-                                                                        
+
+                                                                        <div className="columnContainer">
+                                                                            <b className="form-label">Death Certificate</b>
+
+                                                                            <div className="col-12 d-flex justify-content-end">
+                                                                                {deathCertificatePreview && (
+                                                                                    <a
+                                                                                        href={deathCertificatePreview}
+                                                                                        download="death_certificate.png"
+                                                                                        className="btn w-500 btn-secondary"
+                                                                                    >
+                                                                                        <i className='bx bxs-download'></i> Download
+                                                                                    </a>
+                                                                                )}
+                                                                            </div>
+                                                                            <br />
+                                                                            <br />
+                                                                            {deathCertificatePreview ? (
+                                                                                <img src={deathCertificatePreview} alt="Death Certificate" className="dashboardSymbols" />
+                                                                            ) : (
+                                                                                <p>No death certificate available</p>
+                                                                            )}
+                                                                        </div>
+
+
+
                                                                     </div>
 
                                                                 </div>
-
                                                             </div>
-
-                                                            
                                                         </div>
 
                                                     </div>
@@ -756,7 +722,6 @@ function ViewHospitalBillContent() {
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <div className="col-lg-5">
                                     <div className="row">
@@ -938,7 +903,7 @@ function ViewHospitalBillContent() {
                                                                                     <label className="form-label">Province:</label>
                                                                                     <select
                                                                                         className="form-control"
-                                                                                        value={contactPersonProvince}
+                                                                                        value={patientProvince}
                                                                                         disabled
                                                                                     >
                                                                                         <option value="Camarines Norte">Camarines Norte</option>
@@ -970,7 +935,7 @@ function ViewHospitalBillContent() {
                                                                                     <select
                                                                                         className="form-control"
                                                                                         value={patientBarangay}
-                                                                                        onChange={(e) => setPatientBarangay(e.target.value.trim())}
+                                                                                        onChange={(e) => setContactPersonBarangay(e.target.value.trim())}
                                                                                         disabled={barangayList.length === 0}
                                                                                     >
                                                                                         <option value="">Select Barangay</option>
@@ -990,7 +955,7 @@ function ViewHospitalBillContent() {
                                                                                         type="text"
                                                                                         className="form-control"
                                                                                         value={patientPurok}
-                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                        onChange={(e) => setContactPersonPurok(e.target.value)}
                                                                                     />
                                                                                 </div>  
                                                                                 
@@ -1219,13 +1184,12 @@ function ViewHospitalBillContent() {
                                     </div>
                                 </div>
 
-
-
                             </div>
                         </section>
                     </div>
                 </main>
             </main>
+
 
             {/* Modal */}
             <div className="modal fade" id="viewReportModal" tabIndex="-1" aria-labelledby="viewReportModal" aria-hidden="true">
@@ -1239,7 +1203,7 @@ function ViewHospitalBillContent() {
                         </div>
 
                         <div className="modal-body">
-  
+    
                             <div className="generateContainer"> 
                                 <br />
 
@@ -1260,7 +1224,7 @@ function ViewHospitalBillContent() {
 
                                             <div className="formContainer">
                                                 <div className="row"> 
- 
+    
 
                                                     <div className="col-4 d-flex justify-content-center">
                                                         <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
@@ -1289,11 +1253,11 @@ function ViewHospitalBillContent() {
                                                             <h4 className="headerFormText">GUARANTEE LETTER</h4><br/>
                                                             <h5 className="headerFormText">{currentDate}</h5><br/><br/>
                                                             <p className="guaranteeLetterContent"> 
-                                                                Respectfully referred to <b>{clientFirstName} {clientMiddleName} {clientLastName} {clientExtName}</b>, the herein attached approved request of <b>MR/MS. {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
+                                                                Respectfully referred to <b>{deceasedFirstName} {deceasedMiddleName} {deceasedLastName} {deceasedExtName}</b>, the herein attached approved request of <b>MR/MS. {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b> from Purok - {deceasedPurok}, Barangay {deceasedBarangay}, {deceasedMunicipality}, {deceasedMunicipality} for hospital bill assistance stated below:
                                                             </p><br/><br/>
 
                                                             <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
-                                                            <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+                                                            {/* <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/> */}
 
                                                         </div>
                                                     </div> 
@@ -1307,7 +1271,7 @@ function ViewHospitalBillContent() {
 
                                 }
 
-                                { formPage == "Petty Cash Voucher" && 
+                                {/* { formPage == "Petty Cash Voucher" && 
                                     <> 
 
                                         <div className="formContent"> 
@@ -1431,11 +1395,11 @@ function ViewHospitalBillContent() {
 
 
                                             
-                                            />
+                                            /> 
                                         </PDFViewer> 
 
                                     </>
-                                } 
+                                }  */}
                                 
 
                             </div>     
@@ -1458,4 +1422,4 @@ function ViewHospitalBillContent() {
     );
 }
 
-export default ViewHospitalBillContent;
+export default ViewAlayPagdamayContent;

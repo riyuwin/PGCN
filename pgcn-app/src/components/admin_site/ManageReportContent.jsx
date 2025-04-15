@@ -184,7 +184,7 @@ function ManageReportContent(){
         try {
             const response = await fetch("http://localhost:5000/retrieve_hospital_bill");
             const data = await response.json();
-            setHospitalBills(data);
+            setHospitalBills(data); 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -469,13 +469,6 @@ function ManageReportContent(){
                                                                 <ExcelExport data={currentRecords} buttonStatus={generateButton} />
                                                             </div> 
                                                         </div>
-
-                                                        
-                                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
-                                                            <PSWDOLayout             
-                                                            
-                                                            />
-                                                        </PDFViewer> 
 
                                                     </div> 
 
