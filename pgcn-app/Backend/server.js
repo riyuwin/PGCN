@@ -226,9 +226,9 @@ app.post("/insert_hospital_bill", (req, res) => {
         patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
         claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount,
         hospitalBillStatus,
-        barangayIndigency, 
+        barangayIndigency,
         checkMedicalCertificate,
-        checkFinalBill, 
+        checkFinalBill,
         validId,
         remarks // Added remarks
     } = req.body;
@@ -266,10 +266,10 @@ app.post("/insert_hospital_bill", (req, res) => {
                 claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                 claimantAmount,  // Fixed order
                 hospitalBillStatus,
-                barangayIndigency === 1, 
+                barangayIndigency === 1,
                 checkMedicalCertificate === 1,
-                checkFinalBill === 1, 
-                validId === 1, 
+                checkFinalBill === 1,
+                validId === 1,
                 remarks,  // Included remarks
                 currentDateTime
             ], (err, result) => {
@@ -303,12 +303,12 @@ app.post("/update_hospital_bill", (req, res) => {
         billId, account_id,
         patientFirstName, patientMiddleName, patientLastName, patientExtName,
         patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
-        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, 
+        claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
         claimantAmount, hospitalBillStatus,
-        barangayIndigency, 
+        barangayIndigency,
         checkMedicalCertificate,
         checkFinalBill, // Ensure consistency
-        validId, 
+        validId,
     } = req.body;
 
     if (!billId) {
@@ -365,10 +365,10 @@ app.post("/update_hospital_bill", (req, res) => {
                 patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
                 claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                 claimantAmount, hospitalBillStatus,
-                barangayIndigency, 
+                barangayIndigency,
                 checkMedicalCertificate,
                 checkFinalBill, // Ensure consistency
-                validId, 
+                validId,
                 currentDateTime, billId
             ], (err, result) => {
                 if (err) {
@@ -452,7 +452,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
+        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
         remarks, pettyCashAmount,
         currentDateTime
     } = req.body;
@@ -493,7 +493,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
                 deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate, deathCertificate,
                 contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
                 contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-                barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
+                barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
                 remarks, pettyCashAmount, currentDateTime
             ], (err, result) => {
                 if (err) {
@@ -599,7 +599,7 @@ app.post("/update_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate,
         contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber,
         contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
+        barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
         remarks, pettyCashAmount, currentDateTime
     ];
 
@@ -819,7 +819,7 @@ app.post("/insert_burial_assistance", (req, res) => {
 });
 
 
-app.get("/retrieve_burial_assistance", (req, res) => { 
+app.get("/retrieve_burial_assistance", (req, res) => {
     db.query("SELECT * FROM burial_assistance", (err, results) => {
         if (err) {
             console.error("Error retrieving hospital bills:", err);
@@ -879,13 +879,13 @@ app.get("/retrieve_hospital_bill_id", (req, res) => {
 
 app.post("/insert_pswdo_interview", (req, res) => {
     const {
-        hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+        hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
         contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
-        patientProvince, patientMunicipality, patientBarangay, patientPurok, 
+        patientProvince, patientMunicipality, patientBarangay, patientPurok,
         familyComposition = [], transactionName, typeOfAssistance, member4Ps
     } = req.body;
 
-    const savedAt = new Date().toISOString().slice(0, 19).replace("T", " "); 
+    const savedAt = new Date().toISOString().slice(0, 19).replace("T", " ");
 
     const insertInterviewQuery = `
         INSERT INTO pswdo_interview
@@ -910,7 +910,7 @@ app.post("/insert_pswdo_interview", (req, res) => {
             }
 
             connection.query(insertInterviewQuery, [
-                hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+                hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
                 patientProvince, patientMunicipality, patientBarangay, patientPurok, typeOfAssistance, member4Ps, transactionName, savedAt
             ], (err, result) => {
@@ -974,17 +974,25 @@ app.post("/insert_pswdo_interview", (req, res) => {
         });
     });
 });
- 
-app.get("/retrieve_pswdo_interview_id", (req, res) => {
-    const { hospitalId } = req.query;
 
-    if (!hospitalId) {
-        return res.status(400).json({ error: "Missing hospitalId parameter." });
+app.get("/retrieve_pswdo_interview_id", (req, res) => {
+    const { Id, transactionName } = req.query;
+
+    if (!Id) {
+        return res.status(400).json({ error: "Missing Id parameter." });
     }
 
-    const interviewQuery = "SELECT * FROM pswdo_interview WHERE hospital_bill_id = ?";
-    
-    db.query(interviewQuery, [hospitalId], (err, interviewResults) => {
+    let interviewQuery = ""; // Use 'let' to allow reassignment
+
+    if (transactionName === "Hospital Bill") {
+        interviewQuery = "SELECT * FROM pswdo_interview WHERE hospital_bill_id = ?";
+    } else if (transactionName === "Alay Pagdamay") {
+        interviewQuery = "SELECT * FROM pswdo_interview WHERE burial_id = ?";
+    } else {
+        return res.status(400).json({ error: "Invalid transaction name." });
+    }
+
+    db.query(interviewQuery, [Id], (err, interviewResults) => {
         if (err) {
             console.error("Error retrieving interview:", err);
             return res.status(500).json({ error: "Database error." });
@@ -997,7 +1005,7 @@ app.get("/retrieve_pswdo_interview_id", (req, res) => {
         const interview = interviewResults[0];
 
         const compositionQuery = "SELECT * FROM family_composition WHERE pswdo_interview_id = ?";
- 
+
         db.query(compositionQuery, [interview.pswdo_interview_id], (err, compositionResults) => {
             if (err) {
                 console.error("Error retrieving family composition:", err);
@@ -1013,21 +1021,36 @@ app.get("/retrieve_pswdo_interview_id", (req, res) => {
 });
 
 
+
 app.put("/update_pswdo_interview", (req, res) => {
     const {
         id, PSWDOId, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
         contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
-        patientProvince, patientMunicipality, patientBarangay, patientPurok,
-        familyComposition = [], transactionName, typeOfAssistance, member4Ps,
+        patientProvince, patientMunicipality, patientBarangay, patientPurok, typeOfAssistance, member4Ps,
+        transactionName, familyComposition = []
     } = req.body;
 
-    const updateInterviewQuery = `
-        UPDATE pswdo_interview SET
-        age = ?, civil_status = ?, occupation = ?, monthly_income = ?, gender = ?, 
-        mobile_num = ?, petty_amount = ?, province = ?, municipality = ?, barangay = ?, 
-        purok = ?, type_assistance = ?, member_4ps = ?, transaction_name = ?
-        WHERE hospital_bill_id = ?
-    `;
+    let updateInterviewQuery = ""; // <-- Change from const to let
+
+    if (transactionName === "Hospital Bill") {
+        updateInterviewQuery = `
+            UPDATE pswdo_interview SET
+            age = ?, civil_status = ?, occupation = ?, monthly_income = ?, gender = ?, 
+            mobile_num = ?, petty_amount = ?, province = ?, municipality = ?, barangay = ?, 
+            purok = ?, type_assistance = ?, member_4ps = ?, transaction_name = ?
+            WHERE hospital_bill_id = ?
+        `;
+    } else if (transactionName === "Alay Pagdamay") {
+        updateInterviewQuery = `
+            UPDATE pswdo_interview SET
+            age = ?, civil_status = ?, occupation = ?, monthly_income = ?, gender = ?, 
+            mobile_num = ?, petty_amount = ?, province = ?, municipality = ?, barangay = ?, 
+            purok = ?, type_assistance = ?, member_4ps = ?, transaction_name = ?
+            WHERE burial_id = ?
+        `;
+    } else {
+        return res.status(400).json({ error: "Invalid transaction name." });
+    }
 
     const deleteFamilyQuery = `
         DELETE FROM family_composition WHERE pswdo_interview_id = ?
@@ -1052,7 +1075,6 @@ app.put("/update_pswdo_interview", (req, res) => {
                 return res.status(500).json({ error: "Transaction start failed." });
             }
 
-            // Step 1: Update pswdo_interview record
             connection.query(updateInterviewQuery, [
                 contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
@@ -1067,7 +1089,6 @@ app.put("/update_pswdo_interview", (req, res) => {
                     });
                 }
 
-                // Step 2: Delete existing family members
                 connection.query(deleteFamilyQuery, [PSWDOId], (err) => {
                     if (err) {
                         console.error("Delete family composition error:", err);
@@ -1077,7 +1098,6 @@ app.put("/update_pswdo_interview", (req, res) => {
                         });
                     }
 
-                    // Step 3: Insert new family members
                     const insertPromises = familyComposition.map(member => {
                         return new Promise((resolve, reject) => {
                             const values = [
@@ -1098,7 +1118,6 @@ app.put("/update_pswdo_interview", (req, res) => {
 
                     Promise.all(insertPromises)
                         .then(() => {
-                            // Step 4: Commit transaction
                             connection.commit(err => {
                                 if (err) {
                                     console.error("Commit error:", err);
@@ -1125,6 +1144,28 @@ app.put("/update_pswdo_interview", (req, res) => {
     });
 });
 
+app.get("/retrieve_burial_assistance_id", (req, res) => {
+    const { burialId } = req.query; // Correct parameter
+
+    if (!burialId) {  // Fix the incorrect variable name
+        return res.status(400).json({ error: "Missing burialAssitanceId parameter." });
+    }
+
+    const sqlQuery = "SELECT * FROM burial_assistance WHERE burial_assistance_id = ?";
+
+    db.query(sqlQuery, [burialId], (err, results) => {
+        if (err) {
+            console.error("Error retrieving burial assistance records:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "No records found." });
+        }
+
+        res.status(200).json(results[0]); // Send the retrieved data
+    });
+});
 
 
 

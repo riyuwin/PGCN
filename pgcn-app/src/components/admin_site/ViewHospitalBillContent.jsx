@@ -14,10 +14,11 @@ import { PettyCashLayout } from "./reports/PettyCashLayout";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
 
 function ViewHospitalBillContent() {
+    const transactionName = "Hospital Bill";
 
     const [familyCount, setFamilyCount] = useState(0);
     const [familyComposition, setFamilyComposition] = useState([]);
-    
+
     const { id } = useParams(); // Get burialId from URL
     // Variables for hospital bills -------------------------------
     const [burialAssitance, setBurialAssitance] = useState([]);
@@ -33,18 +34,18 @@ function ViewHospitalBillContent() {
     const [clientPurok, setClientPurok] = useState('');
     const [clientBarangay, setClientBarangay] = useState('');
     const [clientMunicipality, setClientMunicipality] = useState('');
-    const [clientProvince, setClientProvince] = useState('Camarines Norte'); 
+    const [clientProvince, setClientProvince] = useState('Camarines Norte');
 
     const [clientGender, setClientGender] = useState('');
-    const [deceasedDeathDate, setDeceasedDeathDate] = useState(''); 
+    const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
 
 
     const [contactPersonFirstname, setContactPersonFname] = useState('');
     const [contactPersonMiddlename, setContactPersonMname] = useState('');
     const [contactPersonLastname, setContactPersonLname] = useState('');
     const [contactPersonExtName, setContactPersonExtName] = useState('');
-    const [contactNumber, setContactNumber] = useState(''); 
-    const [contactPersonAmount, setContactPersonAmount] = useState(''); 
+    const [contactNumber, setContactNumber] = useState('');
+    const [contactPersonAmount, setContactPersonAmount] = useState('');
 
     const [PSWDOInterviewId, setPSWDOInterviewId] = useState('');
     const [contactPersonAge, setContactPersonAge] = useState('');
@@ -60,12 +61,12 @@ function ViewHospitalBillContent() {
     const [contactPersonMunicipality, setContactPersonMuncipality] = useState('');
     const [contactPersonBarangay, setContactPersonBarangay] = useState('');
     const [contactPersonPurok, setContactPersonPurok] = useState('');
-    
+
     const [patientPurok, setPatientPurok] = useState('');
     const [patientBarangay, setPatientBarangay] = useState('');
     const [patientMunicipality, setPatientMunicipality] = useState('');
-    const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
-    const [barangayList, setBarangayList] = useState([]);  
+    const [patientProvince, setPatientProvince] = useState('Camarines Norte');
+    const [barangayList, setBarangayList] = useState([]);
 
     const [hospitalStatus, setHospitalStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
@@ -93,7 +94,7 @@ function ViewHospitalBillContent() {
 
     const fetchPSWDOInterviewId = async (hospitalId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?hospitalId=${hospitalId}`);
+            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?Id=${hospitalId}&transactionName=${transactionName}`);
             const data = await response.json();
 
             console.log("Test: ", data)
@@ -102,9 +103,9 @@ function ViewHospitalBillContent() {
         } catch (error) {
             console.error("Error fetching hospital bill assistance:", error); // Fix the log message
         }
-    };    
+    };
 
-    
+
     useEffect(() => {
         if (id) {
             fetchHospitalBillAssistance(id);
@@ -116,23 +117,20 @@ function ViewHospitalBillContent() {
         try {
             const response = await fetch(`http://localhost:5000/retrieve_hospital_bill_id?hospitalId=${hospitalId}`);
             const data = await response.json();
-    
+
             PopulateForms(data);
         } catch (error) {
             console.error("Error fetching hospital bill assistance:", error); // Fix the log message
         }
-    };    
+    };
 
-    console.log("HHAHHAHA", PSWDOInterviewStatus)
+    const PopulatePSWDOInterview = (PSWDOInterview) => {
 
-    const PopulatePSWDOInterview = (PSWDOInterview) => {  
-    console.log("HHAHHAHA", PSWDOInterview['error'])
-        
         if (!PSWDOInterview?.error) {
             const interview = PSWDOInterview.interview || {};
-        
+
             setPSWDOInterviewStatus(true);
-        
+
             setPSWDOId(interview.pswdo_interview_id || '');
             setContactPersonAge(interview.age || '');
             setContactPersonCivilStatus(interview.civil_status || '');
@@ -148,7 +146,7 @@ function ViewHospitalBillContent() {
             setContactPersonTransactionName(interview.transaction_name || '');
             setTypeOfAssistance(interview.type_assistance || '');
             setMember4Ps(interview.member_4ps || '');
-        
+
             if (Array.isArray(PSWDOInterview.familyComposition)) {
                 const filledData = PSWDOInterview.familyComposition.map(member => ({
                     name: member.family_member_name || '',
@@ -158,14 +156,14 @@ function ViewHospitalBillContent() {
                     occupation: member.occupation || '',
                     monthlyIncome: member.monthly_income || '',
                 }));
-        
+
                 setFamilyCount(filledData.length);
                 setFamilyComposition(filledData);
-        
+
                 console.log("Family Composition:", filledData);
             }
         }
-    
+
 
         console.log("Testtt: ", PSWDOInterviewStatus)
 
@@ -196,15 +194,15 @@ function ViewHospitalBillContent() {
 
     const handlePettyCashDownload = async () => {
         const blob = await pdf(
-            <PettyCashLayout                         
-                claimantFirstname={contactPersonFirstname}                   
-                claimantMiddlename={contactPersonMiddlename}                   
-                claimantLastname={contactPersonLastname}                   
-                claimantExtName={contactPersonExtName}                   
-                patientPurok={contactPersonPurok}                   
-                patientBarangay={patientBarangay}                   
-                patientMunicipality={patientMunicipality}                   
-                patientProvince={patientProvince}                   
+            <PettyCashLayout
+                claimantFirstname={contactPersonFirstname}
+                claimantMiddlename={contactPersonMiddlename}
+                claimantLastname={contactPersonLastname}
+                claimantExtName={contactPersonExtName}
+                patientPurok={contactPersonPurok}
+                patientBarangay={patientBarangay}
+                patientMunicipality={patientMunicipality}
+                patientProvince={patientProvince}
                 claimantAmount={contactPersonAmount}
             />
         ).toBlob();
@@ -223,14 +221,14 @@ function ViewHospitalBillContent() {
         setClientPurok(bill['patient_purok']);
         setClientBarangay(bill['patient_barangay']);
         setClientMunicipality(bill['patient_municipality']);
-        setClientProvince(bill['patient_province']); 
-        
-        setContactPersonFname(bill['claimant_fname']); 
-        setContactPersonMname(bill['claimant_mname']); 
-        setContactPersonLname(bill['claimant_lname']); 
-        setContactPersonExtName(bill['claimant_extname']); 
-        setContactNumber(bill['claimant_contact']); 
-        setContactPersonAmount(bill['claimant_amount']); 
+        setClientProvince(bill['patient_province']);
+
+        setContactPersonFname(bill['claimant_fname']);
+        setContactPersonMname(bill['claimant_mname']);
+        setContactPersonLname(bill['claimant_lname']);
+        setContactPersonExtName(bill['claimant_extname']);
+        setContactNumber(bill['claimant_contact']);
+        setContactPersonAmount(bill['claimant_amount']);
 
         setContactPersonRelationship(bill['claimant_relationship']);
 
@@ -239,12 +237,12 @@ function ViewHospitalBillContent() {
         setRemarks(bill['remarks']);
 
         setCheckedItems({
-            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,  
-            checkMedCertificate: bill['check_med_certificate'] == 1,  
-            checkFinalBill: bill['check_hospital_bill'] == 1,  
-            checkValidId: bill['check_valid_id'] == 1,  
+            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,
+            checkMedCertificate: bill['check_med_certificate'] == 1,
+            checkFinalBill: bill['check_hospital_bill'] == 1,
+            checkValidId: bill['check_valid_id'] == 1,
         });
-        
+
     };
 
     const formatDate = (dateString) => {
@@ -257,7 +255,7 @@ function ViewHospitalBillContent() {
             day: "numeric",
         });
     };
-     
+
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -265,35 +263,35 @@ function ViewHospitalBillContent() {
     });
 
     const municipalityBarangays = {
-        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay", 
+        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay",
             "Mantugawe", "Matnog", "Mocong", "Oliva", "Pagsangahan", "Pinagwarasan", "Plaridel", "Poblacion 1", "Poblacion 2", "San Felipe", "San Jose", "San Pascual", "Taba-taba", "Tacad", "Taisan", "Tuaca"],
 
-        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque", 
+        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque",
             "Old Camp", "Poblacion", "San Antonio", "San Isidro", "San Roque", "Tanawan", "Ubang", "Villa Aurora", "Villa Belen"],
 
-        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII", 
+        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII",
             "Bibirao", "Borabod", "Calasgasan", "Camambugan", "Cobangbang", "Dogongan", "Gahonon", "Gubat", "Lag-on", "Magang", "Mambalite", "Mancruz", "Pamorangon", "San Isidro"],
 
         "Jose Panganiban": [
             "Bagong Bayan", "Calero", "Dahican", "Dayhagan", "Larap", "Luklukan Norte", "Luklukan Sur", "Motherlode", "Nakalaya", "North Poblacion",
             "Osmeña", "Pag-asa", "Parang", "Plaridel", "Salvacion", "San Isidro", "San Jose", "San Martin", "San Pedro", "San Rafael",
             "Santa Cruz", "Santa Elena", "Santa Milagrosa", "Santa Rosa Norte", "Santa Rosa Sur", "South Poblacion", "Tamisan"
-        ], 
+        ],
 
         "Labo": [
-            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit", 
-            "Bulhao", "Cabatuhan", "Cabusay",  "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica", 
-            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong", 
+            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit",
+            "Bulhao", "Cabatuhan", "Cabusay", "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica",
+            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong",
             "Matanlang", "Napaod", "Pag-asa", "Pangpang", "Pinya", "San Antonio", "San Francisco", "Santa Cruz", "Submakin", "Talobatib", "Tigbinan", "Tulay na Lupa"],
 
         "Mercedes": [
             "Apuao", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Caringo", "Catandunganon", "Cayucyucan", "Colasi",
             "Del Rosario", "Gaboc", "Hamoraon", "Hinipaan", "Lalawigan", "Lanot", "Mambungalon", "Manguisoc", "Masalongsalong", "Matoogtoog", "Pambuhan", "Quinapaguian", "San Roque", "Tarum"
-        ], 
+        ],
 
         "Paracale": [
-            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan","Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
-            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas","Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
+            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan", "Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
+            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas", "Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
             "Tabas", "Talusan", "Tawig", "Tugos"
         ],
 
@@ -303,7 +301,7 @@ function ViewHospitalBillContent() {
         ],
 
         "San Vicente": [
-            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur", 
+            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur",
             "Man-ogob", "Poblacion District I", "Poblacion District II", "San Jose"
         ],
 
@@ -313,7 +311,7 @@ function ViewHospitalBillContent() {
             "Rizal", "Salvacion", "San Lorenzo", "San Pedro", "San Vicente",
             "Santa Elena", "Tabugon", "Villa San Isidro"
         ],
-        
+
         "Talisay": [
             "Binanuaan", "Caawigan", "Cahabaan", "Calintaan", "Del Carmen",
             "Gabon", "Itomang", "Poblacion", "San Francisco", "San Isidro",
@@ -328,7 +326,7 @@ function ViewHospitalBillContent() {
         ]
 
     };
-    
+
 
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
@@ -340,7 +338,7 @@ function ViewHospitalBillContent() {
     const handleUpdatePSWDOInterview = async (e) => {
         e.preventDefault();
         const transactionName = "Hospital Bill";
-    
+
         const alayPagDamayID = null;
         const hospitalId = id;
 
@@ -362,7 +360,7 @@ function ViewHospitalBillContent() {
                     patientMunicipality,
                     patientBarangay,
                     patientPurok,
-                    typeOfAssistance, 
+                    typeOfAssistance,
                     member4Ps,
                     transactionName,
                     familyComposition: familyComposition.map(member => ({
@@ -374,22 +372,21 @@ function ViewHospitalBillContent() {
                         occupation: member.occupation,
                         monthlyIncome: member.monthlyIncome,
                     })),
-                    hospitalId
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             if (!response.ok) {
                 throw new Error(data.error || "Failed to update PSWDO data.");
             }
-    
+
             Swal.fire({
                 icon: "success",
                 title: "Update Successful",
                 text: "PSWDO interview and family data updated!",
             });
-    
+
         } catch (err) {
             console.error("Update Error:", err.message);
             Swal.fire({
@@ -398,14 +395,14 @@ function ViewHospitalBillContent() {
                 text: err.message || "An error occurred during update.",
             });
         }
-    }; 
+    };
 
     const handleAddPSWDOInterview = async (e) => {
         e.preventDefault();
 
         const alayPagDamayID = null;
         const hospitalId = id;
-    
+
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
         const transactionName = "Hospital Bill";
         try {
@@ -413,24 +410,24 @@ function ViewHospitalBillContent() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation, 
+                    hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                     contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
                     patientProvince, patientMunicipality, patientBarangay, patientPurok,
                     familyComposition, transactionName, typeOfAssistance, member4Ps
                 })
             });
-    
+
             const data = await response.json();
-    
+
             if (!response.ok) {
                 throw new Error(data.error || "Failed to insert PSWDO data.");
             }
-    
+
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
                 text: "PSWDO interview and family data saved!",
-            }) 
+            })
         } catch (err) {
             console.error("Error:", err.message);
             Swal.fire({
@@ -440,8 +437,8 @@ function ViewHospitalBillContent() {
             });
         }
     };
-    
-         
+
+
 
     return (
         <>
@@ -479,11 +476,11 @@ function ViewHospitalBillContent() {
                                                                     <div /* className="columnContainer" */>
                                                                         <h5>Generate Reports</h5><br />
 
-                                                                        <div className="row"> 
+                                                                        <div className="row">
                                                                             <div className="col-4">
-                                                                                <button 
-                                                                                    type="button" 
-                                                                                    className={`btn w-100 btn-success`} 
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={`btn w-100 btn-success`}
                                                                                     onClick={() => handleFormPageUpdate("Guarantee Letter")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -493,8 +490,8 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-4">
-                                                                                <button 
-                                                                                    type="button" 
+                                                                                <button
+                                                                                    type="button"
                                                                                     className={`btn w-100 btn-success`}
                                                                                     onClick={() => handleFormPageUpdate("Petty Cash Voucher")}
                                                                                     data-bs-toggle="modal"
@@ -505,8 +502,8 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-4">
-                                                                                <button 
-                                                                                    type="button" 
+                                                                                <button
+                                                                                    type="button"
                                                                                     className={`btn w-100 btn-success`}
                                                                                     onClick={() => handleFormPageUpdate("PSWDO Interview")}
                                                                                     data-bs-toggle="modal"
@@ -514,16 +511,16 @@ function ViewHospitalBillContent() {
                                                                                 >
                                                                                     <i className='bx bxs-file-pdf' ></i> PSWDO Interview
                                                                                 </button>
-                                                                            </div> 
+                                                                            </div>
                                                                         </div>
- 
+
 
 
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            
+
                                                         </div>
 
                                                     </div>
@@ -684,13 +681,13 @@ function ViewHospitalBillContent() {
                                                                                         <label className="form-label">Contact Number:<br /> <b>{contactNumber}</b></label>
                                                                                     </div>
                                                                                 </div>
- 
+
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
                                                                                         <label className="form-label">Claimant Relationship:<br /> <b>{contactPersonRelationship}</b></label>
                                                                                     </div>
                                                                                 </div>
-                                                                                
+
                                                                             </div>
                                                                         </div>
 
@@ -699,7 +696,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-sm-12">
                                                                                 <div className="input-group">
-                                                                                    <b className="form-label">Hospital Bill Requirements</b> 
+                                                                                    <b className="form-label">Hospital Bill Requirements</b>
                                                                                 </div>
                                                                             </div>
 
@@ -740,14 +737,14 @@ function ViewHospitalBillContent() {
 
 
                                                                         </div>
-                                                                        
+
                                                                     </div>
 
                                                                 </div>
 
                                                             </div>
 
-                                                            
+
                                                         </div>
 
                                                     </div>
@@ -770,444 +767,444 @@ function ViewHospitalBillContent() {
                                                                 <br />
                                                                 <div className="row">
 
-                                                                        <div className="columnContainer">
-                                                                            <b className="form-label">PSWDO Interview</b>
-                                                                            <br/><hr/> 
-                                                                            
-                                                                            <div className="row"> 
-                                                                                
-                                                                                <div className="col-12">               
-                                                                                    <p htmlFor="firstName" className="form-label"><i>Claimant Information </i></p><br/>
-                                                                                </div>
-    
-                                                                                <div className="col-3">               
-                                                                                    <label htmlFor="firstName" className="form-label">First Name:</label>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonFirstname}
-                                                                                        onChange={(e) => setContactPersonFname(e.target.value)} 
-                                                                                        placeholder="First Name"
-                                                                                        disabled={true}
-                                                                                    />
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">               
-                                                                                    <label htmlFor="firstName" className="form-label">Middle Name:</label>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonMiddlename}
-                                                                                        onChange={(e) => setContactPersonMname(e.target.value)} 
-                                                                                        placeholder="First Name"
-                                                                                        disabled={true}
-                                                                                    />
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">               
-                                                                                    <label htmlFor="firstName" className="form-label">Last Name:</label>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonLastname}
-                                                                                        onChange={(e) => setContactPersonLname(e.target.value)} 
-                                                                                        placeholder="First Name"
-                                                                                        disabled={true}
-                                                                                    />
-                                                                                </div>
+                                                                    <div className="columnContainer">
+                                                                        <b className="form-label">PSWDO Interview</b>
+                                                                        <br /><hr />
 
-                                                                                <div className="col-3">               
-                                                                                    <label htmlFor="firstName" className="form-label">Ext Name:</label>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonExtName}
-                                                                                        onChange={(e) => setContactPersonExtName(e.target.value)} 
-                                                                                        placeholder="First Name"
-                                                                                        disabled={true}
-                                                                                    />
-                                                                                </div>
-                                                                                
-                                                                                
-                                                                                <div className="col-3">    
-                                                                                    <br/>        
-                                                                                    <label htmlFor="firstName" className="form-label">Age:</label>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonAge}
-                                                                                        onChange={(e) => setContactPersonAge(e.target.value)} 
-                                                                                        placeholder="Age" 
-                                                                                    />
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">         
-                                                                                    <br/>           
-                                                                                    <label htmlFor="firstName" className="form-label">Civil Status:</label> 
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={contactPersonCivilStatus} 
-                                                                                        onChange={(e) => setContactPersonCivilStatus(e.target.value)}>
-                                                                                        <option value="">Select Civil Status</option>
-                                                                                        <option value="Single">Single</option>
-                                                                                        <option value="Married">Married</option>
-                                                                                        <option value="Widowed">Widowed</option>
-                                                                                        <option value="Widowed">Separed</option>
-                                                                                        <option value="Widowed">Common-Law Married</option>
-                                                                                        <option value="Widowed">Lived-in-Partener</option> 
-                                                                                        <option value=""></option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">      
-                                                                                    <br/>              
-                                                                                    <label htmlFor="firstName" className="form-label">Occupation:</label>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonOccupation}
-                                                                                        onChange={(e) => setContactPersonOccupation(e.target.value)} 
-                                                                                        placeholder="Occupation" 
-                                                                                    />
-                                                                                </div>
+                                                                        <div className="row">
 
-                                                                                <div className="col-3">      
-                                                                                    <br/>              
-                                                                                    <label htmlFor="firstName" className="form-label">Income:</label>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonIncome}
-                                                                                        onChange={(e) => setContactPersonIncome(e.target.value)} 
-                                                                                        placeholder="Income" 
-                                                                                    />
-                                                                                </div>
-                                                                                 
-                                                                                <div className="col-3">         
-                                                                                    <br/>           
-                                                                                    <label htmlFor="firstName" className="form-label">Gender:</label> 
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={contactPersonGender} 
-                                                                                        onChange={(e) => setContactPersonGender(e.target.value)} >
-                                                                                        <option value="">Select Gender</option>
-                                                                                        <option value="Male">Male</option>
-                                                                                        <option value="Female">Female</option> 
-                                                                                    </select>
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">      
-                                                                                    <br/>              
-                                                                                    <label htmlFor="firstName" className="form-label">Mobile Number:</label>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonMobileNum}
-                                                                                        onChange={(e) => setContactPersonMobileNum(e.target.value)} 
-                                                                                        placeholder="Income" 
-                                                                                    />
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">      
-                                                                                    <br/>              
-                                                                                    <label htmlFor="firstName" className="form-label">Petty Amount:</label>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        className="form-control"
-                                                                                        id="firstName"
-                                                                                        value={contactPersonPettyAmount}
-                                                                                        onChange={(e) => setContactPersonPettyAmount(e.target.value)} 
-                                                                                        placeholder="Income" 
-                                                                                    />
-                                                                                </div>
-
-                                                                                <div className="col-3">      
-                                                                                    <br/>               
-                                                                                </div>
-                                                                                
-                                                                                <div className="col-3">
-                                                                                    <br />
-                                                                                    <label className="form-label">Province:</label>
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={contactPersonProvince}
-                                                                                        disabled
-                                                                                    >
-                                                                                        <option value="Camarines Norte">Camarines Norte</option>
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                {/* Municipality */}
-                                                                                <div className="col-3">
-                                                                                    <br />
-                                                                                    <label className="form-label">Municipality:</label>
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={patientMunicipality}
-                                                                                        onChange={handleMunicipalityChange}
-                                                                                    >
-                                                                                        <option value="">Select Municipality</option>
-                                                                                        {Object.keys(municipalityBarangays).map((municipality) => (
-                                                                                            <option key={municipality} value={municipality}>
-                                                                                                {municipality}
-                                                                                            </option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                {/* Barangay */}
-                                                                                <div className="col-3">
-                                                                                    <br />
-                                                                                    <label className="form-label">Barangay:</label>
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={patientBarangay}
-                                                                                        onChange={(e) => setPatientBarangay(e.target.value.trim())}
-                                                                                        disabled={barangayList.length === 0}
-                                                                                    >
-                                                                                        <option value="">Select Barangay</option>
-                                                                                        {barangayList.map((barangay) => (
-                                                                                            <option key={barangay} value={barangay}>
-                                                                                                {barangay}
-                                                                                            </option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                {/* Purok */}
-                                                                                <div className="col-3">
-                                                                                    <br />
-                                                                                    <label className="form-label">Purok:</label>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        className="form-control"
-                                                                                        value={patientPurok}
-                                                                                        onChange={(e) => setPatientPurok(e.target.value)}
-                                                                                    />
-                                                                                </div>  
-                                                                                
-                                                                                <div className="col-12">    
-                                                                                    <br/>         
-                                                                                    <hr/>
-                                                                                    <p htmlFor="firstName" className="form-label"><i>Type of Assistance </i></p> 
-                                                                                </div>
-
-                                                                                <div className="col-12">         
-                                                                                    <br/>           
-                                                                                    <label htmlFor="firstName" className="form-label">Select Type of Assistance:</label> 
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={typeOfAssistance} 
-                                                                                        onChange={(e) => setTypeOfAssistance(e.target.value)}>
-                                                                                        <option value="">Select Type of Assistance</option>
-                                                                                        <option value="Medical">Medical</option>
-                                                                                        <option value="Burial">Burial</option>
-                                                                                        <option value="Food">Food</option>
-                                                                                        <option value="Educational">Educational</option>
-                                                                                        <option value="Transportation">Transportation</option>
-                                                                                        <option value="Emergency Shelter">Emergency Shelter</option>
-                                                                                        <option value="Others">Others</option>  
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                
-                                                                                <div className="col-12">         
-                                                                                    <br/>           
-                                                                                    <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label> 
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        value={member4Ps} 
-                                                                                        onChange={(e) => setMember4Ps(e.target.value)}> 
-                                                                                        <option value="No">No</option> 
-                                                                                        <option value="Yes">Yes</option>
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                <div className="col-12">    
-                                                                                    <br/>         
-                                                                                    <hr/>
-                                                                                    <p htmlFor="firstName" className="form-label"><i>Family Composition </i></p> 
-                                                                                </div>
-
-                                                                                <div className="col-12">
-                                                                                    <br />
-                                                                                    <label className="form-label">Number of Family Members:</label>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        className="form-control"
-                                                                                        min="0"
-                                                                                        max="6"
-                                                                                        value={familyCount}
-                                                                                        onChange={(e) => {
-                                                                                            const count = Math.min(Math.max(Number(e.target.value), 0), 6); // keep between 0-6
-                                                                                            setFamilyCount(count);
-
-                                                                                            // initialize composition with empty objects
-                                                                                            const newComposition = Array.from({ length: count }, (_, i) => familyComposition[i] || {
-                                                                                                name: '',
-                                                                                                relationship: '',
-                                                                                                age: '',
-                                                                                                civilStatus: '',
-                                                                                                purok: '',
-                                                                                            });
-                                                                                            setFamilyComposition(newComposition);
-                                                                                        }}
-                                                                                    />
-                                                                                </div>
-
-
-                                                                                {/* --------- */}
-                                                                                {familyComposition.map((member, index) => (
-                                                                                    <Fragment key={member.id || index}>
-                                                                                        <div className="col-12">
-                                                                                            <br />
-                                                                                            <label className="form-label"><i>Family Member {index + 1}</i></label>
-                                                                                        </div>
-
-                                                                                        <div className="col-4">
-                                                                                            <br />
-                                                                                            <label className="form-label">Family Member:</label>
-                                                                                            <input
-                                                                                                type="text"
-                                                                                                className="form-control"
-                                                                                                value={member.name || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    const updated = familyComposition.map((item, i) =>
-                                                                                                        i === index ? { ...item, name: e.target.value } : item
-                                                                                                    );
-                                                                                                    setFamilyComposition(updated);
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="col-4">
-                                                                                            <br />
-                                                                                            <label className="form-label">Relationship:</label>
-                                                                                            <input
-                                                                                                type="text"
-                                                                                                className="form-control"
-                                                                                                value={member.relationship || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    const updated = familyComposition.map((item, i) =>
-                                                                                                        i === index ? { ...item, relationship: e.target.value } : item
-                                                                                                    );
-                                                                                                    setFamilyComposition(updated);
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="col-4">
-                                                                                            <br />
-                                                                                            <label className="form-label">Age:</label>
-                                                                                            <input
-                                                                                                type="number"
-                                                                                                className="form-control"
-                                                                                                min="0"
-                                                                                                value={member.age || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    const updated = familyComposition.map((item, i) =>
-                                                                                                        i === index ? { ...item, age: e.target.value } : item
-                                                                                                    );
-                                                                                                    setFamilyComposition(updated);
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="col-4">
-                                                                                            <br />
-                                                                                            <label className="form-label">Civil Status:</label>
-                                                                                            <input
-                                                                                                type="text"
-                                                                                                className="form-control"
-                                                                                                value={member.civilStatus || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    const updated = familyComposition.map((item, i) =>
-                                                                                                        i === index ? { ...item, civilStatus: e.target.value } : item
-                                                                                                    );
-                                                                                                    setFamilyComposition(updated);
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="col-4">
-                                                                                            <br />
-                                                                                            <label className="form-label">Occupation:</label>
-                                                                                            <input
-                                                                                                type="text"
-                                                                                                className="form-control"
-                                                                                                value={member.occupation || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    const updated = familyComposition.map((item, i) =>
-                                                                                                        i === index ? { ...item, occupation: e.target.value } : item
-                                                                                                    );
-                                                                                                    setFamilyComposition(updated);
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="col-4">
-                                                                                            <br />
-                                                                                            <label className="form-label">Monthly Income:</label>
-                                                                                            <input
-                                                                                                type="number"
-                                                                                                className="form-control"
-                                                                                                value={member.monthlyIncome || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    const updated = familyComposition.map((item, i) =>
-                                                                                                        i === index ? { ...item, monthlyIncome: e.target.value } : item
-                                                                                                    );
-                                                                                                    setFamilyComposition(updated);
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-
-                                                                                        <div className="col-12">
-                                                                                            <br />
-                                                                                            <hr />
-                                                                                        </div>
-                                                                                    </Fragment>
-                                                                                ))}
-
-
-
+                                                                            <div className="col-12">
+                                                                                <p htmlFor="firstName" className="form-label"><i>Claimant Information </i></p><br />
                                                                             </div>
- 
-                                                                            <br/>
-                                                                            
-                                                                            { PSWDOInterviewStatus === true && 
-                                                                                <>
-                                                                                    <button
-                                                                                        className="btn btn-primary btn-sm w-100" 
-                                                                                        type="submit" 
-                                                                                        onClick={handleUpdatePSWDOInterview} 
-                                                                                    >
-                                                                                        Edit PSWDO Interview Details 
-                                                                                    </button>
-                                                                                </>
-                                                                            }
 
-                                                                            { PSWDOInterviewStatus === false && 
-                                                                                <>
-                                                                                    <button
-                                                                                        className="btn btn-primary btn-sm w-100" 
-                                                                                        type="submit" 
-                                                                                        onClick={handleAddPSWDOInterview}
-                                                                                    >
-                                                                                        Save PSWDO Interview Details
-                                                                                    </button>
-                                                                                </>
-                                                                            }
- 
+                                                                            <div className="col-3">
+                                                                                <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonFirstname}
+                                                                                    onChange={(e) => setContactPersonFname(e.target.value)}
+                                                                                    placeholder="First Name"
+                                                                                    disabled={true}
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <label htmlFor="firstName" className="form-label">Middle Name:</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonMiddlename}
+                                                                                    onChange={(e) => setContactPersonMname(e.target.value)}
+                                                                                    placeholder="First Name"
+                                                                                    disabled={true}
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <label htmlFor="firstName" className="form-label">Last Name:</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonLastname}
+                                                                                    onChange={(e) => setContactPersonLname(e.target.value)}
+                                                                                    placeholder="First Name"
+                                                                                    disabled={true}
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <label htmlFor="firstName" className="form-label">Ext Name:</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonExtName}
+                                                                                    onChange={(e) => setContactPersonExtName(e.target.value)}
+                                                                                    placeholder="First Name"
+                                                                                    disabled={true}
+                                                                                />
+                                                                            </div>
+
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Age:</label>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonAge}
+                                                                                    onChange={(e) => setContactPersonAge(e.target.value)}
+                                                                                    placeholder="Age"
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Civil Status:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={contactPersonCivilStatus}
+                                                                                    onChange={(e) => setContactPersonCivilStatus(e.target.value)}>
+                                                                                    <option value="">Select Civil Status</option>
+                                                                                    <option value="Single">Single</option>
+                                                                                    <option value="Married">Married</option>
+                                                                                    <option value="Widowed">Widowed</option>
+                                                                                    <option value="Widowed">Separed</option>
+                                                                                    <option value="Widowed">Common-Law Married</option>
+                                                                                    <option value="Widowed">Lived-in-Partener</option>
+                                                                                    <option value=""></option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Occupation:</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonOccupation}
+                                                                                    onChange={(e) => setContactPersonOccupation(e.target.value)}
+                                                                                    placeholder="Occupation"
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Income:</label>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonIncome}
+                                                                                    onChange={(e) => setContactPersonIncome(e.target.value)}
+                                                                                    placeholder="Income"
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Gender:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={contactPersonGender}
+                                                                                    onChange={(e) => setContactPersonGender(e.target.value)} >
+                                                                                    <option value="">Select Gender</option>
+                                                                                    <option value="Male">Male</option>
+                                                                                    <option value="Female">Female</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Mobile Number:</label>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonMobileNum}
+                                                                                    onChange={(e) => setContactPersonMobileNum(e.target.value)}
+                                                                                    placeholder="Income"
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Petty Amount:</label>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className="form-control"
+                                                                                    id="firstName"
+                                                                                    value={contactPersonPettyAmount}
+                                                                                    onChange={(e) => setContactPersonPettyAmount(e.target.value)}
+                                                                                    placeholder="Income"
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                            </div>
+
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label className="form-label">Province:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={contactPersonProvince}
+                                                                                    disabled
+                                                                                >
+                                                                                    <option value="Camarines Norte">Camarines Norte</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            {/* Municipality */}
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label className="form-label">Municipality:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={patientMunicipality}
+                                                                                    onChange={handleMunicipalityChange}
+                                                                                >
+                                                                                    <option value="">Select Municipality</option>
+                                                                                    {Object.keys(municipalityBarangays).map((municipality) => (
+                                                                                        <option key={municipality} value={municipality}>
+                                                                                            {municipality}
+                                                                                        </option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            </div>
+
+                                                                            {/* Barangay */}
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label className="form-label">Barangay:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={patientBarangay}
+                                                                                    onChange={(e) => setPatientBarangay(e.target.value.trim())}
+                                                                                    disabled={barangayList.length === 0}
+                                                                                >
+                                                                                    <option value="">Select Barangay</option>
+                                                                                    {barangayList.map((barangay) => (
+                                                                                        <option key={barangay} value={barangay}>
+                                                                                            {barangay}
+                                                                                        </option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            </div>
+
+                                                                            {/* Purok */}
+                                                                            <div className="col-3">
+                                                                                <br />
+                                                                                <label className="form-label">Purok:</label>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    className="form-control"
+                                                                                    value={patientPurok}
+                                                                                    onChange={(e) => setPatientPurok(e.target.value)}
+                                                                                />
+                                                                            </div>
+
+                                                                            <div className="col-12">
+                                                                                <br />
+                                                                                <hr />
+                                                                                <p htmlFor="firstName" className="form-label"><i>Type of Assistance </i></p>
+                                                                            </div>
+
+                                                                            <div className="col-12">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Select Type of Assistance:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={typeOfAssistance}
+                                                                                    onChange={(e) => setTypeOfAssistance(e.target.value)}>
+                                                                                    <option value="">Select Type of Assistance</option>
+                                                                                    <option value="Medical">Medical</option>
+                                                                                    <option value="Burial">Burial</option>
+                                                                                    <option value="Food">Food</option>
+                                                                                    <option value="Educational">Educational</option>
+                                                                                    <option value="Transportation">Transportation</option>
+                                                                                    <option value="Emergency Shelter">Emergency Shelter</option>
+                                                                                    <option value="Others">Others</option>
+                                                                                </select>
+                                                                            </div>
+
+
+                                                                            <div className="col-12">
+                                                                                <br />
+                                                                                <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
+                                                                                <select
+                                                                                    className="form-control"
+                                                                                    value={member4Ps}
+                                                                                    onChange={(e) => setMember4Ps(e.target.value)}>
+                                                                                    <option value="No">No</option>
+                                                                                    <option value="Yes">Yes</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div className="col-12">
+                                                                                <br />
+                                                                                <hr />
+                                                                                <p htmlFor="firstName" className="form-label"><i>Family Composition </i></p>
+                                                                            </div>
+
+                                                                            <div className="col-12">
+                                                                                <br />
+                                                                                <label className="form-label">Number of Family Members:</label>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className="form-control"
+                                                                                    min="0"
+                                                                                    max="6"
+                                                                                    value={familyCount}
+                                                                                    onChange={(e) => {
+                                                                                        const count = Math.min(Math.max(Number(e.target.value), 0), 6); // keep between 0-6
+                                                                                        setFamilyCount(count);
+
+                                                                                        // initialize composition with empty objects
+                                                                                        const newComposition = Array.from({ length: count }, (_, i) => familyComposition[i] || {
+                                                                                            name: '',
+                                                                                            relationship: '',
+                                                                                            age: '',
+                                                                                            civilStatus: '',
+                                                                                            purok: '',
+                                                                                        });
+                                                                                        setFamilyComposition(newComposition);
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+
+
+                                                                            {/* --------- */}
+                                                                            {familyComposition.map((member, index) => (
+                                                                                <Fragment key={member.id || index}>
+                                                                                    <div className="col-12">
+                                                                                        <br />
+                                                                                        <label className="form-label"><i>Family Member {index + 1}</i></label>
+                                                                                    </div>
+
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Family Member:</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            className="form-control"
+                                                                                            value={member.name || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, name: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Relationship:</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            className="form-control"
+                                                                                            value={member.relationship || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Age:</label>
+                                                                                        <input
+                                                                                            type="number"
+                                                                                            className="form-control"
+                                                                                            min="0"
+                                                                                            value={member.age || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, age: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Civil Status:</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            className="form-control"
+                                                                                            value={member.civilStatus || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Occupation:</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            className="form-control"
+                                                                                            value={member.occupation || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, occupation: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Monthly Income:</label>
+                                                                                        <input
+                                                                                            type="number"
+                                                                                            className="form-control"
+                                                                                            value={member.monthlyIncome || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, monthlyIncome: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div className="col-12">
+                                                                                        <br />
+                                                                                        <hr />
+                                                                                    </div>
+                                                                                </Fragment>
+                                                                            ))}
+
+
 
                                                                         </div>
+
+                                                                        <br />
+
+                                                                        {PSWDOInterviewStatus === true &&
+                                                                            <>
+                                                                                <button
+                                                                                    className="btn btn-primary btn-sm w-100"
+                                                                                    type="submit"
+                                                                                    onClick={handleUpdatePSWDOInterview}
+                                                                                >
+                                                                                    Edit PSWDO Interview Details
+                                                                                </button>
+                                                                            </>
+                                                                        }
+
+                                                                        {PSWDOInterviewStatus === false &&
+                                                                            <>
+                                                                                <button
+                                                                                    className="btn btn-primary btn-sm w-100"
+                                                                                    type="submit"
+                                                                                    onClick={handleAddPSWDOInterview}
+                                                                                >
+                                                                                    Save PSWDO Interview Details
+                                                                                </button>
+                                                                            </>
+                                                                        }
+
+
+                                                                    </div>
 
                                                                 </div>
                                                             </div>
@@ -1234,23 +1231,23 @@ function ViewHospitalBillContent() {
                         <div className="modal-header">
                             <h5 className="modal-title" id="viewReportModal">
                                 {formPage}
-                            </h5>  
+                            </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div className="modal-body">
-  
-                            <div className="generateContainer"> 
+
+                            <div className="generateContainer">
                                 <br />
 
-                                { formPage == "Guarantee Letter" && 
+                                {formPage == "Guarantee Letter" &&
                                     <>
 
                                         <div  >
-                                            <div className="col-12 d-flex justify-content-end"> 
-                                                <button 
-                                                    type="button" 
-                                                    className={`btn w-500  btn-secondary`}  
+                                            <div className="col-12 d-flex justify-content-end">
+                                                <button
+                                                    type="button"
+                                                    className={`btn w-500  btn-secondary`}
                                                     onClick={handleDownload}
                                                 >
                                                     <i className='bx bxs-file-pdf' ></i> Download
@@ -1259,63 +1256,63 @@ function ViewHospitalBillContent() {
 
 
                                             <div className="formContainer">
-                                                <div className="row"> 
- 
+                                                <div className="row">
+
 
                                                     <div className="col-4 d-flex justify-content-center">
-                                                        <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
+                                                        <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container" />
                                                     </div>
 
-                                                    <div className="col-4 d-flex flex-column align-items-center header_form"> 
+                                                    <div className="col-4 d-flex flex-column align-items-center header_form">
                                                         <p className="d-flex flex-column align-items-center text-center m-auto">
-                                                            Republic of the Philippines<br/>
-                                                            Province of Camarines Norte<br/>
+                                                            Republic of the Philippines<br />
+                                                            Province of Camarines Norte<br />
                                                             Dong Tulong
-                                                        </p> 
+                                                        </p>
                                                     </div>
-                
+
                                                     <div className="col-4 d-flex justify-content-center">
-                                                        <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
+                                                        <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container" />
                                                     </div>
 
                                                     <div className="col-12">
-                                                        <br/><hr/><br/>
+                                                        <br /><hr /><br />
                                                     </div>
 
 
                                                     <div className="col-12  d-flex flex-column align-items-start body_form">
                                                         <div className="body_container">
-                                                            <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br/>
-                                                            <h4 className="headerFormText">GUARANTEE LETTER</h4><br/>
-                                                            <h5 className="headerFormText">{currentDate}</h5><br/><br/>
-                                                            <p className="guaranteeLetterContent"> 
+                                                            <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br />
+                                                            <h4 className="headerFormText">GUARANTEE LETTER</h4><br />
+                                                            <h5 className="headerFormText">{currentDate}</h5><br /><br />
+                                                            <p className="guaranteeLetterContent">
                                                                 Respectfully referred to <b>{clientFirstName} {clientMiddleName} {clientLastName} {clientExtName}</b>, the herein attached approved request of <b>MR/MS. {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
-                                                            </p><br/><br/>
+                                                            </p><br /><br />
 
                                                             <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
-                                                            <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+                                                            <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br />
 
                                                         </div>
-                                                    </div> 
-                                                </div>   
-                                            </div> 
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                         </div>
 
-                                        
-                                    </> 
+
+                                    </>
 
                                 }
 
-                                { formPage == "Petty Cash Voucher" && 
-                                    <> 
+                                {formPage == "Petty Cash Voucher" &&
+                                    <>
 
-                                        <div className="formContent"> 
-                                            
-                                            <div className="col-12 d-flex justify-content-end"> 
-                                                <button 
-                                                    type="button" 
-                                                    className={`btn w-500  btn-secondary`}  
+                                        <div className="formContent">
+
+                                            <div className="col-12 d-flex justify-content-end">
+                                                <button
+                                                    type="button"
+                                                    className={`btn w-500  btn-secondary`}
                                                     onClick={handlePettyCashDownload}
                                                 >
                                                     <i className='bx bxs-file-pdf' ></i> Download
@@ -1330,127 +1327,127 @@ function ViewHospitalBillContent() {
                                                 <tbody>
                                                     <tr>
                                                         <td colSpan="2" class="text-center">
-                                                            <br/>
-                                                            <b>PETTY CASH VOUCHER</b> <br/>
-                                                            Provincial Government of Camarines Norte <br/>
+                                                            <br />
+                                                            <b>PETTY CASH VOUCHER</b> <br />
+                                                            Provincial Government of Camarines Norte <br />
                                                             LGU
-                                                            <br/><br/>
-                                                        </td>   
+                                                            <br /><br />
+                                                        </td>
                                                     </tr>
-                                                    
+
                                                     <tr>
                                                         <td colSpan="2" class="text-start">
                                                             <b>Payee / Office:</b> {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}
-                                                        </td>   
+                                                        </td>
                                                     </tr>
 
                                                     <tr>
                                                         <td colSpan="2" class="text-start">
                                                             <b>Address:</b> Purok - {patientPurok} Barangay {patientBarangay}, {patientMunicipality} {patientProvince}
-                                                        </td>   
-                                                    </tr> 
+                                                        </td>
+                                                    </tr>
 
                                                     <tr>
                                                         <td colSpan="2" class="text-start">
                                                             <b>I. To be filled up upon request</b>
-                                                        </td>   
-                                                    </tr> 
+                                                        </td>
+                                                    </tr>
 
                                                     <tr>
                                                         <td class="text-center">
                                                             Particulars
-                                                        </td>   
+                                                        </td>
                                                         <td class="text-center">
                                                             Amount
-                                                        </td>   
-                                                    </tr> 
-                                                    
+                                                        </td>
+                                                    </tr>
+
                                                     <tr>
                                                         <td class="text-center">
                                                             <b>Hospital Bill</b>
-                                                        </td>   
+                                                        </td>
                                                         <td class="text-center">
                                                             <b>{Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</b>
-                                                        </td>   
-                                                    </tr> 
-                                                    
+                                                        </td>
+                                                    </tr>
+
                                                     <tr>
-                                                        <td colSpan="2" > 
-                                                            <p class="text-start"><b>A. </b> Approved by: </p>  
-                                                            <p class="text-center"><b>CYNTHIA R. DELA CRUZ</b></p>  
-                                                        </td> 
-                                                    </tr> 
-                                                    
+                                                        <td colSpan="2" >
+                                                            <p class="text-start"><b>A. </b> Approved by: </p>
+                                                            <p class="text-center"><b>CYNTHIA R. DELA CRUZ</b></p>
+                                                        </td>
+                                                    </tr>
+
                                                     <tr>
-                                                        <td colSpan="2" > 
-                                                            <p class="text-start"><b>B. </b> Paid by: </p>  
-                                                            <p class="text-center"><b class="text-center">RITA G. GUEVARRA</b> <br/> Social Worker </p>  
-                                                        </td> 
-                                                    </tr> 
-                                                    
+                                                        <td colSpan="2" >
+                                                            <p class="text-start"><b>B. </b> Paid by: </p>
+                                                            <p class="text-center"><b class="text-center">RITA G. GUEVARRA</b> <br /> Social Worker </p>
+                                                        </td>
+                                                    </tr>
+
                                                     <tr>
                                                         <td colSpan="2">
-                                                            <p class="text-start"><b>C. </b> Cash Received by: </p>  
-                                                            <p class="text-center"><u><b class="text-center">{contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b></u></p>  
-                                                            <p class="text-center">Signature over Printed Name of Payee</p>    
-                                                            <p class="text-start">Date: <u>{currentDate}</u></p> 
-                                                        </td> 
-                                                    </tr>  
+                                                            <p class="text-start"><b>C. </b> Cash Received by: </p>
+                                                            <p class="text-center"><u><b class="text-center">{contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b></u></p>
+                                                            <p class="text-center">Signature over Printed Name of Payee</p>
+                                                            <p class="text-start">Date: <u>{currentDate}</u></p>
+                                                        </td>
+                                                    </tr>
 
                                                 </tbody>
                                             </table>
 
-                                        </div> 
+                                        </div>
 
-                                    </> 
+                                    </>
                                 }
 
-                                { formPage == "PSWDO Interview" && 
+                                {formPage == "PSWDO Interview" &&
                                     <>
                                         <PDFViewer style={{ width: "100%", height: "800px" }}>
-                                            <PSWDOLayout    
+                                            <PSWDOLayout
                                                 claimantFirstname={contactPersonFirstname}
                                                 claimantMiddlename={contactPersonMiddlename}
                                                 claimantLastname={contactPersonLastname}
-                                                claimantExtName={contactPersonExtName}    
-                                                claimantAge={contactPersonAge}    
-                                                claimantCivilStatus={contactPersonCivilStatus} 
-                                                claimantPurok={patientPurok}    
-                                                claimantBarangay={patientBarangay}    
-                                                claimantMunicipality={patientMunicipality}    
-                                                claimantProvince={patientProvince}     
+                                                claimantExtName={contactPersonExtName}
+                                                claimantAge={contactPersonAge}
+                                                claimantCivilStatus={contactPersonCivilStatus}
+                                                claimantPurok={patientPurok}
+                                                claimantBarangay={patientBarangay}
+                                                claimantMunicipality={patientMunicipality}
+                                                claimantProvince={patientProvince}
                                                 claimantMobileNum={contactPersonMobileNum}
-                                                claimantOccupation={contactPersonOccupation}    
+                                                claimantOccupation={contactPersonOccupation}
                                                 claimantMonthlyIncome={contactPersonIncome}
                                                 familyComposition={familyComposition}
                                                 claimantRelationship={contactPersonRelationship}
-                                                dateOfDeath={deceasedDeathDate} 
+                                                dateOfDeath={deceasedDeathDate}
                                                 typeOfAssistance={typeOfAssistance}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
 
 
-                                            
+
                                             />
-                                        </PDFViewer> 
+                                        </PDFViewer>
 
                                     </>
-                                } 
-                                
+                                }
 
-                            </div>     
 
-                            
+                            </div>
+
+
 
                         </div>
-                        
+
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
 
 

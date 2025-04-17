@@ -12,9 +12,9 @@ import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
 
-function ViewAlayPagdamayContent() {
+function ViewBurialAssistanceContent() {
 
-    const transactionName = "Alay Pagdamay";
+    const transactionName = "Burial Assistance";
 
     const [familyCount, setFamilyCount] = useState(0);
     const [familyComposition, setFamilyComposition] = useState([]);
@@ -48,9 +48,18 @@ function ViewAlayPagdamayContent() {
     const [contactPersonLastname, setContactPersonLname] = useState('');
     const [contactPersonExtName, setContactPersonExtName] = useState('');
     const [contactNumber, setContactNumber] = useState('');
-    const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
-    const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
-    const [contactPersonEncoded, setContactPersonEncoded] = useState('');
+    const [contactAge, setContactAge] = useState('');
+    const [contactGender, setContactGender] = useState('');
+    const [contactRelationship, setContactRelationship] = useState('');
+    const [contactPurok, setContactPurok] = useState('');
+    const [contactBarangay, setContactBarangay] = useState('');
+    const [contactMunicipality, setContactMunicipality] = useState('');
+    const [contactProvince, setContactProvince] = useState('Camarines Norte');
+
+    const [personTypeAssistance, setContactPersonTypeAssistance] = useState('');
+    const [personStatusRemarks, setContactPersonStatusRemarks] = useState('');
+    const [personStatusApplication, setContactPersonStatusApplication] = useState('');
+    const [personInterviewer, setContactPersonInterviewer] = useState('');
 
     const [PSWDOInterviewId, setPSWDOInterviewId] = useState('');
     const [contactPersonAge, setContactPersonAge] = useState('');
@@ -86,7 +95,7 @@ function ViewAlayPagdamayContent() {
 
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
-    const [typeOfAssistance, setTypeOfAssistance] = useState('Alay Pagdamay');
+    const [typeOfAssistance, setTypeOfAssistance] = useState('Burial Assistance');
     const [member4Ps, setMember4Ps] = useState('');
 
     // Variables for inputs ------------------------------------------------------------
@@ -129,7 +138,7 @@ function ViewAlayPagdamayContent() {
         const hospitalId = null;
 
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-        const transactionName = "Alay Pagdamay";
+        const transactionName = "Burial Assistance";
         try {
             const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
                 method: "POST",
@@ -167,7 +176,7 @@ function ViewAlayPagdamayContent() {
         e.preventDefault();
 
         const hospitalId = null;
-        const transactionName = "Alay Pagdamay";
+        const transactionName = "Burial Assistance";
 
         try {
             const response = await fetch("http://localhost:5000/update_pswdo_interview", {
@@ -249,7 +258,7 @@ function ViewAlayPagdamayContent() {
 
     const fetchBurialAssistance = async (burialId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_alay_pagdamay_id?burialId=${burialId}`);
+            const response = await fetch(`http://localhost:5000/retrieve_burial_assistance_id?burialId=${burialId}`);
             const data = await response.json();
 
             PopulateForms(data);
@@ -307,8 +316,8 @@ function ViewAlayPagdamayContent() {
     const PopulateForms = (burial) => {
         console.log("Populating forms with:", burial); // Check all values 
 
-        setBurialId(burial['burial_id']);
-        setDeceasedFirstName(burial['deceased_fname']);
+        setBurialId(burial['burial_assistance_id']);
+        /* setDeceasedFirstName(burial['deceased_fname']);
         setDeceasedMiddleName(burial['deceased_mname']);
         setDeceasedLastName(burial['deceased_lname']);
         setDeceasedExtName(burial['deceased_ext_name']);
@@ -317,15 +326,23 @@ function ViewAlayPagdamayContent() {
         setDeceasedMunicipality(burial['deceased_municipality']);
         setDeceasedProvince(burial['deceased_province']);
         setDeceasedGender(burial['deceased_gender']);
-        setDeceasedDeathDate(burial['deceased_deathdate']);
-        setContactPersonFname(burial['contact_fname']);
-        setContactPersonMname(burial['contact_mname']);
-        setContactPersonLname(burial['contact_lname']);
-        setContactPersonExtName(burial['contact_ext_name']);
-        setContactNumber(burial['contact_number']);
-        setContactPersonServiceCovered(burial['contact_service_covered']);
-        setContactPersonFuneralCovered(burial['contact_funeral_service']);
-        setContactPersonEncoded(burial['contact_person_encoded']);
+        setDeceasedDeathDate(burial['deceased_deathdate']); */
+        setContactPersonFname(burial['client_fname']);
+        setContactPersonMname(burial['client_mname']);
+        setContactPersonLname(burial['client_lname']);
+        setContactPersonExtName(burial['client_ext_name']);
+        setContactNumber(burial['client_contact_num']);
+        setContactAge(burial['client_age']);
+        setContactRelationship(burial['client_relationship']);
+        setContactGender(burial['client_gender']);
+        setContactPurok(burial['client_purok']);
+        setContactBarangay(burial['client_barangay']);
+        setContactMunicipality(burial['client_municipality']);
+        setContactProvince(burial['client_province']);
+        setContactPersonTypeAssistance(burial['type_assistance']);
+        setContactPersonStatusRemarks(burial['status_remarks']);
+        setContactPersonStatusApplication(burial['status_application']);
+        setContactPersonInterviewer(burial['interviewer']);
 
         setBurialStatus(burial['burial_status']);
         setCheckedItems({
@@ -457,11 +474,11 @@ function ViewAlayPagdamayContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Alay Pagdamay Details</h1>
+                    <h1>Burial Assistance Details</h1>
                     <nav>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Alay Pagdamay Details</li>
+                            <li className="breadcrumb-item active">Burial Assistance Details</li>
                         </ol>
                     </nav>
                 </div>
@@ -553,6 +570,7 @@ function ViewAlayPagdamayContent() {
 
                                                     <div className="row mb-3">
                                                         <div className="row">
+
                                                             <div className="col-sm-12">
                                                                 <br />
                                                                 <div className="row">
@@ -569,7 +587,7 @@ function ViewAlayPagdamayContent() {
                                                                                 </div>
                                                                                 <div className="col-sm-4">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Burial Status:<br /><b>{burialStatus}</b></label>
+                                                                                        <label className="form-label">Burial Assistance Status:<br /><b>{burialStatus}</b></label>
                                                                                     </div>
                                                                                 </div>
 
@@ -591,66 +609,6 @@ function ViewAlayPagdamayContent() {
                                                                                 </div>
 
 
-
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div className="infoContainer">
-                                                                            <div className="row">
-                                                                                <div className="col-sm-12">
-                                                                                    <div className="input-group">
-                                                                                        <b className="form-label">Deceased Information</b> <hr />
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">First Name:<br /> <b>{deceasedFirstName}</b></label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Middle Name:<br /> <b>{deceasedMiddleName}</b></label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">First Name:<br /> <b>{deceasedLastName}</b></label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Ext Name:<br /> <b>{deceasedExtName}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-12">
-                                                                                    <br />
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Purok:<br /> <b>{deceasedPurok}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Barangay:<br /> <b>{deceasedBarangay}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Municipality:<br /> <b>{deceasedMunicipality}</b></label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div className="col-sm-3">
-                                                                                    <div className="input-group">
-                                                                                        <label className="form-label">Province:<br /> <b>{deceasedProvince}</b></label>
-                                                                                    </div>
-                                                                                </div>
 
                                                                             </div>
                                                                         </div>
@@ -697,43 +655,88 @@ function ViewAlayPagdamayContent() {
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Serviced Covered:<br /> <b>{contactPersonFuneralService}</b></label>
+                                                                                        <label className="form-label">Age:<br /> <b>{contactAge}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Funeral Covered:<br /> <b>{contactPersonFuneralService}</b></label>
+                                                                                        <label className="form-label">Gender:<br /> <b>{contactGender}</b></label>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Encoded/Reviewed By:<br /> <b>{contactPersonEncoded}</b></label>
+                                                                                        <label className="form-label">Claimant Relationship:<br /> <b>{contactRelationship}</b></label>
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div className="col-sm-12">
+                                                                                    <br />
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Purok:<br /> <b>{contactPurok}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Barangay:<br /> <b>{contactBarangay}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Municipality:<br /> <b>{contactMunicipality}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Province:<br /> <b>{contactProvince}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-12">
+                                                                                    <br />
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Type of Assistance:<br /> <b>{personTypeAssistance}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Status Remarks:<br /> <b>{personStatusRemarks}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Status Application:<br /> <b>{personStatusApplication}</b></label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Person Interviewer:<br /> <b>{personInterviewer}</b></label>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-
-
-
-
                                                                     </div>
                                                                 </div>
-
                                                             </div>
 
                                                             <div className="col-sm-12">
-                                                                <br />
                                                                 <div className="row">
                                                                     <div className="col-sm-12">
-
-
                                                                         <div className="columnContainer">
-
                                                                             <b className="form-label">Burial Requirements:</b>
-
                                                                             <div className="col-sm-12">
                                                                                 <br />
                                                                                 <ul className="list-group">
@@ -1506,4 +1509,4 @@ function ViewAlayPagdamayContent() {
     );
 }
 
-export default ViewAlayPagdamayContent;
+export default ViewBurialAssistanceContent;

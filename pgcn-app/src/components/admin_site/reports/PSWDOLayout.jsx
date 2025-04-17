@@ -3,22 +3,24 @@ import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/render
 import { Font } from '@react-pdf/renderer';
 
 Font.register({
-  family: 'Roboto',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
-    { src: 'https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 'bold' }, // Bold
-  ]
+    family: 'Roboto',
+    fonts: [
+        { src: 'https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
+        { src: 'https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 'bold' }, // Bold
+    ]
 });
 
 
 
 // ✅ PDF Layout
-export const PSWDOLayout = ({ 
-                            claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantAge, claimantCivilStatus, 
-                            claimantPurok, claimantBarangay, claimantMunicipality, claimantProvince,
-                            claimantMobileNum, claimantOccupation, claimantMonthlyIncome, familyComposition, claimantRelationship,
-                            dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount
-                        }) => {                                   
+export const PSWDOLayout = ({
+    claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantAge, claimantCivilStatus,
+    claimantPurok, claimantBarangay, claimantMunicipality, claimantProvince,
+    claimantMobileNum, claimantOccupation, claimantMonthlyIncome, familyComposition, claimantRelationship,
+    dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount
+}) => {
+
+    console.log("Address: ", typeOfAssistance)
 
     const maxWidth = 260;
 
@@ -32,13 +34,13 @@ export const PSWDOLayout = ({
             day: "numeric",
         });
     };
-     
+
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
     });
-        
+
     // Function to dynamically adjust font size based on width
     const getResponsiveFontSize = (text, maxWidth, baseFontSize) => {
         const estimatedCharWidth = baseFontSize * 0.55; // Approximate width per character
@@ -64,9 +66,9 @@ export const PSWDOLayout = ({
 
     function formatToPesos(amount) {
         return new Intl.NumberFormat('en-PH', {
-          minimumFractionDigits: 0
+            minimumFractionDigits: 0
         }).format(Math.abs(amount));
-      } 
+    }
 
     // Sample data
     const payeeName = `${claimantFirstname} ${claimantMiddlename} ${claimantLastname} ${claimantExtName}`;
@@ -92,28 +94,28 @@ export const PSWDOLayout = ({
 
     function numberToWords(num) {
         const ones = [
-          '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six',
-          'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
-          'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
-          'Seventeen', 'Eighteen', 'Nineteen'
+            '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six',
+            'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
+            'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+            'Seventeen', 'Eighteen', 'Nineteen'
         ];
-      
+
         const tens = [
-          '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
-          'Sixty', 'Seventy', 'Eighty', 'Ninety'
+            '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
+            'Sixty', 'Seventy', 'Eighty', 'Ninety'
         ];
-      
+
         function convertToWords(n) {
-          if (n < 20) return ones[n];
-          if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + ones[n % 10] : '');
-          if (n < 1000) return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + convertToWords(n % 100) : '');
-          if (n < 1000000) return convertToWords(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 !== 0 ? ' ' + convertToWords(n % 1000) : '');
-          return 'Amount too large';
+            if (n < 20) return ones[n];
+            if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + ones[n % 10] : '');
+            if (n < 1000) return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + convertToWords(n % 100) : '');
+            if (n < 1000000) return convertToWords(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 !== 0 ? ' ' + convertToWords(n % 1000) : '');
+            return 'Amount too large';
         }
-      
+
         const words = convertToWords(num);
         return (words ? words + ' PESOS' : 'ZERO PESOS').toUpperCase();
-      }       
+    }
 
     // ✅ Styles
     const styles = StyleSheet.create({
@@ -142,16 +144,16 @@ export const PSWDOLayout = ({
             textAlign: 'left',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left',  
+            alignItems: 'left',
         },
         ageContent: {
             position: 'absolute',
             top: 151,
             left: 336,
             width: 35,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             fontSize: 11
         },
 
@@ -160,9 +162,9 @@ export const PSWDOLayout = ({
             top: 151,
             left: 450,
             width: 35,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             fontSize: 11
         },
         addressContent: {
@@ -175,38 +177,38 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left', 
+            alignItems: 'left',
         },
         mobileNumberContent: {
             position: 'absolute',
             top: 164,
             left: 400,
             width: 160,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         occupationContent: {
             position: 'absolute',
             top: 178,
             left: 110,
             width: 200,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         monthlyIncomeContent: {
             position: 'absolute',
             top: 178,
             left: 410,
             width: 120,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             fontSize: 11
-        },   
+        },
         familyNameContent: {
             position: 'absolute',
             top: 200,
@@ -219,7 +221,7 @@ export const PSWDOLayout = ({
             alignItems: 'left',
             /* borderWidth: 1,
             borderColor: '#000', */
-        }, 
+        },
 
         /* Family Member 1 */
         familyMember1Content: {
@@ -228,19 +230,19 @@ export const PSWDOLayout = ({
             left: 35,
             width: 155,
             paddingLeft: 5,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11,  
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         relationship1Content: {
             position: 'absolute',
             top: 255,
             left: 190,
             width: 87,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             fontSize: 11,
         },
         age1Content: {
@@ -248,40 +250,40 @@ export const PSWDOLayout = ({
             top: 255,
             left: 275,
             width: 45,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         civilStatus1Content: {
             position: 'absolute',
             top: 255,
             left: 320,
             width: 73,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         occupation1Content: {
             position: 'absolute',
             top: 255,
             left: 393,
             width: 91,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         monthlyIncome1Content: {
             position: 'absolute',
             top: 255,
             left: 483,
             width: 78,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
 
         /* Family Member 2 */
@@ -291,60 +293,60 @@ export const PSWDOLayout = ({
             left: 35,
             width: 155,
             paddingLeft: 5,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11,  
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         relationship2Content: {
             position: 'absolute',
             top: 268,
             left: 190,
             width: 87,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         age2Content: {
             position: 'absolute',
             top: 268,
             left: 275,
             width: 45,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         civilStatus2Content: {
             position: 'absolute',
             top: 268,
             left: 320,
             width: 73,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         occupation2Content: {
             position: 'absolute',
             top: 268,
             left: 393,
             width: 91,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         monthlyIncome2Content: {
             position: 'absolute',
             top: 268,
             left: 483,
             width: 78,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
 
         /* Family Member 3 */
@@ -354,62 +356,62 @@ export const PSWDOLayout = ({
             left: 35,
             width: 155,
             paddingLeft: 5,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11,  
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         relationship3Content: {
             position: 'absolute',
             top: 281,
             left: 190,
             width: 87,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         age3Content: {
             position: 'absolute',
             top: 281,
             left: 275,
             width: 45,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         civilStatus3Content: {
             position: 'absolute',
             top: 281,
             left: 320,
             width: 73,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         occupation3Content: {
             position: 'absolute',
             top: 281,
             left: 393,
             width: 91,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         monthlyIncome3Content: {
             position: 'absolute',
             top: 281,
             left: 483,
             width: 78,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
-        
+
         /* Family Member 4 */
         familyMember4Content: {
             position: 'absolute',
@@ -417,62 +419,62 @@ export const PSWDOLayout = ({
             left: 35,
             width: 155,
             paddingLeft: 5,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11,  
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         relationship4Content: {
             position: 'absolute',
             top: 294,
             left: 190,
             width: 87,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         age4Content: {
             position: 'absolute',
             top: 294,
             left: 275,
             width: 45,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         civilStatus4Content: {
             position: 'absolute',
             top: 294,
             left: 320,
             width: 73,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         occupation4Content: {
             position: 'absolute',
             top: 294,
             left: 393,
             width: 91,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         monthlyIncome4Content: {
             position: 'absolute',
             top: 294,
             left: 483,
             width: 78,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
-        },  
-        
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
+        },
+
         /* Family Member 5 */
         familyMember5Content: {
             position: 'absolute',
@@ -480,60 +482,60 @@ export const PSWDOLayout = ({
             left: 35,
             width: 155,
             paddingLeft: 5,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11,  
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         relationship5Content: {
             position: 'absolute',
             top: 308,
             left: 190,
             width: 87,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         age5Content: {
             position: 'absolute',
             top: 308,
             left: 275,
             width: 45,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         civilStatus5Content: {
             position: 'absolute',
             top: 308,
             left: 320,
             width: 73,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         occupation5Content: {
             position: 'absolute',
             top: 308,
             left: 393,
             width: 91,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
         monthlyIncome5Content: {
             position: 'absolute',
             top: 308,
             left: 483,
             width: 78,
-            textAlign: 'center', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
         },
 
         /* Brief Background */
@@ -545,17 +547,17 @@ export const PSWDOLayout = ({
             height: 75,
             paddingLeft: 0,
             paddingRight: 0,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             fontSize: 11,
-            letterSpacing: 0.1, 
+            letterSpacing: 0.1,
             lineHeight: 1.3,
             /* borderWidth: 1,
             borderColor: '#000', */
         },
 
-        
+
         /* Type of Assistance */
         medicalTypeAssistanceContent: {
             position: 'absolute',
@@ -564,13 +566,13 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
-        
+
         burialTypeAssistanceContent: {
             position: 'absolute',
             top: 452.5,
@@ -578,10 +580,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         foodTypeAssistanceContent: {
@@ -591,10 +593,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         educationTypeAssistanceContent: {
@@ -604,10 +606,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         transportationTypeAssistanceContent: {
@@ -617,10 +619,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         emergencyShelterTypeAssistanceContent: {
@@ -630,10 +632,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         otherTypeAssistanceContent: {
@@ -643,10 +645,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         yes4PsTypeAssistanceContent: {
@@ -656,10 +658,10 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
         },
         no4PsTypeAssistanceContent: {
@@ -669,12 +671,12 @@ export const PSWDOLayout = ({
             width: 25,
             height: 20,
             paddingLeft: 10,
-            textAlign: 'left', 
-            overflow: 'hidden', 
-            whiteSpace: 'nowrap', 
-            fontSize: 11, 
+            textAlign: 'left',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            fontSize: 11,
             lineHeight: 1.3
-        },       
+        },
         certifyNameContent: {
             position: 'absolute',
             top: 529,
@@ -682,15 +684,15 @@ export const PSWDOLayout = ({
             width: 155,
             height: 13,
             display: 'flex',
-            alignItems: 'center',        
-            justifyContent: 'flex-start', 
-            paddingLeft: 2,              
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            paddingLeft: 2,
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             fontSize: 11,
-            textAlign: 'left',  
+            textAlign: 'left',
             fontFamily: 'Roboto',
-            fontWeight: 'bold',             
+            fontWeight: 'bold',
         },
         certifyAddressContent: {
             position: 'absolute',
@@ -701,11 +703,11 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left', 
+            alignItems: 'left',
             fontFamily: 'Roboto',
-            fontWeight: 'bold',  
+            fontWeight: 'bold',
         },
-        eligbleToContent:{
+        eligbleToContent: {
             position: 'absolute',
             top: 541,
             left: 365,
@@ -715,11 +717,11 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left',  
+            alignItems: 'left',
             fontFamily: 'Roboto',
-            fontWeight: 'bold',  
+            fontWeight: 'bold',
         },
-        caseDateContent:{
+        caseDateContent: {
             position: 'absolute',
             top: 570,
             left: 190,
@@ -729,11 +731,11 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left',  
+            alignItems: 'left',
             fontFamily: 'Roboto',
-            fontWeight: 'bold',  
+            fontWeight: 'bold',
         },
-        amountContent:{
+        amountContent: {
             position: 'absolute',
             top: 598,
             left: 328,
@@ -743,11 +745,11 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left',  
+            alignItems: 'left',
             fontFamily: 'Roboto',
-            fontWeight: 'bold',  
+            fontWeight: 'bold',
         },
-        amountNumberContent:{
+        amountNumberContent: {
             position: 'absolute',
             top: 612,
             left: 37,
@@ -757,11 +759,11 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left',  
+            alignItems: 'left',
             fontFamily: 'Roboto',
-            fontWeight: 'bold',  
+            fontWeight: 'bold',
         },
-        clientCompleteNameContent:{
+        clientCompleteNameContent: {
             position: 'absolute',
             top: 660,
             left: 325,
@@ -771,11 +773,11 @@ export const PSWDOLayout = ({
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'left', 
+            alignItems: 'left',
         },
-        boldLetter:{ 
+        boldLetter: {
             fontFamily: 'Roboto',
-            fontWeight: 'bold',    
+            fontWeight: 'bold',
         }
     });
 
@@ -796,330 +798,330 @@ export const PSWDOLayout = ({
             <Page size="A4" style={styles.page}>
                 {/* Background Image inside a View */}
                 <View style={styles.backgroundContainer}>
-                    <Image 
-                        src="/assets/img/PSWDO_FORM.png" 
+                    <Image
+                        src="/assets/img/PSWDO_FORM.png"
                         style={styles.backgroundImage}
                     />
                 </View>
 
                 {/* Overlay Text with Dynamic Font Size */}
-                
+
                 <View style={[styles.nameContent, styles.textContainer]}>
-                    <Text style={{ fontSize: nameFontSize }}>{payeeName}</Text> 
+                    <Text style={{ fontSize: nameFontSize }}>{payeeName}</Text>
                 </View>
- 
+
                 <View style={styles.ageContent}>
-                    <Text>{claimantAge}</Text> 
+                    <Text>{claimantAge}</Text>
                 </View>
 
                 <View style={styles.civilStatusContent}>
-                    <Text>{claimantCivilStatus}</Text> 
-                </View> 
-                
+                    <Text>{claimantCivilStatus}</Text>
+                </View>
+
                 <View style={[styles.addressContent, styles.textContainer]}>
-                    { claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                    {claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
                         <>
-                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>            
+                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>
                         </>
                     }
                 </View>
 
                 <View style={styles.mobileNumberContent}>
-                    <Text>{claimantMobileNum}</Text> 
+                    <Text>{claimantMobileNum}</Text>
                 </View>
 
                 <View style={styles.occupationContent}>
-                    <Text>{claimantOccupation}</Text> 
+                    <Text>{claimantOccupation}</Text>
                 </View>
- 
+
                 <View style={styles.monthlyIncomeContent}>
-                    <Text>{formatToPesos(claimantMonthlyIncome)}</Text> 
+                    <Text>{formatToPesos(claimantMonthlyIncome)}</Text>
                 </View>
-                
+
                 {/* Family Member 1 */}
-                { familyComposition[0] && 
+                {familyComposition[0] &&
                     <>
                         <View style={styles.familyMember1Content}>
-                            <Text>{familyComposition[0].name}</Text> 
+                            <Text>{familyComposition[0].name}</Text>
                         </View>
 
                         <View style={styles.relationship1Content}>
-                            <Text>{familyComposition[0].relationship}</Text> 
+                            <Text>{familyComposition[0].relationship}</Text>
                         </View>
 
                         <View style={styles.age1Content}>
-                            <Text>{familyComposition[0].age}</Text> 
+                            <Text>{familyComposition[0].age}</Text>
                         </View>
-                        
+
                         <View style={styles.civilStatus1Content}>
-                            <Text>{familyComposition[0].civilStatus}</Text> 
+                            <Text>{familyComposition[0].civilStatus}</Text>
                         </View>
-                        
+
                         <View style={styles.occupation1Content}>
-                            <Text>{familyComposition[0].occupation}</Text> 
+                            <Text>{familyComposition[0].occupation}</Text>
                         </View>
 
                         <View style={styles.monthlyIncome1Content}>
-                            <Text>{formatToPesos(familyComposition[0].monthlyIncome)}</Text> 
+                            <Text>{formatToPesos(familyComposition[0].monthlyIncome)}</Text>
                         </View>
                     </>
                 }
-                
-                { familyComposition[1] && 
+
+                {familyComposition[1] &&
                     <>
-                        {/* Family Member 2 */} 
+                        {/* Family Member 2 */}
                         <View style={styles.familyMember2Content}>
-                            <Text>{familyComposition[1].name}</Text> 
+                            <Text>{familyComposition[1].name}</Text>
                         </View>
 
                         <View style={styles.relationship2Content}>
-                            <Text>{familyComposition[1].relationship}</Text> 
+                            <Text>{familyComposition[1].relationship}</Text>
                         </View>
 
                         <View style={styles.age2Content}>
-                            <Text>{familyComposition[1].age}</Text> 
+                            <Text>{familyComposition[1].age}</Text>
                         </View>
-                        
+
                         <View style={styles.civilStatus2Content}>
-                            <Text>{familyComposition[1].civilStatus}</Text> 
+                            <Text>{familyComposition[1].civilStatus}</Text>
                         </View>
-                        
+
                         <View style={styles.occupation2Content}>
-                            <Text>{familyComposition[1].occupation}</Text> 
+                            <Text>{familyComposition[1].occupation}</Text>
                         </View>
 
                         <View style={styles.monthlyIncome2Content}>
-                            <Text>{formatToPesos(familyComposition[1].monthlyIncome)}</Text> 
+                            <Text>{formatToPesos(familyComposition[1].monthlyIncome)}</Text>
                         </View>
                     </>
                 }
-                
-                { familyComposition[2] && 
-                    <> 
-                        {/* Family Member 3 */} 
+
+                {familyComposition[2] &&
+                    <>
+                        {/* Family Member 3 */}
                         <View style={styles.familyMember3Content}>
-                            <Text>{familyComposition[2].name}</Text> 
+                            <Text>{familyComposition[2].name}</Text>
                         </View>
 
                         <View style={styles.relationship3Content}>
-                            <Text>{familyComposition[2].relationship}</Text> 
+                            <Text>{familyComposition[2].relationship}</Text>
                         </View>
 
                         <View style={styles.age3Content}>
-                            <Text>{familyComposition[3].relationship}</Text> 
+                            <Text>{familyComposition[3].relationship}</Text>
                         </View>
-                        
+
                         <View style={styles.civilStatus3Content}>
-                            <Text>{familyComposition[3].civilStatus}</Text> 
+                            <Text>{familyComposition[3].civilStatus}</Text>
                         </View>
-                        
+
                         <View style={styles.occupation3Content}>
-                            <Text>{familyComposition[3].occupation}</Text> 
+                            <Text>{familyComposition[3].occupation}</Text>
                         </View>
 
                         <View style={styles.monthlyIncome3Content}>
-                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text> 
+                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
                         </View>
                     </>
                 }
 
-                { familyComposition[3] && 
-                    <> 
-                        {/* Family Member 4 */} 
+                {familyComposition[3] &&
+                    <>
+                        {/* Family Member 4 */}
                         <View style={styles.familyMember4Content}>
-                            <Text>{familyComposition[3].name}</Text> 
+                            <Text>{familyComposition[3].name}</Text>
                         </View>
 
                         <View style={styles.relationship4Content}>
-                            <Text>{familyComposition[3].relationship}</Text> 
+                            <Text>{familyComposition[3].relationship}</Text>
                         </View>
 
                         <View style={styles.age4Content}>
-                            <Text>{familyComposition[3].age}</Text> 
+                            <Text>{familyComposition[3].age}</Text>
                         </View>
-                        
+
                         <View style={styles.civilStatus4Content}>
-                            <Text>{familyComposition[3].civilStatus}</Text> 
+                            <Text>{familyComposition[3].civilStatus}</Text>
                         </View>
-                        
+
                         <View style={styles.occupation4Content}>
-                            <Text>{familyComposition[3].occupation}</Text> 
+                            <Text>{familyComposition[3].occupation}</Text>
                         </View>
 
                         <View style={styles.monthlyIncome4Content}>
-                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text> 
+                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
                         </View>
                     </>
                 }
 
-                { familyComposition[4] && 
-                    <> 
-                        {/* Family Member 5 */} 
+                {familyComposition[4] &&
+                    <>
+                        {/* Family Member 5 */}
                         <View style={styles.familyMember5Content}>
-                            <Text>{familyComposition[4].name}</Text> 
+                            <Text>{familyComposition[4].name}</Text>
                         </View>
 
                         <View style={styles.relationship5Content}>
-                            <Text>{familyComposition[4].relationship}</Text> 
+                            <Text>{familyComposition[4].relationship}</Text>
                         </View>
 
                         <View style={styles.age5Content}>
-                            <Text>{familyComposition[4].age}</Text> 
+                            <Text>{familyComposition[4].age}</Text>
                         </View>
-                        
+
                         <View style={styles.civilStatus5Content}>
-                            <Text>{familyComposition[4].civilStatus}</Text> 
+                            <Text>{familyComposition[4].civilStatus}</Text>
                         </View>
-                        
+
                         <View style={styles.occupation5Content}>
-                            <Text>{familyComposition[4].occupation}</Text> 
+                            <Text>{familyComposition[4].occupation}</Text>
                         </View>
 
                         <View style={styles.monthlyIncome5Content}>
-                            <Text>{formatToPesos(familyComposition[4].monthlyIncome)}</Text> 
+                            <Text>{formatToPesos(familyComposition[4].monthlyIncome)}</Text>
                         </View>
                     </>
                 }
- 
+
                 {/* <View style={[styles.briefBackgroundContent, styles.textContainer]} >
                     <Text style={{ fontSize: briefBackgroundFontSize }}>{briefBackground}</Text> 
                 </View> */}
 
                 <View style={[styles.briefBackgroundContent, styles.textContainer]}>
-                    { typeOfAssistance === "Medical" && 
+                    {typeOfAssistance === "Medical" &&
                         <>
                             <Text style={{ fontSize: briefBackgroundFontSize }}>
                                 Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last{" "}
                                 <Text style={styles.boldLetter}>{dateOfDeath}</Text> due to{" "}
-                                <Text style={styles.boldLetter}>{}</Text>. The client's family is in dire need of financial help
+                                <Text style={styles.boldLetter}>{ }</Text>. The client's family is in dire need of financial help
                                 to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
                                 as she only depends on <Text style={styles.boldLetter}>{formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
                                 the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
-                            </Text>                        
+                            </Text>
                         </>
                     }
                 </View>
 
-                { typeOfAssistance == "Medical" && 
+                {typeOfAssistance == "Medical" &&
                     <>
                         <View style={styles.medicalTypeAssistanceContent}>
-                            <Text>/</Text> 
-                        </View>                    
+                            <Text>/</Text>
+                        </View>
                     </>
                 }
-                
-                { typeOfAssistance == "Burial" && 
+
+                {typeOfAssistance == "Burial" || typeOfAssistance == "Alay Pagdamay" || typeOfAssistance == "Burial" &&
                     <>
                         <View style={styles.burialTypeAssistanceContent}>
-                            <Text>/</Text> 
-                        </View>            
+                            <Text>/</Text>
+                        </View>
                     </>
                 }
 
-                { typeOfAssistance == "Food" && 
+                {typeOfAssistance == "Food" &&
                     <>
                         <View style={styles.foodTypeAssistanceContent}>
-                            <Text>/</Text> 
-                        </View>          
+                            <Text>/</Text>
+                        </View>
                     </>
                 }
 
-                
-                { typeOfAssistance == "Education" && 
+
+                {typeOfAssistance == "Education" &&
                     <>
                         <View style={styles.educationTypeAssistanceContent}>
-                            <Text>/</Text> 
-                        </View>  
-                    </>
-                }
-                
-                { typeOfAssistance == "Transportation" && 
-                    <>
-                        <View style={styles.transportationTypeAssistanceContent}>
-                            <Text>/</Text> 
+                            <Text>/</Text>
                         </View>
                     </>
                 }
 
-                { typeOfAssistance == "Emergency Shelter" && 
+                {typeOfAssistance == "Transportation" &&
+                    <>
+                        <View style={styles.transportationTypeAssistanceContent}>
+                            <Text>/</Text>
+                        </View>
+                    </>
+                }
+
+                {typeOfAssistance == "Emergency Shelter" &&
                     <>
                         <View style={styles.emergencyShelterTypeAssistanceContent}>
-                            <Text>/</Text> 
+                            <Text>/</Text>
                         </View>
                     </>
                 }
-                
-                { typeOfAssistance == "Others" && 
+
+                {typeOfAssistance == "Others" &&
                     <>
                         <View style={styles.otherTypeAssistanceContent}>
-                            <Text>/</Text> 
+                            <Text>/</Text>
                         </View>
                     </>
                 }
-                
-                { member4Ps == "Yes" && 
+
+                {member4Ps == "Yes" &&
                     <>
                         <View style={styles.yes4PsTypeAssistanceContent}>
-                            <Text>/</Text> 
+                            <Text>/</Text>
                         </View>
                     </>
                 }
-                
-                { member4Ps == "No" && 
+
+                {member4Ps == "No" &&
                     <>
                         <View style={styles.no4PsTypeAssistanceContent}>
-                            <Text>/</Text> 
+                            <Text>/</Text>
                         </View>
                     </>
                 }
- 
+
                 <View style={[styles.certifyNameContent, styles.textContainer]}>
-                    <Text style={{ fontSize: certifyNameFontSize }}>{payeeName}</Text> 
+                    <Text style={{ fontSize: certifyNameFontSize }}>{payeeName}</Text>
                 </View>
- 
+
                 <View style={[styles.certifyAddressContent, styles.textContainer]}>
-                    { claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
-                        <>     
-                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>        
+                    {claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                        <>
+                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>
                         </>
                     }
                 </View>
 
                 <View style={[styles.eligbleToContent, styles.textContainer]}>
-                    { typeOfAssistance && 
+                    {typeOfAssistance &&
                         <>
                             <Text >{typeOfAssistance} Assistance</Text>
                         </>
-                    } 
+                    }
                 </View>
 
-                <View style={[styles.caseDateContent, styles.textContainer]}> 
-                    <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>  
+                <View style={[styles.caseDateContent, styles.textContainer]}>
+                    <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>
                 </View>
- 
+
                 <View style={[styles.amountContent, styles.textContainer]}>
-                    { contactPersonPettyAmount && 
+                    {contactPersonPettyAmount &&
                         <>
-                            <Text style={{ fontSize: amountFontSize }}>{numberToWords(contactPersonPettyAmount)} ONLY</Text>  
+                            <Text style={{ fontSize: amountFontSize }}>{numberToWords(contactPersonPettyAmount)} ONLY</Text>
                         </>
-                    } 
+                    }
                 </View>
 
                 <View style={[styles.amountNumberContent, styles.textContainer]}>
-                    { contactPersonPettyAmount && 
+                    {contactPersonPettyAmount &&
                         <>
-                            <Text style={{ fontSize: addressFontSize }}>{formatToPesos(contactPersonPettyAmount)}</Text>  
+                            <Text style={{ fontSize: addressFontSize }}>{formatToPesos(contactPersonPettyAmount)}</Text>
                         </>
-                    } 
+                    }
                 </View>
 
                 <View style={[styles.clientCompleteNameContent, styles.textContainer]}>
                     <Text style={[{ fontSize: clientNameFontSize }, styles.boldLetter]}>
                         {clientName}
-                    </Text>  
+                    </Text>
                 </View>
 
-                
+
             </Page>
         </Document>
     );
