@@ -11,16 +11,27 @@ Font.register({
 });
 
 
+const formatDate = (dateString) => {
+    if (!dateString) return "N/A"; // Handle null or undefined dates
+
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+};
 
 // ✅ PDF Layout
 export const PSWDOLayout = ({
     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantAge, claimantCivilStatus,
     claimantPurok, claimantBarangay, claimantMunicipality, claimantProvince,
     claimantMobileNum, claimantOccupation, claimantMonthlyIncome, familyComposition, claimantRelationship,
-    dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount
-}) => {
+    dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount, assistanceReason
+    }) => {
+ 
 
-    console.log("Address: ", typeOfAssistance)
+    console.log("typeOfAssistance: ", typeOfAssistance)
 
     const maxWidth = 260;
 
@@ -786,7 +797,7 @@ export const PSWDOLayout = ({
     const nameFontSize = getResponsiveFontSize(payeeName, maxWidth, baseFontSize);
     const addressFontSize = getResponsiveFontSize(addressName, 230, baseFontSize);
     const familyNameFontSize = getResponsiveFontSize(familyName, maxWidth, baseFontSize);
-    const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 200, baseFontSize);
+    const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 250, baseFontSize);
     const certifyNameFontSize = getResponsiveFontSize(payeeName, 160, 10);
     const amountFontSize = getResponsiveFontSize(contactPersonPettyAmount, 160, 11);
     const amountNumberFontSize = getResponsiveFontSize(contactPersonPettyAmount, maxWidth, baseFontSize);
@@ -988,76 +999,81 @@ export const PSWDOLayout = ({
                 </View> */}
 
                 <View style={[styles.briefBackgroundContent, styles.textContainer]}>
-                    {typeOfAssistance === "Medical" &&
+                    {typeOfAssistance === "Alay Pagdamay" &&
                         <>
                             <Text style={{ fontSize: briefBackgroundFontSize }}>
-                                Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last{" "}
-                                <Text style={styles.boldLetter}>{dateOfDeath}</Text> due to{" "}
-                                <Text style={styles.boldLetter}>{ }</Text>. The client's family is in dire need of financial help
+                                Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
+                                <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
+                                <Text style={styles.boldLetter}> {assistanceReason}</Text>. The client's family is in dire need of financial help
                                 to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
-                                as she only depends on <Text style={styles.boldLetter}>{formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
+                                as he/she solely relies on the income from <Text style={styles.boldLetter}>{claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
                                 the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
                             </Text>
                         </>
                     }
+
+                    {typeOfAssistance === "Burial Assistance" &&
+                        <>
+                            <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
+                                <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
+                                <Text style={styles.boldLetter}> {assistanceReason}</Text>. As claimed, family could hardly afford to shoulder all the expenses
+                                needed for the burial of the deceased. The family would like to provide a decent funeral service to the deceased,
+                                but as of the moment the family has insufficient sources of income to support the needs in the funeral service. Client is a
+                                <Text style={styles.boldLetter}> {claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, 
+                                and income could only be enough for their family needs. Thus, this request.
+                            </Text>
+                        </>
+                    }
+
                 </View>
 
-                {typeOfAssistance == "Medical" &&
-                    <>
-                        <View style={styles.medicalTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
+                {typeOfAssistance === "Hospital Bill" && (
+                    <View style={styles.medicalTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
-                {typeOfAssistance == "Burial" || typeOfAssistance == "Alay Pagdamay" || typeOfAssistance == "Burial" &&
-                    <>
-                        <View style={styles.burialTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
+                {(
+                    typeOfAssistance === "Burial" ||
+                    typeOfAssistance === "Alay Pagdamay" ||
+                    typeOfAssistance === "Burial Assistance"
+                ) && (
+                    <View style={styles.burialTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
-                {typeOfAssistance == "Food" &&
-                    <>
-                        <View style={styles.foodTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
+                {typeOfAssistance === "Food" && (
+                    <View style={styles.foodTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
+                {typeOfAssistance === "Education" && (
+                    <View style={styles.educationTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
-                {typeOfAssistance == "Education" &&
-                    <>
-                        <View style={styles.educationTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
+                {typeOfAssistance === "Transportation" && (
+                    <View style={styles.transportationTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
-                {typeOfAssistance == "Transportation" &&
-                    <>
-                        <View style={styles.transportationTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
+                {typeOfAssistance === "Emergency Shelter" && (
+                    <View style={styles.emergencyShelterTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
-                {typeOfAssistance == "Emergency Shelter" &&
-                    <>
-                        <View style={styles.emergencyShelterTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
+                {typeOfAssistance === "Others" && (
+                    <View style={styles.otherTypeAssistanceContent}>
+                        <Text>/</Text>
+                    </View>
+                )}
 
-                {typeOfAssistance == "Others" &&
-                    <>
-                        <View style={styles.otherTypeAssistanceContent}>
-                            <Text>/</Text>
-                        </View>
-                    </>
-                }
 
                 {member4Ps == "Yes" &&
                     <>
@@ -1087,13 +1103,41 @@ export const PSWDOLayout = ({
                     }
                 </View>
 
-                <View style={[styles.eligbleToContent, styles.textContainer]}>
-                    {typeOfAssistance &&
-                        <>
-                            <Text >{typeOfAssistance} Assistance</Text>
-                        </>
-                    }
-                </View>
+                { typeOfAssistance == "Burial Assistance" && 
+                    <>
+                        <View style={[styles.eligbleToContent, styles.textContainer]}>
+                            {typeOfAssistance &&
+                                <>  
+                                    <Text >{typeOfAssistance}</Text>
+                                </>
+                            }
+                        </View> 
+                    </>
+                }
+                
+                { typeOfAssistance == "Alay Pagdamay" && 
+                    <>
+                        <View style={[styles.eligbleToContent, styles.textContainer]}>
+                            {typeOfAssistance &&
+                                <>  
+                                    <Text >{typeOfAssistance}</Text>
+                                </>
+                            }
+                        </View> 
+                    </>
+                }
+                
+                { typeOfAssistance == "Hospital Bill" && 
+                    <>
+                        <View style={[styles.eligbleToContent, styles.textContainer]}>
+                            {typeOfAssistance &&
+                                <>  
+                                    <Text >{typeOfAssistance}</Text>
+                                </>
+                            }
+                        </View> 
+                    </>
+                }
 
                 <View style={[styles.caseDateContent, styles.textContainer]}>
                     <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>

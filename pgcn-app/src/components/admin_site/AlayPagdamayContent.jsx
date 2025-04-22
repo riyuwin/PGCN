@@ -36,10 +36,12 @@ function AlayPagdamayContent(){
     const [contactPersonLastname, setContactPersonLname] = useState('');
     const [contactPersonExtName, setContactPersonExtName] = useState('');
     const [contactNumber, setContactNumber] = useState('');
+    const [contactRelationship, setContactRelationship] = useState('');
     const [contactPersonServiceCovered, setContactPersonServiceCovered] = useState('');
     const [contactPersonFuneralService, setContactPersonFuneralCovered] = useState('');
     const [contactPersonEncoded, setContactPersonEncoded] = useState('');
     const [pettyCashAmount, setPettyCashAmount] = useState('');
+    const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');
     
     const [burialStatus, setBurialStatus] = useState(''); 
     const [checkedItems, setCheckedItems] = useState({
@@ -97,7 +99,8 @@ function AlayPagdamayContent(){
                 deathCertificate: checkedItems.checkDeathCertificate,
                 funeralContract: checkedItems.checkFuneralContract, 
                 validId: checkedItems.checkValidId, 
-                remarks: remarks
+                remarks: remarks,
+                deceasedCauseDeath: deceasedCauseDeath
             }
         );
         
@@ -119,6 +122,7 @@ function AlayPagdamayContent(){
         formData.append("contactPersonLastname", contactPersonLastname);
         formData.append("contactPersonExtName", contactPersonExtName);
         formData.append("contactNumber", contactNumber);
+        formData.append("contactRelationship", contactRelationship);
         formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
         formData.append("contactPersonFuneralService", contactPersonFuneralService);
         formData.append("contactPersonEncoded", contactPersonEncoded);
@@ -129,6 +133,7 @@ function AlayPagdamayContent(){
         formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
         formData.append("pettyCashAmount", pettyCashAmount);
+        formData.append("deceasedCauseDeath", deceasedCauseDeath);
         formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
     
         // Append the file (deathCertificate should be from an <input type="file"> element)
@@ -231,6 +236,7 @@ function AlayPagdamayContent(){
         formData.append("contactPersonLastname", contactPersonLastname);
         formData.append("contactPersonExtName", contactPersonExtName);
         formData.append("contactNumber", contactNumber);
+        formData.append("contactRelationship", contactRelationship);
         formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
         formData.append("contactPersonFuneralService", contactPersonFuneralService);
         formData.append("contactPersonEncoded", contactPersonEncoded);
@@ -241,6 +247,7 @@ function AlayPagdamayContent(){
         formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
         formData.append("pettyCashAmount", pettyCashAmount);
+        formData.append("deceasedCauseDeath", deceasedCauseDeath);
         formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
     
         if (deathCertificate) {
@@ -347,6 +354,8 @@ function AlayPagdamayContent(){
         setContactPersonFuneralCovered(burial['contact_funeral_service']);
         setContactPersonEncoded(burial['contact_person_encoded']);
         setPettyCashAmount(burial['petty_cash']);
+        setDeceasedCauseDeath(burial['death_cause']);
+        setContactRelationship(burial['contact_relationship'])
         
         setBurialStatus(burial['burial_status']); 
         setCheckedItems({
@@ -390,6 +399,8 @@ function AlayPagdamayContent(){
         setContactPersonLname('');
         setContactPersonExtName('');
         setContactNumber('');
+        setContactRelationship('');
+        setDeceasedCauseDeath('');
         setContactPersonServiceCovered('');
         setContactPersonFuneralCovered('');
         setContactPersonEncoded('');
@@ -832,7 +843,7 @@ function AlayPagdamayContent(){
                                                         value={deceasedDeathDate}
                                                         onChange={(e) => setDeceasedDeathDate(e.target.value)}
                                                     />
-                                                </div>
+                                                </div> 
                                                 
                                                 <div className="col-6">
                                                     <br /> 
@@ -848,6 +859,7 @@ function AlayPagdamayContent(){
                                                         onChange={handleFileChange} 
                                                     />
                                                 </div>
+ 
 
                                                 {/* {deathCertificate && (
                                                     <div className="col-12">
@@ -872,6 +884,19 @@ function AlayPagdamayContent(){
                                                     </div>
                                                 )}
             
+            
+                                                <div className="col-12">
+                                                    <br /> 
+                                                    <label htmlFor="extName" className="form-label">Cause of Death:</label>
+                                                    
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={deceasedCauseDeath}
+                                                        onChange={(e) => setDeceasedCauseDeath(e.target.value)}
+                                                    />
+                                                </div>
+
                                             </div> 
                                             <br />  
                                             <h3>Contact Person</h3><br />
@@ -930,6 +955,32 @@ function AlayPagdamayContent(){
                                                         value={contactNumber}
                                                         onChange={(e) => setContactNumber(e.target.value)}
                                                     />
+                                                </div>
+                                                
+                                                <div className="col-3">          
+                                                    <br />    
+                                                    <label htmlFor="extName" className="form-label">Relationship:</label>
+                                                    
+                                                    <select
+                                                        className="form-control"
+                                                        id="relationship"
+                                                        value={contactRelationship}
+                                                        onChange={(e) => setContactRelationship(e.target.value)}
+                                                    >
+                                                        <option value="">Select Relationship</option>
+                                                        <option value="Mother">Mother</option>
+                                                        <option value="Father">Father</option>
+                                                        <option value="Child">Child</option>
+                                                        <option value="Father">Self</option>
+                                                        <option value="Parent">Parent</option>
+                                                        <option value="Sibling">Sibling</option>
+                                                        <option value="Spouse">Spouse</option>
+                                                        <option value="Grandparent">Grandparent</option>
+                                                        <option value="Relative">Relative</option>
+                                                        <option value="Friend">Friend</option>
+                                                        <option value="Guardian">Guardian</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
                                                 </div>
 
                                                 

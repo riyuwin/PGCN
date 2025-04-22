@@ -68,8 +68,7 @@ function ViewAlayPagdamayContent() {
     const [patientPurok, setContactPersonPurok] = useState('');
     const [contactPersonBarangayList, setContactPersonBarangayList] = useState([]);
     const [pettyCash, setPettyCash] = useState('');
-
-
+    const [deceasedCauseDeath, setDeceasedCauseDeath] = useState(''); 
 
     const [burialStatus, setBurialStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
@@ -326,6 +325,8 @@ function ViewAlayPagdamayContent() {
         setContactPersonServiceCovered(burial['contact_service_covered']);
         setContactPersonFuneralCovered(burial['contact_funeral_service']);
         setContactPersonEncoded(burial['contact_person_encoded']);
+        setDeceasedCauseDeath(burial['death_cause']);
+        setContactPersonRelationship(burial['contact_relationship'])
 
         setBurialStatus(burial['burial_status']);
         setCheckedItems({
@@ -649,6 +650,16 @@ function ViewAlayPagdamayContent() {
                                                                                 <div className="col-sm-3">
                                                                                     <div className="input-group">
                                                                                         <label className="form-label">Province:<br /> <b>{deceasedProvince}</b></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                 
+                                                                                <div className="col-sm-12">
+                                                                                    <br />
+                                                                                </div>
+
+                                                                                <div className="col-sm-12">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Cause of Death:<br /> <b>{deceasedCauseDeath}</b></label>
                                                                                     </div>
                                                                                 </div>
 
@@ -1479,6 +1490,7 @@ function ViewAlayPagdamayContent() {
                                                 typeOfAssistance={typeOfAssistance}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
+                                                assistanceReason={deceasedCauseDeath}
                                             />
                                         </PDFViewer>
 

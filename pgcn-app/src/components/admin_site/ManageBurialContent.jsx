@@ -30,6 +30,8 @@ function ManageBurialContent() {
     const [clientGender, setClientGender] = useState(null);
     const [clientAge, setClientAge] = useState(null);
     const [clientAmount, setClientAmount] = useState(null);
+    const [clientDateDeath, setClientDateDeath] = useState(null);
+    const [clientCauseDeath, setClientCauseDeath] = useState(null);
     const [clientTypeAssistance, setClientTypeAssistance] = useState(null);
     const [clientStatusRemarks, setClientStatusRemarks] = useState(null);
     const [clientApplication, setClientApplication] = useState(null);
@@ -77,7 +79,7 @@ function ManageBurialContent() {
             account_id,
             clientFirstName, clientMiddleName, clientLastName, clientExtName,
             clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
-            clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+            clientContactNumber, clientGender, clientAge, clientDateDeath, clientCauseDeath, clientAmount, clientTypeAssistance,
             clientStatusRemarks, clientApplication, clientInterviewer, burialAssistanceStatus,
             checkBarangayIndigency, checkDeathCertificate, checkFuneralContract, checkValidId,
             remarks, currentDateTime
@@ -165,7 +167,7 @@ function ManageBurialContent() {
         const requestData = {
             burialId, account_id, clientFirstName, clientMiddleName, clientLastName, clientExtName,
             clientProvince, clientMunicipality, clientBarangay, clientPurok, clientRelationship,
-            clientContactNumber, clientGender, clientAge, clientAmount, clientTypeAssistance,
+            clientContactNumber, clientGender, clientAge, clientDateDeath, clientCauseDeath, clientAmount, clientTypeAssistance,
             clientStatusRemarks, clientApplication, clientInterviewer, burialAssistanceStatus,
             checkBarangayIndigency: checkedItems?.checkBarangayIndigency,
             checkDeathCertificate: checkedItems?.checkDeathCertificate,
@@ -269,6 +271,8 @@ function ManageBurialContent() {
         setClientContactNumber(burial['client_contact_num']);
         setClientGender(burial['client_gender']);
         setClientAge(burial['client_age']);
+        setClientDateDeath(burial['death_date']);
+        setClientCauseDeath(burial['death_cause']);
         setClientAmount(burial['amount']);
         setClientTypeAssistance(burial['type_assistance']);
         setClientStatusRemarks(burial['status_remarks']);
@@ -319,6 +323,8 @@ function ManageBurialContent() {
         setClientStatusRemarks('');
         setClientApplication('');
         setClientInterviewer('');
+        setClientDateDeath('');
+        setClientCauseDeath('');
         setBurialAssistanceStatus('');
         setCheckedItems({
             checkBarangayIndigency: false,
@@ -627,6 +633,8 @@ function ManageBurialContent() {
 
                                 <div className="generateContainer">
 
+                                    <br/>
+
                                     {formPage == "Basic Information" &&
                                         <>
 
@@ -806,9 +814,40 @@ function ManageBurialContent() {
                                                     />
                                                 </div>
 
+                                                <div className="col-12">
+                                                    <br/>
+                                                    <hr/>
+                                                    <br />
+                                                    <h3>Burial Information</h3>
+                                                </div>
+
                                                 <div className="col-3">
                                                     <br />
-                                                    <label htmlFor="extName" className="form-label">Amount:</label>
+                                                    <label htmlFor="extName" className="form-label">Deceased Date of Death:</label>
+
+                                                    <input
+                                                        type="date"
+                                                        className="form-control"
+                                                        value={clientDateDeath}
+                                                        onChange={(e) => setClientDateDeath(e.target.value)}
+                                                    />
+                                                </div>
+
+                                                <div className="col-3">
+                                                    <br />
+                                                    <label htmlFor="extName" className="form-label">Deceased Cause of Death:</label>
+
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={clientCauseDeath}
+                                                        onChange={(e) => setClientCauseDeath(e.target.value)}
+                                                    />
+                                                </div>
+
+                                                <div className="col-3">
+                                                    <br />
+                                                    <label htmlFor="extName" className="form-label">Petty Amount:</label>
 
                                                     <input
                                                         type="number"

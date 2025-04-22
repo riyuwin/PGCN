@@ -42,6 +42,8 @@ function ViewBurialAssistanceContent() {
     const [deathCertificate, setDeathCertificate] = useState(null);
     const [deathCertificatePreview, setDeathCertificatePreview] = useState(null);
 
+    const [clientDateDeath, setClientDateDeath] = useState(null);
+    const [clientCauseDeath, setClientCauseDeath] = useState(null);
 
     const [contactPersonFirstname, setContactPersonFname] = useState('');
     const [contactPersonMiddlename, setContactPersonMname] = useState('');
@@ -136,6 +138,8 @@ function ViewBurialAssistanceContent() {
         e.preventDefault();
 
         const hospitalId = null;
+        const alayPagDamayID = null;
+        const burialAssistanceID = id;
 
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
         const transactionName = "Burial Assistance";
@@ -144,7 +148,7 @@ function ViewBurialAssistanceContent() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
+                    hospitalId, alayPagDamayID, burialAssistanceID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                     contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount,
                     patientProvince, patientMunicipality, patientBarangay, patientPurok,
                     familyComposition, transactionName, typeOfAssistance, member4Ps
@@ -174,8 +178,7 @@ function ViewBurialAssistanceContent() {
 
     const handleUpdatePSWDOInterview = async (e) => {
         e.preventDefault();
-
-        const hospitalId = null;
+        
         const transactionName = "Burial Assistance";
 
         try {
@@ -269,6 +272,8 @@ function ViewBurialAssistanceContent() {
 
     const PopulatePSWDOInterview = (PSWDOInterview) => {
 
+        console.log("Testtt123: ", PSWDOInterview)
+        
         if (!PSWDOInterview?.error) {
             const interview = PSWDOInterview.interview || {};
 
@@ -333,7 +338,7 @@ function ViewBurialAssistanceContent() {
         setContactPersonExtName(burial['client_ext_name']);
         setContactNumber(burial['client_contact_num']);
         setContactAge(burial['client_age']);
-        setContactRelationship(burial['client_relationship']);
+        setContactPersonRelationship(burial['client_relationship']);
         setContactGender(burial['client_gender']);
         setContactPurok(burial['client_purok']);
         setContactBarangay(burial['client_barangay']);
@@ -343,6 +348,8 @@ function ViewBurialAssistanceContent() {
         setContactPersonStatusRemarks(burial['status_remarks']);
         setContactPersonStatusApplication(burial['status_application']);
         setContactPersonInterviewer(burial['interviewer']);
+        setClientDateDeath(burial['death_date']);
+        setClientCauseDeath(burial['death_cause']);
 
         setBurialStatus(burial['burial_status']);
         setCheckedItems({
@@ -1478,10 +1485,11 @@ function ViewBurialAssistanceContent() {
                                                 claimantMonthlyIncome={contactPersonIncome}
                                                 familyComposition={familyComposition}
                                                 claimantRelationship={contactPersonRelationship}
-                                                dateOfDeath={deceasedDeathDate}
+                                                dateOfDeath={clientDateDeath}
                                                 typeOfAssistance={typeOfAssistance}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
+                                                assistanceReason={clientCauseDeath}
                                             />
                                         </PDFViewer>
 
