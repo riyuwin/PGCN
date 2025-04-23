@@ -3,11 +3,10 @@ import { Font, Page, Text, View, Image, Document, StyleSheet } from '@react-pdf/
 
 // Register a custom font with ExtraBold weight
 Font.register({
-    family: 'Montserrat',
+    family: 'Roboto',
     fonts: [
-        { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUHjIg1_i6t8kCHKm45_dJE3gTD_u50.woff2', fontWeight: 'normal' },
-        { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTURjIg1_i6t8kCHKm45_cJD3gTD_u50.woff2', fontWeight: 'bold' },
-        { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTURjIg1_i6t8kCHKm45_epG3gTD_u50.woff2', fontWeight: '900' } // Use "900" for Extra Bold
+        { src: 'https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
+        { src: 'https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 'bold' }, // Bold
     ]
 });
 
@@ -50,15 +49,14 @@ const styles = StyleSheet.create({
         width: '100%', 
         padding: 10,
     },
-    header1: {
-        fontFamily: 'Montserrat',
-        fontSize: 18,
+    header1: { 
+        fontSize: 23,
         fontWeight: '900', 
+        marginTop: 20,
         marginBottom: 15
     },
-    header2: {
-        fontFamily: 'Montserrat',
-        fontSize: 16,
+    header2: { 
+        fontSize: 18,
         fontWeight: '900', 
         marginBottom: 15
     },
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
         paddingRight: 40,
         paddingLeft: 40,
         textAlign: 'right', 
-        marginBottom: 5,
+        marginBottom: 0,
         marginTop: 40
     },
     signatoryPositionText: {
@@ -101,7 +99,7 @@ const styles = StyleSheet.create({
         paddingRight: 45,
         paddingLeft: 40,
         textAlign: 'right', 
-        marginBottom: 5, 
+        marginBottom: 0, 
         marginRight:  40, 
     },
     signature: {
@@ -110,6 +108,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: -80,
         marginLeft: 300,
+    },
+    boldLetter: {
+        fontFamily: 'Roboto',
+        fontWeight: 'bold',
     }
 });
 
@@ -142,21 +144,21 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
 
             {/* Second Row - Body */}
             <View style={styles.body}>
-                <Text style={styles.header1}>OFFICE OF THE GOVERNOR</Text>
-                <Text style={styles.header2}>GUARANTEE LETTER</Text>
-                <Text style={styles.dateText}>{currentDate}</Text>
+                <Text style={[ styles.boldLetter, styles.header1]}>OFFICE OF THE GOVERNOR</Text>
+                <Text style={[ styles.boldLetter, styles.header2]}>GUARANTEE LETTER</Text>
+                <Text style={[ styles.boldLetter, styles.dateText]}>{currentDate}</Text>
                 <Text style={styles.contentText}>
-                    Respectfully referred to <Text style={styles.boldText}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
-                    MR/MS. <Text style={styles.boldText}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
+                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
+                    MR/MS. <Text style={styles.boldLetter}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from <Text style={ styles.boldLetter }>Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} </Text> for hospital bill assistance stated below:
                 </Text>
                 <Text style={styles.amountText}>
                     AMOUNT OF THE HOSPITAL BILL ASSISTANCE
                 </Text> 
-                <Text style={styles.amountText}>
+                <Text style={[styles.boldLetter, styles.amountText]}>
                     P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                 </Text>
                  
-                <Text style={styles.signatoryText}>
+                <Text style={[styles.boldLetter, styles.signatoryText]}>
                     HON. RICARTE R. PADILLA
                 </Text>
                 <Text style={styles.signatoryPositionText}>
@@ -195,22 +197,21 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
 
             {/* Second Row - Body */}
             <View style={styles.body}>
-                <Text style={styles.header1}>OFFICE OF THE GOVERNOR</Text>
-                <Text style={styles.header2}>GUARANTEE LETTER</Text>
-                <Text style={styles.dateText}>{currentDate}</Text>
+                <Text style={[ styles.boldLetter, styles.header1]}>OFFICE OF THE GOVERNOR</Text>
+                <Text style={[ styles.boldLetter, styles.header2]}>GUARANTEE LETTER</Text>
+                <Text style={[ styles.boldLetter, styles.dateText]}>{currentDate}</Text>
                 <Text style={styles.contentText}>
-                    Respectfully referred to <Text style={styles.boldText}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
-                    MR./MS. <Text style={styles.boldText}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} 
-                    for hospital bill assistance stated below:
+                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
+                    MR/MS. <Text style={styles.boldLetter}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from <Text style={ styles.boldLetter }>Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} </Text> for hospital bill assistance stated below:
                 </Text>
                 <Text style={styles.amountText}>
                     AMOUNT OF THE HOSPITAL BILL ASSISTANCE
                 </Text> 
-                <Text style={styles.amountText}>
+                <Text style={[styles.boldLetter, styles.amountText]}>
                     P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                 </Text>
                  
-                <Text style={styles.signatoryText}>
+                <Text style={[styles.boldLetter, styles.signatoryText]}>
                     HON. RICARTE R. PADILLA
                 </Text>
                 <Text style={styles.signatoryPositionText}>

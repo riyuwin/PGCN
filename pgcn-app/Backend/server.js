@@ -223,7 +223,7 @@ app.post("/insert_hospital_bill", (req, res) => {
     const {
         account_id,
         patientFirstName, patientMiddleName, patientLastName, patientExtName,
-        patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
+        patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
         claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact, claimantAmount,
         hospitalBillStatus,
         barangayIndigency,
@@ -239,12 +239,12 @@ app.post("/insert_hospital_bill", (req, res) => {
     const insertHospitalBillQuery = `
         INSERT INTO hospital_bill
         (account_id, patient_fname, patient_mname, patient_lname, patient_ext_name, 
-        patient_purok, patient_barangay, patient_municipality, patient_province, 
+        patient_purok, patient_barangay, patient_municipality, patient_province, date_confinement,
         patient_hospital, claimant_fname, claimant_mname, claimant_lname, claimant_extname, 
         claimant_relationship, claimant_contact, claimant_amount, 
         hospital_bill_status, check_barangay_indigency, check_med_certificate, check_hospital_bill, check_valid_id, remarks, 
         datetime_added) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.getConnection((err, connection) => {
@@ -262,7 +262,7 @@ app.post("/insert_hospital_bill", (req, res) => {
 
             connection.query(insertHospitalBillQuery, [
                 account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
-                patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
+                patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, sanitizedHospital,
                 claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                 claimantAmount,  // Fixed order
                 hospitalBillStatus,
@@ -302,7 +302,7 @@ app.post("/update_hospital_bill", (req, res) => {
     const {
         billId, account_id,
         patientFirstName, patientMiddleName, patientLastName, patientExtName,
-        patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
+        patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
         claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
         claimantAmount, hospitalBillStatus,
         barangayIndigency,
@@ -330,6 +330,7 @@ app.post("/update_hospital_bill", (req, res) => {
             patient_barangay = ?,
             patient_municipality = ?,
             patient_province = ?, 
+            date_confinement = ?,
             patient_hospital = ?, 
             claimant_fname = ?, 
             claimant_mname = ?, 
@@ -362,7 +363,7 @@ app.post("/update_hospital_bill", (req, res) => {
 
             connection.query(updateHospitalBillQuery, [
                 account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
-                patientPurok, patientBarangay, patientMunicipality, patientProvince, sanitizedHospital,
+                patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, sanitizedHospital,
                 claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                 claimantAmount, hospitalBillStatus,
                 barangayIndigency,

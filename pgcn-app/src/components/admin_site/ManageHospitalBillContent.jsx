@@ -23,6 +23,7 @@ function ManageHospitalBillContent(){
     const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
     const [barangayList, setBarangayList] = useState([]);  
     const [patientHospital, setPatientHospital] = useState('');
+    const [dateConfinement, setDateConfinement] = useState('');
 
     const [claimantFirstname, setClaimantFname] = useState('');
     const [claimantMiddlename, setClaimantMname] = useState('');
@@ -85,11 +86,11 @@ function ManageHospitalBillContent(){
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
-                    patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
+                    patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                     claimantAmount, hospitalBillStatus,
                     barangayIndigency: checkedItems.checkBarangayIndigency, 
-                    checkMedicalCertificate: checkedItems.checkMedicalCertificate,
+                    checkMedicalCertificate: checkedItems.checkMedCertificate,
                     checkFinalBill: checkedItems.checkFinalBill, 
                     validId: checkedItems.checkValidId, 
                     remarks,
@@ -177,7 +178,7 @@ function ManageHospitalBillContent(){
         console.log("Submitting hospital bill with data:", {
             billId, account_id,
             patientFirstName, patientMiddleName, patientLastName, patientExtName, 
-            patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
+            patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
             claimantAmount, hospitalBillStatus,
             barangayIndigency: checkedItems.checkBarangayIndigency, 
@@ -195,7 +196,7 @@ function ManageHospitalBillContent(){
                 body: JSON.stringify({
                     billId, account_id,
                     patientFirstName, patientMiddleName, patientLastName, patientExtName, 
-                    patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
+                    patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                     claimantAmount, hospitalBillStatus,
                     barangayIndigency: checkedItems.checkBarangayIndigency, 
@@ -592,7 +593,7 @@ function ManageHospitalBillContent(){
                         <div className="modal-body">
                             <form>
                                 
-                            <div className="generateContainer">
+                                <div className="generateContainer">
                                     
                                     <h5>Select Section: </h5>
                                     <br />
@@ -706,7 +707,7 @@ function ManageHospitalBillContent(){
                                                     <select
                                                         className="form-control"
                                                         value={patientBarangay}
-                                                        onChange={(e) => setBarangayList(e.target.value.trim())}
+                                                        onChange={(e) => setPatientBarangay(e.target.value.trim())}
                                                         disabled={barangayList.length === 0}
                                                     >
                                                         <option value="">Select Barangay</option>
@@ -734,7 +735,19 @@ function ManageHospitalBillContent(){
                                                     />
                                                 </div>  
                                                 
-                                                <div className="col-12">
+                                                <div className="col-3">
+                                                    <br /> 
+                                                    <label htmlFor="extName" className="form-label">Date of Confinement:</label>
+                                                     
+                                                    <input
+                                                        type="date"
+                                                        className="form-control"
+                                                        value={dateConfinement}
+                                                        onChange={(e) => setDateConfinement(e.target.value)}
+                                                    />
+                                                </div>
+                                                
+                                                <div className="col-3">
                                                     <br /> 
                                                     <label htmlFor="extName" className="form-label">Hospital:</label>
                                                     

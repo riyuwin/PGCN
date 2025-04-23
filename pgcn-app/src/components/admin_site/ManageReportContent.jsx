@@ -146,6 +146,10 @@ function ManageReportContent(){
     const [claimantRelationship, setClaimantRelationship] = useState('');
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
+    const [dateConfinement, setDateConfinement] = useState('');
+    
+    const [hospitalBillStatus, setHospitalBillStatus] = useState(''); 
+    
     // HOSPITAL BILL - Variables for inputs ------------------------------------------------------------ 
 
     // Variables for hospital bills
@@ -153,8 +157,8 @@ function ManageReportContent(){
     const [burialAssistance, setBurialAsisstanceData] = useState([]);
 
     const [selectedBill, setSelectedBill] = useState(null);
-
-    const [formPage, setFormPage] = useState("Form 1");
+ 
+    const [formPage, setFormPage] = useState("Basic Information");
 
     useEffect(() => {
         if (transactions !== "" && startDate !== "" && endDate !== "") {
@@ -392,6 +396,14 @@ function ManageReportContent(){
         setCurrentDateToday(formattedDate);
     }, []);
     
+
+    const handleCheckboxChange = (event) => {
+        const { id, checked } = event.target;
+        setCheckedItems((prevState) => ({
+            ...prevState,
+            [id]: checked
+        }));
+    };
 
  
     return(
@@ -772,304 +784,374 @@ function ManageReportContent(){
                             { transactions === "Hospital Bill" && 
                                 <>
                                     <div className="generateContainer">
-                                        <h5>Generate Forms: </h5>
+
+                                        <div className="generateContainer">
+                                    
+                                        <h5>Select Section: </h5>
                                         <br />
-
                                         <div className="row">  
-                                            <div className="col-4">
+                                            <div className="col-6">
                                                 <button 
                                                     type="button" 
-                                                    className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`} 
-                                                    onClick={() => handleFormPageUpdate("Form 1")}
+                                                    className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Basic Information")}
                                                 >
-                                                    <i className='bx bxs-file-pdf' ></i> Form 1
+                                                    <i class="bi bi-person-vcard"></i> Basic Information
                                                 </button>
                                             </div>
 
-                                            <div className="col-4">
+                                            <div className="col-6">
                                                 <button 
                                                     type="button" 
-                                                    className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`} 
-                                                    onClick={() => handleFormPageUpdate("Form 2")}
+                                                    className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`} 
+                                                    onClick={() => handleFormPageUpdate("Checklist")}
                                                 >
-                                                    <i className='bx bxs-file-pdf' ></i> Form 2
+                                                    <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
                                                 </button>
-                                            </div>
-
-                                            <div className="col-4">
-                                                <button 
-                                                    type="button" 
-                                                    className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`} 
-                                                    onClick={() => handleFormPageUpdate("Form 3")}
-                                                >
-                                                    <i className='bx bxs-file-pdf' ></i> Form 3
-                                                </button>
-                                            </div>
-
+                                            </div> 
         
 
                                         </div>  
                                     </div> 
 
-                                    <div className="generateContainer"> 
-                                        <br />
-        
-                                        { formPage == "Form 1" && 
-                                            <>
+                                    { formPage == "Basic Information" && 
+                                        <>
 
-                                                <div className="formContent">
-                                                    <div className="col-12 d-flex justify-content-end"> 
-                                                        <button 
-                                                            type="button" 
-                                                            className={`btn w-500  btn-secondary`}  
-                                                            onClick={handleDownload}
+                                            <div className="formContainer">
+                                                <h3>Patient Information</h3><br />
+                                                <div className="row"> 
+                                                    <div className="col-3">               
+                                                        <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="firstName"
+                                                            value={patientFirstName}
+                                                            onChange={(e) => setPatientFirstName(e.target.value.trim())} 
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-3"> 
+                                                        <label htmlFor="middleName" className="form-label">Middle Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="middleName"
+                                                            value={patientMiddleName}
+                                                            onChange={(e) => setPatientMiddleName(e.target.value.trim())} 
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="col-3"> 
+                                                        <label htmlFor="lastName" className="form-label">Last Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="lastName"
+                                                            value={patientLastName}
+                                                            onChange={(e) => setPatientLastName(e.target.value.trim())} 
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="col-3"> 
+                                                        <label htmlFor="extName" className="form-label">Ext Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="extName"
+                                                            value={patientExtName}
+                                                            onChange={(e) => setPatientExtName(e.target.value.trim())} 
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Province:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            value={patientProvince}
+                                                            disabled
                                                         >
-                                                            <i className='bx bxs-file-pdf' ></i> Download
-                                                        </button>
-                                                    </div><br />
+                                                            <option value="Camarines Norte">Camarines Norte</option>
+                                                        </select>
+                                                    </div>
+                
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Municipality:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            value={patientMunicipality}
+                                                            onChange={handleMunicipalityChange}
+                                                        >
+                                                            <option value="">Select Municipality</option>
+                                                            {Object.keys(municipalityBarangays).map((municipality) => (
+                                                                <option key={municipality} value={municipality}>
+                                                                    {municipality}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Barangay:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            value={patientBarangay}
+                                                            onChange={(e) => setPatientBarangay(e.target.value.trim())}
+                                                            disabled={barangayList.length === 0}
+                                                        >
+                                                            <option value="">Select Barangay</option>
+                                                            {barangayList.map((barangay) => (
+                                                                <option key={barangay} value={barangay}>
+                                                                    {barangay}
+                                                                </option>
+                                                            ))} : {
+                                                                <option key={patientBarangay} value={patientBarangay}>
+                                                                    {patientBarangay}
+                                                                </option>
+                                                            }
+                                                
+                                                        </select>
+                                                    </div>
+                
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Purok:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={patientPurok}
+                                                            onChange={(e) => setPatientPurok(e.target.value)}
+                                                        />
+                                                    </div>  
+                                                    
+                                                    <div className="col-3">
+                                                        <br /> 
+                                                        <label htmlFor="extName" className="form-label">Date of Confinement:</label>
+                                                        
+                                                        <input
+                                                            type="date"
+                                                            className="form-control"
+                                                            value={dateConfinement}
+                                                            onChange={(e) => setDateConfinement(e.target.value)}
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="col-3">
+                                                        <br /> 
+                                                        <label htmlFor="extName" className="form-label">Hospital:</label>
+                                                        
 
+                                                        <select
+                                                            className="form-control"
+                                                            id="hospital"   
+                                                            value={patientHospital}
+                                                            onChange={(e) => setPatientHospital(e.target.value)} >
+                                                                <option value="">Select Hospital</option>
+                                                                <option value="LEON D. HERNANDEZ MEMORIAL HOSPITAL">LEON D. HERNANDEZ MEMORIAL HOSPITAL</option>
+                                                                <option value="DAET DOCTORS HOSPITAL">DAET DOCTORS HOSPITAL</option>
+                                                                <option value="DR. MOISES V. CACAWA HOSPITAL">DR. MOISES V. CACAWA HOSPITAL</option>
+                                                                <option value="OUR LADY OF LOURDES HOSPITAL">OUR LADY OF LOURDES HOSPITAL</option>
+                                                                <option value="SANTISSIMA TRINIDAD OF DAET">SANTISSIMA TRINIDAD OF DAET</option>
+                                                                <option value="RACELIS TIONGSON MEDICAL CLINIC">RACELIS TIONGSON MEDICAL CLINIC</option>
+                                                                <option value="LIZASO HOSPITAL">LIZASO HOSPITAL</option>
+                                                                <option value="DR. MIGUEL V. ALEGRE HOSPITAL">DR. MIGUEL V. ALEGRE HOSPITAL</option>
+                                                                <option value="BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL">BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL</option>
+                                                                <option value="JOSE PANGANIBAN PRIMARY HOSPITAL">JOSE PANGANIBAN PRIMARY HOSPITAL</option> 
+                                                        </select>
+                                                    </div>
+                
+                                                </div> 
+                                                <br />
+                                                <hr /> 
+                                                <br />  
+                                                <h3>Claimant Information</h3><br />
+                                                <div className="row">
+                                                    <div className="col-3"> 
+                                                        <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="firstName"
+                                                            value={claimantFirstname}
+                                                            onChange={(e) => setClaimantFname(e.target.value)} 
+                                                        />
+                                                    </div>
 
+                                                    <div className="col-3"> 
+                                                        <label htmlFor="middleName" className="form-label">Middle Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="middleName"
+                                                            value={claimantMiddlename}
+                                                            onChange={(e) => setClaimantMname(e.target.value)} 
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="col-3"> 
+                                                        <label htmlFor="lastName" className="form-label">Last Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="lastName"
+                                                            value={claimantLastname}
+                                                            onChange={(e) => setClaimantLname(e.target.value)}
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="col-3">              
+                                                        <label htmlFor="extName" className="form-label">Ext Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="extName"
+                                                            value={claimantExtName}
+                                                            onChange={(e) => setClaimantExtName(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="relationship" className="form-label">Relationship:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={claimantRelationship}
+                                                            onChange={(e) => setClaimantRelationship(e.target.value)}
+                                                        >
+                                                            <option value="">Select Relationship</option>
+                                                            <option value="Mother">Mother</option>
+                                                            <option value="Father">Father</option>
+                                                            <option value="Child">Child</option>
+                                                            <option value="Father">Self</option>
+                                                            <option value="Parent">Parent</option>
+                                                            <option value="Sibling">Sibling</option>
+                                                            <option value="Spouse">Spouse</option>
+                                                            <option value="Grandparent">Grandparent</option>
+                                                            <option value="Relative">Relative</option>
+                                                            <option value="Friend">Friend</option>
+                                                            <option value="Guardian">Guardian</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                    </div>
+
+                                                    
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Contact:</label>
+                                                        <input
+                                                            type="number"
+                                                            className="form-control"
+                                                            id="extName"
+                                                            value={claimantContact}
+                                                            onChange={(e) => setClaimantContact(e.target.value)} 
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Amount:</label>
+                                                        <input
+                                                            type="number"
+                                                            className="form-control"
+                                                            id="extName"
+                                                            value={claimantAmount}
+                                                            onChange={(e) => setClaimantAmount(e.target.value)} 
+                                                        />
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+
+                                                <br />
+
+                                            </div>
+
+                                        </>
+                                    } 
+
+                                    {formPage === "Checklist" && (
+                                        <> 
+                                            <div className="row"> 
+                                                <div className="col-12">
                                                     <div className="formContainer">
-                                                        <div className="row"> 
+                                                        <h3>Hospital Bill Status: </h3><br/>
+                                                        <p>Current Status: <b>{hospitalBillStatus}</b></p><br/>  
 
-                                                            <div className="col-12">
-                                                                <br />
-                                                                <br />
-                                                            </div>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={hospitalBillStatus}
+                                                            onChange={(e) => setHospitalBillStatus(e.target.value)}
+                                                        > 
+                                                            <option value="Pending">Pending</option>
+                                                            <option value="Completed">Completed</option> 
+                                                            <option value="Cancelled">Cancelled</option> 
+                                                        </select>
 
-                                                            <div className="col-4 d-flex justify-content-center">
-                                                                <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
-                                                            </div>
-
-                                                            <div className="col-4 d-flex flex-column align-items-center header_form"> 
-                                                                <p className="d-flex flex-column align-items-center text-center m-auto">
-                                                                    Republic of the Philippines<br/>
-                                                                    Province of Camarines Norte<br/>
-                                                                    Dong Tulong
-                                                                </p> 
-                                                            </div>
-                        
-                                                            <div className="col-4 d-flex justify-content-center">
-                                                                <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
-                                                            </div>
-
-                                                            <div className="col-12">
-                                                                <br/><hr/><br/>
-                                                            </div>
-
-
-                                                            <div className="col-12  d-flex flex-column align-items-start body_form">
-                                                                <div className="body_container">
-                                                                    <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br/>
-                                                                    <h4 className="headerFormText">GUARANTEE LETTER</h4><br/>
-                                                                    <h6 className="headerFormText">{currentDate}</h6><br/><br/>
-                                                                    <p className="guaranteeLetterContent"> 
-                                                                        Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
-                                                                    </p><br/><br/>
-
-                                                                    <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
-                                                                    <h3 className="headerFormText">P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
-
-                                                                </div>
-                                                            </div> 
-                                                        </div>   
-                                                    </div> 
-
+                                                    </div>
+                                                    <br/>
                                                 </div>
 
                                                 
-                                            </> 
+                                                <div className="col-12">  
+                                                    <div className="formContainer">
+                                                        <h3>Requirements Checklist:</h3>             
+                                                        <br/>
+                                                        <ul className="list-group">
+                                                            <li className="list-group-item">
+                                                                <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency" 
+                                                                    checked={checkedItems.checkBarangayIndigency}
+                                                                    onChange={handleCheckboxChange} />
+                                                                <label className="form-check-label" htmlFor="checkBarangayIndigency">&nbsp; Barangay Indigency (2 Original)</label>
+                                                            </li>
+                                                            <li className="list-group-item">
+                                                                <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate" 
+                                                                    checked={checkedItems.checkMedCertificate} 
+                                                                    onChange={handleCheckboxChange} />
+                                                                <label className="form-check-label" htmlFor="checkMedicalCertificate">&nbsp; Medical Certificate or Medical Abstract (2 Copies)</label>
+                                                            </li>
+                                                            <li className="list-group-item">
+                                                                <input className="form-check-input me-1" type="checkbox" id="checkFinalBill" 
+                                                                    checked={checkedItems.checkFinalBill}
+                                                                    onChange={handleCheckboxChange} />
+                                                                <label className="form-check-label" htmlFor="checkFinalBill">&nbsp; Hospital Bill (2 Copies)</label>
+                                                            </li> 
+                                                            <li className="list-group-item">
+                                                                <input className="form-check-input me-1" type="checkbox" id="checkValidId" 
+                                                                    checked={checkedItems.checkValidId}
+                                                                    onChange={handleCheckboxChange} />
+                                                                <label className="form-check-label" htmlFor="checkValidId">&nbsp; Valid Identification (2 Copies)</label>
+                                                            </li>
+                                                        </ul>
+                                                    </div> 
+                                                </div>
+                                                
+                                                <div className="col-12">
+                                                    <br/>
+                                                    <div className="formContainer">
+                                                        <h3>Remarks:</h3>             
+                                                        <br/>
 
-                                        }
+                                                        <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
+                                                            value={remarks}
+                                                            onChange={(e) => setRemarks(e.target.value)} > 
+                                                        </textarea>
 
-                                        { formPage == "Form 2" && 
-                                            <> 
-
-                                                <div className="formContent"> 
-                                                    
-                                                    <div className="col-12 d-flex justify-content-end"> 
-                                                        <button 
-                                                            type="button" 
-                                                            className={`btn w-500  btn-secondary`}  
-                                                            onClick={handleDownload}
-                                                        >
-                                                            <i className='bx bxs-file-pdf' ></i> Download
-                                                        </button>
-                                                    </div><br />
-
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td colSpan="2" class="text-center">
-                                                                    <br/>
-                                                                    <b>PETTY CASH VOUCHER</b> <br/>
-                                                                    Provincial Government of Camarines Norte <br/>
-                                                                    LGU
-                                                                    <br/><br/>
-                                                                </td>   
-                                                            </tr>
-                                                            
-                                                            <tr>
-                                                                <td colSpan="2" class="text-start">
-                                                                    <b>Payee / Office:</b> {claimantFirstname} {claimantMiddlename} {claimantLastname} {claimantExtName}
-                                                                </td>   
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td colSpan="2" class="text-start">
-                                                                    <b>Address:</b> Purok - {patientPurok} Barangay {patientBarangay}, {patientMunicipality} {patientProvince}
-                                                                </td>   
-                                                            </tr> 
-
-                                                            <tr>
-                                                                <td colSpan="2" class="text-start">
-                                                                    <b>I. To be filled up upon request</b>
-                                                                </td>   
-                                                            </tr> 
-
-                                                            <tr>
-                                                                <td class="text-center">
-                                                                    Particulars
-                                                                </td>   
-                                                                <td class="text-center">
-                                                                    Amount
-                                                                </td>   
-                                                            </tr> 
-                                                            
-                                                            <tr>
-                                                                <td class="text-center">
-                                                                    <b>Hospital Bill</b>
-                                                                </td>   
-                                                                <td class="text-center">
-                                                                    <b>{claimantAmount}</b>
-                                                                </td>   
-                                                            </tr> 
-                                                            
-                                                            <tr>
-                                                                <td colSpan="2" > 
-                                                                    <p class="text-start"><b>A. </b> Approved by: </p>  
-                                                                    <p class="text-center"><b>CYNTHIA R. DELA CRUZ</b></p>  
-                                                                </td> 
-                                                            </tr> 
-                                                            
-                                                            <tr>
-                                                                <td colSpan="2" > 
-                                                                    <p class="text-start"><b>B. </b> Paid by: </p>  
-                                                                    <p class="text-center"><b class="text-center">RITA G. GUEVARRA</b> <br/> Social Worker </p>  
-                                                                </td> 
-                                                            </tr> 
-                                                            
-                                                            <tr>
-                                                                <td colSpan="2">
-                                                                    <p class="text-start"><b>C. </b> Cash Received by: </p>  
-                                                                    <p class="text-center"><u><b class="text-center">{claimantFirstname} {claimantMiddlename} {claimantLastname} {claimantExtName}</b></u></p>  
-                                                                    <p class="text-center">Signature over Printed Name of Payee</p>    
-                                                                    <p class="text-start">Date: <u>{currentDateToday}</u></p> 
-                                                                </td> 
-                                                            </tr>  
-
-                                                        </tbody>
-                                                    </table>
-
-                                                 </div> 
-
-                                            </> 
-                                        }
-
-                                        { formPage == "Form 3" && 
-                                            <>
-                                                <PDFViewer style={{ width: "100%", height: "800px" }}>
-                                                    <PettyCashLayout                                            
-                                                        claimantFirstname={claimantFirstname}                   
-                                                        claimantMiddlename={claimantMiddlename}                   
-                                                        claimantLastname={claimantLastname}                   
-                                                        claimantExtName={claimantExtName}                   
-                                                        patientPurok={patientPurok}                   
-                                                        patientBarangay={patientBarangay}                   
-                                                        patientMunicipality={patientMunicipality}                   
-                                                        patientProvince={patientProvince}                   
-                                                        claimantAmount={claimantAmount}
-                                                    />
-                                                </PDFViewer>
-                                            </>
-                                        } 
-                                        
-
-                                    </div>    
-                                </>
-                            }
-
-                            { transactions === "Burial Assistance" && 
-                                <>
-                                    <div className="generateContainer">
-                                        <h5>Generate Forms: </h5>
-                                        <br />
-
-                                        <div className="row">  
-                                            <div className="col-4">
-                                                <button 
-                                                    type="button" 
-                                                    className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`} 
-                                                    onClick={() => handleFormPageUpdate("Form 1")}
-                                                >
-                                                    <i className='bx bxs-file-pdf' ></i> Form 1
-                                                </button>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </>
+                                    )}
 
-                                            <div className="col-4">
-                                                <button 
-                                                    type="button" 
-                                                    className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`} 
-                                                    onClick={() => handleFormPageUpdate("Form 2")}
-                                                >
-                                                    <i className='bx bxs-file-pdf' ></i> Form 2
-                                                </button>
-                                            </div>
-
-                                            <div className="col-4">
-                                                <button 
-                                                    type="button" 
-                                                    className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`} 
-                                                    onClick={() => handleFormPageUpdate("Form 3")}
-                                                >
-                                                    <i className='bx bxs-file-pdf' ></i> Form 3
-                                                </button>
-                                            </div>
-
-        
-
-                                        </div>  
                                     </div> 
-
-                                    <div className="generateContainer"> 
-                                        <br />
-        
-                                        { formPage == "Form 1" && 
-                                            <>
-                                                <div className="col-12 d-flex justify-content-end"> 
-                                                    <button 
-                                                        type="button" 
-                                                        className={`btn w-500  btn-secondary`}  
-                                                        onClick={handleDownload}
-                                                    >
-                                                        <i className='bx bxs-file-pdf' ></i> Download
-                                                    </button>
-                                                </div><br />
- 
-                                            </> 
-
-                                        }
- 
-                                        
-
-                                    </div>    
+   
                                 </>
                             }
-
                             
 
                         </div>

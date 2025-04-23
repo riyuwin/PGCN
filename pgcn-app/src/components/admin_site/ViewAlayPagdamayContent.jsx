@@ -68,7 +68,7 @@ function ViewAlayPagdamayContent() {
     const [patientPurok, setContactPersonPurok] = useState('');
     const [contactPersonBarangayList, setContactPersonBarangayList] = useState([]);
     const [pettyCash, setPettyCash] = useState('');
-    const [deceasedCauseDeath, setDeceasedCauseDeath] = useState(''); 
+    const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');  
 
     const [burialStatus, setBurialStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
@@ -442,11 +442,12 @@ function ViewAlayPagdamayContent() {
                 claimantMiddlename={contactPersonMiddlename}
                 claimantLastname={contactPersonLastname}
                 claimantExtName={contactPersonExtName}
-                patientPurok={contactPersonPurok}
+                patientPurok={patientPurok}
                 patientBarangay={patientBarangay}
                 patientMunicipality={patientMunicipality}
                 patientProvince={patientProvince}
-                claimantAmount={contactPersonAmount}
+                claimantAmount={contactPersonPettyAmount}
+                transactionName={transactionName}
             />
         ).toBlob();
 
@@ -920,9 +921,9 @@ function ViewAlayPagdamayContent() {
                                                                                     <option value="Single">Single</option>
                                                                                     <option value="Married">Married</option>
                                                                                     <option value="Widowed">Widowed</option>
-                                                                                    <option value="Widowed">Separed</option>
-                                                                                    <option value="Widowed">Common-Law Married</option>
-                                                                                    <option value="Widowed">Lived-in-Partener</option>
+                                                                                    <option value="Separated">Separated</option>
+                                                                                    <option value="Common-Law Married">Common-Law Married</option>
+                                                                                    <option value="Lived-in-Partener">Lived-in-Partener</option>
                                                                                     <option value=""></option>
                                                                                 </select>
                                                                             </div>
@@ -1468,7 +1469,9 @@ function ViewAlayPagdamayContent() {
                                 }
 
                                 {formPage == "PSWDO Interview" &&
-                                    <>
+                                    <> 
+
+                                        {/* <h1>afasfsaf</h1> */} <br/>
                                         <PDFViewer style={{ width: "100%", height: "800px" }}>
                                             <PSWDOLayout
                                                 claimantFirstname={contactPersonFirstname}
@@ -1490,7 +1493,12 @@ function ViewAlayPagdamayContent() {
                                                 typeOfAssistance={typeOfAssistance}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
-                                                assistanceReason={deceasedCauseDeath}
+                                                assistanceReason={deceasedCauseDeath} 
+                                                beneFirstname={deceasedFirstName} 
+                                                beneMiddleName={deceasedMiddleName}
+                                                beneLastName={deceasedLastName}
+                                                beneExtName={deceasedExtName}
+                                                location={null}
                                             />
                                         </PDFViewer>
 

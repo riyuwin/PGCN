@@ -35,9 +35,10 @@ function ViewHospitalBillContent() {
     const [clientBarangay, setClientBarangay] = useState('');
     const [clientMunicipality, setClientMunicipality] = useState('');
     const [clientProvince, setClientProvince] = useState('Camarines Norte');
+    const [patientHospital, setPatientHospital] = useState('');
 
     const [clientGender, setClientGender] = useState('');
-    const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
+    const [dateConfinement, setDateConfinement] = useState(''); 
 
 
     const [contactPersonFirstname, setContactPersonFname] = useState('');
@@ -222,6 +223,7 @@ function ViewHospitalBillContent() {
         setClientBarangay(bill['patient_barangay']);
         setClientMunicipality(bill['patient_municipality']);
         setClientProvince(bill['patient_province']);
+        setPatientHospital(bill['patient_hospital']);
 
         setContactPersonFname(bill['claimant_fname']);
         setContactPersonMname(bill['claimant_mname']);
@@ -229,6 +231,7 @@ function ViewHospitalBillContent() {
         setContactPersonExtName(bill['claimant_extname']);
         setContactNumber(bill['claimant_contact']);
         setContactPersonAmount(bill['claimant_amount']);
+        setDateConfinement(bill['date_confinement'])
 
         setContactPersonRelationship(bill['claimant_relationship']);
 
@@ -1242,8 +1245,26 @@ function ViewHospitalBillContent() {
 
                                 {formPage == "Guarantee Letter" &&
                                     <>
+                                     
+                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                            <GuaranteeLetterLayout
+                                                patientFirstName={clientFirstName}
+                                                patientMiddleName={clientMiddleName}
+                                                patientLastName={clientLastName}
+                                                patientExtName={clientExtName}
+                                                claimantFirstName={contactPersonFirstname}
+                                                claimantMiddleName={contactPersonMiddlename}
+                                                claimantLastName={contactPersonLastname}
+                                                claimantExtName={contactPersonExtName}
+                                                patientPurok={clientPurok}
+                                                patientBarangay={clientBarangay}
+                                                patientMunicipality={clientMunicipality}
+                                                patientProvince={clientProvince}
+                                                claimantAmount={contactPersonAmount}
+                                            />
+                                        </PDFViewer>
 
-                                        <div  >
+                                        {/* <div  >
                                             <div className="col-12 d-flex justify-content-end">
                                                 <button
                                                     type="button"
@@ -1297,7 +1318,7 @@ function ViewHospitalBillContent() {
                                                 </div>
                                             </div>
 
-                                        </div>
+                                        </div> */}
 
 
                                     </>
@@ -1307,7 +1328,23 @@ function ViewHospitalBillContent() {
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
 
-                                        <div className="formContent">
+                                        
+                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                            <PettyCashLayout
+                                                claimantFirstname={contactPersonFirstname}
+                                                claimantMiddlename={contactPersonMiddlename}
+                                                claimantLastname={contactPersonLastname}
+                                                claimantExtName={contactPersonExtName}
+                                                patientPurok={patientPurok}
+                                                patientBarangay={patientBarangay}
+                                                patientMunicipality={patientMunicipality}
+                                                patientProvince={patientProvince}
+                                                claimantAmount={contactPersonAmount}
+                                                transactionName={transactionName}
+                                            />
+                                        </PDFViewer>
+
+                                        {/* <div className="formContent">
 
                                             <div className="col-12 d-flex justify-content-end">
                                                 <button
@@ -1397,7 +1434,7 @@ function ViewHospitalBillContent() {
                                                 </tbody>
                                             </table>
 
-                                        </div>
+                                        </div> */}
 
                                     </>
                                 }
@@ -1421,13 +1458,15 @@ function ViewHospitalBillContent() {
                                                 claimantMonthlyIncome={contactPersonIncome}
                                                 familyComposition={familyComposition}
                                                 claimantRelationship={contactPersonRelationship}
-                                                dateOfDeath={deceasedDeathDate}
+                                                dateOfDeath={dateConfinement}
                                                 typeOfAssistance={typeOfAssistance}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
-
-
-
+                                                beneFirstname={clientFirstName} 
+                                                beneMiddleName={clientMiddleName}
+                                                beneLastName={clientLastName}
+                                                beneExtName={clientExtName}
+                                                location={patientHospital} 
                                             />
                                         </PDFViewer>
 

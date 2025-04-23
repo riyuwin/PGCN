@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { Font } from '@react-pdf/renderer';
 
@@ -27,12 +27,19 @@ export const PSWDOLayout = ({
     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantAge, claimantCivilStatus,
     claimantPurok, claimantBarangay, claimantMunicipality, claimantProvince,
     claimantMobileNum, claimantOccupation, claimantMonthlyIncome, familyComposition, claimantRelationship,
-    dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount, assistanceReason
+    dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount, assistanceReason,
+    beneFirstname, beneMiddleName, beneLastName, beneExtName, location
     }) => {
- 
+    
+    const [selectBriefBackground, setSelectBriefBackground] = useState('Option 1');
 
-    console.log("typeOfAssistance: ", typeOfAssistance)
+    useEffect(() => {
+        const option = Math.floor(Math.random() * 3) + 1;
+        setSelectBriefBackground(`Option ${option}`);
 
+        console.log(`Option ${option}`);
+    }, []);
+    
     const maxWidth = 260;
 
     const formatDate = (dateString) => {
@@ -87,12 +94,15 @@ export const PSWDOLayout = ({
     const baseFontSize = 11;
     /* const briefBackground = `Client’s ${claimantRelationship} died last ${dateOfDeath} due to {}. The client's family is in dire need of financial help to cover the needs of the deceased.  As claimed, the client has no financial and no sufficient source of income as she only depends on ${claimantOccupation}, which is not enough to support the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance. `; */
 
+    
+    //const briefBackground = `Client’s ${claimantRelationship} died last ${dateOfDeath} due to ${assistanceReason}. The client's family is in dire need of financial help to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income as she only depends on ${formatToPesos(claimantMonthlyIncome)}, which is not enough to support the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.`;
+
     const briefBackground = `
             Client’s <span class="boldLetter">${claimantRelationship}</span> died last 
-            <span class="boldLetter">${dateOfDeath}</span> due to 
-            <span class="boldLetter">{causeOfDeath}</span>. The client's family is in dire need of financial help 
+            <span class="boldLetter">${formatDate(dateOfDeath)}</span> due to 
+            <span class="boldLetter">${assistanceReason}</span>. The client's family is in dire need of financial help 
             to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income 
-            as she only depends on <span class="boldLetter  ">${claimantOccupation}</span>, which is not enough to support 
+            as he/she solely relies on the income from <Text style={styles.boldLetter}>${claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP ${formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
             the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
             `;
 
@@ -552,18 +562,18 @@ export const PSWDOLayout = ({
         /* Brief Background */
         briefBackgroundContent: {
             position: 'absolute',
-            top: 347,
+            top: 346,
             left: 35,
             width: 525,
             height: 75,
-            paddingLeft: 0,
-            paddingRight: 0,
-            textAlign: 'left',
+            paddingLeft: 2,
+            paddingRight: 2, 
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            fontSize: 11,
+            fontSize: 12,
             letterSpacing: 0.1,
-            lineHeight: 1.3,
+            lineHeight: 1.2,
+            textAlign: 'justify'
             /* borderWidth: 1,
             borderColor: '#000', */
         },
@@ -797,7 +807,7 @@ export const PSWDOLayout = ({
     const nameFontSize = getResponsiveFontSize(payeeName, maxWidth, baseFontSize);
     const addressFontSize = getResponsiveFontSize(addressName, 230, baseFontSize);
     const familyNameFontSize = getResponsiveFontSize(familyName, maxWidth, baseFontSize);
-    const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 250, baseFontSize);
+    const briefBackgroundFontSize = getBriefBackgroundResponsiveFontSize(briefBackground, 350, baseFontSize);
     const certifyNameFontSize = getResponsiveFontSize(payeeName, 160, 10);
     const amountFontSize = getResponsiveFontSize(contactPersonPettyAmount, 160, 11);
     const amountNumberFontSize = getResponsiveFontSize(contactPersonPettyAmount, maxWidth, baseFontSize);
@@ -805,368 +815,449 @@ export const PSWDOLayout = ({
     const currentDataFontSize = getResponsiveFontSize(currentDate, 88, baseFontSize);
 
     return (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                {/* Background Image inside a View */}
-                <View style={styles.backgroundContainer}>
-                    <Image
-                        src="/assets/img/PSWDO_FORM.png"
-                        style={styles.backgroundImage}
-                    />
-                </View>
+        <>
+            <Document>
+                <Page size="A4" style={styles.page}>
+                    {/* Background Image inside a View */}
+                    <View style={styles.backgroundContainer}>
+                        <Image
+                            src="/assets/img/PSWDO_FORM.png"
+                            style={styles.backgroundImage}
+                        />
+                    </View>
 
-                {/* Overlay Text with Dynamic Font Size */}
+                    {/* Overlay Text with Dynamic Font Size */}
 
-                <View style={[styles.nameContent, styles.textContainer]}>
-                    <Text style={{ fontSize: nameFontSize }}>{payeeName}</Text>
-                </View>
+                    <View style={[styles.nameContent, styles.textContainer]}>
+                        <Text style={{ fontSize: nameFontSize }}>{payeeName}</Text>
+                    </View>
 
-                <View style={styles.ageContent}>
-                    <Text>{claimantAge}</Text>
-                </View>
+                    <View style={styles.ageContent}>
+                        <Text>{claimantAge}</Text>
+                    </View>
 
-                <View style={styles.civilStatusContent}>
-                    <Text>{claimantCivilStatus}</Text>
-                </View>
+                    <View style={styles.civilStatusContent}>
+                        <Text>{claimantCivilStatus}</Text>
+                    </View>
 
-                <View style={[styles.addressContent, styles.textContainer]}>
-                    {claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                    <View style={[styles.addressContent, styles.textContainer]}>
+                        {claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                            <>
+                                <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>
+                            </>
+                        }
+                    </View>
+
+                    <View style={styles.mobileNumberContent}>
+                        <Text>{claimantMobileNum}</Text>
+                    </View>
+
+                    <View style={styles.occupationContent}>
+                        <Text>{claimantOccupation}</Text>
+                    </View>
+
+                    <View style={styles.monthlyIncomeContent}>
+                        <Text>{formatToPesos(claimantMonthlyIncome)}</Text>
+                    </View>
+
+                    {/* Family Member 1 */}
+                    {familyComposition[0] &&
                         <>
-                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>
-                        </>
-                    }
-                </View>
+                            <View style={styles.familyMember1Content}>
+                                <Text>{familyComposition[0].name}</Text>
+                            </View>
 
-                <View style={styles.mobileNumberContent}>
-                    <Text>{claimantMobileNum}</Text>
-                </View>
+                            <View style={styles.relationship1Content}>
+                                <Text>{familyComposition[0].relationship}</Text>
+                            </View>
 
-                <View style={styles.occupationContent}>
-                    <Text>{claimantOccupation}</Text>
-                </View>
+                            <View style={styles.age1Content}>
+                                <Text>{familyComposition[0].age}</Text>
+                            </View>
 
-                <View style={styles.monthlyIncomeContent}>
-                    <Text>{formatToPesos(claimantMonthlyIncome)}</Text>
-                </View>
+                            <View style={styles.civilStatus1Content}>
+                                <Text>{familyComposition[0].civilStatus}</Text>
+                            </View>
 
-                {/* Family Member 1 */}
-                {familyComposition[0] &&
-                    <>
-                        <View style={styles.familyMember1Content}>
-                            <Text>{familyComposition[0].name}</Text>
-                        </View>
+                            <View style={styles.occupation1Content}>
+                                <Text>{familyComposition[0].occupation}</Text>
+                            </View>
 
-                        <View style={styles.relationship1Content}>
-                            <Text>{familyComposition[0].relationship}</Text>
-                        </View>
-
-                        <View style={styles.age1Content}>
-                            <Text>{familyComposition[0].age}</Text>
-                        </View>
-
-                        <View style={styles.civilStatus1Content}>
-                            <Text>{familyComposition[0].civilStatus}</Text>
-                        </View>
-
-                        <View style={styles.occupation1Content}>
-                            <Text>{familyComposition[0].occupation}</Text>
-                        </View>
-
-                        <View style={styles.monthlyIncome1Content}>
-                            <Text>{formatToPesos(familyComposition[0].monthlyIncome)}</Text>
-                        </View>
-                    </>
-                }
-
-                {familyComposition[1] &&
-                    <>
-                        {/* Family Member 2 */}
-                        <View style={styles.familyMember2Content}>
-                            <Text>{familyComposition[1].name}</Text>
-                        </View>
-
-                        <View style={styles.relationship2Content}>
-                            <Text>{familyComposition[1].relationship}</Text>
-                        </View>
-
-                        <View style={styles.age2Content}>
-                            <Text>{familyComposition[1].age}</Text>
-                        </View>
-
-                        <View style={styles.civilStatus2Content}>
-                            <Text>{familyComposition[1].civilStatus}</Text>
-                        </View>
-
-                        <View style={styles.occupation2Content}>
-                            <Text>{familyComposition[1].occupation}</Text>
-                        </View>
-
-                        <View style={styles.monthlyIncome2Content}>
-                            <Text>{formatToPesos(familyComposition[1].monthlyIncome)}</Text>
-                        </View>
-                    </>
-                }
-
-                {familyComposition[2] &&
-                    <>
-                        {/* Family Member 3 */}
-                        <View style={styles.familyMember3Content}>
-                            <Text>{familyComposition[2].name}</Text>
-                        </View>
-
-                        <View style={styles.relationship3Content}>
-                            <Text>{familyComposition[2].relationship}</Text>
-                        </View>
-
-                        <View style={styles.age3Content}>
-                            <Text>{familyComposition[3].relationship}</Text>
-                        </View>
-
-                        <View style={styles.civilStatus3Content}>
-                            <Text>{familyComposition[3].civilStatus}</Text>
-                        </View>
-
-                        <View style={styles.occupation3Content}>
-                            <Text>{familyComposition[3].occupation}</Text>
-                        </View>
-
-                        <View style={styles.monthlyIncome3Content}>
-                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
-                        </View>
-                    </>
-                }
-
-                {familyComposition[3] &&
-                    <>
-                        {/* Family Member 4 */}
-                        <View style={styles.familyMember4Content}>
-                            <Text>{familyComposition[3].name}</Text>
-                        </View>
-
-                        <View style={styles.relationship4Content}>
-                            <Text>{familyComposition[3].relationship}</Text>
-                        </View>
-
-                        <View style={styles.age4Content}>
-                            <Text>{familyComposition[3].age}</Text>
-                        </View>
-
-                        <View style={styles.civilStatus4Content}>
-                            <Text>{familyComposition[3].civilStatus}</Text>
-                        </View>
-
-                        <View style={styles.occupation4Content}>
-                            <Text>{familyComposition[3].occupation}</Text>
-                        </View>
-
-                        <View style={styles.monthlyIncome4Content}>
-                            <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
-                        </View>
-                    </>
-                }
-
-                {familyComposition[4] &&
-                    <>
-                        {/* Family Member 5 */}
-                        <View style={styles.familyMember5Content}>
-                            <Text>{familyComposition[4].name}</Text>
-                        </View>
-
-                        <View style={styles.relationship5Content}>
-                            <Text>{familyComposition[4].relationship}</Text>
-                        </View>
-
-                        <View style={styles.age5Content}>
-                            <Text>{familyComposition[4].age}</Text>
-                        </View>
-
-                        <View style={styles.civilStatus5Content}>
-                            <Text>{familyComposition[4].civilStatus}</Text>
-                        </View>
-
-                        <View style={styles.occupation5Content}>
-                            <Text>{familyComposition[4].occupation}</Text>
-                        </View>
-
-                        <View style={styles.monthlyIncome5Content}>
-                            <Text>{formatToPesos(familyComposition[4].monthlyIncome)}</Text>
-                        </View>
-                    </>
-                }
-
-                {/* <View style={[styles.briefBackgroundContent, styles.textContainer]} >
-                    <Text style={{ fontSize: briefBackgroundFontSize }}>{briefBackground}</Text> 
-                </View> */}
-
-                <View style={[styles.briefBackgroundContent, styles.textContainer]}>
-                    {typeOfAssistance === "Alay Pagdamay" &&
-                        <>
-                            <Text style={{ fontSize: briefBackgroundFontSize }}>
-                                Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
-                                <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
-                                <Text style={styles.boldLetter}> {assistanceReason}</Text>. The client's family is in dire need of financial help
-                                to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
-                                as he/she solely relies on the income from <Text style={styles.boldLetter}>{claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
-                                the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
-                            </Text>
+                            <View style={styles.monthlyIncome1Content}>
+                                <Text>{formatToPesos(familyComposition[0].monthlyIncome)}</Text>
+                            </View>
                         </>
                     }
 
-                    {typeOfAssistance === "Burial Assistance" &&
+                    {familyComposition[1] &&
                         <>
-                            <Text style={{ fontSize: briefBackgroundFontSize }}>
-                                Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
-                                <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
-                                <Text style={styles.boldLetter}> {assistanceReason}</Text>. As claimed, family could hardly afford to shoulder all the expenses
-                                needed for the burial of the deceased. The family would like to provide a decent funeral service to the deceased,
-                                but as of the moment the family has insufficient sources of income to support the needs in the funeral service. Client is a
-                                <Text style={styles.boldLetter}> {claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, 
-                                and income could only be enough for their family needs. Thus, this request.
-                            </Text>
+                            {/* Family Member 2 */}
+                            <View style={styles.familyMember2Content}>
+                                <Text>{familyComposition[1].name}</Text>
+                            </View>
+
+                            <View style={styles.relationship2Content}>
+                                <Text>{familyComposition[1].relationship}</Text>
+                            </View>
+
+                            <View style={styles.age2Content}>
+                                <Text>{familyComposition[1].age}</Text>
+                            </View>
+
+                            <View style={styles.civilStatus2Content}>
+                                <Text>{familyComposition[1].civilStatus}</Text>
+                            </View>
+
+                            <View style={styles.occupation2Content}>
+                                <Text>{familyComposition[1].occupation}</Text>
+                            </View>
+
+                            <View style={styles.monthlyIncome2Content}>
+                                <Text>{formatToPesos(familyComposition[1].monthlyIncome)}</Text>
+                            </View>
                         </>
                     }
 
-                </View>
+                    {familyComposition[2] &&
+                        <>
+                            {/* Family Member 3 */}
+                            <View style={styles.familyMember3Content}>
+                                <Text>{familyComposition[2].name}</Text>
+                            </View>
 
-                {typeOfAssistance === "Hospital Bill" && (
-                    <View style={styles.medicalTypeAssistanceContent}>
-                        <Text>/</Text>
+                            <View style={styles.relationship3Content}>
+                                <Text>{familyComposition[2].relationship}</Text>
+                            </View>
+
+                            <View style={styles.age3Content}>
+                                <Text>{familyComposition[3].relationship}</Text>
+                            </View>
+
+                            <View style={styles.civilStatus3Content}>
+                                <Text>{familyComposition[3].civilStatus}</Text>
+                            </View>
+
+                            <View style={styles.occupation3Content}>
+                                <Text>{familyComposition[3].occupation}</Text>
+                            </View>
+
+                            <View style={styles.monthlyIncome3Content}>
+                                <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
+                            </View>
+                        </>
+                    }
+
+                    {familyComposition[3] &&
+                        <>
+                            {/* Family Member 4 */}
+                            <View style={styles.familyMember4Content}>
+                                <Text>{familyComposition[3].name}</Text>
+                            </View>
+
+                            <View style={styles.relationship4Content}>
+                                <Text>{familyComposition[3].relationship}</Text>
+                            </View>
+
+                            <View style={styles.age4Content}>
+                                <Text>{familyComposition[3].age}</Text>
+                            </View>
+
+                            <View style={styles.civilStatus4Content}>
+                                <Text>{familyComposition[3].civilStatus}</Text>
+                            </View>
+
+                            <View style={styles.occupation4Content}>
+                                <Text>{familyComposition[3].occupation}</Text>
+                            </View>
+
+                            <View style={styles.monthlyIncome4Content}>
+                                <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
+                            </View>
+                        </>
+                    }
+
+                    {familyComposition[4] &&
+                        <>
+                            {/* Family Member 5 */}
+                            <View style={styles.familyMember5Content}>
+                                <Text>{familyComposition[4].name}</Text>
+                            </View>
+
+                            <View style={styles.relationship5Content}>
+                                <Text>{familyComposition[4].relationship}</Text>
+                            </View>
+
+                            <View style={styles.age5Content}>
+                                <Text>{familyComposition[4].age}</Text>
+                            </View>
+
+                            <View style={styles.civilStatus5Content}>
+                                <Text>{familyComposition[4].civilStatus}</Text>
+                            </View>
+
+                            <View style={styles.occupation5Content}>
+                                <Text>{familyComposition[4].occupation}</Text>
+                            </View>
+
+                            <View style={styles.monthlyIncome5Content}>
+                                <Text>{formatToPesos(familyComposition[4].monthlyIncome)}</Text>
+                            </View>
+                        </>
+                    }
+
+                    {/* <View style={[styles.briefBackgroundContent, styles.textContainer]} >
+                        <Text style={{ fontSize: briefBackgroundFontSize }}>{briefBackground}</Text> 
+                    </View> */}
+
+                    <View style={[styles.briefBackgroundContent, styles.textContainer]}>
+                        {typeOfAssistance === "Alay Pagdamay" && selectBriefBackground == "Option 1" &&
+                            <> 
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
+                                    <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
+                                    <Text style={styles.boldLetter}> {assistanceReason}</Text>. The client's family is in dire need of financial help
+                                    to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
+                                    as he/she solely relies on the income from <Text style={styles.boldLetter}>{claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
+                                    the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
+                                </Text>
+                            </>
+                        }
+
+                        {typeOfAssistance === "Alay Pagdamay" && selectBriefBackground == "Option 2" &&
+                            <>
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
+                                    <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
+                                    <Text style={styles.boldLetter}> {assistanceReason}</Text>. As claimed, family could hardly afford to shoulder all the expenses
+                                    needed for the burial of the deceased. The family would like to provide a decent funeral service to the deceased,
+                                    but as of the moment the family has insufficient sources of income to support the needs in the funeral service. Client is a
+                                    <Text style={styles.boldLetter}> {claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, 
+                                    and income could only be enough for their family needs. Thus, this request.
+                                </Text>
+                            </>
+                        }
+
+                        
+                        {typeOfAssistance === "Alay Pagdamay" && selectBriefBackground == "Option 3" &&
+                            <>
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    As claimed, the client has encountered significant financial obstacles and is currently grappling with the
+                                    daunting task of raising funds to support the funeral expenses and bill of his/her <Text style={styles.boldLetter}>{claimantRelationship}</Text>,
+                                    <Text style={styles.boldLetter}> {beneFirstname} {beneMiddleName} {beneLastName} {beneExtName}</Text>, who passed away on <Text style={styles.boldLetter}>{formatDate(dateOfDeath)} </Text>
+                                    due to <Text style={styles.boldLetter}>{assistanceReason}</Text>. As of the moment faced with such circumstances, she came to the office
+                                    seeking financial aid to pay in full the funeral bill which is beyond their interventions.
+                                </Text>
+                            </>
+                        }
+
+                        {typeOfAssistance === "Burial Assistance" && selectBriefBackground == "Option 1" &&
+                            <> 
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
+                                    <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
+                                    <Text style={styles.boldLetter}> {assistanceReason}</Text>. The client's family is in dire need of financial help
+                                    to cover the needs of the deceased. As claimed, the client has no financial and no sufficient source of income
+                                    as he/she solely relies on the income from <Text style={styles.boldLetter}>{claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, which is not enough to support
+                                    the needs of the deceased during his/her wake and other financial needs. Hence, this request for assistance.
+                                </Text>
+                            </>
+                        }
+
+                        {typeOfAssistance === "Burial Assistance" && selectBriefBackground == "Option 2" &&
+                            <>
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> died last
+                                    <Text style={styles.boldLetter}> {formatDate(dateOfDeath)}</Text> due to
+                                    <Text style={styles.boldLetter}> {assistanceReason}</Text>. As claimed, family could hardly afford to shoulder all the expenses
+                                    needed for the burial of the deceased. The family would like to provide a decent funeral service to the deceased,
+                                    but as of the moment the family has insufficient sources of income to support the needs in the funeral service. Client is a
+                                    <Text style={styles.boldLetter}> {claimantOccupation}'s</Text> work, earning only <Text style={styles.boldLetter}>PHP {formatToPesos(claimantMonthlyIncome)}</Text>, 
+                                    and income could only be enough for their family needs. Thus, this request.
+                                </Text>
+                            </>
+                        }
+
+                        {typeOfAssistance === "Hospital Bill" && selectBriefBackground == "Option 1" &&
+                            <>
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    The client came to ask for help for his/her <Text style={styles.boldLetter}>{claimantRelationship}</Text>. His/Her died last
+                                    <Text style={styles.boldLetter}> {claimantRelationship}</Text> which is the patient is only a <Text style={styles.boldLetter}> {claimantOccupation}, </Text>
+                                    and that is their main source of income. Because his/her <Text style={styles.boldLetter}>{claimantRelationship}</Text> was admitted to the hospital, they need help
+                                    for hospital bill. The client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> was admitted last <Text style={styles.boldLetter}>{dateOfDeath}</Text>
+                                    based on the medical certificate presented. 
+                                </Text>
+                            </>
+                        }
+                        
+                        {typeOfAssistance === "Hospital Bill" && selectBriefBackground == "Option 2" &&
+                            <>
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    Client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> was admitted at <Text style={styles.boldLetter}>{location}</Text> due to
+                                    <Text style={styles.boldLetter}>{assistanceReason}</Text>. He/She is already discharged with a promissory note. As
+                                    claimed, the client is facing financial difficulty due to his/her <Text style={styles.boldLetter}>{claimantRelationship} </Text> 
+                                    medications. He/she had series of laboratory tests and diagnostics procedure during the
+                                    confinement which the family spend quite a huge amount now. He/She still gathers huge
+                                    amount to pay the unpaid bill, as he/she only depend from his/her salary as
+                                    <Text style={styles.boldLetter}> {claimantOccupation}</Text>. Hence, this request.
+                                </Text>
+                            </>
+                        }
+                        
+                        {typeOfAssistance === "Hospital Bill" && selectBriefBackground == "Option 3" &&
+                            <>
+                                <Text style={{ fontSize: briefBackgroundFontSize }}>
+                                    The client is seeking financial assistance to help with his/her <Text style={styles.boldLetter}>{claimantRelationship}'s </Text>
+                                    medication, <Text style={styles.boldLetter}>{beneFirstname} {beneMiddleName} {beneLastName} {beneExtName} </Text> is still admitted at
+                                    <Text style={styles.boldLetter}>{location}</Text>. He/She has been examined and diagnosed with <Text style={styles.boldLetter}>{assistanceReason}</Text>.
+                                    The patient is scheduled to be discharge today, however, the client has no source of income to pay the acquired billing, as he/she only depend on
+                                    his/her <Text style={styles.boldLetter}>{claimantRelationship}'s </Text>income as <Text style={styles.boldLetter}>{claimantOccupation}</Text>. Hence, this request.
+                                </Text>
+                            </>
+                        }
+
+
                     </View>
-                )}
 
-                {(
-                    typeOfAssistance === "Burial" ||
-                    typeOfAssistance === "Alay Pagdamay" ||
-                    typeOfAssistance === "Burial Assistance"
-                ) && (
-                    <View style={styles.burialTypeAssistanceContent}>
-                        <Text>/</Text>
-                    </View>
-                )}
-
-                {typeOfAssistance === "Food" && (
-                    <View style={styles.foodTypeAssistanceContent}>
-                        <Text>/</Text>
-                    </View>
-                )}
-
-                {typeOfAssistance === "Education" && (
-                    <View style={styles.educationTypeAssistanceContent}>
-                        <Text>/</Text>
-                    </View>
-                )}
-
-                {typeOfAssistance === "Transportation" && (
-                    <View style={styles.transportationTypeAssistanceContent}>
-                        <Text>/</Text>
-                    </View>
-                )}
-
-                {typeOfAssistance === "Emergency Shelter" && (
-                    <View style={styles.emergencyShelterTypeAssistanceContent}>
-                        <Text>/</Text>
-                    </View>
-                )}
-
-                {typeOfAssistance === "Others" && (
-                    <View style={styles.otherTypeAssistanceContent}>
-                        <Text>/</Text>
-                    </View>
-                )}
-
-
-                {member4Ps == "Yes" &&
-                    <>
-                        <View style={styles.yes4PsTypeAssistanceContent}>
+                    {typeOfAssistance === "Hospital Bill" && (
+                        <View style={styles.medicalTypeAssistanceContent}>
                             <Text>/</Text>
                         </View>
-                    </>
-                }
+                    )}
 
-                {member4Ps == "No" &&
-                    <>
-                        <View style={styles.no4PsTypeAssistanceContent}>
+                    {(
+                        typeOfAssistance === "Burial" ||
+                        typeOfAssistance === "Alay Pagdamay" ||
+                        typeOfAssistance === "Burial Assistance"
+                    ) && (
+                        <View style={styles.burialTypeAssistanceContent}>
                             <Text>/</Text>
                         </View>
-                    </>
-                }
+                    )}
 
-                <View style={[styles.certifyNameContent, styles.textContainer]}>
-                    <Text style={{ fontSize: certifyNameFontSize }}>{payeeName}</Text>
-                </View>
+                    {typeOfAssistance === "Food" && (
+                        <View style={styles.foodTypeAssistanceContent}>
+                            <Text>/</Text>
+                        </View>
+                    )}
 
-                <View style={[styles.certifyAddressContent, styles.textContainer]}>
-                    {claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                    {typeOfAssistance === "Education" && (
+                        <View style={styles.educationTypeAssistanceContent}>
+                            <Text>/</Text>
+                        </View>
+                    )}
+
+                    {typeOfAssistance === "Transportation" && (
+                        <View style={styles.transportationTypeAssistanceContent}>
+                            <Text>/</Text>
+                        </View>
+                    )}
+
+                    {typeOfAssistance === "Emergency Shelter" && (
+                        <View style={styles.emergencyShelterTypeAssistanceContent}>
+                            <Text>/</Text>
+                        </View>
+                    )}
+
+                    {typeOfAssistance === "Others" && (
+                        <View style={styles.otherTypeAssistanceContent}>
+                            <Text>/</Text>
+                        </View>
+                    )}
+
+
+                    {member4Ps == "Yes" &&
                         <>
-                            <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>
+                            <View style={styles.yes4PsTypeAssistanceContent}>
+                                <Text>/</Text>
+                            </View>
                         </>
                     }
-                </View>
 
-                { typeOfAssistance == "Burial Assistance" && 
-                    <>
-                        <View style={[styles.eligbleToContent, styles.textContainer]}>
-                            {typeOfAssistance &&
-                                <>  
-                                    <Text >{typeOfAssistance}</Text>
-                                </>
-                            }
-                        </View> 
-                    </>
-                }
-                
-                { typeOfAssistance == "Alay Pagdamay" && 
-                    <>
-                        <View style={[styles.eligbleToContent, styles.textContainer]}>
-                            {typeOfAssistance &&
-                                <>  
-                                    <Text >{typeOfAssistance}</Text>
-                                </>
-                            }
-                        </View> 
-                    </>
-                }
-                
-                { typeOfAssistance == "Hospital Bill" && 
-                    <>
-                        <View style={[styles.eligbleToContent, styles.textContainer]}>
-                            {typeOfAssistance &&
-                                <>  
-                                    <Text >{typeOfAssistance}</Text>
-                                </>
-                            }
-                        </View> 
-                    </>
-                }
-
-                <View style={[styles.caseDateContent, styles.textContainer]}>
-                    <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>
-                </View>
-
-                <View style={[styles.amountContent, styles.textContainer]}>
-                    {contactPersonPettyAmount &&
+                    {member4Ps == "No" &&
                         <>
-                            <Text style={{ fontSize: amountFontSize }}>{numberToWords(contactPersonPettyAmount)} ONLY</Text>
+                            <View style={styles.no4PsTypeAssistanceContent}>
+                                <Text>/</Text>
+                            </View>
                         </>
                     }
-                </View>
 
-                <View style={[styles.amountNumberContent, styles.textContainer]}>
-                    {contactPersonPettyAmount &&
+                    <View style={[styles.certifyNameContent, styles.textContainer]}>
+                        <Text style={{ fontSize: certifyNameFontSize }}>{payeeName}</Text>
+                    </View>
+
+                    <View style={[styles.certifyAddressContent, styles.textContainer]}>
+                        {claimantPurok && claimantBarangay && claimantMunicipality && claimantProvince &&
+                            <>
+                                <Text style={{ fontSize: addressFontSize }}>{addressName}</Text>
+                            </>
+                        }
+                    </View>
+
+                    { typeOfAssistance == "Burial Assistance" && 
                         <>
-                            <Text style={{ fontSize: addressFontSize }}>{formatToPesos(contactPersonPettyAmount)}</Text>
+                            <View style={[styles.eligbleToContent, styles.textContainer]}>
+                                {typeOfAssistance &&
+                                    <>  
+                                        <Text >{typeOfAssistance}</Text>
+                                    </>
+                                }
+                            </View> 
                         </>
                     }
-                </View>
+                    
+                    { typeOfAssistance == "Alay Pagdamay" && 
+                        <>
+                            <View style={[styles.eligbleToContent, styles.textContainer]}>
+                                {typeOfAssistance &&
+                                    <>  
+                                        <Text >{typeOfAssistance}</Text>
+                                    </>
+                                }
+                            </View> 
+                        </>
+                    }
+                    
+                    { typeOfAssistance == "Hospital Bill" && 
+                        <>
+                            <View style={[styles.eligbleToContent, styles.textContainer]}>
+                                {typeOfAssistance &&
+                                    <>  
+                                        <Text >{typeOfAssistance}</Text>
+                                    </>
+                                }
+                            </View> 
+                        </>
+                    }
 
-                <View style={[styles.clientCompleteNameContent, styles.textContainer]}>
-                    <Text style={[{ fontSize: clientNameFontSize }, styles.boldLetter]}>
-                        {clientName}
-                    </Text>
-                </View>
+                    <View style={[styles.caseDateContent, styles.textContainer]}>
+                        <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>
+                    </View>
+
+                    <View style={[styles.amountContent, styles.textContainer]}>
+                        {contactPersonPettyAmount &&
+                            <>
+                                <Text style={{ fontSize: amountFontSize }}>{numberToWords(contactPersonPettyAmount)} ONLY</Text>
+                            </>
+                        }
+                    </View>
+
+                    <View style={[styles.amountNumberContent, styles.textContainer]}>
+                        {contactPersonPettyAmount &&
+                            <>
+                                <Text style={{ fontSize: addressFontSize }}>{formatToPesos(contactPersonPettyAmount)}</Text>
+                            </>
+                        }
+                    </View>
+
+                    <View style={[styles.clientCompleteNameContent, styles.textContainer]}>
+                        <Text style={[{ fontSize: clientNameFontSize }, styles.boldLetter]}>
+                            {clientName}
+                        </Text>
+                    </View>
 
 
-            </Page>
-        </Document>
+                </Page>
+            </Document>
+        </>
     );
 };

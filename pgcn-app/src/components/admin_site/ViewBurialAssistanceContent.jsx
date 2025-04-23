@@ -338,7 +338,7 @@ function ViewBurialAssistanceContent() {
         setContactPersonExtName(burial['client_ext_name']);
         setContactNumber(burial['client_contact_num']);
         setContactAge(burial['client_age']);
-        setContactPersonRelationship(burial['client_relationship']);
+        setContactRelationship(burial['client_relationship']);
         setContactGender(burial['client_gender']);
         setContactPurok(burial['client_purok']);
         setContactBarangay(burial['client_barangay']);
@@ -465,11 +465,12 @@ function ViewBurialAssistanceContent() {
                 claimantMiddlename={contactPersonMiddlename}
                 claimantLastname={contactPersonLastname}
                 claimantExtName={contactPersonExtName}
-                patientPurok={contactPersonPurok}
+                patientPurok={patientPurok}
                 patientBarangay={patientBarangay}
                 patientMunicipality={patientMunicipality}
                 patientProvince={patientProvince}
-                claimantAmount={contactPersonAmount}
+                claimantAmount={contactPersonPettyAmount}
+                transactionName={transactionName}
             />
         ).toBlob();
 
@@ -1490,6 +1491,11 @@ function ViewBurialAssistanceContent() {
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
                                                 assistanceReason={clientCauseDeath}
+                                                beneFirstname={deceasedFirstName} 
+                                                beneMiddleName={deceasedMiddleName}
+                                                beneLastName={deceasedLastName}
+                                                beneExtName={deceasedExtName}
+                                                location={null} 
                                             />
                                         </PDFViewer>
 
