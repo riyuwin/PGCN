@@ -100,7 +100,7 @@ function Sidebar({ isVisible }) {
                         <li className="nav-item">
                             <Link className={`nav-link ${isActive('/admin/manage_report') ? '' : 'collapsed'}`} to="/admin/manage_report">
                                 <i className="bx bxs-report"></i>
-                                <span>Generate Reports</span>
+                                <span>Generate Masterlist</span>
                             </Link>
                         </li>
 
