@@ -1175,7 +1175,7 @@ hr {
 }
 
 .filterContainer{
-  outline: 0.5px solid rgba(235, 235, 235, 0.842);
+  outline: 0.5px solid rgba(235, 235, 235, 0.11);
   padding: 20px;
   border-radius: 5px;
   background-color: rgb(255, 255, 255);

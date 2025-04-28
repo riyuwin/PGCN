@@ -1181,6 +1181,83 @@ app.get("/retrieve_burial_assistance_id", (req, res) => {
     });
 });
 
+app.post("/retrieve_total_hospital_bill", (req, res) => {
+    const { patientBarangay, patientMunicipality, patientProvince } = req.body;
 
+    let query = `
+        SELECT 
+            DATE_FORMAT(datetime_added, '%Y-%m') AS month, 
+            COUNT(*) AS totalRecords 
+        FROM hospital_bill
+    `;
+    const conditions = [];
+    const values = [];
+
+    if (patientBarangay !== "all") {
+        conditions.push("patient_barangay = ?");
+        values.push(patientBarangay);
+    }
+    if (patientMunicipality !== "all") {
+        conditions.push("patient_municipality = ?");
+        values.push(patientMunicipality);
+    }
+    if (patientProvince !== "all") {
+        conditions.push("patient_province = ?");
+        values.push(patientProvince);
+    }
+
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
+    query += " GROUP BY month ORDER BY month ASC";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results); 
+        // Example output: [{ month: '2025-01', totalRecords: 5 }, { month: '2025-02', totalRecords: 8 }]
+    });
+});
+
+app.get("/retrieve_hospital_bill_petty_cash", (req, res) => {
+    const currentYear = new Date().getFullYear();
+
+    const query = `
+        SELECT SUM(claimant_amount) AS totalAmount 
+        FROM hospital_bill 
+        WHERE YEAR(datetime_added) = ?
+    `;
+
+    db.query(query, [currentYear], (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results[0]); // Send the single object directly
+    });
+});
+
+app.get("/retrieve_total_hospital_bill_hospital_name", (req, res) => {
+    const currentYear = new Date().getFullYear();
+
+    // Adjust the query to filter by the current year and group by hospital name.
+    const query = `
+        SELECT patient_hospital, COUNT(*) AS totalBills
+        FROM hospital_bill
+        WHERE YEAR(datetime_added) = ?
+        GROUP BY patient_hospital
+    `;
+
+    db.query(query, [currentYear], (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results); // Send the list of hospitals with their respective bill counts
+    });
+});
 
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));

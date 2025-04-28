@@ -13,13 +13,14 @@ import Chart from "react-apexcharts";
 
 function ReportStatisticsContent(){ 
     const [transactions, setTransactions] = useState('');
+    const [reportClassification, setReportClassification] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [generateButton, setGenerateButton] = useState(false); 
      
     const [patientPurok, setPatientPurok] = useState(''); 
     const [patientBarangay, setPatientBarangay] = useState('');
-    const [patientMunicipality, setPatientMunicipality] = useState('');
+    const [patientMunicipality, setPatientMunicipalsetHospitalBillsity] = useState('All');
     const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
     const [barangayList, setBarangayList] = useState([]);  
     
@@ -104,23 +105,63 @@ function ReportStatisticsContent(){
     const [claimantRelationship, setClaimantRelationship] = useState('');
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
+
+    const [pettyCashAmount, setPettyCashAmount] = useState('');
+
+    const [filterName, setFilterName] = useState('');
     // Variables for inputs ------------------------------------------------------------ 
 
     // Variables for hospital bills
     const [hospitalBills, setHospitalBills] = useState([]);
+    const [hospitalNames, setHospitalNames] = useState([]);
 
     const [selectedBill, setSelectedBill] = useState(null);
 
     const [formPage, setFormPage] = useState("Form 1");
+    
+    const retrieveFilter = () => {
+        if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality === "All") {
+            setFilterName('Hospital Bill');
+            fetchTotalHospitalBills();
+            fetchHospitalBills();
+            fetchHospitalBillPettyCash();
+            fetchHospitalBillHospitalName();
+            console.log("Hey:", barChartData);    
+        } else {
+            console.log("No matching filter conditions.");
+        }
+    };
+    
+    
 
     useEffect(() => {
         if (transactions !== "" && startDate !== "" && endDate !== "") {
             setGenerateButton(true); 
             fetchHospitalBills();  
+            fetchTotalHospitalBills();
+
+            console.log("Hey: ", barChartData);
         } else {
             setGenerateButton(false);
         }
     }, [transactions, startDate, endDate]); // ✅ Runs when any of these values change 
+    
+    const fetchHospitalBillPettyCash = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash");
+            const data = await response.json();
+    
+            console.log("Hello: ", data);
+    
+            // Assume your backend sends { totalAmount: 1000 }
+            setRadialChartData(prevData => ({
+                ...prevData,
+                series: [data.totalAmount ?? 0]  // Safely handle missing value
+            }));
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
 
     const fetchHospitalBills = async () => {
         try {
@@ -131,6 +172,33 @@ function ReportStatisticsContent(){
             console.error("Error fetching hospital bills:", error);
         }
     };
+    
+    const fetchHospitalBillHospitalName = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_hospital_name");
+            const data = await response.json(); 
+    
+            // Process the response to extract hospital names (labels) and their respective total bill counts (series)
+            const labels = data.map(item => item.patient_hospital);  // Extract hospital names
+            const series = data.map(item => item.totalBills);  // Extract total bill counts
+    
+            // Now update the chart data
+            setPolarChartData(prevData => ({
+                ...prevData,
+                options: {
+                    ...prevData.options,  // Preserve existing options
+                    labels: labels        // Update the labels
+                },
+                series: series,  // Set the total bill counts as the series data
+            }));
+    
+            console.log("Updated Labels:", labels);
+            console.log("Updated Series:", series);
+            
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };    
 
     // Filter hospital bills based on startDate and endDate 
     const filteredRecords = hospitalBills.filter((bill) => {
@@ -243,33 +311,122 @@ function ReportStatisticsContent(){
         saveAs(blob, 'Guarantee_Letter.pdf');
     };
 
+    const [chartData, setChartData] = useState({
+        series: [{
+            name: "Patient Care Records",
+            data: [25, 10, 5, 10, 6, 1, 5]
+        }],
+        options: {
+            chart: { type: "line", height: 350 },
+            xaxis: { categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
+            colors: ["#E42424"],
+            stroke: { curve: "straight" },
+        }
+    });
     
-        const [chartData, setChartData] = useState({
-            series: [{
-                name: "Patient Care Records",
-                data: [25, 10, 5, 10, 6, 1, 5]
-            }],
-            options: {
-                chart: { type: "line", height: 350 },
-                xaxis: { categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
-                colors: ["#E42424"],
-                stroke: { curve: "straight" },
-            }
-        });
-     
+    const [barChartData, setBarChartData] = useState({
+        series: [{
+            name: "Active Services",
+            data: [25, 10, 5, 30, 6, 30, 5, 10, 21, 2, 10, 25]
+        }],
+        options: {
+            chart: { type: "bar", height: 350 },
+            xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "October", "November", "December"] },
+            colors: ["#2196F3"],
+        }
+    });
     
-        
-        const [barChartData, setBarChartData] = useState({
-            series: [{
-                name: "Active Services",
-                data: [25, 10, 5, 30, 6, 30, 5]
-            }],
-            options: {
-                chart: { type: "bar", height: 350 },
-                xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"] },
-                colors: ["#2196F3"],
+    const [pieChartData, setPieChartData] = useState({
+        series: [10, 15, 20, 25, 30, 40, 50],  // Data values for each category
+        options: {
+            chart: { type: "pie", height: 350 },
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],  // Pie chart labels
+            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            legend: { position: "bottom" }
+        }
+    });
+    
+    const [piePolarChartData, setPolarChartData] = useState({
+        series: [10, 15, 20, 25, 30, 40, 50],  // Data values for each category
+        options: {
+            chart: { type: "pie", height: 350 },
+            labels: [],  // Pie chart labels
+            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            legend: { position: "bottom" }
+        }
+    });
+
+    
+    const [radialChartData, setRadialChartData] = useState({
+        series: [10000],  // Example: 10,000 pesos
+        options: {
+            chart: { type: "radialBar", height: 350 },
+            labels: ["Petty Cash"],
+            colors: ["#FF6384"],
+            legend: { position: "bottom" },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        value: {
+                            formatter: function (val) {
+                                return Number(val).toLocaleString();  
+                            },
+                            fontSize: "18px",
+                            color: "#111",
+                            offsetY: 5
+                        },
+                        name: {
+                            fontSize: "16px",
+                            offsetY: -5
+                        }
+                    }
+                }
             }
-        });
+        }
+    });
+    
+    
+
+    
+    const fetchTotalHospitalBills = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    patientBarangay: "all",
+                    patientMunicipality: "all",
+                    patientProvince: "all"
+                })
+            });
+    
+            const data = await response.json();  
+    
+            // Prepare an array for 12 months initialized to 0
+            const monthlyCounts = Array(12).fill(0);
+    
+            // Fill monthlyCounts from the response
+            data.forEach(record => {
+                const monthIndex = new Date(record.month + "-01").getMonth(); // example: "2025-04" + "-01"
+                monthlyCounts[monthIndex] = record.totalRecords;
+            });
+    
+            // Now set the bar chart data
+            setBarChartData(prevData => ({
+                ...prevData,
+                series: [{
+                    ...prevData.series[0],
+                    data: monthlyCounts
+                }]
+            }));
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+    
+
  
     return(
         <>
@@ -305,7 +462,7 @@ function ReportStatisticsContent(){
   
                                                         <div className="row mb-3">   
 
-                                                            <div className="col-sm-4">
+                                                            <div className="col-sm-3">
                                                                 <div className="input-group">
                                                                     <label className="form-label">Select Transactions: </label> 
                                                                     <select
@@ -317,10 +474,69 @@ function ReportStatisticsContent(){
                                                                             <option value="Hospital Bill">Hospital Bill</option>
                                                                             <option value="Burial Assistance">Burial Assistance</option> 
                                                                     </select>
-                                                                </div><br/>
+                                                                </div>
                                                             </div>
 
-                                                            <div className="col-sm-4">
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Select Report Classification: </label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        id="hospital" 
+                                                                        value={reportClassification}
+                                                                        onChange={(e) => setReportClassification(e.target.value)} >
+                                                                            <option value="">Select Report Classification</option>
+                                                                            <option value="This Week Report">This Week Report</option>
+                                                                            <option value="This Month Report">This Month Report</option>
+                                                                            <option value="Annual Report">Annual Report</option> 
+                                                                    </select>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Select Municipality: </label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        id="hospital" 
+                                                                        value={patientMunicipality}
+                                                                        onChange={(e) => setPatientMunicipality(e.target.value)} >
+                                                                            <option value="All">All</option> 
+                                                                            <option value="Basud">Basud</option> 
+                                                                            <option value="Capalonga">Capalonga</option> 
+                                                                            <option value="Daet">Daet</option> 
+                                                                            <option value="Jose Panganiban">Jose Panganiban</option> 
+                                                                            <option value="Labo">Labo</option> 
+                                                                            <option value="Mercedes">Mercedes</option> 
+                                                                            <option value="Paracale">Paracale</option> 
+                                                                            <option value="San Lorenzo Ruiz">San Lorenzo Ruiz</option> 
+                                                                            <option value="San Vicente">San Vicente</option> 
+                                                                            <option value="Santa Elena">Santa Elena</option> 
+                                                                            <option value="Talisay">Talisay</option> 
+                                                                            <option value="Vinzons">Vinzons</option> 
+                                                                    </select>
+                                                                    
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Search: </label>                                               
+                                                                    <button onClick={retrieveFilter} type="button" 
+                                                                        className="btn btn-primary w-100" >
+                                                                        Filter
+                                                                    </button>  
+                                                                </div>
+                                                            </div>
+    
+                                                            <div className="col-sm-12">
+                                                                <div className="input-group">
+                                                                    
+                                                                </div>
+                                                            </div>  
+
+                                                            {/* <div className="col-sm-4">
                                                                 <div className="input-group">
                                                                     <label className="form-label">Start Date: </label>
                                                                     <input
@@ -342,9 +558,9 @@ function ReportStatisticsContent(){
                                                                         onChange={(e) => setEndDate(e.target.value)}
                                                                     />
                                                                 </div><br/>
-                                                            </div>  
+                                                            </div>   */}
                                                             
-                                                            <div className="col-sm-4">
+                                                            {/* <div className="col-sm-4">
                                                                 <div className="input-group">
                                                                     <label className="form-label">Province: </label> 
                                                                     <select
@@ -378,7 +594,7 @@ function ReportStatisticsContent(){
                                                                             <option value="All">All</option> 
                                                                     </select>
                                                                 </div> 
-                                                            </div>
+                                                            </div> */}
 
 
                                                         </div> 
@@ -386,27 +602,64 @@ function ReportStatisticsContent(){
                                                     
                                                     <br/>
 
-                                                    { transactions === "Hospital Bill" && 
+                                                    { filterName === "Hospital Bill" && 
                                                         <> 
-                                                        <div className="filterContainer">
+                                                        <div >
                                                             
-                                                            <div className="row">  
-                                                                <div className="col-lg-6">
+                                                            <div className="row">   
+                                                                <div className="col-lg-8">
                                                                     <div className="card">
                                                                         <div className="card-body">
-                                                                            <h5 className="card-title">Patient Records Trend</h5>
-                                                                            <Chart options={chartData.options} series={chartData.series} type="line" height={350} />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-lg-6">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Active Services</h5>
-                                                                            <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
+                                                                            <h5 className="card-title">Total Patient Records</h5><br/>
+                                                                            <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
                                                                         </div>
                                                                     </div>
                                                                 </div> 
+
+                                                                
+                                                                <div className="col-lg-4">
+                                                                    <div className="card">
+                                                                        <div className="card-body">
+                                                                            <h5 className="card-title">Total Petty Cash Amount</h5><br/>
+                                                                            <Chart options={radialChartData.options} series={radialChartData.series} type="radialBar" height={400} />
+                                                                        </div> 
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="col-lg-4">
+                                                                    <div className="card">
+                                                                        <div className="card-body">
+                                                                            <h5 className="card-title">Total Patient Per Barangay</h5><br/>
+                                                                            <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
+                                                                        </div>
+
+                                                                        {/* <div className="card-body">
+                                                                            <h5 className="card-title"></h5>
+                                                                            <Chart options={chartData.options} series={chartData.series} type="line" height={350} />
+                                                                        </div> */}
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div className="col-lg-4">
+                                                                    <div className="card">
+                                                                        <div className="card-body">
+                                                                            <h5 className="card-title">Total Patient Per Hospital</h5><br/>
+                                                                            <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div> 
+                                                                
+                                                                <div className="col-lg-4">
+                                                                    <div className="card">
+                                                                        <div className="card-body">
+                                                                            <h5 className="card-title">Total Patient Status</h5><br/>
+                                                                            <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
+                                                                        </div> 
+                                                                    </div>
+                                                                </div>
+
+
                                                             </div>
                                                             
                                                         </div>
