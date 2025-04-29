@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
-import { Modal, Button, Form } from "react-bootstrap"; 
-import 'bootstrap/dist/css/bootstrap.min.css';  
-import ExcelExport from "./ExportExcel"; 
+import { Modal, Button, Form } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ExcelExport from "./ExportExcel";
 import ReactDOM from 'react-dom';
 import { PDFViewer } from '@react-pdf/renderer';
 import { GuaranteeLetterLayout } from "./reports/GuaranteeLetterLayout";
@@ -11,49 +11,49 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import Chart from "react-apexcharts";
 
-function ReportStatisticsContent(){ 
+function ReportStatisticsContent() {
     const [transactions, setTransactions] = useState('');
     const [reportClassification, setReportClassification] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [generateButton, setGenerateButton] = useState(false); 
-     
-    const [patientPurok, setPatientPurok] = useState(''); 
+    const [generateButton, setGenerateButton] = useState(false);
+
+    const [patientPurok, setPatientPurok] = useState('');
     const [patientBarangay, setPatientBarangay] = useState('');
     const [patientMunicipality, setPatientMunicipality] = useState('All');
-    const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
-    const [barangayList, setBarangayList] = useState([]);  
-    
+    const [patientProvince, setPatientProvince] = useState('Camarines Norte');
+    const [barangayList, setBarangayList] = useState([]);
+
     const municipalityBarangays = {
-        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay", 
+        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay",
             "Mantugawe", "Matnog", "Mocong", "Oliva", "Pagsangahan", "Pinagwarasan", "Plaridel", "Poblacion 1", "Poblacion 2", "San Felipe", "San Jose", "San Pascual", "Taba-taba", "Tacad", "Taisan", "Tuaca"],
 
-        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque", 
+        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque",
             "Old Camp", "Poblacion", "San Antonio", "San Isidro", "San Roque", "Tanawan", "Ubang", "Villa Aurora", "Villa Belen"],
 
-        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII", 
+        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII",
             "Bibirao", "Borabod", "Calasgasan", "Camambugan", "Cobangbang", "Dogongan", "Gahonon", "Gubat", "Lag-on", "Magang", "Mambalite", "Mancruz", "Pamorangon", "San Isidro"],
 
         "Jose Panganiban": [
             "Bagong Bayan", "Calero", "Dahican", "Dayhagan", "Larap", "Luklukan Norte", "Luklukan Sur", "Motherlode", "Nakalaya", "North Poblacion",
             "Osmeña", "Pag-asa", "Parang", "Plaridel", "Salvacion", "San Isidro", "San Jose", "San Martin", "San Pedro", "San Rafael",
             "Santa Cruz", "Santa Elena", "Santa Milagrosa", "Santa Rosa Norte", "Santa Rosa Sur", "South Poblacion", "Tamisan"
-        ], 
+        ],
 
         "Labo": [
-            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit", 
-            "Bulhao", "Cabatuhan", "Cabusay",  "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica", 
-            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong", 
+            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit",
+            "Bulhao", "Cabatuhan", "Cabusay", "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica",
+            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong",
             "Matanlang", "Napaod", "Pag-asa", "Pangpang", "Pinya", "San Antonio", "San Francisco", "Santa Cruz", "Submakin", "Talobatib", "Tigbinan", "Tulay na Lupa"],
 
         "Mercedes": [
             "Apuao", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Caringo", "Catandunganon", "Cayucyucan", "Colasi",
             "Del Rosario", "Gaboc", "Hamoraon", "Hinipaan", "Lalawigan", "Lanot", "Mambungalon", "Manguisoc", "Masalongsalong", "Matoogtoog", "Pambuhan", "Quinapaguian", "San Roque", "Tarum"
-        ], 
+        ],
 
         "Paracale": [
-            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan","Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
-            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas","Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
+            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan", "Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
+            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas", "Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
             "Tabas", "Talusan", "Tawig", "Tugos"
         ],
 
@@ -63,7 +63,7 @@ function ReportStatisticsContent(){
         ],
 
         "San Vicente": [
-            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur", 
+            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur",
             "Man-ogob", "Poblacion District I", "Poblacion District II", "San Jose"
         ],
 
@@ -73,7 +73,7 @@ function ReportStatisticsContent(){
             "Rizal", "Salvacion", "San Lorenzo", "San Pedro", "San Vicente",
             "Santa Elena", "Tabugon", "Villa San Isidro"
         ],
-        
+
         "Talisay": [
             "Binanuaan", "Caawigan", "Cahabaan", "Calintaan", "Del Carmen",
             "Gabon", "Itomang", "Poblacion", "San Francisco", "San Isidro",
@@ -88,7 +88,7 @@ function ReportStatisticsContent(){
         ]
 
     };
-    
+
     // Variables for inputs ------------------------------------------------------------
     const [billId, setHospitalId] = useState('');
     const [patientFirstName, setPatientFirstName] = useState('');
@@ -109,7 +109,7 @@ function ReportStatisticsContent(){
     const [pettyCashAmount, setPettyCashAmount] = useState('');
 
     const [filterName, setFilterName] = useState('');
-    const [filterNamePatientMunicipality, setFilterPatientMunicipality] = useState('');
+    const [filterNamePatientMunicipality, setFilterPatientMunicipality] = useState('All');
     // Variables for inputs ------------------------------------------------------------ 
 
     // Variables for hospital bills
@@ -119,7 +119,7 @@ function ReportStatisticsContent(){
     const [selectedBill, setSelectedBill] = useState(null);
 
     const [formPage, setFormPage] = useState("Form 1");
-    
+
     const retrieveFilter = () => {
         if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality === "All") {
             setFilterName('Hospital Bill');
@@ -129,7 +129,7 @@ function ReportStatisticsContent(){
             fetchHospitalBillPettyCash();
             fetchHospitalBillHospitalName();
             fetchHospitalBillPatientBarangay();
-            console.log("Hey:", barChartData);    
+            console.log("Hey:", barChartData);
         } else if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality !== "All") {
             setFilterName('Hospital Bill');
             setFilterPatientMunicipality(patientMunicipality);
@@ -153,15 +153,15 @@ function ReportStatisticsContent(){
         } else {
             setGenerateButton(false);
         }
-    }, [transactions, startDate, endDate]); */ 
+    }, [transactions, startDate, endDate]); */
 
     const fetchHospitalBillPettyCash = async () => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash");
             const data = await response.json();
-    
+
             console.log("Hello: ", data);
-    
+
             // Assume your backend sends { totalAmount: 1000 }
             setRadialChartData(prevData => ({
                 ...prevData,
@@ -184,24 +184,24 @@ function ReportStatisticsContent(){
                     municipality: filterNamePatientMunicipality
                 }),
             });
-    
+
             const data = await response.json();
             setHospitalBills(data);
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
-    
-    
+
+
     const fetchHospitalBillHospitalName = async () => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_hospital_name");
-            const data = await response.json(); 
-    
+            const data = await response.json();
+
             // Process the response to extract hospital names (labels) and their respective total bill counts (series)
             const labels = data.map(item => item.patient_hospital);  // Extract hospital names
             const series = data.map(item => item.totalBills);  // Extract total bill counts
-    
+
             // Now update the chart data
             setPolarChartData(prevData => ({
                 ...prevData,
@@ -211,24 +211,24 @@ function ReportStatisticsContent(){
                 },
                 series: series,  // Set the total bill counts as the series data
             }));
-    
+
             console.log("Updated Labels:", labels);
             console.log("Updated Series:", series);
-            
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
-    };   
-    
+    };
+
     const fetchHospitalBillPatientBarangay = async () => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_barangay");
-            const data = await response.json(); 
-    
+            const data = await response.json();
+
             // Process the response to extract hospital names (labels) and their respective total bill counts (series)
             const labels = data.map(item => item.patient_barangay);  // Extract hospital names
             const series = data.map(item => item.patientBarangay);  // Extract total bill counts
-    
+
             // Now update the chart data
             setPieChartData(prevData => ({
                 ...prevData,
@@ -238,21 +238,21 @@ function ReportStatisticsContent(){
                 },
                 series: series,  // Set the total bill counts as the series data
             }));
-    
+
             console.log("Updated Labels:", labels);
             console.log("Updated Series:", series);
-            
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
-    };   
+    };
 
     // Filter hospital bills based on startDate and endDate 
     const filteredRecords = hospitalBills.filter((bill) => {
         const billDate = new Date(bill.datetime_added);
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
-    
+
         return (
             (!start || billDate >= start) &&
             (!end || billDate <= end) &&
@@ -260,10 +260,10 @@ function ReportStatisticsContent(){
             (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "")
         );
     });
-    
-    
-    
-    
+
+
+
+
 
     // Pagination Logic
     const [currentPage, setCurrentPage] = useState(1);
@@ -274,17 +274,17 @@ function ReportStatisticsContent(){
     const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
     const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
 
-    
+
     // Open modal and set selected bill
     const handlePopulateDetails = (bill) => {
-        setSelectedBill(bill); 
+        setSelectedBill(bill);
         PopulateForms(bill);
     };
 
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
-    
+
     const PopulateForms = (bill) => {
         setHospitalId(bill['hospital_bill_id']);
         setPatientFirstName(bill['patient_fname']);
@@ -302,7 +302,7 @@ function ReportStatisticsContent(){
         setClaimantExtName(bill['claimant_extname']);
         setClaimantRelationship(bill['claimant_relationship']);
         setClaimantContact(bill['claimant_contact']);
-        setClaimantAmount(bill['claimant_amount']); 
+        setClaimantAmount(bill['claimant_amount']);
     }
 
     const ResetForms = () => {
@@ -320,16 +320,16 @@ function ReportStatisticsContent(){
         setClaimantRelationship('');
         setClaimantContact('');
         setClaimantAmount('');
-        
-    } 
-    
+
+    }
+
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
         setPatientMunicipality(selectedMunicipality);
         setPatientBarangay(''); // Reset barangay selection
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
-    };  
-     
+    };
+
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -370,7 +370,7 @@ function ReportStatisticsContent(){
             stroke: { curve: "straight" },
         }
     });
-    
+
     const [barChartData, setBarChartData] = useState({
         series: [{
             name: "Active Services",
@@ -382,7 +382,7 @@ function ReportStatisticsContent(){
             colors: ["#2196F3"],
         }
     });
-    
+
     const [pieChartData, setPieChartData] = useState({
         series: [10, 15, 20, 25, 30, 40, 50],  // Data values for each category
         options: {
@@ -392,7 +392,7 @@ function ReportStatisticsContent(){
             legend: { position: "bottom" }
         }
     });
-    
+
     const [piePolarChartData, setPolarChartData] = useState({
         series: [10, 15, 20, 25, 30, 40, 50],  // Data values for each category
         options: {
@@ -403,7 +403,7 @@ function ReportStatisticsContent(){
         }
     });
 
-    
+
     const [radialChartData, setRadialChartData] = useState({
         series: [10000],  // Example: 10,000 pesos
         options: {
@@ -416,7 +416,7 @@ function ReportStatisticsContent(){
                     dataLabels: {
                         value: {
                             formatter: function (val) {
-                                return Number(val).toLocaleString();  
+                                return Number(val).toLocaleString();
                             },
                             fontSize: "18px",
                             color: "#111",
@@ -431,7 +431,7 @@ function ReportStatisticsContent(){
             }
         }
     });
-     
+
     const fetchTotalHospitalBills = async (filterNamePatientMunicipality) => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill", {
@@ -440,23 +440,25 @@ function ReportStatisticsContent(){
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    patientBarangay: "all",
-                    patientMunicipality: "all",
-                    patientProvince: "all"
+                    patientBarangay: "All",
+                    patientMunicipality: filterNamePatientMunicipality,
+                    patientProvince: "All"
                 })
             });
-    
-            const data = await response.json();  
-    
+
+            const data = await response.json();
+
+            console.log("HAHAHAH1232: ", data)
+
             // Prepare an array for 12 months initialized to 0
             const monthlyCounts = Array(12).fill(0);
-    
+
             // Fill monthlyCounts from the response
             data.forEach(record => {
                 const monthIndex = new Date(record.month + "-01").getMonth(); // example: "2025-04" + "-01"
                 monthlyCounts[monthIndex] = record.totalRecords;
             });
-    
+
             // Now set the bar chart data
             setBarChartData(prevData => ({
                 ...prevData,
@@ -469,10 +471,10 @@ function ReportStatisticsContent(){
             console.error("Error fetching hospital bills:", error);
         }
     };
-    
 
- 
-    return(
+
+
+    return (
         <>
             <main id="main" className="main">
                 <div className="content">
@@ -490,7 +492,7 @@ function ReportStatisticsContent(){
                 <main className="py-6">
                     <div className="container-fluid">
                         <section className="section dashboard">
-                            <div className="row"> 
+                            <div className="row">
                                 <div className="col-lg-12">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
@@ -502,21 +504,21 @@ function ReportStatisticsContent(){
 
                                                     {/* Filter and Search Section */}
                                                     <div className="filterContainer">
-                                                        <h5>Filter: </h5><hr/>
-  
-                                                        <div className="row mb-3">   
+                                                        <h5>Filter: </h5><hr />
+
+                                                        <div className="row mb-3">
 
                                                             <div className="col-sm-3">
                                                                 <div className="input-group">
-                                                                    <label className="form-label">Select Transactions: </label> 
+                                                                    <label className="form-label">Select Transactions: </label>
                                                                     <select
                                                                         className="form-control"
-                                                                        id="hospital" 
+                                                                        id="hospital"
                                                                         value={transactions}
                                                                         onChange={(e) => setTransactions(e.target.value)} >
-                                                                            <option value="">Select Transactions</option>
-                                                                            <option value="Hospital Bill">Hospital Bill</option>
-                                                                            <option value="Burial Assistance">Burial Assistance</option> 
+                                                                        <option value="">Select Transactions</option>
+                                                                        <option value="Hospital Bill">Hospital Bill</option>
+                                                                        <option value="Burial Assistance">Burial Assistance</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -526,59 +528,59 @@ function ReportStatisticsContent(){
                                                                     <label className="form-label">Select Report Classification: </label>
                                                                     <select
                                                                         className="form-control"
-                                                                        id="hospital" 
+                                                                        id="hospital"
                                                                         value={reportClassification}
                                                                         onChange={(e) => setReportClassification(e.target.value)} >
-                                                                            <option value="">Select Report Classification</option>
-                                                                            <option value="This Week Report">This Week Report</option>
-                                                                            <option value="This Month Report">This Month Report</option>
-                                                                            <option value="Annual Report">Annual Report</option> 
+                                                                        <option value="">Select Report Classification</option>
+                                                                        <option value="This Week Report">This Week Report</option>
+                                                                        <option value="This Month Report">This Month Report</option>
+                                                                        <option value="Annual Report">Annual Report</option>
                                                                     </select>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                            
-                                                            <div className="col-sm-3">
-                                                                <div className="input-group">
-                                                                    <label className="form-label">Select Municipality: </label>
-                                                                    <select
-                                                                        className="form-control"
-                                                                        id="hospital" 
-                                                                        value={patientMunicipality}
-                                                                        onChange={(e) => setPatientMunicipality(e.target.value)} >
-                                                                            <option value="All">All</option> 
-                                                                            <option value="Basud">Basud</option> 
-                                                                            <option value="Capalonga">Capalonga</option> 
-                                                                            <option value="Daet">Daet</option> 
-                                                                            <option value="Jose Panganiban">Jose Panganiban</option> 
-                                                                            <option value="Labo">Labo</option> 
-                                                                            <option value="Mercedes">Mercedes</option> 
-                                                                            <option value="Paracale">Paracale</option> 
-                                                                            <option value="San Lorenzo Ruiz">San Lorenzo Ruiz</option> 
-                                                                            <option value="San Vicente">San Vicente</option> 
-                                                                            <option value="Santa Elena">Santa Elena</option> 
-                                                                            <option value="Talisay">Talisay</option> 
-                                                                            <option value="Vinzons">Vinzons</option> 
-                                                                    </select>
-                                                                    
+
                                                                 </div>
                                                             </div>
 
                                                             <div className="col-sm-3">
                                                                 <div className="input-group">
-                                                                    <label className="form-label">Search: </label>                                               
-                                                                    <button onClick={retrieveFilter} type="button" 
-                                                                        className="btn btn-primary w-100" >
-                                                                        Filter
-                                                                    </button>  
+                                                                    <label className="form-label">Select Municipality: </label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        id="hospital"
+                                                                        value={patientMunicipality}
+                                                                        onChange={(e) => setPatientMunicipality(e.target.value)} >
+                                                                        <option value="All">All</option>
+                                                                        <option value="Basud">Basud</option>
+                                                                        <option value="Capalonga">Capalonga</option>
+                                                                        <option value="Daet">Daet</option>
+                                                                        <option value="Jose Panganiban">Jose Panganiban</option>
+                                                                        <option value="Labo">Labo</option>
+                                                                        <option value="Mercedes">Mercedes</option>
+                                                                        <option value="Paracale">Paracale</option>
+                                                                        <option value="San Lorenzo Ruiz">San Lorenzo Ruiz</option>
+                                                                        <option value="San Vicente">San Vicente</option>
+                                                                        <option value="Santa Elena">Santa Elena</option>
+                                                                        <option value="Talisay">Talisay</option>
+                                                                        <option value="Vinzons">Vinzons</option>
+                                                                    </select>
+
                                                                 </div>
                                                             </div>
-    
+
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Search: </label>
+                                                                    <button onClick={retrieveFilter} type="button"
+                                                                        className="btn btn-primary w-100" >
+                                                                        Filter
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
                                                             <div className="col-sm-12">
                                                                 <div className="input-group">
-                                                                    
+
                                                                 </div>
-                                                            </div>  
+                                                            </div>
 
                                                             {/* <div className="col-sm-4">
                                                                 <div className="input-group">
@@ -603,7 +605,7 @@ function ReportStatisticsContent(){
                                                                     />
                                                                 </div><br/>
                                                             </div>   */}
-                                                            
+
                                                             {/* <div className="col-sm-4">
                                                                 <div className="input-group">
                                                                     <label className="form-label">Province: </label> 
@@ -641,62 +643,62 @@ function ReportStatisticsContent(){
                                                             </div> */}
 
 
-                                                        </div> 
+                                                        </div>
                                                     </div>
-                                                    
-                                                    <br/>
 
-                                                    { filterName === "Hospital Bill" && 
-                                                        <> 
-                                                        <div >
-                                                            
-                                                            <div className="row">   
-                                                                
-                                                                <div className="col-lg-8">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Total Patient Records</h5><br/>
-                                                                            <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
+                                                    <br />
+
+                                                    {filterName === "Hospital Bill" &&
+                                                        <>
+                                                            <div >
+
+                                                                <div className="row">
+
+                                                                    <div className="col-lg-8">
+                                                                        <div className="card">
+                                                                            <div className="card-body">
+                                                                                <h5 className="card-title">Total Patient Records</h5><br />
+                                                                                <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
-
-                                                                
-                                                                <div className="col-lg-4">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Total Petty Cash Amount</h5><br/>
-                                                                            <Chart options={radialChartData.options} series={radialChartData.series} type="radialBar" height={400} />
-                                                                        </div> 
-                                                                    </div>
-                                                                </div>
 
 
-                                                                
-                                                                <div className="col-lg-8">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Total Patient Per Hospital</h5><br/>
-                                                                            <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
+                                                                    <div className="col-lg-4">
+                                                                        <div className="card">
+                                                                            <div className="card-body">
+                                                                                <h5 className="card-title">Total Petty Cash Amount</h5><br />
+                                                                                <Chart options={radialChartData.options} series={radialChartData.series} type="radialBar" height={400} />
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
-                                                                
-                                                                <div className="col-lg-4">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Total Patient Per Barangay</h5><br/>
-                                                                            <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
-                                                                        </div>
 
-                                                                        {/* <div className="card-body">
+
+
+                                                                    <div className="col-lg-8">
+                                                                        <div className="card">
+                                                                            <div className="card-body">
+                                                                                <h5 className="card-title">Total Patient Per Hospital</h5><br />
+                                                                                <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="col-lg-4">
+                                                                        <div className="card">
+                                                                            <div className="card-body">
+                                                                                <h5 className="card-title">Total Patient Per Barangay</h5><br />
+                                                                                <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
+                                                                            </div>
+
+                                                                            {/* <div className="card-body">
                                                                             <h5 className="card-title"></h5>
                                                                             <Chart options={chartData.options} series={chartData.series} type="line" height={350} />
                                                                         </div> */}
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                
-                                                                {/* <div className="col-lg-4">
+
+                                                                    {/* <div className="col-lg-4">
                                                                     <div className="card">
                                                                         <div className="card-body">
                                                                             <h5 className="card-title">Total Patient Status</h5><br/>
@@ -706,13 +708,13 @@ function ReportStatisticsContent(){
                                                                 </div> */}
 
 
+                                                                </div>
+
                                                             </div>
-                                                            
-                                                        </div>
-                                                            
-                                                        </> 
+
+                                                        </>
                                                     }
-                                                    
+
                                                 </div>
 
 
@@ -724,7 +726,7 @@ function ReportStatisticsContent(){
                         </section>
                     </div>
                 </main>
-            </main> 
+            </main>
 
 
             {/* Modal */}
@@ -734,21 +736,21 @@ function ReportStatisticsContent(){
                         <div className="modal-header">
                             <h5 className="modal-title" id="viewReportModal">
                                 View Reports
-                            </h5>  
+                            </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div className="modal-body">
 
                             <div className="generateContainer">
-                                
+
                                 <h5>Generate Reports: </h5>
                                 <br />
-                                <div className="row">  
+                                <div className="row">
                                     <div className="col-4">
-                                        <button 
-                                            type="button" 
-                                            className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`} 
+                                        <button
+                                            type="button"
+                                            className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`}
                                             onClick={() => handleFormPageUpdate("Form 1")}
                                         >
                                             <i className="bi bi-file-earmark-pdf-fill"></i> Form 1
@@ -756,9 +758,9 @@ function ReportStatisticsContent(){
                                     </div>
 
                                     <div className="col-4">
-                                        <button 
-                                            type="button" 
-                                            className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`} 
+                                        <button
+                                            type="button"
+                                            className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`}
                                             onClick={() => handleFormPageUpdate("Form 2")}
                                         >
                                             <i className="bi bi-file-earmark-pdf-fill"></i> Form 2
@@ -766,38 +768,38 @@ function ReportStatisticsContent(){
                                     </div>
 
                                     <div className="col-4">
-                                        <button 
-                                            type="button" 
-                                            className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`} 
+                                        <button
+                                            type="button"
+                                            className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`}
                                             onClick={() => handleFormPageUpdate("Form 3")}
                                         >
                                             <i className="bi bi-file-earmark-pdf-fill"></i> Form 3
                                         </button>
                                     </div>
 
-  
 
-                                </div>  
-                            </div> 
 
-                            <div className="generateContainer"> 
+                                </div>
+                            </div>
+
+                            <div className="generateContainer">
                                 <br />
- 
-                                { formPage == "Form 1" && 
+
+                                {formPage == "Form 1" &&
                                     <>
-                                        <div className="col-12 d-flex justify-content-end"> 
-                                            <button 
-                                                type="button" 
-                                                className={`btn w-500  btn-secondary`}  
+                                        <div className="col-12 d-flex justify-content-end">
+                                            <button
+                                                type="button"
+                                                className={`btn w-500  btn-secondary`}
                                                 onClick={handleDownload}
                                             >
                                                 <i className="bi bi-file-earmark-pdf-fill"></i> Download
                                             </button>
                                         </div><br />
 
-                                        
+
                                         <div className="formContainer">
-                                            <div className="row"> 
+                                            <div className="row">
 
                                                 <div className="col-12">
                                                     <br />
@@ -805,66 +807,66 @@ function ReportStatisticsContent(){
                                                 </div>
 
                                                 <div className="col-4 d-flex justify-content-center">
-                                                    <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container"/> 
+                                                    <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container" />
                                                 </div>
 
-                                                <div className="col-4 d-flex flex-column align-items-center header_form"> 
-                                                    <p>Republic of the Philippines</p> 
-                                                    <p>Province of the Camarines Norte</p> 
-                                                    <p>Dong Tulong</p> 
+                                                <div className="col-4 d-flex flex-column align-items-center header_form">
+                                                    <p>Republic of the Philippines</p>
+                                                    <p>Province of the Camarines Norte</p>
+                                                    <p>Dong Tulong</p>
                                                 </div>
-            
+
                                                 <div className="col-4 d-flex justify-content-center">
-                                                    <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container"/> 
+                                                    <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container" />
                                                 </div>
 
                                                 <div className="col-12">
-                                                    <br/><hr/><br/>
+                                                    <br /><hr /><br />
                                                 </div>
 
 
                                                 <div className="col-12  d-flex flex-column align-items-start body_form">
                                                     <div className="body_container">
-                                                        <h1>OFFICE OF THE GOVERNOR</h1><br/>
-                                                        <h2>GUARANTEE LETTER</h2><br/>
-                                                        <h3>{currentDate}</h3><br/><br/>
-                                                        <p className="guaranteeLetterContent"> 
+                                                        <h1>OFFICE OF THE GOVERNOR</h1><br />
+                                                        <h2>GUARANTEE LETTER</h2><br />
+                                                        <h3>{currentDate}</h3><br /><br />
+                                                        <p className="guaranteeLetterContent">
                                                             Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
-                                                        </p><br/><br/>
+                                                        </p><br /><br />
 
-                                                        <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br/>
-                                                        <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/>
+                                                        <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br />
+                                                        <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br />
 
                                                     </div>
-                                                </div> 
-                                            </div>   
-                                        </div> 
-                                    </> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
 
-                                    
+
                                 }
 
-                                { formPage == "Form 2" && 
-                                    <> 
+                                {formPage == "Form 2" &&
+                                    <>
 
-                                    </> 
+                                    </>
                                 }
-                                
 
-                            </div> 
 
-                            
-                            
+                            </div>
+
+
+
 
                         </div>
-                        
+
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
 
         </>
@@ -872,4 +874,3 @@ function ReportStatisticsContent(){
 }
 
 export default ReportStatisticsContent;
- 

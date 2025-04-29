@@ -508,7 +508,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
                 deceasedPurok, deceasedBarangay, deceasedMunicipality, deceasedProvince, deceasedGender, deceasedDeathDate, deathCertificate,
                 contactPersonFirstname, contactPersonMiddlename, contactPersonLastname, contactPersonExtName, contactNumber, contactRelationship,
                 contactPersonServiceCovered, contactPersonFuneralService, contactPersonEncoded,
-                barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus, 
+                barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
                 remarks, pettyCashAmount, deceasedCauseDeath, currentDateTime
             ], (err, result) => {
                 if (err) {
@@ -1173,7 +1173,7 @@ app.put("/update_pswdo_interview", (req, res) => {
 
 app.get("/retrieve_burial_assistance_id", (req, res) => {
     const { burialId } = req.query; // Correct parameter
- 
+
     if (!burialId) {  // Fix the incorrect variable name
         return res.status(400).json({ error: "Missing burialAssitanceId parameter." });
     }
@@ -1206,15 +1206,15 @@ app.post("/retrieve_total_hospital_bill", (req, res) => {
     const conditions = [];
     const values = [];
 
-    if (patientBarangay !== "all") {
+    if (patientBarangay !== "All") {
         conditions.push("patient_barangay = ?");
         values.push(patientBarangay);
     }
-    if (patientMunicipality !== "all") {
+    if (patientMunicipality !== "All") {
         conditions.push("patient_municipality = ?");
         values.push(patientMunicipality);
     }
-    if (patientProvince !== "all") {
+    if (patientProvince !== "All") {
         conditions.push("patient_province = ?");
         values.push(patientProvince);
     }
@@ -1230,7 +1230,7 @@ app.post("/retrieve_total_hospital_bill", (req, res) => {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results); 
+        res.json(results);
         // Example output: [{ month: '2025-01', totalRecords: 5 }, { month: '2025-02', totalRecords: 8 }]
     });
 });
