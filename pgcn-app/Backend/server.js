@@ -403,15 +403,28 @@ app.post("/update_hospital_bill", (req, res) => {
 });
 
 
-app.get("/retrieve_hospital_bill", (req, res) => {
-    db.query("SELECT * FROM hospital_bill", (err, results) => {
+app.post("/retrieve_hospital_bill", (req, res) => {
+    const municipality = req.body.municipality; // Now reading from the request body
+
+    console.log("HEy: ", municipality)
+
+    let query = "SELECT * FROM hospital_bill";
+    let params = [];
+
+    if (municipality && municipality !== "All") {
+        query += " WHERE patient_municipality = ?";
+        params.push(municipality);
+    }
+
+    db.query(query, params, (err, results) => {
         if (err) {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results); // Ensure this is an array
+        res.json(results); // Return the fetched data
     });
 });
+
 
 
 app.post("/delete_hospital_bill", (req, res) => {
@@ -1259,5 +1272,27 @@ app.get("/retrieve_total_hospital_bill_hospital_name", (req, res) => {
         res.json(results); // Send the list of hospitals with their respective bill counts
     });
 });
+
+app.get("/retrieve_total_hospital_bill_barangay", (req, res) => {
+    const currentYear = new Date().getFullYear();
+
+    // Adjust the query to filter by the current year and group by hospital name.
+    const query = `
+        SELECT patient_barangay, COUNT(*) AS patientBarangay
+        FROM hospital_bill
+        WHERE YEAR(datetime_added) = ?
+        GROUP BY patient_barangay
+    `;
+
+    db.query(query, [currentYear], (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results); // Send the list of hospitals with their respective bill counts
+    });
+});
+
+
 
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));

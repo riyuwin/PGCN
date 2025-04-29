@@ -20,7 +20,7 @@ function ReportStatisticsContent(){
      
     const [patientPurok, setPatientPurok] = useState(''); 
     const [patientBarangay, setPatientBarangay] = useState('');
-    const [patientMunicipality, setPatientMunicipalsetHospitalBillsity] = useState('All');
+    const [patientMunicipality, setPatientMunicipality] = useState('All');
     const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
     const [barangayList, setBarangayList] = useState([]);  
     
@@ -109,6 +109,7 @@ function ReportStatisticsContent(){
     const [pettyCashAmount, setPettyCashAmount] = useState('');
 
     const [filterName, setFilterName] = useState('');
+    const [filterNamePatientMunicipality, setFilterPatientMunicipality] = useState('');
     // Variables for inputs ------------------------------------------------------------ 
 
     // Variables for hospital bills
@@ -122,30 +123,38 @@ function ReportStatisticsContent(){
     const retrieveFilter = () => {
         if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality === "All") {
             setFilterName('Hospital Bill');
-            fetchTotalHospitalBills();
-            fetchHospitalBills();
+            setFilterPatientMunicipality("All");
+            fetchTotalHospitalBills(filterNamePatientMunicipality);
+            fetchHospitalBills(filterNamePatientMunicipality);
             fetchHospitalBillPettyCash();
             fetchHospitalBillHospitalName();
+            fetchHospitalBillPatientBarangay();
             console.log("Hey:", barChartData);    
+        } else if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality !== "All") {
+            setFilterName('Hospital Bill');
+            setFilterPatientMunicipality(patientMunicipality);
+            fetchTotalHospitalBills(filterNamePatientMunicipality);
+            fetchHospitalBills(filterNamePatientMunicipality);
+            fetchHospitalBillPettyCash();
+            fetchHospitalBillHospitalName();
+            fetchHospitalBillPatientBarangay();
         } else {
             console.log("No matching filter conditions.");
+            setFilterName('');
+            setFilterPatientMunicipality('');
         }
     };
-    
-    
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (transactions !== "" && startDate !== "" && endDate !== "") {
-            setGenerateButton(true); 
-            fetchHospitalBills();  
-            fetchTotalHospitalBills();
+            setGenerateButton(true);  
 
             console.log("Hey: ", barChartData);
         } else {
             setGenerateButton(false);
         }
-    }, [transactions, startDate, endDate]); // ✅ Runs when any of these values change 
-    
+    }, [transactions, startDate, endDate]); */ 
+
     const fetchHospitalBillPettyCash = async () => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash");
@@ -163,15 +172,26 @@ function ReportStatisticsContent(){
         }
     };
 
-    const fetchHospitalBills = async () => {
+    const fetchHospitalBills = async (filterNamePatientMunicipality) => {
+        console.log("HEHEHE: ", filterNamePatientMunicipality)
         try {
-            const response = await fetch("http://localhost:5000/retrieve_hospital_bill");
+            const response = await fetch("http://localhost:5000/retrieve_hospital_bill", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality
+                }),
+            });
+    
             const data = await response.json();
             setHospitalBills(data);
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
+    
     
     const fetchHospitalBillHospitalName = async () => {
         try {
@@ -198,7 +218,34 @@ function ReportStatisticsContent(){
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
-    };    
+    };   
+    
+    const fetchHospitalBillPatientBarangay = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_barangay");
+            const data = await response.json(); 
+    
+            // Process the response to extract hospital names (labels) and their respective total bill counts (series)
+            const labels = data.map(item => item.patient_barangay);  // Extract hospital names
+            const series = data.map(item => item.patientBarangay);  // Extract total bill counts
+    
+            // Now update the chart data
+            setPieChartData(prevData => ({
+                ...prevData,
+                options: {
+                    ...prevData.options,  // Preserve existing options
+                    labels: labels        // Update the labels
+                },
+                series: series,  // Set the total bill counts as the series data
+            }));
+    
+            console.log("Updated Labels:", labels);
+            console.log("Updated Series:", series);
+            
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };   
 
     // Filter hospital bills based on startDate and endDate 
     const filteredRecords = hospitalBills.filter((bill) => {
@@ -352,7 +399,7 @@ function ReportStatisticsContent(){
             chart: { type: "pie", height: 350 },
             labels: [],  // Pie chart labels
             colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
-            legend: { position: "bottom" }
+            legend: { position: "right" }
         }
     });
 
@@ -384,11 +431,8 @@ function ReportStatisticsContent(){
             }
         }
     });
-    
-    
-
-    
-    const fetchTotalHospitalBills = async () => {
+     
+    const fetchTotalHospitalBills = async (filterNamePatientMunicipality) => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill", {
                 method: "POST",
@@ -607,6 +651,7 @@ function ReportStatisticsContent(){
                                                         <div >
                                                             
                                                             <div className="row">   
+                                                                
                                                                 <div className="col-lg-8">
                                                                     <div className="card">
                                                                         <div className="card-body">
@@ -626,6 +671,17 @@ function ReportStatisticsContent(){
                                                                     </div>
                                                                 </div>
 
+
+                                                                
+                                                                <div className="col-lg-8">
+                                                                    <div className="card">
+                                                                        <div className="card-body">
+                                                                            <h5 className="card-title">Total Patient Per Hospital</h5><br/>
+                                                                            <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div> 
+                                                                
                                                                 <div className="col-lg-4">
                                                                     <div className="card">
                                                                         <div className="card-body">
@@ -639,25 +695,15 @@ function ReportStatisticsContent(){
                                                                         </div> */}
                                                                     </div>
                                                                 </div>
-
                                                                 
-                                                                <div className="col-lg-4">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Total Patient Per Hospital</h5><br/>
-                                                                            <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
-                                                                        </div>
-                                                                    </div>
-                                                                </div> 
-                                                                
-                                                                <div className="col-lg-4">
+                                                                {/* <div className="col-lg-4">
                                                                     <div className="card">
                                                                         <div className="card-body">
                                                                             <h5 className="card-title">Total Patient Status</h5><br/>
                                                                             <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
                                                                         </div> 
                                                                     </div>
-                                                                </div>
+                                                                </div> */}
 
 
                                                             </div>
