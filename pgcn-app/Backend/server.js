@@ -1195,7 +1195,73 @@ app.get("/retrieve_burial_assistance_id", (req, res) => {
 });
 
 app.post("/retrieve_total_hospital_bill", (req, res) => {
-    const { patientBarangay, patientMunicipality, patientProvince } = req.body;
+    const { patientBarangay, patientMunicipality, patientProvince, reportClassification } = req.body;
+
+    let selectField = "DATE_FORMAT(datetime_added, '%Y-%m') AS label"; // default: monthly
+    let groupByField = "label";
+    const conditions = [];
+    const values = [];
+    const now = new Date();
+
+    // Location filters
+    if (patientBarangay && patientBarangay !== "All") {
+        conditions.push("patient_barangay = ?");
+        values.push(patientBarangay);
+    }
+    if (patientMunicipality && patientMunicipality !== "All") {
+        conditions.push("patient_municipality = ?");
+        values.push(patientMunicipality);
+    }
+    if (patientProvince && patientProvince !== "All") {
+        conditions.push("patient_province = ?");
+        values.push(patientProvince);
+    }
+
+    // Report classification filters
+    if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        selectField = "DATE_FORMAT(datetime_added, '%Y-%m-%d') AS label"; // group by date
+        conditions.push("MONTH(datetime_added) = ?");
+        values.push(currentMonth);
+        conditions.push("YEAR(datetime_added) = ?");
+        values.push(currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+        selectField = "DATE_FORMAT(datetime_added, '%Y-%m-%d') AS label"; // group by date
+        conditions.push("DATE(datetime_added) BETWEEN ? AND ?");
+        values.push(startOfWeek.toISOString().slice(0, 10));
+        values.push(endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Final query
+    let query = `
+        SELECT ${selectField}, COUNT(*) AS totalRecords
+        FROM hospital_bill
+    `;
+
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
+    query += ` GROUP BY ${groupByField} ORDER BY ${groupByField} ASC`;
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results);
+    });
+});
+
+
+/* app.post("/retrieve_total_hospital_bill", (req, res) => {
+    const { patientBarangay, patientMunicipality, patientProvince, reportClassification } = req.body;
 
     let query = `
         SELECT 
@@ -1203,20 +1269,42 @@ app.post("/retrieve_total_hospital_bill", (req, res) => {
             COUNT(*) AS totalRecords 
         FROM hospital_bill
     `;
+    
     const conditions = [];
     const values = [];
 
-    if (patientBarangay !== "All") {
+    // Location filters
+    if (patientBarangay && patientBarangay !== "All") {
         conditions.push("patient_barangay = ?");
         values.push(patientBarangay);
     }
-    if (patientMunicipality !== "All") {
+    if (patientMunicipality && patientMunicipality !== "All") {
         conditions.push("patient_municipality = ?");
         values.push(patientMunicipality);
     }
-    if (patientProvince !== "All") {
+    if (patientProvince && patientProvince !== "All") {
         conditions.push("patient_province = ?");
         values.push(patientProvince);
+    }
+
+    // Report classification filters
+    const now = new Date();
+    if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1; // JS months are 0-indexed
+        const currentYear = now.getFullYear();
+        conditions.push("MONTH(datetime_added) = ?");
+        values.push(currentMonth);
+        conditions.push("YEAR(datetime_added) = ?");
+        values.push(currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
+
+        conditions.push("DATE(datetime_added) BETWEEN ? AND ?");
+        values.push(startOfWeek.toISOString().slice(0, 10));
+        values.push(endOfWeek.toISOString().slice(0, 10));
     }
 
     if (conditions.length > 0) {
@@ -1231,68 +1319,452 @@ app.post("/retrieve_total_hospital_bill", (req, res) => {
             return res.status(500).json({ error: "Database error." });
         }
         res.json(results);
-        // Example output: [{ month: '2025-01', totalRecords: 5 }, { month: '2025-02', totalRecords: 8 }]
+
+
+        console.log("Test: ", results)
+    });
+}); */
+
+app.post("/retrieve_hospital_bill_status", (req, res) => {
+    const now = new Date();
+    const { municipality, reportClassification } = req.body;
+
+    let query = `
+        SELECT hospital_bill_status, COUNT(*) AS totalCount 
+        FROM hospital_bill 
+        WHERE 1=1
+    `;
+    const values = [];
+
+    // Apply date filters
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(datetime_added) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        query += " AND MONTH(datetime_added) = ? AND YEAR(datetime_added) = ?";
+        values.push(currentMonth, currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(datetime_added) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Apply location filter
+    if (municipality && municipality !== "All") {
+        query += " AND patient_municipality = ?";
+        values.push(municipality);
+    }
+
+    query += " GROUP BY hospital_bill_status";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bill status counts:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results); // returns array like: [{ hospital_bill_status: "Approved", totalCount: 10 }, ...]
     });
 });
 
-app.get("/retrieve_hospital_bill_petty_cash", (req, res) => {
-    const currentYear = new Date().getFullYear();
+app.post("/retrieve_hospital_bill_petty_cash", (req, res) => {
+    const now = new Date();
+    const { municipality, reportClassification } = req.body;
 
-    const query = `
-        SELECT SUM(claimant_amount) AS totalAmount 
-        FROM hospital_bill 
-        WHERE YEAR(datetime_added) = ?
-    `;
+    let query = `SELECT SUM(claimant_amount) AS totalAmount FROM hospital_bill WHERE 1=1`;
+    const values = [];
 
-    db.query(query, [currentYear], (err, results) => {
+    // Apply date filters based on reportClassification
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(datetime_added) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1; // 0-indexed
+        const currentYear = now.getFullYear();
+        query += " AND MONTH(datetime_added) = ? AND YEAR(datetime_added) = ?";
+        values.push(currentMonth, currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(datetime_added) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Apply location filter
+    if (municipality && municipality !== "All") {
+        query += " AND patient_municipality = ?";
+        values.push(municipality);
+    }
+
+    db.query(query, values, (err, results) => {
         if (err) {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results[0]); // Send the single object directly
+        res.json(results[0]); // return single object: { totalAmount: ... }
     });
 });
 
-app.get("/retrieve_total_hospital_bill_hospital_name", (req, res) => {
-    const currentYear = new Date().getFullYear();
 
-    // Adjust the query to filter by the current year and group by hospital name.
-    const query = `
+app.post("/retrieve_total_hospital_bill_hospital_name", (req, res) => {
+    const now = new Date();
+    const { patientMunicipality, reportClassification } = req.body;
+
+    let query = `
         SELECT patient_hospital, COUNT(*) AS totalBills
         FROM hospital_bill
-        WHERE YEAR(datetime_added) = ?
-        GROUP BY patient_hospital
+        WHERE 1=1
     `;
+    const values = [];
 
-    db.query(query, [currentYear], (err, results) => {
+    // Apply reportClassification date filters
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(datetime_added) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+        query += " AND YEAR(datetime_added) = ? AND MONTH(datetime_added) = ?";
+        values.push(currentYear, currentMonth);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(datetime_added) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Municipality filter
+    if (patientMunicipality && patientMunicipality !== "All") {
+        query += " AND patient_municipality = ?";
+        values.push(patientMunicipality);
+    }
+
+    query += " GROUP BY patient_hospital";
+
+    db.query(query, values, (err, results) => {
         if (err) {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results); // Send the list of hospitals with their respective bill counts
+        res.json(results);
+        console.log("Test: ", results);
     });
 });
 
-app.get("/retrieve_total_hospital_bill_barangay", (req, res) => {
-    const currentYear = new Date().getFullYear();
+app.post("/retrieve_total_hospital_bill_barangay", (req, res) => {
+    const now = new Date();
+    const { patientMunicipality, reportClassification } = req.body;
 
-    // Adjust the query to filter by the current year and group by hospital name.
-    const query = `
+    let query = `
         SELECT patient_barangay, COUNT(*) AS patientBarangay
         FROM hospital_bill
-        WHERE YEAR(datetime_added) = ?
-        GROUP BY patient_barangay
+        WHERE 1=1
     `;
+    const values = [];
 
-    db.query(query, [currentYear], (err, results) => {
+    // Report classification date filter
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(datetime_added) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+        query += " AND YEAR(datetime_added) = ? AND MONTH(datetime_added) = ?";
+        values.push(currentYear, currentMonth);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(datetime_added) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Municipality filter
+    if (patientMunicipality && patientMunicipality !== "All") {
+        query += " AND patient_municipality = ?";
+        values.push(patientMunicipality);
+    }
+
+    query += " GROUP BY patient_barangay";
+
+    db.query(query, values, (err, results) => {
         if (err) {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results); // Send the list of hospitals with their respective bill counts
+        res.json(results);
+        console.log("Barangay Result: ", results);
     });
 });
 
+app.post("/retrieve_total_alay_pagdamay", (req, res) => {
+    const { patientBarangay, patientMunicipality, patientProvince, reportClassification } = req.body;
 
+    let selectField = "DATE_FORMAT(savedAt, '%Y-%m') AS label"; // default: monthly
+    let groupByField = "label";
+    const conditions = [];
+    const values = [];
+    const now = new Date();
+
+    // Location filters
+    if (patientBarangay && patientBarangay !== "All") {
+        conditions.push("deceased_barangay = ?");
+        values.push(patientBarangay);
+    }
+    if (patientMunicipality && patientMunicipality !== "All") {
+        conditions.push("deceased_municipality = ?");
+        values.push(patientMunicipality);
+    }
+    if (patientProvince && patientProvince !== "All") {
+        conditions.push("deceased_province = ?");
+        values.push(patientProvince);
+    }
+
+    // Report classification filters
+    if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        selectField = "DATE_FORMAT(savedAt, '%Y-%m-%d') AS label"; // group by date
+        conditions.push("MONTH(savedAt) = ?");
+        values.push(currentMonth);
+        conditions.push("YEAR(savedAt) = ?");
+        values.push(currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+        selectField = "DATE_FORMAT(savedAt, '%Y-%m-%d') AS label"; // group by date
+        conditions.push("DATE(savedAt) BETWEEN ? AND ?");
+        values.push(startOfWeek.toISOString().slice(0, 10));
+        values.push(endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Final query
+    let query = `
+        SELECT ${selectField}, COUNT(*) AS totalRecords
+        FROM alay_pagdamay
+    `;
+
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
+    query += ` GROUP BY ${groupByField} ORDER BY ${groupByField} ASC`;
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results);
+    });
+});
+
+app.post("/retrieve_alay_pagdamay_status", (req, res) => {
+    const now = new Date();
+    const { municipality, reportClassification } = req.body;
+
+    let query = `
+        SELECT burial_status, COUNT(*) AS totalCount 
+        FROM alay_pagdamay 
+        WHERE 1=1
+    `;
+    const values = [];
+
+    // Apply date filters
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        query += " AND MONTH(savedAt) = ? AND YEAR(savedAt) = ?";
+        values.push(currentMonth, currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Apply location filter
+    if (municipality && municipality !== "All") {
+        query += " AND deceased_municipality = ?";
+        values.push(municipality);
+    }
+
+    query += " GROUP BY burial_status";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bill status counts:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results); // returns array like: [{ hospital_bill_status: "Approved", totalCount: 10 }, ...]
+    });
+});
+
+app.post("/retrieve_alay_pagdamay_petty_cash", (req, res) => {
+    const now = new Date();
+    const { municipality, reportClassification } = req.body;
+
+    let query = `SELECT SUM(petty_cash) AS totalAmount FROM alay_pagdamay WHERE 1=1`;
+    const values = [];
+
+    // Apply date filters based on reportClassification
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1; // 0-indexed
+        const currentYear = now.getFullYear();
+        query += " AND MONTH(savedAt) = ? AND YEAR(savedAt) = ?";
+        values.push(currentMonth, currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Apply location filter
+    if (municipality && municipality !== "All") {
+        query += " AND deceased_municipality = ?";
+        values.push(municipality);
+    }
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results[0]); // return single object: { totalAmount: ... }
+    });
+});
+
+app.post("/retrieve_total_alay_pagdamay_funeral_name", (req, res) => {
+    const now = new Date();
+    const { patientMunicipality, reportClassification } = req.body;
+
+    let query = `
+        SELECT contact_funeral_service, COUNT(*) AS totalBills
+        FROM alay_pagdamay
+        WHERE 1=1
+    `;
+    const values = [];
+
+    // Apply reportClassification date filters
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+        query += " AND YEAR(savedAt) = ? AND MONTH(savedAt) = ?";
+        values.push(currentYear, currentMonth);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Municipality filter
+    if (patientMunicipality && patientMunicipality !== "All") {
+        query += " AND deceased_municipality = ?";
+        values.push(patientMunicipality);
+    }
+
+    query += " GROUP BY contact_funeral_service";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results);
+        console.log("Test: ", results);
+    });
+});
+
+app.post("/retrieve_total_alay_pagdamay_barangay", (req, res) => {
+    const now = new Date();
+    const { patientMunicipality, reportClassification } = req.body;
+
+    let query = `
+        SELECT deceased_barangay, COUNT(*) AS deceasedBarangay
+        FROM alay_pagdamay
+        WHERE 1=1
+    `;
+    const values = [];
+
+    // Report classification date filter
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+        query += " AND YEAR(savedAt) = ? AND MONTH(savedAt) = ?";
+        values.push(currentYear, currentMonth);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Municipality filter
+    if (patientMunicipality && patientMunicipality !== "All") {
+        query += " AND deceased_municipality = ?";
+        values.push(patientMunicipality);
+    }
+
+    query += " GROUP BY deceased_barangay";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results);
+        console.log("Barangay Result: ", results);
+    });
+});
 
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));

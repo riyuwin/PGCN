@@ -20,92 +20,11 @@ function ReportStatisticsContent() {
 
     const [patientPurok, setPatientPurok] = useState('');
     const [patientBarangay, setPatientBarangay] = useState('');
-    const [patientMunicipality, setPatientMunicipality] = useState('All');
+    const [patientMunicipality, setPatientMunicipality] = useState('');
     const [patientProvince, setPatientProvince] = useState('Camarines Norte');
     const [barangayList, setBarangayList] = useState([]);
-
-    const municipalityBarangays = {
-        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay",
-            "Mantugawe", "Matnog", "Mocong", "Oliva", "Pagsangahan", "Pinagwarasan", "Plaridel", "Poblacion 1", "Poblacion 2", "San Felipe", "San Jose", "San Pascual", "Taba-taba", "Tacad", "Taisan", "Tuaca"],
-
-        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque",
-            "Old Camp", "Poblacion", "San Antonio", "San Isidro", "San Roque", "Tanawan", "Ubang", "Villa Aurora", "Villa Belen"],
-
-        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII",
-            "Bibirao", "Borabod", "Calasgasan", "Camambugan", "Cobangbang", "Dogongan", "Gahonon", "Gubat", "Lag-on", "Magang", "Mambalite", "Mancruz", "Pamorangon", "San Isidro"],
-
-        "Jose Panganiban": [
-            "Bagong Bayan", "Calero", "Dahican", "Dayhagan", "Larap", "Luklukan Norte", "Luklukan Sur", "Motherlode", "Nakalaya", "North Poblacion",
-            "Osmeña", "Pag-asa", "Parang", "Plaridel", "Salvacion", "San Isidro", "San Jose", "San Martin", "San Pedro", "San Rafael",
-            "Santa Cruz", "Santa Elena", "Santa Milagrosa", "Santa Rosa Norte", "Santa Rosa Sur", "South Poblacion", "Tamisan"
-        ],
-
-        "Labo": [
-            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit",
-            "Bulhao", "Cabatuhan", "Cabusay", "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica",
-            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong",
-            "Matanlang", "Napaod", "Pag-asa", "Pangpang", "Pinya", "San Antonio", "San Francisco", "Santa Cruz", "Submakin", "Talobatib", "Tigbinan", "Tulay na Lupa"],
-
-        "Mercedes": [
-            "Apuao", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Caringo", "Catandunganon", "Cayucyucan", "Colasi",
-            "Del Rosario", "Gaboc", "Hamoraon", "Hinipaan", "Lalawigan", "Lanot", "Mambungalon", "Manguisoc", "Masalongsalong", "Matoogtoog", "Pambuhan", "Quinapaguian", "San Roque", "Tarum"
-        ],
-
-        "Paracale": [
-            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan", "Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
-            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas", "Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
-            "Tabas", "Talusan", "Tawig", "Tugos"
-        ],
-
-        "San Lorenzo Ruiz": [
-            "Daculang Bolo", "Dagotdotan", "Langga", "Laniton", "Maisog", "Mampurog",
-            "Manlimonsito", "Matacong", "Salvacion", "San Antonio", "San Isidro", "San Ramon"
-        ],
-
-        "San Vicente": [
-            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur",
-            "Man-ogob", "Poblacion District I", "Poblacion District II", "San Jose"
-        ],
-
-        "Santa Elena": [
-            "Basiad", "Bulala", "Don Tomas", "Guitol", "Kabuluan", "Kagtalaba",
-            "Maulawin", "Patag Ibaba", "Patag Iraya", "Plaridel", "Polungguitguit",
-            "Rizal", "Salvacion", "San Lorenzo", "San Pedro", "San Vicente",
-            "Santa Elena", "Tabugon", "Villa San Isidro"
-        ],
-
-        "Talisay": [
-            "Binanuaan", "Caawigan", "Cahabaan", "Calintaan", "Del Carmen",
-            "Gabon", "Itomang", "Poblacion", "San Francisco", "San Isidro",
-            "San Jose", "San Nicolas", "Santa Cruz", "Santa Elena", "Santo Niño"
-        ],
-
-        "Vinzons": [
-            "Aguit-it", "Banocboc", "Barangay I", "Barangay II", "Barangay III",
-            "Cagbalogo", "Calangcawan Norte", "Calangcawan Sur", "Guinacutan",
-            "Mangcawayan", "Mangcayo", "Manlucugan", "Matango", "Napilihan",
-            "Pinagtigasan", "Sabang", "Santo Domingo", "Singi", "Sula"
-        ]
-
-    };
-
-    // Variables for inputs ------------------------------------------------------------
-    const [billId, setHospitalId] = useState('');
-    const [patientFirstName, setPatientFirstName] = useState('');
-    const [patientMiddleName, setPatientMiddleName] = useState('');
-    const [patientLastName, setPatientLastName] = useState('');
-    const [patientExtName, setPatientExtName] = useState('');
-    const [patientAddress, setPatientAddress] = useState('');
-    const [patientHospital, setPatientHospital] = useState('');
-
-    const [claimantFirstname, setClaimantFname] = useState('');
-    const [claimantMiddlename, setClaimantMname] = useState('');
-    const [claimantLastname, setClaimantLname] = useState('');
-    const [claimantExtName, setClaimantExtName] = useState('');
-    const [claimantRelationship, setClaimantRelationship] = useState('');
-    const [claimantContact, setClaimantContact] = useState('');
-    const [claimantAmount, setClaimantAmount] = useState('');
-
+ 
+    // Variables for inputs ------------------------------------------------------------  
     const [pettyCashAmount, setPettyCashAmount] = useState('');
 
     const [filterName, setFilterName] = useState('');
@@ -121,23 +40,42 @@ function ReportStatisticsContent() {
     const [formPage, setFormPage] = useState("Form 1");
 
     const retrieveFilter = () => {
-        if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality === "All") {
+        if (
+            transactions === "Hospital Bill" &&
+            ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
+        ) {
+            const municipalityFilter = patientMunicipality === "All" ? "All" : patientMunicipality;
+        
+            setFilterPatientMunicipality(municipalityFilter);
+        
+            // Pass both filter and classification to functions that need them
+            fetchTotalHospitalBills(municipalityFilter, reportClassification);
+            fetchHospitalBillStatus(municipalityFilter, reportClassification);
+            fetchHospitalBills(municipalityFilter, reportClassification);
+            fetchHospitalBillPettyCash(municipalityFilter, reportClassification);
+            fetchHospitalBillHospitalName(municipalityFilter, reportClassification);
+            fetchHospitalBillPatientBarangay(municipalityFilter, reportClassification);
+        
             setFilterName('Hospital Bill');
-            setFilterPatientMunicipality("All");
-            fetchTotalHospitalBills(filterNamePatientMunicipality);
-            fetchHospitalBills(filterNamePatientMunicipality);
-            fetchHospitalBillPettyCash();
-            fetchHospitalBillHospitalName();
-            fetchHospitalBillPatientBarangay();
             console.log("Hey:", barChartData);
-        } else if (transactions === "Hospital Bill" && reportClassification === "Annual Report" && patientMunicipality !== "All") {
-            setFilterName('Hospital Bill');
-            setFilterPatientMunicipality(patientMunicipality);
-            fetchTotalHospitalBills(filterNamePatientMunicipality);
-            fetchHospitalBills(filterNamePatientMunicipality);
-            fetchHospitalBillPettyCash();
-            fetchHospitalBillHospitalName();
-            fetchHospitalBillPatientBarangay();
+        } else if (
+            transactions === "Alay Pagdamay" &&
+            ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
+        ) {
+            const municipalityFilter = patientMunicipality === "All" ? "All" : patientMunicipality;
+        
+            setFilterPatientMunicipality(municipalityFilter);
+        
+            // Pass both filter and classification to functions that need them
+            fetchTotalAlayPagdamay(municipalityFilter, reportClassification);
+            fetchAlayPagdamayStatus(municipalityFilter, reportClassification);
+            fetchHospitalBills(municipalityFilter, reportClassification);
+            fetchAlayPagdamayPettyCash(municipalityFilter, reportClassification);
+            fetchAlayPagdamayFuneralName(municipalityFilter, reportClassification);
+            fetchAlayPagdamayBarangay(municipalityFilter, reportClassification);
+        
+            setFilterName('Alay Pagdamay');
+            console.log("Hey:", barChartData);
         } else {
             console.log("No matching filter conditions.");
             setFilterName('');
@@ -155,18 +93,79 @@ function ReportStatisticsContent() {
         }
     }, [transactions, startDate, endDate]); */
 
-    const fetchHospitalBillPettyCash = async () => {
+    const fetchHospitalBillStatus = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash");
+            const response = await fetch("http://localhost:5000/retrieve_hospital_bill_status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+    
             const data = await response.json();
-
-            console.log("Hello: ", data);
-
-            // Assume your backend sends { totalAmount: 1000 }
+    
+            console.log("Hospital Bill Status Data: ", data);
+    
+            let labels = [];
+            let series = [];
+    
+            if (Array.isArray(data) && data.length > 0) {
+                labels = data.map(item => item.hospital_bill_status ?? "Unknown");
+                series = data.map(item => item.totalCount ?? 0);
+    
+                const isAllZero = series.every(value => value === 0);
+    
+                if (isAllZero) {
+                    labels = ["No Data"];
+                    series = [0];
+                }
+            } else {
+                labels = ["No Data"];
+                series = [0];
+            }
+    
             setRadialChartData(prevData => ({
                 ...prevData,
-                series: [data.totalAmount ?? 0]  // Safely handle missing value
+                series: series,
+                options: {
+                    ...prevData.options,
+                    labels: labels
+                }
             }));
+        } catch (error) {
+            console.error("Error fetching hospital bill status data:", error);
+            setRadialChartData(prevData => ({
+                ...prevData,
+                series: [0],
+                options: {
+                    ...prevData.options,
+                    labels: ["No Data"]
+                }
+            }));
+        }
+    };
+    
+    const fetchHospitalBillPettyCash = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+            /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
+            const data = await response.json();
+ 
+            setPettyCashAmount(data.totalAmount);
+ 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -193,170 +192,103 @@ function ReportStatisticsContent() {
     };
 
 
-    const fetchHospitalBillHospitalName = async () => {
+    const fetchHospitalBillHospitalName = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_hospital_name");
+            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_hospital_name", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    patientMunicipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+    
             const data = await response.json();
-
-            // Process the response to extract hospital names (labels) and their respective total bill counts (series)
-            const labels = data.map(item => item.patient_hospital);  // Extract hospital names
-            const series = data.map(item => item.totalBills);  // Extract total bill counts
-
-            // Now update the chart data
+    
+            // Provide fallback if no records are returned
+            const hasData = data.length > 0;
+    
+            const labels = hasData
+                ? data.map(item => item.patient_hospital)
+                : ["No Data"];
+            
+            const series = hasData
+                ? data.map(item => item.totalBills ?? 0)
+                : [0];
+    
+            // Update the chart data
             setPolarChartData(prevData => ({
                 ...prevData,
                 options: {
-                    ...prevData.options,  // Preserve existing options
-                    labels: labels        // Update the labels
+                    ...prevData.options,
+                    labels: labels
                 },
-                series: series,  // Set the total bill counts as the series data
+                series: series,
             }));
-
+    
             console.log("Updated Labels:", labels);
             console.log("Updated Series:", series);
-
+    
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
+    
+    
 
-    const fetchHospitalBillPatientBarangay = async () => {
+    const fetchHospitalBillPatientBarangay = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_barangay");
+            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_barangay", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    patientMunicipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+    
             const data = await response.json();
-
-            // Process the response to extract hospital names (labels) and their respective total bill counts (series)
-            const labels = data.map(item => item.patient_barangay);  // Extract hospital names
-            const series = data.map(item => item.patientBarangay);  // Extract total bill counts
-
-            // Now update the chart data
+    
+            // Check if the data contains any entries
+            const hasData = data.length > 0;
+    
+            // Use real data if available, otherwise provide fallback
+            const labels = hasData
+                ? data.map(item => item.patient_barangay)
+                : ["No Data"];
+    
+            const series = hasData
+                ? data.map(item => item.patientBarangay ?? 0)
+                : [0];
+    
+            // Update pie chart data
             setPieChartData(prevData => ({
                 ...prevData,
                 options: {
-                    ...prevData.options,  // Preserve existing options
-                    labels: labels        // Update the labels
+                    ...prevData.options,
+                    labels: labels
                 },
-                series: series,  // Set the total bill counts as the series data
+                series: series,
             }));
-
-            console.log("Updated Labels:", labels);
-            console.log("Updated Series:", series);
-
+    
+            console.log("Updated Labels123:", labels);
+            console.log("Updated Series:123", series);
+    
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
-
-    // Filter hospital bills based on startDate and endDate 
-    const filteredRecords = hospitalBills.filter((bill) => {
-        const billDate = new Date(bill.datetime_added);
-        const start = startDate ? new Date(startDate) : null;
-        const end = endDate ? new Date(endDate) : null;
-
-        return (
-            (!start || billDate >= start) &&
-            (!end || billDate <= end) &&
-            (patientMunicipality === "All" || bill.patient_municipality === patientMunicipality || patientMunicipality === "") &&
-            (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "")
-        );
-    });
-
-
-
-
-
-    // Pagination Logic
-    const [currentPage, setCurrentPage] = useState(1);
-    const recordsPerPage = 10;
-
-    const indexOfLastRecord = currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
-    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
-
-
-    // Open modal and set selected bill
-    const handlePopulateDetails = (bill) => {
-        setSelectedBill(bill);
-        PopulateForms(bill);
-    };
-
-    const handleFormPageUpdate = (formPageNumber) => {
-        setFormPage(formPageNumber);
-    }
-
-    const PopulateForms = (bill) => {
-        setHospitalId(bill['hospital_bill_id']);
-        setPatientFirstName(bill['patient_fname']);
-        setPatientMiddleName(bill['patient_mname']);
-        setPatientLastName(bill['patient_lname']);
-        setPatientExtName(bill['patient_ext_name']);
-        setPatientPurok(bill['patient_purok']);
-        setPatientBarangay(bill['patient_barangay']);
-        setPatientMunicipality(bill['patient_municipality']);
-        setPatientProvince(bill['patient_province']);
-        setPatientHospital(bill['patient_hospital']);
-        setClaimantFname(bill['claimant_fname']);
-        setClaimantMname(bill['claimant_mname']);
-        setClaimantLname(bill['claimant_lname']);
-        setClaimantExtName(bill['claimant_extname']);
-        setClaimantRelationship(bill['claimant_relationship']);
-        setClaimantContact(bill['claimant_contact']);
-        setClaimantAmount(bill['claimant_amount']);
-    }
-
-    const ResetForms = () => {
-        // ✅ Reset all input fields after successful save
-        setPatientFirstName('');
-        setPatientMiddleName('');
-        setPatientLastName('');
-        setPatientExtName('');
-        setPatientAddress('');
-        setPatientHospital('');
-        setClaimantFname('');
-        setClaimantMname('');
-        setClaimantLname('');
-        setClaimantExtName('');
-        setClaimantRelationship('');
-        setClaimantContact('');
-        setClaimantAmount('');
-
-    }
-
-    const handleMunicipalityChange = (e) => {
-        const selectedMunicipality = e.target.value.trim();
-        setPatientMunicipality(selectedMunicipality);
-        setPatientBarangay(''); // Reset barangay selection
-        setBarangayList(municipalityBarangays[selectedMunicipality] || []);
-    };
+ 
 
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
     });
-
-    const handleDownload = async () => {
-        const blob = await pdf(
-            <GuaranteeLetterLayout
-                patientFirstName={patientFirstName}
-                patientMiddleName={patientMiddleName}
-                patientLastName={patientLastName}
-                patientExtName={patientExtName}
-                claimantFirstName={claimantFirstname}
-                claimantMiddleName={claimantMiddlename}
-                claimantLastName={claimantLastname}
-                claimantExtName={claimantExtName}
-                patientPurok={patientPurok}
-                patientBarangay={patientBarangay}
-                patientMunicipality={patientMunicipality}
-                patientProvince={patientProvince}
-                claimantAmount={claimantAmount}
-            />
-        ).toBlob();
-
-        saveAs(blob, 'Guarantee_Letter.pdf');
-    };
 
     const [chartData, setChartData] = useState({
         series: [{
@@ -409,7 +341,7 @@ function ReportStatisticsContent() {
         options: {
             chart: { type: "radialBar", height: 350 },
             labels: ["Petty Cash"],
-            colors: ["#FF6384"],
+            colors: ["#FF6384", "#36A2EB", "#FFCE56",],
             legend: { position: "bottom" },
             plotOptions: {
                 radialBar: {
@@ -431,8 +363,11 @@ function ReportStatisticsContent() {
             }
         }
     });
+    
+    
+    const [totalPatientNumber, setTotalPatientNumber] = useState('');
 
-    const fetchTotalHospitalBills = async (filterNamePatientMunicipality) => {
+    const fetchTotalHospitalBills = async (filterNamePatientMunicipality, reportClassification) => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill", {
                 method: "POST",
@@ -442,35 +377,389 @@ function ReportStatisticsContent() {
                 body: JSON.stringify({
                     patientBarangay: "All",
                     patientMunicipality: filterNamePatientMunicipality,
-                    patientProvince: "All"
+                    patientProvince: "All",
+                    reportClassification
                 })
             });
-
+    
             const data = await response.json();
-
-            console.log("HAHAHAH1232: ", data)
-
-            // Prepare an array for 12 months initialized to 0
-            const monthlyCounts = Array(12).fill(0);
-
-            // Fill monthlyCounts from the response
-            data.forEach(record => {
-                const monthIndex = new Date(record.month + "-01").getMonth(); // example: "2025-04" + "-01"
-                monthlyCounts[monthIndex] = record.totalRecords;
-            });
-
-            // Now set the bar chart data
-            setBarChartData(prevData => ({
-                ...prevData,
-                series: [{
-                    ...prevData.series[0],
-                    data: monthlyCounts
-                }]
-            }));
+                        
+            // Set total patient number
+            const totalPatients = data.reduce((sum, record) => sum + record.totalRecords, 0);
+            setTotalPatientNumber(totalPatients);
+    
+            if (reportClassification === "Annual Report") {
+                const monthlyCounts = Array(12).fill(0);
+                data.forEach(record => {
+                    const monthIndex = new Date(record.label + "-01").getMonth(); // '2025-04' → 3
+                    monthlyCounts[monthIndex] = record.totalRecords;
+                });
+    
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: monthlyCounts
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: [
+                                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                            ]
+                        }
+                    }
+                }));
+    
+            } else if (reportClassification === "This Month Report") {
+                // Only use dates with actual records
+                const labels = data.map(record => record.label); // e.g., '2025-04-15'
+                const seriesData = data.map(record => record.totalRecords);
+    
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: seriesData
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: labels
+                        }
+                    }
+                }));
+    
+            } else if (reportClassification === "This Week Report") {
+                const now = new Date();
+                const startOfWeek = new Date(now);
+                startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+    
+                const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                const weekDates = weekdays.map((_, i) => {
+                    const d = new Date(startOfWeek);
+                    d.setDate(d.getDate() + i);
+                    return d.toISOString().split("T")[0]; // e.g., '2025-04-28'
+                });
+    
+                const dataMap = {};
+                data.forEach(record => {
+                    dataMap[record.label] = record.totalRecords;
+                });
+    
+                const seriesData = weekDates.map(date => dataMap[date] || 0);
+    
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: seriesData
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: weekdays
+                        }
+                    }
+                }));
+            }
+    
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
+
+
+    // Alay Pagdamay
+
+    const [alayPagdamayNumber, setTotalAlayPagdamayNumber] = useState('');
+
+    const fetchTotalAlayPagdamay= async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_alay_pagdamay", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    patientBarangay: "All",
+                    patientMunicipality: filterNamePatientMunicipality,
+                    patientProvince: "All",
+                    reportClassification
+                })
+            });
+    
+            const data = await response.json();
+                        
+            // Set total patient number
+            const totalPatients = data.reduce((sum, record) => sum + record.totalRecords, 0);
+            setTotalAlayPagdamayNumber(totalPatients);
+    
+            if (reportClassification === "Annual Report") {
+                const monthlyCounts = Array(12).fill(0);
+                data.forEach(record => {
+                    const monthIndex = new Date(record.label + "-01").getMonth(); // '2025-04' → 3
+                    monthlyCounts[monthIndex] = record.totalRecords;
+                });
+    
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: monthlyCounts
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: [
+                                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                            ]
+                        }
+                    }
+                }));
+    
+            } else if (reportClassification === "This Month Report") {
+                // Only use dates with actual records
+                const labels = data.map(record => record.label); // e.g., '2025-04-15'
+                const seriesData = data.map(record => record.totalRecords);
+    
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: seriesData
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: labels
+                        }
+                    }
+                }));
+    
+            } else if (reportClassification === "This Week Report") {
+                const now = new Date();
+                const startOfWeek = new Date(now);
+                startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+    
+                const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                const weekDates = weekdays.map((_, i) => {
+                    const d = new Date(startOfWeek);
+                    d.setDate(d.getDate() + i);
+                    return d.toISOString().split("T")[0]; // e.g., '2025-04-28'
+                });
+    
+                const dataMap = {};
+                data.forEach(record => {
+                    dataMap[record.label] = record.totalRecords;
+                });
+    
+                const seriesData = weekDates.map(date => dataMap[date] || 0);
+    
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: seriesData
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: weekdays
+                        }
+                    }
+                }));
+            }
+    
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+
+    const fetchAlayPagdamayStatus = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay_status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+    
+            const data = await response.json();
+    
+            console.log("Hospital Bill Status Data: ", data);
+    
+            let labels = [];
+            let series = [];
+    
+            if (Array.isArray(data) && data.length > 0) {
+                labels = data.map(item => item.burial_status ?? "Unknown");
+                series = data.map(item => item.totalCount ?? 0);
+    
+                const isAllZero = series.every(value => value === 0);
+    
+                if (isAllZero) {
+                    labels = ["No Data"];
+                    series = [0];
+                }
+            } else {
+                labels = ["No Data"];
+                series = [0];
+            }
+    
+            setRadialChartData(prevData => ({
+                ...prevData,
+                series: series,
+                options: {
+                    ...prevData.options,
+                    labels: labels
+                }
+            }));
+        } catch (error) {
+            console.error("Error fetching hospital bill status data:", error);
+            setRadialChartData(prevData => ({
+                ...prevData,
+                series: [0],
+                options: {
+                    ...prevData.options,
+                    labels: ["No Data"]
+                }
+            }));
+        }
+    };
+
+    const fetchAlayPagdamayPettyCash = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay_petty_cash", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+            /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
+            const data = await response.json();
+ 
+            setPettyCashAmount(data.totalAmount);
+ 
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+
+    const fetchAlayPagdamayFuneralName = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_alay_pagdamay_funeral_name", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    patientMunicipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+    
+            const data = await response.json();
+    
+            // Provide fallback if no records are returned
+            const hasData = data.length > 0;
+    
+            const labels = hasData
+                ? data.map(item => item.contact_funeral_service)
+                : ["No Data"];
+            
+            const series = hasData
+                ? data.map(item => item.totalBills ?? 0)
+                : [0];
+    
+            // Update the chart data
+            setPolarChartData(prevData => ({
+                ...prevData,
+                options: {
+                    ...prevData.options,
+                    labels: labels
+                },
+                series: series,
+            }));
+    
+            console.log("Updated Labels:", labels);
+            console.log("Updated Series:", series);
+    
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+
+    const fetchAlayPagdamayBarangay = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_alay_pagdamay_barangay", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    patientMunicipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+    
+            const data = await response.json();
+    
+            // Check if the data contains any entries
+            const hasData = data.length > 0;
+    
+            // Use real data if available, otherwise provide fallback
+            const labels = hasData
+                ? data.map(item => item.deceased_barangay)
+                : ["No Data"];
+    
+            const series = hasData
+                ? data.map(item => item.deceasedBarangay ?? 0)
+                : [0];
+    
+            // Update pie chart data
+            setPieChartData(prevData => ({
+                ...prevData,
+                options: {
+                    ...prevData.options,
+                    labels: labels
+                },
+                series: series,
+            }));
+    
+            console.log("Updated Labels123:", labels);
+            console.log("Updated Series:123", series);
+    
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+    
+
+    // Alay Pagdamay
+
+    
+    function formatToPesos(amount) {
+        return new Intl.NumberFormat('en-PH', {
+            minimumFractionDigits: 0
+        }).format(Math.abs(amount));
+    }
 
 
 
@@ -497,6 +786,7 @@ function ReportStatisticsContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
+                                                
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between align-items-center">
                                                         <h5 className="card-title">Manage Reports</h5>
@@ -518,6 +808,7 @@ function ReportStatisticsContent() {
                                                                         onChange={(e) => setTransactions(e.target.value)} >
                                                                         <option value="">Select Transactions</option>
                                                                         <option value="Hospital Bill">Hospital Bill</option>
+                                                                        <option value="Alay Pagdamay">Alay Pagdamay</option>
                                                                         <option value="Burial Assistance">Burial Assistance</option>
                                                                     </select>
                                                                 </div>
@@ -580,145 +871,262 @@ function ReportStatisticsContent() {
                                                                 <div className="input-group">
 
                                                                 </div>
+                                                            </div> 
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                { filterName === "Hospital Bill" &&
+                                                <>
+                                                    <div >
+
+                                                        <div className="row">
+
+                                                            <div className="col-xxl-6 col-md-6">
+                                                                <div className="card info-card revenue-card h-100">
+                                                                    <div className="filter">
+                                                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                                            <li className="dropdown-header text-start">
+                                                                                <h6>Filter</h6>
+                                                                            </li>
+
+                                                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                                                        </ul>
+                                                                    </div>
+
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Patient Number <span>| {reportClassification}</span></h5>
+                                                                        <br/>
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                                                <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
+                                                                            </div>
+                                                                            <div className="ps-3">
+                                                                                <h6 id="dashboardAmounts">{formatToPesos(totalPatientNumber)}</h6>
+                                                                                <span className="text-muted small pt-2 ps-1">total patient number</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
-                                                            {/* <div className="col-sm-4">
-                                                                <div className="input-group">
-                                                                    <label className="form-label">Start Date: </label>
-                                                                    <input
-                                                                        type="date"
-                                                                        className="form-control"
-                                                                        value={startDate}
-                                                                        onChange={(e) => setStartDate(e.target.value)}
-                                                                    />
-                                                                </div><br/>
-                                                            </div>
-    
-                                                            <div className="col-sm-4">
-                                                                <div className="input-group">
-                                                                    <label className="form-label">End Date: </label>
-                                                                    <input
-                                                                        type="date"
-                                                                        className="form-control"
-                                                                        value={endDate}
-                                                                        onChange={(e) => setEndDate(e.target.value)}
-                                                                    />
-                                                                </div><br/>
-                                                            </div>   */}
+                                                            <div className="col-xxl-6 col-md-6">
+                                                                <div className="card info-card revenue-card h-100">
+                                                                    <div className="filter">
+                                                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                                            <li className="dropdown-header text-start">
+                                                                                <h6>Filter</h6>
+                                                                            </li>
 
-                                                            {/* <div className="col-sm-4">
-                                                                <div className="input-group">
-                                                                    <label className="form-label">Province: </label> 
-                                                                    <select
-                                                                        className="form-control"
-                                                                        id="hospital"  
-                                                                        disabled={true}>
-                                                                            <option value="Camarines Norte">Camarines Norte</option> 
-                                                                    </select>
-                                                                </div> 
-                                                            </div>
+                                                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                                                        </ul>
+                                                                    </div>
 
-                                                            <div className="col-sm-4">
-                                                                <div className="input-group">
-                                                                    <label className="form-label">Municipality: </label> 
-                                                                    <select
-                                                                        className="form-control"
-                                                                        id="hospital"  
-                                                                        disabled={false}>
-                                                                            <option value="All">All</option> 
-                                                                    </select>
-                                                                </div> 
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
+                                                                        <br/>
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                                                            </div>
+                                                                            <div className="ps-3">
+                                                                                <h6 id="dashboardAmounts">₱ {formatToPesos(pettyCashAmount)}</h6>
+                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             
-                                                            <div className="col-sm-4">
-                                                                <div className="input-group">
-                                                                    <label className="form-label">Barangay: </label> 
-                                                                    <select
-                                                                        className="form-control"
-                                                                        id="hospital"  
-                                                                        disabled={false}>
-                                                                            <option value="All">All</option> 
-                                                                    </select>
+
+                                                            <div className="col-lg-8">
+                                                                <br/>
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Patient Records</h5><br />
+                                                                        <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="col-lg-4">
+                                                                <br/>
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Hospital Bill Status</h5><br />
+                                                                        <Chart options={radialChartData.options} series={radialChartData.series} type="donut" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+                                                            <div className="col-lg-8">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Patient Per Hospital</h5><br />
+                                                                        <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Patient Per Barangay</h5><br />
+                                                                        <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
+                                                                    </div>
+
+                                                                    {/* <div className="card-body">
+                                                                    <h5 className="card-title"></h5>
+                                                                    <Chart options={chartData.options} series={chartData.series} type="line" height={350} />
+                                                                </div> */}
+                                                                </div>
+                                                            </div>
+
+                                                            {/* <div className="col-lg-4">
+                                                            <div className="card">
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title">Total Patient Status</h5><br/>
+                                                                    <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
                                                                 </div> 
-                                                            </div> */}
+                                                            </div>
+                                                        </div> */}
 
 
                                                         </div>
+
                                                     </div>
 
-                                                    <br />
+                                                </>
+                                            }
 
-                                                    {filterName === "Hospital Bill" &&
-                                                        <>
-                                                            <div >
 
-                                                                <div className="row">
+                                            { filterName === "Alay Pagdamay" &&
+                                                <>
+                                                    <div >
 
-                                                                    <div className="col-lg-8">
-                                                                        <div className="card">
-                                                                            <div className="card-body">
-                                                                                <h5 className="card-title">Total Patient Records</h5><br />
-                                                                                <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
+                                                        <div className="row">
+
+                                                            <div className="col-xxl-6 col-md-6">
+                                                                <div className="card info-card revenue-card h-100">
+                                                                    <div className="filter">
+                                                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                                            <li className="dropdown-header text-start">
+                                                                                <h6>Filter</h6>
+                                                                            </li>
+
+                                                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                                                        </ul>
+                                                                    </div>
+
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Alay Pagdamay <span>| {reportClassification}</span></h5>
+                                                                        <br/>
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                                                <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
+                                                                            </div>
+                                                                            <div className="ps-3">
+                                                                                <h6 id="dashboardAmounts">{formatToPesos(alayPagdamayNumber)}</h6>
+                                                                                <span className="text-muted small pt-2 ps-1">total alay pagdamay</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
-
-                                                                    <div className="col-lg-4">
-                                                                        <div className="card">
-                                                                            <div className="card-body">
-                                                                                <h5 className="card-title">Total Petty Cash Amount</h5><br />
-                                                                                <Chart options={radialChartData.options} series={radialChartData.series} type="radialBar" height={400} />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-
-
-                                                                    <div className="col-lg-8">
-                                                                        <div className="card">
-                                                                            <div className="card-body">
-                                                                                <h5 className="card-title">Total Patient Per Hospital</h5><br />
-                                                                                <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="col-lg-4">
-                                                                        <div className="card">
-                                                                            <div className="card-body">
-                                                                                <h5 className="card-title">Total Patient Per Barangay</h5><br />
-                                                                                <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
-                                                                            </div>
-
-                                                                            {/* <div className="card-body">
-                                                                            <h5 className="card-title"></h5>
-                                                                            <Chart options={chartData.options} series={chartData.series} type="line" height={350} />
-                                                                        </div> */}
-                                                                        </div>
-                                                                    </div>
-
-                                                                    {/* <div className="col-lg-4">
-                                                                    <div className="card">
-                                                                        <div className="card-body">
-                                                                            <h5 className="card-title">Total Patient Status</h5><br/>
-                                                                            <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
-                                                                        </div> 
-                                                                    </div>
-                                                                </div> */}
-
-
                                                                 </div>
-
                                                             </div>
 
-                                                        </>
-                                                    }
+                                                            <div className="col-xxl-6 col-md-6">
+                                                                <div className="card info-card revenue-card h-100">
+                                                                    <div className="filter">
+                                                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                                            <li className="dropdown-header text-start">
+                                                                                <h6>Filter</h6>
+                                                                            </li>
 
-                                                </div>
+                                                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                                                        </ul>
+                                                                    </div>
+
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
+                                                                        <br/>
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                                                            </div>
+                                                                            <div className="ps-3">
+                                                                                <h6 id="dashboardAmounts">₱ {formatToPesos(pettyCashAmount)}</h6>
+                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div className="col-lg-8">
+                                                                <br/>
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Alay Pagdamay Records</h5><br />
+                                                                        <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4">
+                                                                <br/>
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Alay Pagdamay Status</h5><br />
+                                                                        <Chart options={radialChartData.options} series={radialChartData.series} type="donut" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-8">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Deceased Per Funeral</h5><br />
+                                                                        <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Deceased Per Barangay</h5><br />
+                                                                        <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+ 
 
 
-                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </>
+                                            }
+
                                         </div>
                                     </div>
                                 </div>
@@ -728,146 +1136,6 @@ function ReportStatisticsContent() {
                 </main>
             </main>
 
-
-            {/* Modal */}
-            <div className="modal fade" id="viewReportModal" tabIndex="-1" aria-labelledby="viewReportModal" aria-hidden="true">
-                <div className="modal-dialog modal-xl">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal">
-                                View Reports
-                            </h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div className="modal-body">
-
-                            <div className="generateContainer">
-
-                                <h5>Generate Reports: </h5>
-                                <br />
-                                <div className="row">
-                                    <div className="col-4">
-                                        <button
-                                            type="button"
-                                            className={`btn w-100 ${formPage === "Form 1" ? "btn-secondary" : "btn-success"}`}
-                                            onClick={() => handleFormPageUpdate("Form 1")}
-                                        >
-                                            <i className="bi bi-file-earmark-pdf-fill"></i> Form 1
-                                        </button>
-                                    </div>
-
-                                    <div className="col-4">
-                                        <button
-                                            type="button"
-                                            className={`btn w-100 ${formPage === "Form 2" ? "btn-secondary" : "btn-success"}`}
-                                            onClick={() => handleFormPageUpdate("Form 2")}
-                                        >
-                                            <i className="bi bi-file-earmark-pdf-fill"></i> Form 2
-                                        </button>
-                                    </div>
-
-                                    <div className="col-4">
-                                        <button
-                                            type="button"
-                                            className={`btn w-100 ${formPage === "Form 3" ? "btn-secondary" : "btn-success"}`}
-                                            onClick={() => handleFormPageUpdate("Form 3")}
-                                        >
-                                            <i className="bi bi-file-earmark-pdf-fill"></i> Form 3
-                                        </button>
-                                    </div>
-
-
-
-                                </div>
-                            </div>
-
-                            <div className="generateContainer">
-                                <br />
-
-                                {formPage == "Form 1" &&
-                                    <>
-                                        <div className="col-12 d-flex justify-content-end">
-                                            <button
-                                                type="button"
-                                                className={`btn w-500  btn-secondary`}
-                                                onClick={handleDownload}
-                                            >
-                                                <i className="bi bi-file-earmark-pdf-fill"></i> Download
-                                            </button>
-                                        </div><br />
-
-
-                                        <div className="formContainer">
-                                            <div className="row">
-
-                                                <div className="col-12">
-                                                    <br />
-                                                    <br />
-                                                </div>
-
-                                                <div className="col-4 d-flex justify-content-center">
-                                                    <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container" />
-                                                </div>
-
-                                                <div className="col-4 d-flex flex-column align-items-center header_form">
-                                                    <p>Republic of the Philippines</p>
-                                                    <p>Province of the Camarines Norte</p>
-                                                    <p>Dong Tulong</p>
-                                                </div>
-
-                                                <div className="col-4 d-flex justify-content-center">
-                                                    <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container" />
-                                                </div>
-
-                                                <div className="col-12">
-                                                    <br /><hr /><br />
-                                                </div>
-
-
-                                                <div className="col-12  d-flex flex-column align-items-start body_form">
-                                                    <div className="body_container">
-                                                        <h1>OFFICE OF THE GOVERNOR</h1><br />
-                                                        <h2>GUARANTEE LETTER</h2><br />
-                                                        <h3>{currentDate}</h3><br /><br />
-                                                        <p className="guaranteeLetterContent">
-                                                            Respectfully referred to <b>{patientFirstName} {patientMiddleName} {patientLastName}</b>, the herein attached approved request of <b>MR./MS. {claimantFirstname} {claimantMiddlename} {claimantLastname}</b> from Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} for hospital bill assistance stated below:
-                                                        </p><br /><br />
-
-                                                        <h3>AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h3><br />
-                                                        <h3>P {Number(claimantAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br />
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
-
-
-                                }
-
-                                {formPage == "Form 2" &&
-                                    <>
-
-                                    </>
-                                }
-
-
-                            </div>
-
-
-
-
-                        </div>
-
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </>
     );
