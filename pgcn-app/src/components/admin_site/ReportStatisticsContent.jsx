@@ -76,6 +76,24 @@ function ReportStatisticsContent() {
         
             setFilterName('Alay Pagdamay');
             console.log("Hey:", barChartData);
+        } else if (
+            transactions === "Burial Assistance" &&
+            ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
+        ) {
+            const municipalityFilter = patientMunicipality === "All" ? "All" : patientMunicipality;
+        
+            setFilterPatientMunicipality(municipalityFilter);
+        
+            // Pass both filter and classification to functions that need them
+            fetchTotalAlayPagdamay(municipalityFilter, reportClassification);
+            fetchAlayPagdamayStatus(municipalityFilter, reportClassification);
+            fetchHospitalBills(municipalityFilter, reportClassification);
+            fetchAlayPagdamayPettyCash(municipalityFilter, reportClassification);
+            fetchAlayPagdamayFuneralName(municipalityFilter, reportClassification);
+            fetchAlayPagdamayBarangay(municipalityFilter, reportClassification);
+        
+            setFilterName('Burial Assistance');
+            console.log("Hey:", barChartData);
         } else {
             console.log("No matching filter conditions.");
             setFilterName('');
