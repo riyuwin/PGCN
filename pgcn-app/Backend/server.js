@@ -309,6 +309,7 @@ app.post("/update_hospital_bill", (req, res) => {
         checkMedicalCertificate,
         checkFinalBill, // Ensure consistency
         validId,
+        remarks
     } = req.body;
 
     if (!billId) {
@@ -344,6 +345,7 @@ app.post("/update_hospital_bill", (req, res) => {
             check_med_certificate = ?,
             check_hospital_bill = ?, 
             check_valid_id = ?,
+            remarks = ?,
             datetime_added = ?
         WHERE hospital_bill_id = ?;
     `;
@@ -370,6 +372,7 @@ app.post("/update_hospital_bill", (req, res) => {
                 checkMedicalCertificate,
                 checkFinalBill, // Ensure consistency
                 validId,
+                remarks,
                 currentDateTime, billId
             ], (err, result) => {
                 if (err) {
@@ -403,29 +406,15 @@ app.post("/update_hospital_bill", (req, res) => {
 });
 
 
-app.post("/retrieve_hospital_bill", (req, res) => {
-    const municipality = req.body.municipality; // Now reading from the request body
-
-    console.log("HEy: ", municipality)
-
-    let query = "SELECT * FROM hospital_bill";
-    let params = [];
-
-    if (municipality && municipality !== "All") {
-        query += " WHERE patient_municipality = ?";
-        params.push(municipality);
-    }
-
-    db.query(query, params, (err, results) => {
+app.get("/retrieve_hospital_bill", (req, res) => {
+    db.query("SELECT * FROM hospital_bill", (err, results) => {
         if (err) {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results); // Return the fetched data
+        res.json(results); // Ensure this is an array
     });
 });
-
-
 
 app.post("/delete_hospital_bill", (req, res) => {
     const { billId } = req.body;
@@ -1766,5 +1755,294 @@ app.post("/retrieve_total_alay_pagdamay_barangay", (req, res) => {
         console.log("Barangay Result: ", results);
     });
 });
+
+
+app.post("/retrieve_total_burial_assistance", (req, res) => {
+    const { patientBarangay, patientMunicipality, patientProvince, reportClassification } = req.body;
+
+    let selectField = "DATE_FORMAT(savedAt, '%Y-%m') AS label"; // default: monthly
+    let groupByField = "label";
+    const conditions = [];
+    const values = [];
+    const now = new Date();
+
+    // Location filters
+    if (patientBarangay && patientBarangay !== "All") {
+        conditions.push("client_barangay = ?");
+        values.push(patientBarangay);
+    }
+    if (patientMunicipality && patientMunicipality !== "All") {
+        conditions.push("client_municipality = ?");
+        values.push(patientMunicipality);
+    }
+    if (patientProvince && patientProvince !== "All") {
+        conditions.push("client_province = ?");
+        values.push(patientProvince);
+    }
+
+    // Report classification filters
+    if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        selectField = "DATE_FORMAT(savedAt, '%Y-%m-%d') AS label"; // group by date
+        conditions.push("MONTH(savedAt) = ?");
+        values.push(currentMonth);
+        conditions.push("YEAR(savedAt) = ?");
+        values.push(currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+        selectField = "DATE_FORMAT(savedAt, '%Y-%m-%d') AS label"; // group by date
+        conditions.push("DATE(savedAt) BETWEEN ? AND ?");
+        values.push(startOfWeek.toISOString().slice(0, 10));
+        values.push(endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Final query
+    let query = `
+        SELECT ${selectField}, COUNT(*) AS totalRecords
+        FROM burial_assistance
+    `;
+
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
+    query += ` GROUP BY ${groupByField} ORDER BY ${groupByField} ASC`;
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results);
+    });
+});
+
+app.post("/retrieve_burial_assistance_status", (req, res) => {
+    const now = new Date();
+    const { municipality, reportClassification } = req.body;
+
+    let query = `
+        SELECT burial_status, COUNT(*) AS totalCount 
+        FROM burial_assistance 
+        WHERE 1=1
+    `;
+    const values = [];
+
+    // Apply date filters
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        query += " AND MONTH(savedAt) = ? AND YEAR(savedAt) = ?";
+        values.push(currentMonth, currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Apply location filter
+    if (municipality && municipality !== "All") {
+        query += " AND client_municipality = ?";
+        values.push(municipality);
+    }
+
+    query += " GROUP BY burial_status";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bill status counts:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results); // returns array like: [{ hospital_bill_status: "Approved", totalCount: 10 }, ...]
+    });
+});
+
+app.post("/retrieve_burial_assistance_petty_cash", (req, res) => {
+    const now = new Date();
+    const { municipality, reportClassification } = req.body;
+
+    let query = `SELECT SUM(amount) AS totalAmount FROM burial_assistance WHERE 1=1`;
+    const values = [];
+
+    // Apply date filters based on reportClassification
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentMonth = now.getMonth() + 1; // 0-indexed
+        const currentYear = now.getFullYear();
+        query += " AND MONTH(savedAt) = ? AND YEAR(savedAt) = ?";
+        values.push(currentMonth, currentYear);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Apply location filter
+    if (municipality && municipality !== "All") {
+        query += " AND client_municipality = ?";
+        values.push(municipality);
+    }
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results[0]); // return single object: { totalAmount: ... }
+    });
+});
+
+app.post("/retrieve_total_burial_assistance_barangay", (req, res) => {
+    const now = new Date();
+    const { patientMunicipality, reportClassification } = req.body;
+
+    let query = `
+        SELECT client_barangay, COUNT(*) AS clientBarangay
+        FROM burial_assistance
+        WHERE 1=1
+    `;
+    const values = [];
+
+    // Report classification date filter
+    if (reportClassification === "Annual Report") {
+        const currentYear = now.getFullYear();
+        query += " AND YEAR(savedAt) = ?";
+        values.push(currentYear);
+    } else if (reportClassification === "This Month Report") {
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+        query += " AND YEAR(savedAt) = ? AND MONTH(savedAt) = ?";
+        values.push(currentYear, currentMonth);
+    } else if (reportClassification === "This Week Report") {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        query += " AND DATE(savedAt) BETWEEN ? AND ?";
+        values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+    }
+
+    // Municipality filter
+    if (patientMunicipality && patientMunicipality !== "All") {
+        query += " AND client_municipality = ?";
+        values.push(patientMunicipality);
+    }
+
+    query += " GROUP BY client_barangay";
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error("Error retrieving hospital bills:", err);
+            return res.status(500).json({ error: "Database error." });
+        }
+        res.json(results);
+        console.log("Barangay Result: ", results);
+    });
+});
+app.get("/retrieve_all_assistance", (req, res) => {
+    const checkBarangayIndigency = req.query.check_barangay_indigency;
+    const reportClassification = req.query.reportClassification;
+
+    const now = new Date();
+
+    // Helper function to generate condition and values based on date column
+    const getDateCondition = (columnName) => {
+        const conditions = [];
+        const values = [];
+
+        if (reportClassification === "Annual Report") {
+            const currentYear = now.getFullYear();
+            conditions.push(`YEAR(${columnName}) = ?`);
+            values.push(currentYear);
+        } else if (reportClassification === "This Month Report") {
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1;
+            conditions.push(`YEAR(${columnName}) = ? AND MONTH(${columnName}) = ?`);
+            values.push(currentYear, currentMonth);
+        } else if (reportClassification === "This Week Report") {
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+            conditions.push(`DATE(${columnName}) BETWEEN ? AND ?`);
+            values.push(startOfWeek.toISOString().slice(0, 10), endOfWeek.toISOString().slice(0, 10));
+        }
+
+        return { condition: conditions.length ? ` AND ${conditions.join(" AND ")}` : "", values };
+    };
+
+    const hospitalDateFilter = getDateCondition("datetime_added");
+    const alayDateFilter = getDateCondition("savedAt");
+    const burialDateFilter = getDateCondition("savedAt");
+
+    const queries = {
+        hospital: {
+            sql: `SELECT COUNT(*) AS count FROM hospital_bill WHERE check_barangay_indigency = ?${hospitalDateFilter.condition}`,
+            values: [checkBarangayIndigency, ...hospitalDateFilter.values]
+        },
+        alay: {
+            sql: `SELECT COUNT(*) AS count FROM alay_pagdamay WHERE check_barangay_indigency = ?${alayDateFilter.condition}`,
+            values: [checkBarangayIndigency, ...alayDateFilter.values]
+        },
+        burial: {
+            sql: `SELECT COUNT(*) AS count FROM burial_assistance WHERE check_barangay_indigency = ?${burialDateFilter.condition}`,
+            values: [checkBarangayIndigency, ...burialDateFilter.values]
+        }
+    };
+
+    const results = {};
+
+    db.query(queries.hospital.sql, queries.hospital.values, (err, hospitalResult) => {
+        if (err) {
+            console.error("Hospital Query Error:", err);
+            return res.status(500).json({ error: "Database error (hospital)." });
+        }
+
+        results.hospital = hospitalResult[0].count;
+
+        db.query(queries.alay.sql, queries.alay.values, (err, alayResult) => {
+            if (err) {
+                console.error("Alay Query Error:", err);
+                return res.status(500).json({ error: "Database error (alay)." });
+            }
+
+            results.alay = alayResult[0].count;
+
+            db.query(queries.burial.sql, queries.burial.values, (err, burialResult) => {
+                if (err) {
+                    console.error("Burial Query Error:", err);
+                    return res.status(500).json({ error: "Database error (burial)." });
+                }
+
+                results.burial = burialResult[0].count;
+
+                res.json(results);
+            });
+        });
+    });
+});
+
 
 app.listen(process.env.VITE_PORT, () => console.log(`Server running on port ${process.env.VITE_PORT}`));

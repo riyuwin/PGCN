@@ -7,14 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchLocalUserDetails from "./scripts/FetchLocalUser";
 
 function BurialAssistanceModalContent({
-        clientFirstName, clientMiddleName, clientLastName, clientExtName, 
-        clientProvince, clientMunicipality, clientBarangay, clientPurok, 
-        clientRelationship, clientContactNumber, clientGender, clientAge, clientAmount,
-        clientDateDeath, clientCauseDeath, clientTypeAssistance, clientStatusRemarks,
-        clientApplication, clientInterviewer, burialAssistanceStatus, checkedItems,
-        remarks
-    }) {    
- 
+    clientFirstName, clientMiddleName, clientLastName, clientExtName,
+    clientProvince, clientMunicipality, clientBarangay, clientPurok,
+    clientRelationship, clientContactNumber, clientGender, clientAge, clientAmount,
+    clientDateDeath, clientCauseDeath, clientTypeAssistance, clientStatusRemarks,
+    clientApplication, clientInterviewer, burialAssistanceStatus, checkedItems,
+    remarks
+}) {
+
     const [formPage, setFormPage] = useState("Basic Information");
 
     const handleFormPageUpdate = (formPageNumber) => {
@@ -22,9 +22,9 @@ function BurialAssistanceModalContent({
     }
 
     return (
-        <> 
+        <>
             <div className="generateContainer">
-
+                <br />
                 <h5>Select Section: </h5>
                 <br />
                 <div className="row">
@@ -54,7 +54,7 @@ function BurialAssistanceModalContent({
 
             <div className="generateContainer">
 
-                <br/>
+                <br />
 
                 {formPage == "Basic Information" &&
                     <>
@@ -67,8 +67,8 @@ function BurialAssistanceModalContent({
                                     type="text"
                                     className="form-control"
                                     id="firstName"
-                                    value={clientFirstName} 
-                                    placeholder="First Name" 
+                                    value={clientFirstName}
+                                    placeholder="First Name"
                                     disabled={true}
                                 />
                             </div>
@@ -80,7 +80,7 @@ function BurialAssistanceModalContent({
                                     className="form-control"
                                     id="middleName"
                                     placeholder="Middle Name"
-                                    value={clientMiddleName}  
+                                    value={clientMiddleName}
                                     disabled={true}
                                 />
                             </div>
@@ -92,7 +92,7 @@ function BurialAssistanceModalContent({
                                     className="form-control"
                                     id="lastName"
                                     placeholder="Last Name"
-                                    value={clientLastName}  
+                                    value={clientLastName}
                                     disabled={true}
                                 />
                             </div>
@@ -104,7 +104,7 @@ function BurialAssistanceModalContent({
                                     className="form-control"
                                     id="extName"
                                     value={clientExtName}
-                                    placeholder="Ext Name"  
+                                    placeholder="Ext Name"
                                     disabled={true}
                                 />
                             </div>
@@ -114,7 +114,7 @@ function BurialAssistanceModalContent({
                                 <label className="form-label">Province:</label>
                                 <select
                                     className="form-control"
-                                    value={clientProvince} 
+                                    value={clientProvince}
                                     disabled={true}
                                 >
                                     <option value="Camarines Norte">Camarines Norte</option>
@@ -126,10 +126,10 @@ function BurialAssistanceModalContent({
                                 <label className="form-label">Municipality:</label>
                                 <select
                                     className="form-control"
-                                    value={clientMunicipality}  
+                                    value={clientMunicipality}
                                     disabled={true}
                                 >
-                                    <option value="">Select Municipality</option> 
+                                    <option value="">Select Municipality</option>
                                 </select>
                             </div>
 
@@ -138,10 +138,10 @@ function BurialAssistanceModalContent({
                                 <label className="form-label">Barangay:</label>
                                 <select
                                     className="form-control"
-                                    value={clientBarangay}   
+                                    value={clientBarangay}
                                     disabled={true}
                                 >
-                                    <option value="">Select Barangay</option> 
+                                    <option value="">Select Barangay</option>
 
 
                                 </select>
@@ -153,7 +153,7 @@ function BurialAssistanceModalContent({
                                 <input
                                     type="text"
                                     className="form-control"
-                                    value={clientPurok}  
+                                    value={clientPurok}
                                     disabled={true}
                                 />
                             </div>
@@ -165,7 +165,7 @@ function BurialAssistanceModalContent({
                                 <select
                                     className="form-control"
                                     id="relationship"
-                                    value={clientRelationship}  
+                                    value={clientRelationship}
                                     disabled={true}
                                 >
                                     <option value="">Select Relationship</option>
@@ -187,7 +187,7 @@ function BurialAssistanceModalContent({
                                 <input
                                     type="number"
                                     className="form-control"
-                                    value={clientContactNumber}  
+                                    value={clientContactNumber}
                                     disabled={true}
                                 />
                             </div>
@@ -200,7 +200,7 @@ function BurialAssistanceModalContent({
                                 <select
                                     className="form-control"
                                     id="hospital"
-                                    value={clientGender}  
+                                    value={clientGender}
                                     disabled={true}>
                                     <option value="">Select Gender</option>
                                     <option value="Male">Male</option>
@@ -215,14 +215,14 @@ function BurialAssistanceModalContent({
                                 <input
                                     type="number"
                                     className="form-control"
-                                    value={clientAge}  
+                                    value={clientAge}
                                     disabled={true}
                                 />
                             </div>
 
                             <div className="col-12">
-                                <br/>
-                                <hr/>
+                                <br />
+                                <hr />
                                 <br />
                                 <h3>Burial Information</h3>
                             </div>
@@ -234,7 +234,7 @@ function BurialAssistanceModalContent({
                                 <input
                                     type="date"
                                     className="form-control"
-                                    value={clientDateDeath}  
+                                    value={clientDateDeath}
                                     disabled={true}
                                 />
                             </div>
@@ -246,7 +246,7 @@ function BurialAssistanceModalContent({
                                 <input
                                     type="text"
                                     className="form-control"
-                                    value={clientCauseDeath}  
+                                    value={clientCauseDeath}
                                     disabled={true}
                                 />
                             </div>
@@ -258,7 +258,7 @@ function BurialAssistanceModalContent({
                                 <input
                                     type="number"
                                     className="form-control"
-                                    value={clientAmount}  
+                                    value={clientAmount}
                                     disabled={true}
                                 />
                             </div>
@@ -269,8 +269,8 @@ function BurialAssistanceModalContent({
                                 <select
                                     className="form-control"
                                     id="relationship"
-                                    value={clientTypeAssistance} 
-                                    disabled={true} 
+                                    value={clientTypeAssistance}
+                                    disabled={true}
                                 >
                                     <option value="">Select Type of Assistance</option>
                                     <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
@@ -292,7 +292,7 @@ function BurialAssistanceModalContent({
                                 <select
                                     className="form-control"
                                     id="relationship"
-                                    value={clientStatusRemarks}  
+                                    value={clientStatusRemarks}
                                     disabled={true}
                                 >
                                     <option value="">Select Status / Remarks</option>
@@ -314,8 +314,8 @@ function BurialAssistanceModalContent({
                                 <select
                                     className="form-control"
                                     id="relationship"
-                                    value={clientApplication} 
-                                    disabled={true} 
+                                    value={clientApplication}
+                                    disabled={true}
                                 >
                                     <option value="">Select Status of Application</option>
                                     <option value="Claimed / Released / Payout Governors Office">Claimed / Released / Payout Governors Office</option>
@@ -332,8 +332,8 @@ function BurialAssistanceModalContent({
                                 <select
                                     className="form-control"
                                     id="relationship"
-                                    value={clientInterviewer} 
-                                    disabled={true} 
+                                    value={clientInterviewer}
+                                    disabled={true}
                                 >
                                     <option value="">Select Interviewer</option>
                                     <option value="Dennis S. Ballosa">Dennis S. Ballosa</option>
@@ -378,7 +378,7 @@ function BurialAssistanceModalContent({
                                     <select
                                         className="form-control"
                                         id="relationship"
-                                        value={burialAssistanceStatus}  
+                                        value={burialAssistanceStatus}
                                         disabled={true}
                                     >
                                         <option value="Pending">Pending</option>
@@ -413,7 +413,7 @@ function BurialAssistanceModalContent({
                                         </li>
                                         <li className="list-group-item">
                                             <input className="form-check-input me-1" type="checkbox" id="checkValidId"
-                                                checked={checkedItems.checkValidId}     />
+                                                checked={checkedItems.checkValidId} />
                                             <label className="form-check-label" htmlFor="checkValidId">&nbsp; Valid Identification (2 Copies)</label>
                                         </li>
                                     </ul>
@@ -427,7 +427,7 @@ function BurialAssistanceModalContent({
                                     <br />
 
                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
-                                        value={remarks}  
+                                        value={remarks}
                                         disabled={true}>
                                     </textarea>
 

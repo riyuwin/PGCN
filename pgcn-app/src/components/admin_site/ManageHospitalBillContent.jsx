@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
-import { Modal, Button, Form } from "react-bootstrap"; 
-import 'bootstrap/dist/css/bootstrap.min.css'; 
-import FetchLocalUserDetails from "./scripts/FetchLocalUser"; 
+import { Modal, Button, Form } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import FetchLocalUserDetails from "./scripts/FetchLocalUser";
 
-function ManageHospitalBillContent(){
+function ManageHospitalBillContent() {
     const { localUserDetails } = FetchLocalUserDetails();
-    const [ account_id, setLocalUserId ] = useState(null);
+    const [account_id, setLocalUserId] = useState(null);
 
     const navigate = useNavigate(); // Use navigate for redirection 
 
@@ -16,12 +16,12 @@ function ManageHospitalBillContent(){
     const [patientFirstName, setPatientFirstName] = useState('');
     const [patientMiddleName, setPatientMiddleName] = useState('');
     const [patientLastName, setPatientLastName] = useState('');
-    const [patientExtName, setPatientExtName] = useState('');  
+    const [patientExtName, setPatientExtName] = useState('');
     const [patientPurok, setPatientPurok] = useState('');
     const [patientBarangay, setPatientBarangay] = useState('');
     const [patientMunicipality, setPatientMunicipality] = useState('');
-    const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
-    const [barangayList, setBarangayList] = useState([]);  
+    const [patientProvince, setPatientProvince] = useState('Camarines Norte');
+    const [barangayList, setBarangayList] = useState([]);
     const [patientHospital, setPatientHospital] = useState('');
     const [dateConfinement, setDateConfinement] = useState('');
 
@@ -33,16 +33,16 @@ function ManageHospitalBillContent(){
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
 
-    const [hospitalBillStatus, setHospitalBillStatus] = useState(''); 
+    const [hospitalBillStatus, setHospitalBillStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
-        checkBarangayIndigency: false, 
+        checkBarangayIndigency: false,
         checkMedCertificate: false,
         checkFinalBill: false,
         checkValidId: false
     });
-    
+
     const [remarks, setRemarks] = useState('');
-        
+
     // Variables for inputs ------------------------------------------------------------
 
     // Variables for hospital bills -------------------------------
@@ -58,52 +58,52 @@ function ManageHospitalBillContent(){
     const [isEditMode, setIsEditMode] = useState(false);
     const [modalName, setModalName] = useState();
     // Variables for pagination -------------------------------
-    
+
     const [formPage, setFormPage] = useState("Basic Information");
 
     const handleAddHospitalBill = async (e) => {
         e.preventDefault();
-    
+
         // Get current date-time in yyyy-mm-dd HH:mm:ss format
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-    
+
         console.log("Submitting hospital bill with data:", {
-            account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+            account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
             patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-            claimantAmount, hospitalBillStatus, 
-            barangayIndigency: checkedItems.checkBarangayIndigency, 
+            claimantAmount, hospitalBillStatus,
+            barangayIndigency: checkedItems.checkBarangayIndigency,
             checkMedicalCertificate: checkedItems.checkMedicalCertificate,
-            checkFinalBill: checkedItems.checkFinalBill, 
-            validId: checkedItems.checkValidId, 
+            checkFinalBill: checkedItems.checkFinalBill,
+            validId: checkedItems.checkValidId,
             remarks,
             currentDateTime
         });
-    
+
         try {
             const response = await fetch("http://localhost:5000/insert_hospital_bill", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+                    account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName,
                     patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                     claimantAmount, hospitalBillStatus,
-                    barangayIndigency: checkedItems.checkBarangayIndigency, 
+                    barangayIndigency: checkedItems.checkBarangayIndigency,
                     checkMedicalCertificate: checkedItems.checkMedCertificate,
-                    checkFinalBill: checkedItems.checkFinalBill, 
-                    validId: checkedItems.checkValidId, 
+                    checkFinalBill: checkedItems.checkFinalBill,
+                    validId: checkedItems.checkValidId,
                     remarks,
                     currentDateTime
-                })                
+                })
             });
-    
+
             const data = await response.json();
-    
+
             if (!response.ok) {
                 throw new Error(data.error || "Failed to insert hospital bill.");
             }
-    
+
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
@@ -111,8 +111,8 @@ function ManageHospitalBillContent(){
             }).then(() => {
                 ResetForms(); // Reset the forms after the user clicks "OK"
             });
-            
-    
+
+
         } catch (err) {
             console.error("Error:", err.message);
             Swal.fire({
@@ -121,13 +121,13 @@ function ManageHospitalBillContent(){
                 text: err.message || "An error occurred while saving the hospital bill.",
             });
         }
-    }; 
+    };
 
     const handleDeleteHospitalBill = async (e, billId) => {
         e.preventDefault();
-    
+
         console.log("Testtt", billId); // Ensure billId is being passed correctly
-    
+
         Swal.fire({
             title: 'Are you sure?',
             text: "This will delete the hospital bill record permanently!",
@@ -148,13 +148,13 @@ function ManageHospitalBillContent(){
                         },
                         body: JSON.stringify({ billId }) // Send the billId to the server
                     });
-    
+
                     const serverResult = await response.json(); // Renamed result to serverResult
-    
-                    if (response.ok) { 
+
+                    if (response.ok) {
                         Swal.fire('Deleted!', serverResult.message, 'success'); // Success message 
-                    } else { 
-                        Swal.fire('Error!', serverResult.error, 'error');  
+                    } else {
+                        Swal.fire('Error!', serverResult.error, 'error');
                     }
                 } catch (error) {
                     console.error("Error deleting hospital bill:", error);
@@ -166,60 +166,60 @@ function ManageHospitalBillContent(){
             }
         });
     };
-    
-    
+
+
 
     const handleUpdateHospitalBill = async (e) => {
         e.preventDefault();
-    
+
         // Get current date-time in yyyy-mm-dd HH:mm:ss format
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-    
+
         console.log("Submitting hospital bill with data:", {
             billId, account_id,
-            patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+            patientFirstName, patientMiddleName, patientLastName, patientExtName,
             patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
             claimantAmount, hospitalBillStatus,
-            barangayIndigency: checkedItems.checkBarangayIndigency, 
+            barangayIndigency: checkedItems.checkBarangayIndigency,
             checkMedicalCertificate: checkedItems.checkMedCertificate,
-            checkFinalBill: checkedItems.checkFinalBill, 
-            validId: checkedItems.checkValidId, 
+            checkFinalBill: checkedItems.checkFinalBill,
+            validId: checkedItems.checkValidId,
             remarks,
             currentDateTime
         });
-    
+
         try {
             const response = await fetch("http://localhost:5000/update_hospital_bill", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     billId, account_id,
-                    patientFirstName, patientMiddleName, patientLastName, patientExtName, 
+                    patientFirstName, patientMiddleName, patientLastName, patientExtName,
                     patientPurok, patientBarangay, patientMunicipality, patientProvince, dateConfinement, patientHospital,
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                     claimantAmount, hospitalBillStatus,
-                    barangayIndigency: checkedItems.checkBarangayIndigency, 
+                    barangayIndigency: checkedItems.checkBarangayIndigency,
                     checkMedicalCertificate: checkedItems.checkMedCertificate,
-                    checkFinalBill: checkedItems.checkFinalBill, 
-                    validId: checkedItems.checkValidId, 
+                    checkFinalBill: checkedItems.checkFinalBill,
+                    validId: checkedItems.checkValidId,
                     remarks,
                     currentDateTime
-                })                
+                })
             });
-    
+
             const data = await response.json();
-    
+
             if (!response.ok) {
                 throw new Error(data.error || "Failed to insert hospital bill.");
             }
-    
+
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
                 text: "Hospital bill has been updated successfully!",
-            }); 
-    
+            });
+
         } catch (err) {
             console.error("Error:", err.message);
             Swal.fire({
@@ -228,27 +228,27 @@ function ManageHospitalBillContent(){
                 text: err.message || "An error occurred while saving the hospital bill.",
             });
         }
-    };  
+    };
 
     const fetchHospitalBills = async () => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_hospital_bill");
             const data = await response.json();
             setHospitalBills(data);
- 
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
 
     // Handle any real-time updates (for example, using WebSockets or polling)
-    useEffect(() => { 
+    useEffect(() => {
         const interval = setInterval(() => {
-            fetchHospitalBills();  
+            fetchHospitalBills();
         }, 2000); // Refresh every 5 seconds (you can adjust the time)
 
         return () => clearInterval(interval); // Cleanup interval when the component unmounts
-    }, []); 
+    }, []);
 
     // Pagination Logic
     const indexOfLastRecord = currentPage * recordsPerPage;
@@ -260,21 +260,21 @@ function ManageHospitalBillContent(){
     const handleOpenModal = (bill, editMode = false, modalName) => {
         setSelectedBill(bill);
         setIsEditMode(editMode);
-        setModalName(modalName); 
-        PopulateForms(bill);  
+        setModalName(modalName);
+        PopulateForms(bill);
 
-        if (modalName == "View"){
-            
+        if (modalName == "View") {
+
             navigate(`/admin/view_hospital_bill/${bill['hospital_bill_id']}`);
-        }   
-    }; 
- 
-    const handleAddRecord = (editMode = false, modalName) => { 
+        }
+    };
+
+    const handleAddRecord = (editMode = false, modalName) => {
         /* ResetForms(); */
         setIsEditMode(editMode);
-        setModalName(modalName)  
+        setModalName(modalName)
     };
- 
+
     const PopulateForms = (bill) => {
         console.log("Populating forms with:", bill); // Check all values
         console.log("Claimant Barangay:", bill['patient_barangay']); // Specifically check this value
@@ -283,7 +283,7 @@ function ManageHospitalBillContent(){
         setPatientFirstName(bill['patient_fname']);
         setPatientMiddleName(bill['patient_mname']);
         setPatientLastName(bill['patient_lname']);
-        setPatientExtName(bill['patient_ext_name']); 
+        setPatientExtName(bill['patient_ext_name']);
         setPatientPurok(bill['patient_purok']);
         setPatientBarangay(bill['patient_barangay']);
         setPatientMunicipality(bill['patient_municipality']);
@@ -295,21 +295,21 @@ function ManageHospitalBillContent(){
         setClaimantExtName(bill['claimant_extname']);
 
         // ✅ Fix for the select tag issue
-        setClaimantRelationship(bill['claimant_relationship']?.trim() || ""); 
+        setClaimantRelationship(bill['claimant_relationship']?.trim() || "");
 
         setClaimantContact(bill['claimant_contact']);
-        setClaimantAmount(bill['claimant_amount']);  
+        setClaimantAmount(bill['claimant_amount']);
 
         document.getElementById("relationship").value = bill['claimant_relationship']
- 
-        setHospitalBillStatus(bill['hospital_bill_status']); 
+
+        setHospitalBillStatus(bill['hospital_bill_status']);
         setCheckedItems({
-            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,  
-            checkMedCertificate: bill['check_med_certificate'] == 1,  
-            checkFinalBill: bill['check_hospital_bill'] == 1,  
-            checkValidId: bill['check_valid_id'] == 1,  
+            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,
+            checkMedCertificate: bill['check_med_certificate'] == 1,
+            checkFinalBill: bill['check_hospital_bill'] == 1,
+            checkValidId: bill['check_valid_id'] == 1,
         });
-         
+
         setRemarks(bill['remarks']);
     };
 
@@ -319,7 +319,7 @@ function ManageHospitalBillContent(){
         setPatientFirstName('');
         setPatientMiddleName('');
         setPatientLastName('');
-        setPatientExtName(''); 
+        setPatientExtName('');
         setPatientPurok('');
         setPatientBarangay('');
         setPatientMunicipality('');
@@ -340,11 +340,11 @@ function ManageHospitalBillContent(){
             checkValidId: false,
         });
         setRemarks('');
-        
-    }  
+
+    }
 
     useEffect(() => {
-        if (localUserDetails){
+        if (localUserDetails) {
             console.log("Test: ", localUserDetails['account_id']);
 
             setLocalUserId(localUserDetails['account_id']);
@@ -352,35 +352,35 @@ function ManageHospitalBillContent(){
     })
 
     const municipalityBarangays = {
-        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay", 
+        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay",
             "Mantugawe", "Matnog", "Mocong", "Oliva", "Pagsangahan", "Pinagwarasan", "Plaridel", "Poblacion 1", "Poblacion 2", "San Felipe", "San Jose", "San Pascual", "Taba-taba", "Tacad", "Taisan", "Tuaca"],
 
-        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque", 
+        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque",
             "Old Camp", "Poblacion", "San Antonio", "San Isidro", "San Roque", "Tanawan", "Ubang", "Villa Aurora", "Villa Belen"],
 
-        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII", 
+        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII",
             "Bibirao", "Borabod", "Calasgasan", "Camambugan", "Cobangbang", "Dogongan", "Gahonon", "Gubat", "Lag-on", "Magang", "Mambalite", "Mancruz", "Pamorangon", "San Isidro"],
 
         "Jose Panganiban": [
             "Bagong Bayan", "Calero", "Dahican", "Dayhagan", "Larap", "Luklukan Norte", "Luklukan Sur", "Motherlode", "Nakalaya", "North Poblacion",
             "Osmeña", "Pag-asa", "Parang", "Plaridel", "Salvacion", "San Isidro", "San Jose", "San Martin", "San Pedro", "San Rafael",
             "Santa Cruz", "Santa Elena", "Santa Milagrosa", "Santa Rosa Norte", "Santa Rosa Sur", "South Poblacion", "Tamisan"
-        ], 
+        ],
 
         "Labo": [
-            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit", 
-            "Bulhao", "Cabatuhan", "Cabusay",  "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica", 
-            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong", 
+            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit",
+            "Bulhao", "Cabatuhan", "Cabusay", "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica",
+            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong",
             "Matanlang", "Napaod", "Pag-asa", "Pangpang", "Pinya", "San Antonio", "San Francisco", "Santa Cruz", "Submakin", "Talobatib", "Tigbinan", "Tulay na Lupa"],
 
         "Mercedes": [
             "Apuao", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Caringo", "Catandunganon", "Cayucyucan", "Colasi",
             "Del Rosario", "Gaboc", "Hamoraon", "Hinipaan", "Lalawigan", "Lanot", "Mambungalon", "Manguisoc", "Masalongsalong", "Matoogtoog", "Pambuhan", "Quinapaguian", "San Roque", "Tarum"
-        ], 
+        ],
 
         "Paracale": [
-            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan","Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
-            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas","Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
+            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan", "Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
+            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas", "Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
             "Tabas", "Talusan", "Tawig", "Tugos"
         ],
 
@@ -390,7 +390,7 @@ function ManageHospitalBillContent(){
         ],
 
         "San Vicente": [
-            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur", 
+            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur",
             "Man-ogob", "Poblacion District I", "Poblacion District II", "San Jose"
         ],
 
@@ -400,7 +400,7 @@ function ManageHospitalBillContent(){
             "Rizal", "Salvacion", "San Lorenzo", "San Pedro", "San Vicente",
             "Santa Elena", "Tabugon", "Villa San Isidro"
         ],
-        
+
         "Talisay": [
             "Binanuaan", "Caawigan", "Cahabaan", "Calintaan", "Del Carmen",
             "Gabon", "Itomang", "Poblacion", "San Francisco", "San Isidro",
@@ -415,15 +415,15 @@ function ManageHospitalBillContent(){
         ]
 
     };
-    
+
 
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
         setPatientMunicipality(selectedMunicipality);
         setPatientBarangay(''); // Reset barangay selection
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
-    };  
-    
+    };
+
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
@@ -436,8 +436,8 @@ function ManageHospitalBillContent(){
         }));
     };
 
-    
-    return(
+
+    return (
         <>
             <main id="main" className="main">
                 <div className="content">
@@ -477,7 +477,7 @@ function ManageHospitalBillContent(){
                                                                     className="form-control"
                                                                     id="searchInput"
                                                                     placeholder="Search Patient Name"
-                                                                    /* onChange={handleSearch} */
+                                                                /* onChange={handleSearch} */
                                                                 />
                                                             </div>
                                                         </div>
@@ -528,7 +528,7 @@ function ManageHospitalBillContent(){
                                                                                     data-bs-target="#addHospitalBillModal">
                                                                                     <i className='bx bx-edit' ></i> Edit
                                                                                 </button>
-                                                                                <button className="btn btn-danger" 
+                                                                                <button className="btn btn-danger"
                                                                                     onClick={(e) => handleDeleteHospitalBill(e, bill['hospital_bill_id'])} >
                                                                                     <i className='bx bx-trash' ></i> Delete
                                                                                 </button>
@@ -547,7 +547,7 @@ function ManageHospitalBillContent(){
 
                                                         {/* Pagination Controls */}
                                                         <div className="d-flex justify-content-between mt-3">
-                                                            <button 
+                                                            <button
                                                                 className="btn btn-secondary"
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
@@ -555,7 +555,7 @@ function ManageHospitalBillContent(){
                                                                 Previous
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
-                                                            <button 
+                                                            <button
                                                                 className="btn btn-secondary"
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
@@ -592,16 +592,16 @@ function ManageHospitalBillContent(){
                         </div>
                         <div className="modal-body">
                             <form>
-                                
+
                                 <div className="generateContainer">
-                                    
+
                                     <h5>Select Section: </h5>
                                     <br />
-                                    <div className="row">  
+                                    <div className="row">
                                         <div className="col-6">
-                                            <button 
-                                                type="button" 
-                                                className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`} 
+                                            <button
+                                                type="button"
+                                                className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`}
                                                 onClick={() => handleFormPageUpdate("Basic Information")}
                                             >
                                                 <i class="bi bi-person-vcard"></i> Basic Information
@@ -609,66 +609,66 @@ function ManageHospitalBillContent(){
                                         </div>
 
                                         <div className="col-6">
-                                            <button 
-                                                type="button" 
-                                                className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`} 
+                                            <button
+                                                type="button"
+                                                className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
                                                 onClick={() => handleFormPageUpdate("Checklist")}
                                             >
                                                 <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
                                             </button>
-                                        </div> 
-    
+                                        </div>
 
-                                    </div>  
-                                </div> 
 
-                                { formPage == "Basic Information" && 
+                                    </div>
+                                </div>
+
+                                {formPage == "Basic Information" &&
                                     <>
 
                                         <div className="formContainer">
                                             <h3>Patient Information</h3><br />
-                                            <div className="row"> 
-                                                <div className="col-3">               
+                                            <div className="row">
+                                                <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="firstName"
                                                         value={patientFirstName}
-                                                        onChange={(e) => setPatientFirstName(e.target.value.trim())} 
+                                                        onChange={(e) => setPatientFirstName(e.target.value.trim())}
                                                     />
                                                 </div>
 
-                                                <div className="col-3"> 
+                                                <div className="col-3">
                                                     <label htmlFor="middleName" className="form-label">Middle Name:</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="middleName"
                                                         value={patientMiddleName}
-                                                        onChange={(e) => setPatientMiddleName(e.target.value.trim())} 
+                                                        onChange={(e) => setPatientMiddleName(e.target.value.trim())}
                                                     />
                                                 </div>
-                                                
-                                                <div className="col-3"> 
+
+                                                <div className="col-3">
                                                     <label htmlFor="lastName" className="form-label">Last Name:</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="lastName"
                                                         value={patientLastName}
-                                                        onChange={(e) => setPatientLastName(e.target.value.trim())} 
+                                                        onChange={(e) => setPatientLastName(e.target.value.trim())}
                                                     />
                                                 </div>
-                                                
-                                                <div className="col-3"> 
+
+                                                <div className="col-3">
                                                     <label htmlFor="extName" className="form-label">Ext Name:</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="extName"
                                                         value={patientExtName}
-                                                        onChange={(e) => setPatientExtName(e.target.value.trim())} 
+                                                        onChange={(e) => setPatientExtName(e.target.value.trim())}
                                                     />
                                                 </div>
 
@@ -683,7 +683,7 @@ function ManageHospitalBillContent(){
                                                         <option value="Camarines Norte">Camarines Norte</option>
                                                     </select>
                                                 </div>
-            
+
                                                 <div className="col-3">
                                                     <br />
                                                     <label className="form-label">Municipality:</label>
@@ -700,7 +700,7 @@ function ManageHospitalBillContent(){
                                                         ))}
                                                     </select>
                                                 </div>
-            
+
                                                 <div className="col-3">
                                                     <br />
                                                     <label className="form-label">Barangay:</label>
@@ -720,10 +720,10 @@ function ManageHospitalBillContent(){
                                                                 {patientBarangay}
                                                             </option>
                                                         }
-                                            
+
                                                     </select>
                                                 </div>
-            
+
                                                 <div className="col-3">
                                                     <br />
                                                     <label className="form-label">Purok:</label>
@@ -733,12 +733,12 @@ function ManageHospitalBillContent(){
                                                         value={patientPurok}
                                                         onChange={(e) => setPatientPurok(e.target.value)}
                                                     />
-                                                </div>  
-                                                
+                                                </div>
+
                                                 <div className="col-3">
-                                                    <br /> 
+                                                    <br />
                                                     <label htmlFor="extName" className="form-label">Date of Confinement:</label>
-                                                     
+
                                                     <input
                                                         type="date"
                                                         className="form-control"
@@ -746,60 +746,60 @@ function ManageHospitalBillContent(){
                                                         onChange={(e) => setDateConfinement(e.target.value)}
                                                     />
                                                 </div>
-                                                
+
                                                 <div className="col-3">
-                                                    <br /> 
+                                                    <br />
                                                     <label htmlFor="extName" className="form-label">Hospital:</label>
-                                                    
+
 
                                                     <select
                                                         className="form-control"
-                                                        id="hospital"   
+                                                        id="hospital"
                                                         value={patientHospital}
                                                         onChange={(e) => setPatientHospital(e.target.value)} >
-                                                            <option value="">Select Hospital</option>
-                                                            <option value="LEON D. HERNANDEZ MEMORIAL HOSPITAL">LEON D. HERNANDEZ MEMORIAL HOSPITAL</option>
-                                                            <option value="DAET DOCTORS HOSPITAL">DAET DOCTORS HOSPITAL</option>
-                                                            <option value="DR. MOISES V. CACAWA HOSPITAL">DR. MOISES V. CACAWA HOSPITAL</option>
-                                                            <option value="OUR LADY OF LOURDES HOSPITAL">OUR LADY OF LOURDES HOSPITAL</option>
-                                                            <option value="SANTISSIMA TRINIDAD OF DAET">SANTISSIMA TRINIDAD OF DAET</option>
-                                                            <option value="RACELIS TIONGSON MEDICAL CLINIC">RACELIS TIONGSON MEDICAL CLINIC</option>
-                                                            <option value="LIZASO HOSPITAL">LIZASO HOSPITAL</option>
-                                                            <option value="DR. MIGUEL V. ALEGRE HOSPITAL">DR. MIGUEL V. ALEGRE HOSPITAL</option>
-                                                            <option value="BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL">BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL</option>
-                                                            <option value="JOSE PANGANIBAN PRIMARY HOSPITAL">JOSE PANGANIBAN PRIMARY HOSPITAL</option> 
+                                                        <option value="">Select Hospital</option>
+                                                        <option value="LEON D. HERNANDEZ MEMORIAL HOSPITAL">LEON D. HERNANDEZ MEMORIAL HOSPITAL</option>
+                                                        <option value="DAET DOCTORS HOSPITAL">DAET DOCTORS HOSPITAL</option>
+                                                        <option value="DR. MOISES V. CACAWA HOSPITAL">DR. MOISES V. CACAWA HOSPITAL</option>
+                                                        <option value="OUR LADY OF LOURDES HOSPITAL">OUR LADY OF LOURDES HOSPITAL</option>
+                                                        <option value="SANTISSIMA TRINIDAD OF DAET">SANTISSIMA TRINIDAD OF DAET</option>
+                                                        <option value="RACELIS TIONGSON MEDICAL CLINIC">RACELIS TIONGSON MEDICAL CLINIC</option>
+                                                        <option value="LIZASO HOSPITAL">LIZASO HOSPITAL</option>
+                                                        <option value="DR. MIGUEL V. ALEGRE HOSPITAL">DR. MIGUEL V. ALEGRE HOSPITAL</option>
+                                                        <option value="BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL">BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL</option>
+                                                        <option value="JOSE PANGANIBAN PRIMARY HOSPITAL">JOSE PANGANIBAN PRIMARY HOSPITAL</option>
                                                     </select>
                                                 </div>
-            
-                                            </div> 
+
+                                            </div>
                                             <br />
-                                            <hr /> 
-                                            <br />  
+                                            <hr />
+                                            <br />
                                             <h3>Claimant Information</h3><br />
                                             <div className="row">
-                                                <div className="col-3"> 
+                                                <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="firstName"
                                                         value={claimantFirstname}
-                                                        onChange={(e) => setClaimantFname(e.target.value)} 
+                                                        onChange={(e) => setClaimantFname(e.target.value)}
                                                     />
                                                 </div>
 
-                                                <div className="col-3"> 
+                                                <div className="col-3">
                                                     <label htmlFor="middleName" className="form-label">Middle Name:</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="middleName"
                                                         value={claimantMiddlename}
-                                                        onChange={(e) => setClaimantMname(e.target.value)} 
+                                                        onChange={(e) => setClaimantMname(e.target.value)}
                                                     />
                                                 </div>
-                                                
-                                                <div className="col-3"> 
+
+                                                <div className="col-3">
                                                     <label htmlFor="lastName" className="form-label">Last Name:</label>
                                                     <input
                                                         type="text"
@@ -809,8 +809,8 @@ function ManageHospitalBillContent(){
                                                         onChange={(e) => setClaimantLname(e.target.value)}
                                                     />
                                                 </div>
-                                                
-                                                <div className="col-3">              
+
+                                                <div className="col-3">
                                                     <label htmlFor="extName" className="form-label">Ext Name:</label>
                                                     <input
                                                         type="text"
@@ -821,7 +821,7 @@ function ManageHospitalBillContent(){
                                                     />
                                                 </div>
 
-                                                
+
                                                 <div className="col-3">
                                                     <br />
                                                     <label htmlFor="relationship" className="form-label">Relationship:</label>
@@ -847,7 +847,7 @@ function ManageHospitalBillContent(){
                                                     </select>
                                                 </div>
 
-                                                
+
                                                 <div className="col-3">
                                                     <br />
                                                     <label htmlFor="extName" className="form-label">Contact:</label>
@@ -856,10 +856,10 @@ function ManageHospitalBillContent(){
                                                         className="form-control"
                                                         id="extName"
                                                         value={claimantContact}
-                                                        onChange={(e) => setClaimantContact(e.target.value)} 
+                                                        onChange={(e) => setClaimantContact(e.target.value)}
                                                     />
                                                 </div>
-                                                
+
                                                 <div className="col-3">
                                                     <br />
                                                     <label htmlFor="extName" className="form-label">Amount:</label>
@@ -868,11 +868,11 @@ function ManageHospitalBillContent(){
                                                         className="form-control"
                                                         id="extName"
                                                         value={claimantAmount}
-                                                        onChange={(e) => setClaimantAmount(e.target.value)} 
+                                                        onChange={(e) => setClaimantAmount(e.target.value)}
                                                     />
                                                 </div>
-                                                
-                                                
+
+
                                             </div>
 
                                             <br />
@@ -880,74 +880,74 @@ function ManageHospitalBillContent(){
                                         </div>
 
                                     </>
-                                } 
+                                }
 
                                 {formPage === "Checklist" && (
-                                    <> 
-                                        <div className="row"> 
+                                    <>
+                                        <div className="row">
                                             <div className="col-12">
                                                 <div className="formContainer">
-                                                    <h3>Hospital Bill Status: </h3><br/>
-                                                    <p>Current Status: <b>{hospitalBillStatus}</b></p><br/>  
+                                                    <h3>Hospital Bill Status: </h3><br />
+                                                    <p>Current Status: <b>{hospitalBillStatus}</b></p><br />
 
                                                     <select
                                                         className="form-control"
                                                         id="relationship"
                                                         value={hospitalBillStatus}
                                                         onChange={(e) => setHospitalBillStatus(e.target.value)}
-                                                    > 
+                                                    >
                                                         <option value="Pending">Pending</option>
-                                                        <option value="Completed">Completed</option> 
-                                                        <option value="Cancelled">Cancelled</option> 
+                                                        <option value="Completed">Completed</option>
+                                                        <option value="Cancelled">Cancelled</option>
                                                     </select>
 
                                                 </div>
-                                                <br/>
+                                                <br />
                                             </div>
 
-                                            
-                                            <div className="col-12">  
+
+                                            <div className="col-12">
                                                 <div className="formContainer">
-                                                    <h3>Requirements Checklist:</h3>             
-                                                    <br/>
+                                                    <h3>Requirements Checklist:</h3>
+                                                    <br />
                                                     <ul className="list-group">
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency" 
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency"
                                                                 checked={checkedItems.checkBarangayIndigency}
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkBarangayIndigency">&nbsp; Barangay Indigency (2 Original)</label>
                                                         </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate" 
-                                                                checked={checkedItems.checkMedCertificate} 
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate"
+                                                                checked={checkedItems.checkMedCertificate}
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkMedicalCertificate">&nbsp; Medical Certificate or Medical Abstract (2 Copies)</label>
                                                         </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkFinalBill" 
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkFinalBill"
                                                                 checked={checkedItems.checkFinalBill}
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkFinalBill">&nbsp; Hospital Bill (2 Copies)</label>
-                                                        </li> 
+                                                        </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkValidId" 
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkValidId"
                                                                 checked={checkedItems.checkValidId}
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkValidId">&nbsp; Valid Identification (2 Copies)</label>
                                                         </li>
                                                     </ul>
-                                                </div> 
+                                                </div>
                                             </div>
-                                            
+
                                             <div className="col-12">
-                                                <br/>
+                                                <br />
                                                 <div className="formContainer">
-                                                    <h3>Remarks:</h3>             
-                                                    <br/>
+                                                    <h3>Remarks:</h3>
+                                                    <br />
 
                                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
                                                         value={remarks}
-                                                        onChange={(e) => setRemarks(e.target.value)} > 
+                                                        onChange={(e) => setRemarks(e.target.value)} >
                                                     </textarea>
 
                                                 </div>
@@ -957,36 +957,36 @@ function ManageHospitalBillContent(){
                                 )}
 
                                 <div className="modal-footer">
-                                    
+
                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                                         Close
                                     </button>
 
-                                    { modalName == "Add" && 
+                                    {modalName == "Add" &&
                                         <>
                                             <button type="submit" className="btn btn-primary"
-                                            onClick={handleAddHospitalBill}>
+                                                onClick={handleAddHospitalBill}>
                                                 Save
-                                            </button> 
+                                            </button>
                                         </>
                                     }
 
-                                    { modalName == "Edit" && 
+                                    {modalName == "Edit" &&
                                         <>
                                             <button type="submit" className="btn btn-primary"
-                                            onClick={handleUpdateHospitalBill}>
+                                                onClick={handleUpdateHospitalBill}>
                                                 Save
-                                            </button> 
+                                            </button>
                                         </>
                                     }
                                 </div>
-                                    
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
- 
+
 
         </>
     )

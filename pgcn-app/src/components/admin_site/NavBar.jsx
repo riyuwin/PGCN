@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';  
+import Sidebar from './Sidebar';
 
 function NavBar() {
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -53,7 +53,7 @@ function NavBar() {
 
                 <nav className="header-nav ms-auto">
                     <ul className="d-flex align-items-center">
-                        <li className="nav-item dropdown pe-3">
+                        {/* <li className="nav-item dropdown pe-3">
                             <Link
                                 className="nav-link nav-profile d-flex align-items-center justify-content-center pe-0"
                                 to="/admin/notification"
@@ -84,8 +84,7 @@ function NavBar() {
                                     className="rounded-circle"
                                 />
                             </button>
-
-                            {/* Bootstrap Dropdown Menu */}
+ 
                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                 <li className="dropdown-header">
                                     <h6>{account ? account.firstName : 'Guest'}</h6>
@@ -102,15 +101,15 @@ function NavBar() {
                                 </li>
                                 <li>
                                     <hr className="dropdown-divider" />
-                                </li>  
+                                </li>
                                 <li>
                                     <Link className="dropdown-item d-flex align-items-center" to="/login">
                                         <i className="bi bi-box-arrow-right"></i>
                                         <span>Login</span>
                                     </Link>
-                                </li> 
+                                </li>
                             </ul>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
             </header>

@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
-import { Modal, Button, Form } from "react-bootstrap"; 
-import 'bootstrap/dist/css/bootstrap.min.css';  
-import ExcelExport from "./ExportExcel"; 
+import { Modal, Button, Form } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ExcelExport from "./ExportExcel";
 import ReactDOM from 'react-dom';
 import { PDFViewer } from '@react-pdf/renderer';
 import { GuaranteeLetterLayout } from "./reports/GuaranteeLetterLayout";
@@ -16,48 +16,48 @@ import BurialAssistanceModalContent from "./BurialAssistanceModalContent";
 import ManageHospitalBillContent from "./ManageHospitalBillContent";
 import HospitalBillModalContent from "./HospitalBillModalContent";
 
-function ManageReportContent(){ 
+function ManageReportContent() {
     const [transactions, setTransactions] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [generateButton, setGenerateButton] = useState(false); 
-     
-    const [patientPurok, setPatientPurok] = useState(''); 
+    const [generateButton, setGenerateButton] = useState(false);
+
+    const [patientPurok, setPatientPurok] = useState('');
     const [patientBarangay, setPatientBarangay] = useState('');
     const [patientMunicipality, setPatientMunicipality] = useState('');
-    const [patientProvince, setPatientProvince] = useState('Camarines Norte'); 
-    const [barangayList, setBarangayList] = useState([]);  
-    
+    const [patientProvince, setPatientProvince] = useState('Camarines Norte');
+    const [barangayList, setBarangayList] = useState([]);
+
     const municipalityBarangays = {
-        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay", 
+        "Basud": ["Angas", "Bactas", "Binatagan", "Caayunan", "Guinatungan", "Hinampacan", "Langa", "Laniton", "Lidong", "Mampili", "Mandazo", "Mangcamagong", "Manmuntay",
             "Mantugawe", "Matnog", "Mocong", "Oliva", "Pagsangahan", "Pinagwarasan", "Plaridel", "Poblacion 1", "Poblacion 2", "San Felipe", "San Jose", "San Pascual", "Taba-taba", "Tacad", "Taisan", "Tuaca"],
 
-        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque", 
+        "Capalonga": ["Alayao", "Binawangan", "Calabaca", "Camagsaan", "Catabaguangan", "Catioan", "Del Pilar", "Itok", "Lucbanan", "Mabini", "Mactang", "Magsaysay", "Mataque",
             "Old Camp", "Poblacion", "San Antonio", "San Isidro", "San Roque", "Tanawan", "Ubang", "Villa Aurora", "Villa Belen"],
 
-        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII", 
+        "Daet": ["Alawihao", "Awitan", "Bagasbas", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Barangay VIII",
             "Bibirao", "Borabod", "Calasgasan", "Camambugan", "Cobangbang", "Dogongan", "Gahonon", "Gubat", "Lag-on", "Magang", "Mambalite", "Mancruz", "Pamorangon", "San Isidro"],
 
         "Jose Panganiban": [
             "Bagong Bayan", "Calero", "Dahican", "Dayhagan", "Larap", "Luklukan Norte", "Luklukan Sur", "Motherlode", "Nakalaya", "North Poblacion",
             "Osmeña", "Pag-asa", "Parang", "Plaridel", "Salvacion", "San Isidro", "San Jose", "San Martin", "San Pedro", "San Rafael",
             "Santa Cruz", "Santa Elena", "Santa Milagrosa", "Santa Rosa Norte", "Santa Rosa Sur", "South Poblacion", "Tamisan"
-        ], 
+        ],
 
         "Labo": [
-            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit", 
-            "Bulhao", "Cabatuhan", "Cabusay",  "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica", 
-            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong", 
+            "Anahaw", "Anameam", "Awitan", "Baay", "Bagacay", "Bagong Silang I", "Bagong Silang II", "Bagong Silang III", "Bakiad", "Bautista", "Bayabas", "Bayan-bayan", "Benit",
+            "Bulhao", "Cabatuhan", "Cabusay", "Calabasa", "Canapawan", "Daguit", "Dalas", "Dumagmang", "Exciban", "Fundado", "Guinacutan", "Guisican", "Gumamela", "Iberica",
+            "Kalamunding", "Lugui", "Mabilo I", "Mabilo II", "Macogon", "Mahawan-hawan", "Malangcao-Basud", "Malasugui", "Malatap", "Malaya", "Malibago", "Maot", "Masalong",
             "Matanlang", "Napaod", "Pag-asa", "Pangpang", "Pinya", "San Antonio", "San Francisco", "Santa Cruz", "Submakin", "Talobatib", "Tigbinan", "Tulay na Lupa"],
 
         "Mercedes": [
             "Apuao", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V", "Barangay VI", "Barangay VII", "Caringo", "Catandunganon", "Cayucyucan", "Colasi",
             "Del Rosario", "Gaboc", "Hamoraon", "Hinipaan", "Lalawigan", "Lanot", "Mambungalon", "Manguisoc", "Masalongsalong", "Matoogtoog", "Pambuhan", "Quinapaguian", "San Roque", "Tarum"
-        ], 
+        ],
 
         "Paracale": [
-            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan","Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
-            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas","Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
+            "Awitan", "Bagumbayan", "Bakal", "Batobalani", "Calaburnay", "Capacuan", "Casalugan", "Dagang", "Dalnac", "Dancalan", "Gumaus", "Labnig", "Macolabo Island",
+            "Malacbang", "Malaguit", "Mampungo", "Mangkasay", "Maybato", "Palanas", "Pinagbirayan Malaki", "Pinagbirayan Munti", "Poblacion Norte", "Poblacion Sur",
             "Tabas", "Talusan", "Tawig", "Tugos"
         ],
 
@@ -67,7 +67,7 @@ function ManageReportContent(){
         ],
 
         "San Vicente": [
-            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur", 
+            "Asdum", "Cabanbanan", "Calabagas", "Fabrica", "Iraya Sur",
             "Man-ogob", "Poblacion District I", "Poblacion District II", "San Jose"
         ],
 
@@ -77,7 +77,7 @@ function ManageReportContent(){
             "Rizal", "Salvacion", "San Lorenzo", "San Pedro", "San Vicente",
             "Santa Elena", "Tabugon", "Villa San Isidro"
         ],
-        
+
         "Talisay": [
             "Binanuaan", "Caawigan", "Cahabaan", "Calintaan", "Del Carmen",
             "Gabon", "Itomang", "Poblacion", "San Francisco", "San Isidro",
@@ -101,7 +101,7 @@ function ManageReportContent(){
 
     const [clientProvince, setClientProvince] = useState('Camarines Norte');
     const [clientMunicipality, setClientMunicipality] = useState('');
-    const [clientBarangay, setClientBarangay] = useState(''); 
+    const [clientBarangay, setClientBarangay] = useState('');
     const [clientPurok, setClientPurok] = useState('');
 
     const [clientRelationship, setClientRelationship] = useState('');
@@ -110,14 +110,14 @@ function ManageReportContent(){
     const [clientAge, setClientAge] = useState(null);
     const [clientAmount, setClientAmount] = useState(null);
     const [clientDateDeath, setClientDateDeath] = useState(null);
-    const [clientCauseDeath, setClientCauseDeath] = useState(null); 
-    
+    const [clientCauseDeath, setClientCauseDeath] = useState(null);
+
     const [clientTypeAssistance, setClientTypeAssistance] = useState(null);
     const [clientStatusRemarks, setClientStatusRemarks] = useState(null);
     const [clientApplication, setClientApplication] = useState(null);
     const [clientInterviewer, setClientInterviewer] = useState(null);
 
-    const [burialAssistanceStatus, setBurialAssistanceStatus] = useState(''); 
+    const [burialAssistanceStatus, setBurialAssistanceStatus] = useState('');
     // Variables for inputs ------------------------------------------------------------
 
 
@@ -126,13 +126,13 @@ function ManageReportContent(){
     const [deceasedFirstName, setDeceasedFirstName] = useState('');
     const [deceasedMiddleName, setDeceasedMiddleName] = useState('');
     const [deceasedLastName, setDeceasedLastName] = useState('');
-    const [deceasedExtName, setDeceasedExtName] = useState('');  
+    const [deceasedExtName, setDeceasedExtName] = useState('');
 
     const [deceasedPurok, setDeceasedPurok] = useState('');
     const [deceasedBarangay, setDeceasedBarangay] = useState('');
     const [deceasedMunicipality, setDeceasedMunicipality] = useState('');
-    const [deceasedProvince, setDeceasedProvince] = useState('Camarines Norte'); 
-    const [deceasedBarangayList, setDeceasedBarangayList] = useState([]);  
+    const [deceasedProvince, setDeceasedProvince] = useState('Camarines Norte');
+    const [deceasedBarangayList, setDeceasedBarangayList] = useState([]);
 
     const [deceasedGender, setDeceasedGender] = useState('');
     const [deceasedDeathDate, setDeceasedDeathDate] = useState('');
@@ -151,20 +151,20 @@ function ManageReportContent(){
     const [pettyCashAmount, setPettyCashAmount] = useState('');
     const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');
     const [contactRelationship, setContactRelationship] = useState('');
-    
-    const [burialStatus, setBurialStatus] = useState(''); 
+
+    const [burialStatus, setBurialStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
-        checkBarangayIndigency: false, 
+        checkBarangayIndigency: false,
         checkDeathCertificate: false,
         checkFuneralContract: false,
-        checkValidId: false    
+        checkValidId: false
     });
-    
+
     const [remarks, setRemarks] = useState('');
-    
-    const [currentDateToday, setCurrentDateToday] = useState(''); 
+
+    const [currentDateToday, setCurrentDateToday] = useState('');
     // ALAY PAGDAMAY - Variables for inputs -------------------------------------------------------
-    
+
     // HOSPITAL BILL - Variables for inputs ------------------------------------------------------------
     const [billId, setHospitalId] = useState('');
     const [patientFirstName, setPatientFirstName] = useState('');
@@ -182,9 +182,9 @@ function ManageReportContent(){
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
     const [dateConfinement, setDateConfinement] = useState('');
-    
-    const [hospitalBillStatus, setHospitalBillStatus] = useState(''); 
-    
+
+    const [hospitalBillStatus, setHospitalBillStatus] = useState('');
+
     // HOSPITAL BILL - Variables for inputs ------------------------------------------------------------ 
 
     // Variables for hospital bills
@@ -193,18 +193,18 @@ function ManageReportContent(){
     const [alayPagdamay, setAlayPagdamay] = useState([]);
 
     const [selectedBill, setSelectedBill] = useState(null);
- 
+
     const [formPage, setFormPage] = useState("Basic Information");
 
     useEffect(() => {
         if (transactions !== "" && startDate !== "" && endDate !== "") {
-            setGenerateButton(true); 
+            setGenerateButton(true);
 
-            if (transactions === "Hospital Bill"){
-                fetchHospitalBills();  
-            } else if (transactions === "Burial Assistance"){
+            if (transactions === "Hospital Bill") {
+                fetchHospitalBills();
+            } else if (transactions === "Burial Assistance") {
                 fetchBurialAssitance();
-            } else if (transactions === "Alay Pagdamay"){
+            } else if (transactions === "Alay Pagdamay") {
                 fetchAlayPagdamay();
             }
         } else {
@@ -221,7 +221,7 @@ function ManageReportContent(){
             console.error("Error fetching hospital bills:", error);
         }
     };
-    
+
     const fetchAlayPagdamay = async () => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay");
@@ -236,12 +236,12 @@ function ManageReportContent(){
         try {
             const response = await fetch("http://localhost:5000/retrieve_hospital_bill");
             const data = await response.json();
-            setHospitalBills(data); 
+            setHospitalBills(data);
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
-    
+
     const [filteredRecords, setAssistanceRecord] = useState([]);
     useEffect(() => {
         if (transactions === "Hospital Bill") {
@@ -249,7 +249,7 @@ function ManageReportContent(){
                 const billDate = new Date(bill.datetime_added);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
-    
+
                 return (
                     (!start || billDate >= start) &&
                     (!end || billDate <= end) &&
@@ -257,16 +257,16 @@ function ManageReportContent(){
                     (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "")
                 );
             });
-    
+
             console.log("Test hospital: ", records)
             setAssistanceRecord(records);
-        } 
+        }
         else if (transactions === "Alay Pagdamay") {
-            const records = alayPagdamay.filter((burial) => { 
+            const records = alayPagdamay.filter((burial) => {
                 const burialDate = new Date(burial.savedAt);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
-    
+
                 return (
                     (!start || burialDate >= start) &&
                     (!end || burialDate <= end) &&
@@ -274,18 +274,18 @@ function ManageReportContent(){
                     (patientBarangay === "All" || burial.deceased_barangay === patientBarangay || patientBarangay === "")
                 );
             });
-            
+
             console.log("Test burial: ", records)
-    
+
             setAssistanceRecord(records);
         }
-        
+
         else if (transactions === "Burial Assistance") {
-            const records = burialAssistance.filter((burial) => { 
+            const records = burialAssistance.filter((burial) => {
                 const burialDate = new Date(burial.savedAt);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
-    
+
                 return (
                     (!start || burialDate >= start) &&
                     (!end || burialDate <= end) &&
@@ -293,12 +293,12 @@ function ManageReportContent(){
                     (patientBarangay === "All" || burial.client_barangay === patientBarangay || patientBarangay === "")
                 );
             });
-            
+
             console.log("Test burial: ", records)
-    
+
             setAssistanceRecord(records);
         }
-    }, [transactions, hospitalBills, burialAssistance, startDate, endDate, patientMunicipality, patientBarangay, deceasedMunicipality, deceasedBarangay]);     
+    }, [transactions, hospitalBills, burialAssistance, startDate, endDate, patientMunicipality, patientBarangay, deceasedMunicipality, deceasedBarangay]);
 
 
     /* filteredRecords = hospitalBills.filter((bill) => {
@@ -323,7 +323,7 @@ function ManageReportContent(){
     const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
     const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
 
-    
+
     // Open modal and set selected bill
     const handlePopulateDetails = (data, transactionName) => {
         PopulateForms(data, transactionName);
@@ -332,11 +332,9 @@ function ManageReportContent(){
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
-    
-    const PopulateForms = (data, transactionName) => {
-        if (transactionName === "Hospital Bill"){
 
-            console.log("Hey", data);
+    const PopulateForms = (data, transactionName) => {
+        if (transactionName === "Hospital Bill") {
 
             setHospitalId(data['hospital_bill_id']);
             setPatientFirstName(data['patient_fname']);
@@ -354,19 +352,19 @@ function ManageReportContent(){
             setClaimantExtName(data['claimant_extname']);
             setClaimantRelationship(data['claimant_relationship']);
             setClaimantContact(data['claimant_contact']);
-            setClaimantAmount(data['claimant_amount']);     
- 
-            setHospitalBillStatus(data['hospital_bill_status']); 
+            setClaimantAmount(data['claimant_amount']);
+
+            setHospitalBillStatus(data['hospital_bill_status']);
             setCheckedItems({
-                checkBarangayIndigency: data['check_barangay_indigency'] == 1,  
-                checkMedCertificate: data['check_med_certificate'] == 1,  
-                checkFinalBill: data['check_hospital_bill'] == 1,  
-                checkValidId: data['check_valid_id'] == 1,  
+                checkBarangayIndigency: data['check_barangay_indigency'] == 1,
+                checkMedCertificate: data['check_med_certificate'] == 1,
+                checkFinalBill: data['check_hospital_bill'] == 1,
+                checkValidId: data['check_valid_id'] == 1,
             });
-            
+
             setRemarks(data['remarks']);
 
-        } else if (transactionName === "Alay Pagdamay"){
+        } else if (transactionName === "Alay Pagdamay") {
 
             console.log("Hey", data);
 
@@ -374,7 +372,7 @@ function ManageReportContent(){
             setDeceasedFirstName(data['deceased_fname']);
             setDeceasedMiddleName(data['deceased_mname']);
             setDeceasedLastName(data['deceased_lname']);
-            setDeceasedExtName(data['deceased_ext_name']); 
+            setDeceasedExtName(data['deceased_ext_name']);
             setDeceasedPurok(data['deceased_purok']);
             setDeceasedBarangay(data['deceased_barangay']);
             setDeceasedMunicipality(data['deceased_municipality']);
@@ -392,18 +390,18 @@ function ManageReportContent(){
             setPettyCashAmount(data['petty_cash']);
             setDeceasedCauseDeath(data['death_cause']);
             setContactRelationship(data['contact_relationship'])
-            
-            setBurialStatus(data['burial_status']); 
+
+            setBurialStatus(data['burial_status']);
             setCheckedItems({
                 checkBarangayIndigency: data['check_barangay_indigency'] === 1 || data['check_barangay_indigency'] === "true",
                 checkDeathCertificate: data['check_death_certificate'] === 1 || data['check_death_certificate'] === "true",
                 checkFuneralContract: data['check_funeral_contract'] === 1 || data['check_funeral_contract'] === "true",
                 checkValidId: data['check_valid_id'] === 1 || data['check_valid_id'] === "true",
             });
-            
-    
+
+
             setRemarks(data['remarks']);
-            
+
             // Convert BLOB to Base64 if it's present
             if (data['death_certificate']) {
                 const base64String = `data:image/png;base64,${data['death_certificate']}`;
@@ -463,16 +461,16 @@ function ManageReportContent(){
         setClaimantRelationship('');
         setClaimantContact('');
         setClaimantAmount('');
-        
-    } 
-    
+
+    }
+
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
         setPatientMunicipality(selectedMunicipality);
         setPatientBarangay(''); // Reset barangay selection
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
-    };  
-     
+    };
+
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -500,7 +498,7 @@ function ManageReportContent(){
 
         saveAs(blob, 'Guarantee_Letter.pdf');
     };
- 
+
 
     useEffect(() => {
         const date = new Date();
@@ -509,11 +507,11 @@ function ManageReportContent(){
             month: "long",
             day: "2-digit",
         });
-    
+
         console.log("Formatted Date:", formattedDate); // Debugging
         setCurrentDateToday(formattedDate);
     }, []);
-    
+
 
     const handleCheckboxChange = (event) => {
         const { id, checked } = event.target;
@@ -523,8 +521,8 @@ function ManageReportContent(){
         }));
     };
 
- 
-    return(
+
+    return (
         <>
             <main id="main" className="main">
                 <div className="content">
@@ -542,7 +540,7 @@ function ManageReportContent(){
                 <main className="py-6">
                     <div className="container-fluid">
                         <section className="section dashboard">
-                            <div className="row"> 
+                            <div className="row">
                                 <div className="col-lg-12">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
@@ -553,19 +551,19 @@ function ManageReportContent(){
                                                     </div>
 
                                                     {/* Filter and Search Section */}
-                                                    <div className="row mb-3">   
+                                                    <div className="row mb-3">
                                                         <div className="col-sm-3">
                                                             <div className="input-group">
-                                                                <label className="form-label">Select Transactions: </label> 
+                                                                <label className="form-label">Select Transactions: </label>
                                                                 <select
                                                                     className="form-control"
-                                                                    id="hospital" 
+                                                                    id="hospital"
                                                                     value={transactions}
                                                                     onChange={(e) => setTransactions(e.target.value)} >
-                                                                        <option value="">Select Transactions</option>
-                                                                        <option value="Hospital Bill">Hospital Bill</option>
-                                                                        <option value="Alay Pagdamay">Alay Pagdamay</option> 
-                                                                        <option value="Burial Assistance">Burial Assistance</option> 
+                                                                    <option value="">Select Transactions</option>
+                                                                    <option value="Hospital Bill">Hospital Bill</option>
+                                                                    <option value="Alay Pagdamay">Alay Pagdamay</option>
+                                                                    <option value="Burial Assistance">Burial Assistance</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -581,7 +579,7 @@ function ManageReportContent(){
                                                                 />
                                                             </div>
                                                         </div>
-  
+
                                                         <div className="col-sm-3">
                                                             <div className="input-group">
                                                                 <label className="form-label">End Date: </label>
@@ -592,42 +590,42 @@ function ManageReportContent(){
                                                                     onChange={(e) => setEndDate(e.target.value)}
                                                                 />
                                                             </div>
-                                                        </div> 
+                                                        </div>
 
                                                         <div className="col-sm-3">
                                                             <div className="input-group">
-                                                                <label className="form-label">Generate Masterlist: </label>   
-                                                                <ExcelExport data={currentRecords} buttonStatus={generateButton} />
-                                                            </div> 
+                                                                <label className="form-label">Generate Masterlist: </label>
+                                                                <ExcelExport data={currentRecords} fileName={transactions} buttonStatus={generateButton} />
+                                                            </div>
                                                         </div>
 
-                                                    </div> 
+                                                    </div>
 
-                                                    { transactions === "Hospital Bill" && 
-                                                        <> 
+                                                    {transactions === "Hospital Bill" &&
+                                                        <>
                                                             <div className="row">
-                                                                
+
                                                                 <div className="col-sm-12">
-                                                                    <hr/><br/>
+                                                                    <hr /><br />
                                                                     <label className="form-label mb-0">Filter Address:</label>
-                                                                    <br/><br/>
+                                                                    <br /><br />
                                                                 </div>
- 
-                                                                
-                                                                <div className="col-sm-3"> 
+
+
+                                                                <div className="col-sm-3">
                                                                     <div className="input-group">
                                                                         <label className="form-label">Province: </label>
-                                                                        
+
                                                                         <select
                                                                             className="form-control"
                                                                             id="hospital"
                                                                             disabled={true}>
-                                                                                <option value="">Camarines Norte</option> 
+                                                                            <option value="">Camarines Norte</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                
-                                                                <div className="col-3"> 
+
+                                                                <div className="col-3">
                                                                     <label className="form-label">Municipality:</label>
                                                                     <select
                                                                         className="form-control"
@@ -642,14 +640,14 @@ function ManageReportContent(){
                                                                         ))}
                                                                     </select>
                                                                 </div>
-                            
-                                                                <div className="col-3"> 
+
+                                                                <div className="col-3">
                                                                     <label className="form-label">Barangay:</label>
                                                                     <select
                                                                         className="form-control"
                                                                         value={patientBarangay}
                                                                         onChange={(e) => setPatientBarangay(e.target.value.trim())}
-                                                                        /* disabled={barangayList.length === 0} */
+                                                                    /* disabled={barangayList.length === 0} */
                                                                     >
                                                                         <option value="">All</option>
                                                                         {barangayList.map((barangay) => (
@@ -661,7 +659,7 @@ function ManageReportContent(){
                                                                                 {patientBarangay}
                                                                             </option>
                                                                         }
-                                                            
+
                                                                     </select>
                                                                 </div>
 
@@ -681,7 +679,7 @@ function ManageReportContent(){
                                                                                     <th>Action</th>
                                                                                 </tr>
                                                                             </thead>
-                                                                            <tbody> 
+                                                                            <tbody>
                                                                                 {filteredRecords.length > 0 ? (
                                                                                     filteredRecords.map((bill, index) => (
                                                                                         <tr key={bill.id}>
@@ -693,12 +691,12 @@ function ManageReportContent(){
                                                                                             <td>{bill.claimant_contact}</td>
                                                                                             <td>{new Date(bill.datetime_added).toLocaleString()}</td>
                                                                                             <td>
-                                                                                                <button className="btn btn-link" 
+                                                                                                <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(bill, transactions)}
                                                                                                     data-bs-toggle="modal"
                                                                                                     data-bs-target="#viewReportModal">
                                                                                                     View
-                                                                                                </button> 
+                                                                                                </button>
                                                                                             </td>
                                                                                         </tr>
                                                                                     ))
@@ -715,7 +713,7 @@ function ManageReportContent(){
 
                                                                         {/* Pagination Controls */}
                                                                         <div className="d-flex justify-content-between mt-3">
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn btn-secondary"
                                                                                 disabled={currentPage === 1}
                                                                                 onClick={() => setCurrentPage(currentPage - 1)}
@@ -723,7 +721,7 @@ function ManageReportContent(){
                                                                                 Previous
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn btn-secondary"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
@@ -732,37 +730,37 @@ function ManageReportContent(){
                                                                             </button>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
+                                                                </div>
                                                             </div>
-                                                        </> 
+                                                        </>
                                                     }
 
 
-                                                    { transactions === "Alay Pagdamay" && 
-                                                        <> 
+                                                    {transactions === "Alay Pagdamay" &&
+                                                        <>
                                                             <div className="row">
-                                                                
+
                                                                 <div className="col-sm-12">
-                                                                    <hr/><br/>
+                                                                    <hr /><br />
                                                                     <label className="form-label mb-0">Filter Address:</label>
-                                                                    <br/><br/>
+                                                                    <br /><br />
                                                                 </div>
- 
-                                                                
-                                                                <div className="col-sm-3"> 
+
+
+                                                                <div className="col-sm-3">
                                                                     <div className="input-group">
                                                                         <label className="form-label">Province: </label>
-                                                                        
+
                                                                         <select
                                                                             className="form-control"
                                                                             id="hospital"
                                                                             disabled={true}>
-                                                                                <option value="">Camarines Norte</option> 
+                                                                            <option value="">Camarines Norte</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                
-                                                                <div className="col-3"> 
+
+                                                                <div className="col-3">
                                                                     <label className="form-label">Municipality:</label>
                                                                     <select
                                                                         className="form-control"
@@ -777,14 +775,14 @@ function ManageReportContent(){
                                                                         ))}
                                                                     </select>
                                                                 </div>
-                            
-                                                                <div className="col-3"> 
+
+                                                                <div className="col-3">
                                                                     <label className="form-label">Barangay:</label>
                                                                     <select
                                                                         className="form-control"
                                                                         value={patientBarangay}
                                                                         onChange={(e) => setPatientBarangay(e.target.value.trim())}
-                                                                        /* disabled={barangayList.length === 0} */
+                                                                    /* disabled={barangayList.length === 0} */
                                                                     >
                                                                         <option value="">All</option>
                                                                         {barangayList.map((barangay) => (
@@ -796,7 +794,7 @@ function ManageReportContent(){
                                                                                 {patientBarangay}
                                                                             </option>
                                                                         }
-                                                            
+
                                                                     </select>
                                                                 </div>
 
@@ -813,29 +811,29 @@ function ManageReportContent(){
                                                                                     <th>Deceased Barangay</th>
                                                                                     <th>Contact Person</th>
                                                                                     <th>Contact Number</th>
-                                                                                    <th>Date Registered</th> 
+                                                                                    <th>Date Registered</th>
                                                                                     <th>Action</th>
                                                                                 </tr>
                                                                             </thead>
-                                                                            <tbody> 
+                                                                            <tbody>
                                                                                 {filteredRecords.length > 0 ? (
                                                                                     filteredRecords.map((burial, index) => (
                                                                                         <tr key={burial.burial_id}>
                                                                                             <td>{indexOfFirstRecord + index + 1}</td>
                                                                                             <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
                                                                                             <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
-                                                                                            <td>{burial.deceased_municipality}</td> 
+                                                                                            <td>{burial.deceased_municipality}</td>
                                                                                             <td>{burial.deceased_barangay}</td>
                                                                                             <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_ext_name || ""}`}</td>
-                                                                                            <td>{burial.contact_number}</td> 
+                                                                                            <td>{burial.contact_number}</td>
                                                                                             <td>{new Date(burial.savedAt).toLocaleString()}</td>
                                                                                             <td>
-                                                                                                <button className="btn btn-link" 
+                                                                                                <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
                                                                                                     data-bs-target="#viewReportModal">
                                                                                                     View
-                                                                                                </button> 
+                                                                                                </button>
                                                                                             </td>
                                                                                         </tr>
                                                                                     ))
@@ -852,7 +850,7 @@ function ManageReportContent(){
 
                                                                         {/* Pagination Controls */}
                                                                         <div className="d-flex justify-content-between mt-3">
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn btn-secondary"
                                                                                 disabled={currentPage === 1}
                                                                                 onClick={() => setCurrentPage(currentPage - 1)}
@@ -860,7 +858,7 @@ function ManageReportContent(){
                                                                                 Previous
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn btn-secondary"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
@@ -869,36 +867,36 @@ function ManageReportContent(){
                                                                             </button>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
+                                                                </div>
                                                             </div>
-                                                        </> 
+                                                        </>
                                                     }
 
-                                                    { transactions === "Burial Assistance" && 
-                                                        <> 
+                                                    {transactions === "Burial Assistance" &&
+                                                        <>
                                                             <div className="row">
-                                                                
+
                                                                 <div className="col-sm-12">
-                                                                    <hr/><br/>
+                                                                    <hr /><br />
                                                                     <label className="form-label mb-0">Filter Address:</label>
-                                                                    <br/><br/>
+                                                                    <br /><br />
                                                                 </div>
- 
-                                                                
-                                                                <div className="col-sm-3"> 
+
+
+                                                                <div className="col-sm-3">
                                                                     <div className="input-group">
                                                                         <label className="form-label">Province: </label>
-                                                                        
+
                                                                         <select
                                                                             className="form-control"
                                                                             id="hospital"
                                                                             disabled={true}>
-                                                                                <option value="">Camarines Norte</option> 
+                                                                            <option value="">Camarines Norte</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                
-                                                                <div className="col-3"> 
+
+                                                                <div className="col-3">
                                                                     <label className="form-label">Municipality:</label>
                                                                     <select
                                                                         className="form-control"
@@ -913,14 +911,14 @@ function ManageReportContent(){
                                                                         ))}
                                                                     </select>
                                                                 </div>
-                            
-                                                                <div className="col-3"> 
+
+                                                                <div className="col-3">
                                                                     <label className="form-label">Barangay:</label>
                                                                     <select
                                                                         className="form-control"
                                                                         value={patientBarangay}
                                                                         onChange={(e) => setPatientBarangay(e.target.value.trim())}
-                                                                        /* disabled={barangayList.length === 0} */
+                                                                    /* disabled={barangayList.length === 0} */
                                                                     >
                                                                         <option value="">All</option>
                                                                         {barangayList.map((barangay) => (
@@ -932,7 +930,7 @@ function ManageReportContent(){
                                                                                 {patientBarangay}
                                                                             </option>
                                                                         }
-                                                            
+
                                                                     </select>
                                                                 </div>
 
@@ -943,7 +941,7 @@ function ManageReportContent(){
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>No.</th>
-                                                                                    <th>Client Name</th> 
+                                                                                    <th>Client Name</th>
                                                                                     <th>Status / Remarks</th>
                                                                                     <th>Status of Application</th>
                                                                                     <th>Amount</th>
@@ -957,19 +955,19 @@ function ManageReportContent(){
                                                                                     currentRecords.map((burial, index) => (
                                                                                         <tr key={burial.id}>
                                                                                             <td>{indexOfFirstRecord + index + 1}</td>
-                                                                                            <td>{`${burial.client_fname} ${burial.client_mname} ${burial.client_lname} ${burial.client_ext_name || ""}`}</td> 
+                                                                                            <td>{`${burial.client_fname} ${burial.client_mname} ${burial.client_lname} ${burial.client_ext_name || ""}`}</td>
                                                                                             <td>{burial.type_assistance}</td>
                                                                                             <td>{burial.status_application}</td>
                                                                                             <td><b>{burial.amount}</b></td>
                                                                                             <td>{burial.interviewer}</td>
                                                                                             <td>{new Date(burial.savedAt).toLocaleString()}</td>
                                                                                             <td>
-                                                                                                <button className="btn btn-link" 
+                                                                                                <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
                                                                                                     data-bs-target="#viewReportModal">
                                                                                                     View
-                                                                                                </button> 
+                                                                                                </button>
                                                                                             </td>
                                                                                         </tr>
                                                                                     ))
@@ -986,7 +984,7 @@ function ManageReportContent(){
 
                                                                         {/* Pagination Controls */}
                                                                         <div className="d-flex justify-content-between mt-3">
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn btn-secondary"
                                                                                 disabled={currentPage === 1}
                                                                                 onClick={() => setCurrentPage(currentPage - 1)}
@@ -994,7 +992,7 @@ function ManageReportContent(){
                                                                                 Previous
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn btn-secondary"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
@@ -1003,12 +1001,12 @@ function ManageReportContent(){
                                                                             </button>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
+                                                                </div>
                                                             </div>
-                                                        </> 
+                                                        </>
                                                     }
-                                                    
-                                                </div>  
+
+                                                </div>
 
                                             </div>
                                         </div>
@@ -1018,7 +1016,7 @@ function ManageReportContent(){
                         </section>
                     </div>
                 </main>
-            </main> 
+            </main>
 
 
             {/* Modal */}
@@ -1028,13 +1026,13 @@ function ManageReportContent(){
                         <div className="modal-header">
                             <h5 className="modal-title" id="viewReportModal">
                                 View Reports
-                            </h5>  
+                            </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div className="modal-body">
 
-                            { transactions === "Hospital Bill" && 
+                            {transactions === "Hospital Bill" &&
                                 <>
                                     <HospitalBillModalContent
                                         patientFirstName={patientFirstName}
@@ -1052,17 +1050,17 @@ function ManageReportContent(){
                                         claimantLastname={claimantLastname}
                                         claimantExtName={claimantExtName}
                                         claimantRelationship={claimantRelationship}
-                                        claimantContact={claimantContact} 
+                                        claimantContact={claimantContact}
                                         claimantAmount={claimantAmount}
                                         hospitalBillStatus={hospitalBillStatus}
                                         checkedItems={checkedItems}
                                         remarks={remarks}
                                     />
-   
+
                                 </>
                             }
 
-                            { transactions == "Alay Pagdamay" && 
+                            {transactions == "Alay Pagdamay" &&
                                 <>
                                     <AlayPagdamayModalContent
                                         deceasedFirstName={deceasedFirstName}
@@ -1089,12 +1087,12 @@ function ManageReportContent(){
                                         deceasedCauseDeath={deceasedCauseDeath}
                                         burialStatus={burialStatus}
                                         checkedItems={checkedItems}
-                                        remarks={remarks} 
+                                        remarks={remarks}
                                     />
                                 </>
                             }
 
-                            { transactions == "Burial Assistance" && 
+                            {transactions == "Burial Assistance" &&
                                 <>
                                     <BurialAssistanceModalContent
                                         clientFirstName={clientFirstName}
@@ -1122,18 +1120,18 @@ function ManageReportContent(){
                                     />
                                 </>
                             }
-                            
-                            
+
+
 
                         </div>
-                        
+
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
 
         </>
@@ -1141,4 +1139,3 @@ function ManageReportContent(){
 }
 
 export default ManageReportContent;
- 

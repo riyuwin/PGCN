@@ -23,7 +23,7 @@ function ReportStatisticsContent() {
     const [patientMunicipality, setPatientMunicipality] = useState('');
     const [patientProvince, setPatientProvince] = useState('Camarines Norte');
     const [barangayList, setBarangayList] = useState([]);
- 
+
     // Variables for inputs ------------------------------------------------------------  
     const [pettyCashAmount, setPettyCashAmount] = useState('');
 
@@ -45,9 +45,9 @@ function ReportStatisticsContent() {
             ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
         ) {
             const municipalityFilter = patientMunicipality === "All" ? "All" : patientMunicipality;
-        
+
             setFilterPatientMunicipality(municipalityFilter);
-        
+
             // Pass both filter and classification to functions that need them
             fetchTotalHospitalBills(municipalityFilter, reportClassification);
             fetchHospitalBillStatus(municipalityFilter, reportClassification);
@@ -55,7 +55,7 @@ function ReportStatisticsContent() {
             fetchHospitalBillPettyCash(municipalityFilter, reportClassification);
             fetchHospitalBillHospitalName(municipalityFilter, reportClassification);
             fetchHospitalBillPatientBarangay(municipalityFilter, reportClassification);
-        
+
             setFilterName('Hospital Bill');
             console.log("Hey:", barChartData);
         } else if (
@@ -63,17 +63,16 @@ function ReportStatisticsContent() {
             ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
         ) {
             const municipalityFilter = patientMunicipality === "All" ? "All" : patientMunicipality;
-        
+
             setFilterPatientMunicipality(municipalityFilter);
-        
+
             // Pass both filter and classification to functions that need them
             fetchTotalAlayPagdamay(municipalityFilter, reportClassification);
             fetchAlayPagdamayStatus(municipalityFilter, reportClassification);
-            fetchHospitalBills(municipalityFilter, reportClassification);
             fetchAlayPagdamayPettyCash(municipalityFilter, reportClassification);
             fetchAlayPagdamayFuneralName(municipalityFilter, reportClassification);
             fetchAlayPagdamayBarangay(municipalityFilter, reportClassification);
-        
+
             setFilterName('Alay Pagdamay');
             console.log("Hey:", barChartData);
         } else if (
@@ -81,17 +80,15 @@ function ReportStatisticsContent() {
             ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
         ) {
             const municipalityFilter = patientMunicipality === "All" ? "All" : patientMunicipality;
-        
+
             setFilterPatientMunicipality(municipalityFilter);
-        
+
             // Pass both filter and classification to functions that need them
-            fetchTotalAlayPagdamay(municipalityFilter, reportClassification);
-            fetchAlayPagdamayStatus(municipalityFilter, reportClassification);
-            fetchHospitalBills(municipalityFilter, reportClassification);
-            fetchAlayPagdamayPettyCash(municipalityFilter, reportClassification);
-            fetchAlayPagdamayFuneralName(municipalityFilter, reportClassification);
-            fetchAlayPagdamayBarangay(municipalityFilter, reportClassification);
-        
+            fetchTotalBurialAssistance(municipalityFilter, reportClassification);
+            fetchBurialAssistanceStatus(municipalityFilter, reportClassification);
+            fetchBurialAssistancePettyCash(municipalityFilter, reportClassification);
+            fetchBurialAssistanceBarangay(municipalityFilter, reportClassification);
+
             setFilterName('Burial Assistance');
             console.log("Hey:", barChartData);
         } else {
@@ -123,20 +120,20 @@ function ReportStatisticsContent() {
                     reportClassification: reportClassification
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             console.log("Hospital Bill Status Data: ", data);
-    
+
             let labels = [];
             let series = [];
-    
+
             if (Array.isArray(data) && data.length > 0) {
                 labels = data.map(item => item.hospital_bill_status ?? "Unknown");
                 series = data.map(item => item.totalCount ?? 0);
-    
+
                 const isAllZero = series.every(value => value === 0);
-    
+
                 if (isAllZero) {
                     labels = ["No Data"];
                     series = [0];
@@ -145,7 +142,7 @@ function ReportStatisticsContent() {
                 labels = ["No Data"];
                 series = [0];
             }
-    
+
             setRadialChartData(prevData => ({
                 ...prevData,
                 series: series,
@@ -166,7 +163,7 @@ function ReportStatisticsContent() {
             }));
         }
     };
-    
+
     const fetchHospitalBillPettyCash = async (filterNamePatientMunicipality, reportClassification) => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash", {
@@ -181,9 +178,9 @@ function ReportStatisticsContent() {
             });
             /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
             const data = await response.json();
- 
+
             setPettyCashAmount(data.totalAmount);
- 
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -222,20 +219,20 @@ function ReportStatisticsContent() {
                     reportClassification: reportClassification
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             // Provide fallback if no records are returned
             const hasData = data.length > 0;
-    
+
             const labels = hasData
                 ? data.map(item => item.patient_hospital)
                 : ["No Data"];
-            
+
             const series = hasData
                 ? data.map(item => item.totalBills ?? 0)
                 : [0];
-    
+
             // Update the chart data
             setPolarChartData(prevData => ({
                 ...prevData,
@@ -245,16 +242,16 @@ function ReportStatisticsContent() {
                 },
                 series: series,
             }));
-    
+
             console.log("Updated Labels:", labels);
             console.log("Updated Series:", series);
-    
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
-    
-    
+
+
 
     const fetchHospitalBillPatientBarangay = async (filterNamePatientMunicipality, reportClassification) => {
         try {
@@ -268,21 +265,21 @@ function ReportStatisticsContent() {
                     reportClassification: reportClassification
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             // Check if the data contains any entries
             const hasData = data.length > 0;
-    
+
             // Use real data if available, otherwise provide fallback
             const labels = hasData
                 ? data.map(item => item.patient_barangay)
                 : ["No Data"];
-    
+
             const series = hasData
                 ? data.map(item => item.patientBarangay ?? 0)
                 : [0];
-    
+
             // Update pie chart data
             setPieChartData(prevData => ({
                 ...prevData,
@@ -292,15 +289,15 @@ function ReportStatisticsContent() {
                 },
                 series: series,
             }));
-    
+
             console.log("Updated Labels123:", labels);
             console.log("Updated Series:123", series);
-    
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
- 
+
 
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
@@ -381,8 +378,8 @@ function ReportStatisticsContent() {
             }
         }
     });
-    
-    
+
+
     const [totalPatientNumber, setTotalPatientNumber] = useState('');
 
     const fetchTotalHospitalBills = async (filterNamePatientMunicipality, reportClassification) => {
@@ -399,20 +396,20 @@ function ReportStatisticsContent() {
                     reportClassification
                 })
             });
-    
+
             const data = await response.json();
-                        
+
             // Set total patient number
             const totalPatients = data.reduce((sum, record) => sum + record.totalRecords, 0);
             setTotalPatientNumber(totalPatients);
-    
+
             if (reportClassification === "Annual Report") {
                 const monthlyCounts = Array(12).fill(0);
                 data.forEach(record => {
                     const monthIndex = new Date(record.label + "-01").getMonth(); // '2025-04' → 3
                     monthlyCounts[monthIndex] = record.totalRecords;
                 });
-    
+
                 setBarChartData(prevData => ({
                     ...prevData,
                     series: [{
@@ -430,12 +427,12 @@ function ReportStatisticsContent() {
                         }
                     }
                 }));
-    
+
             } else if (reportClassification === "This Month Report") {
                 // Only use dates with actual records
                 const labels = data.map(record => record.label); // e.g., '2025-04-15'
                 const seriesData = data.map(record => record.totalRecords);
-    
+
                 setBarChartData(prevData => ({
                     ...prevData,
                     series: [{
@@ -450,26 +447,26 @@ function ReportStatisticsContent() {
                         }
                     }
                 }));
-    
+
             } else if (reportClassification === "This Week Report") {
                 const now = new Date();
                 const startOfWeek = new Date(now);
                 startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
-    
+
                 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                 const weekDates = weekdays.map((_, i) => {
                     const d = new Date(startOfWeek);
                     d.setDate(d.getDate() + i);
                     return d.toISOString().split("T")[0]; // e.g., '2025-04-28'
                 });
-    
+
                 const dataMap = {};
                 data.forEach(record => {
                     dataMap[record.label] = record.totalRecords;
                 });
-    
+
                 const seriesData = weekDates.map(date => dataMap[date] || 0);
-    
+
                 setBarChartData(prevData => ({
                     ...prevData,
                     series: [{
@@ -485,7 +482,7 @@ function ReportStatisticsContent() {
                     }
                 }));
             }
-    
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -496,7 +493,7 @@ function ReportStatisticsContent() {
 
     const [alayPagdamayNumber, setTotalAlayPagdamayNumber] = useState('');
 
-    const fetchTotalAlayPagdamay= async (filterNamePatientMunicipality, reportClassification) => {
+    const fetchTotalAlayPagdamay = async (filterNamePatientMunicipality, reportClassification) => {
         try {
             const response = await fetch("http://localhost:5000/retrieve_total_alay_pagdamay", {
                 method: "POST",
@@ -510,20 +507,20 @@ function ReportStatisticsContent() {
                     reportClassification
                 })
             });
-    
+
             const data = await response.json();
-                        
+
             // Set total patient number
             const totalPatients = data.reduce((sum, record) => sum + record.totalRecords, 0);
             setTotalAlayPagdamayNumber(totalPatients);
-    
+
             if (reportClassification === "Annual Report") {
                 const monthlyCounts = Array(12).fill(0);
                 data.forEach(record => {
                     const monthIndex = new Date(record.label + "-01").getMonth(); // '2025-04' → 3
                     monthlyCounts[monthIndex] = record.totalRecords;
                 });
-    
+
                 setBarChartData(prevData => ({
                     ...prevData,
                     series: [{
@@ -541,12 +538,12 @@ function ReportStatisticsContent() {
                         }
                     }
                 }));
-    
+
             } else if (reportClassification === "This Month Report") {
                 // Only use dates with actual records
                 const labels = data.map(record => record.label); // e.g., '2025-04-15'
                 const seriesData = data.map(record => record.totalRecords);
-    
+
                 setBarChartData(prevData => ({
                     ...prevData,
                     series: [{
@@ -561,26 +558,26 @@ function ReportStatisticsContent() {
                         }
                     }
                 }));
-    
+
             } else if (reportClassification === "This Week Report") {
                 const now = new Date();
                 const startOfWeek = new Date(now);
                 startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
-    
+
                 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                 const weekDates = weekdays.map((_, i) => {
                     const d = new Date(startOfWeek);
                     d.setDate(d.getDate() + i);
                     return d.toISOString().split("T")[0]; // e.g., '2025-04-28'
                 });
-    
+
                 const dataMap = {};
                 data.forEach(record => {
                     dataMap[record.label] = record.totalRecords;
                 });
-    
+
                 const seriesData = weekDates.map(date => dataMap[date] || 0);
-    
+
                 setBarChartData(prevData => ({
                     ...prevData,
                     series: [{
@@ -596,7 +593,7 @@ function ReportStatisticsContent() {
                     }
                 }));
             }
-    
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -614,20 +611,20 @@ function ReportStatisticsContent() {
                     reportClassification: reportClassification
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             console.log("Hospital Bill Status Data: ", data);
-    
+
             let labels = [];
             let series = [];
-    
+
             if (Array.isArray(data) && data.length > 0) {
                 labels = data.map(item => item.burial_status ?? "Unknown");
                 series = data.map(item => item.totalCount ?? 0);
-    
+
                 const isAllZero = series.every(value => value === 0);
-    
+
                 if (isAllZero) {
                     labels = ["No Data"];
                     series = [0];
@@ -636,7 +633,7 @@ function ReportStatisticsContent() {
                 labels = ["No Data"];
                 series = [0];
             }
-    
+
             setRadialChartData(prevData => ({
                 ...prevData,
                 series: series,
@@ -672,9 +669,9 @@ function ReportStatisticsContent() {
             });
             /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
             const data = await response.json();
- 
+
             setPettyCashAmount(data.totalAmount);
- 
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -692,20 +689,20 @@ function ReportStatisticsContent() {
                     reportClassification: reportClassification
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             // Provide fallback if no records are returned
             const hasData = data.length > 0;
-    
+
             const labels = hasData
                 ? data.map(item => item.contact_funeral_service)
                 : ["No Data"];
-            
+
             const series = hasData
                 ? data.map(item => item.totalBills ?? 0)
                 : [0];
-    
+
             // Update the chart data
             setPolarChartData(prevData => ({
                 ...prevData,
@@ -715,10 +712,10 @@ function ReportStatisticsContent() {
                 },
                 series: series,
             }));
-    
+
             console.log("Updated Labels:", labels);
             console.log("Updated Series:", series);
-    
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -736,21 +733,21 @@ function ReportStatisticsContent() {
                     reportClassification: reportClassification
                 }),
             });
-    
+
             const data = await response.json();
-    
+
             // Check if the data contains any entries
             const hasData = data.length > 0;
-    
+
             // Use real data if available, otherwise provide fallback
             const labels = hasData
                 ? data.map(item => item.deceased_barangay)
                 : ["No Data"];
-    
+
             const series = hasData
                 ? data.map(item => item.deceasedBarangay ?? 0)
                 : [0];
-    
+
             // Update pie chart data
             setPieChartData(prevData => ({
                 ...prevData,
@@ -760,19 +757,255 @@ function ReportStatisticsContent() {
                 },
                 series: series,
             }));
-    
+
             console.log("Updated Labels123:", labels);
             console.log("Updated Series:123", series);
-    
+
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
     };
-    
+
 
     // Alay Pagdamay
 
-    
+
+    //Burial Assistance
+
+    const [burialAssistanceNumber, setTotalBurialAssistanceNumber] = useState('');
+
+    const fetchTotalBurialAssistance = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_burial_assistance", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    patientBarangay: "All",
+                    patientMunicipality: filterNamePatientMunicipality,
+                    patientProvince: "All",
+                    reportClassification
+                })
+            });
+
+            const data = await response.json();
+
+            // Set total patient number
+            const totalPatients = data.reduce((sum, record) => sum + record.totalRecords, 0);
+            setTotalBurialAssistanceNumber(totalPatients);
+
+            if (reportClassification === "Annual Report") {
+                const monthlyCounts = Array(12).fill(0);
+                data.forEach(record => {
+                    const monthIndex = new Date(record.label + "-01").getMonth(); // '2025-04' → 3
+                    monthlyCounts[monthIndex] = record.totalRecords;
+                });
+
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: monthlyCounts
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: [
+                                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                            ]
+                        }
+                    }
+                }));
+
+            } else if (reportClassification === "This Month Report") {
+                // Only use dates with actual records
+                const labels = data.map(record => record.label); // e.g., '2025-04-15'
+                const seriesData = data.map(record => record.totalRecords);
+
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: seriesData
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: labels
+                        }
+                    }
+                }));
+
+            } else if (reportClassification === "This Week Report") {
+                const now = new Date();
+                const startOfWeek = new Date(now);
+                startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7)); // Monday
+
+                const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                const weekDates = weekdays.map((_, i) => {
+                    const d = new Date(startOfWeek);
+                    d.setDate(d.getDate() + i);
+                    return d.toISOString().split("T")[0]; // e.g., '2025-04-28'
+                });
+
+                const dataMap = {};
+                data.forEach(record => {
+                    dataMap[record.label] = record.totalRecords;
+                });
+
+                const seriesData = weekDates.map(date => dataMap[date] || 0);
+
+                setBarChartData(prevData => ({
+                    ...prevData,
+                    series: [{
+                        ...prevData.series[0],
+                        data: seriesData
+                    }],
+                    options: {
+                        ...prevData.options,
+                        xaxis: {
+                            ...prevData.options.xaxis,
+                            categories: weekdays
+                        }
+                    }
+                }));
+            }
+
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+
+    const fetchBurialAssistanceStatus = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_burial_assistance_status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+
+            const data = await response.json();
+
+            console.log("Hospital Bill Status Data: ", data);
+
+            let labels = [];
+            let series = [];
+
+            if (Array.isArray(data) && data.length > 0) {
+                labels = data.map(item => item.burial_status ?? "Unknown");
+                series = data.map(item => item.totalCount ?? 0);
+
+                const isAllZero = series.every(value => value === 0);
+
+                if (isAllZero) {
+                    labels = ["No Data"];
+                    series = [0];
+                }
+            } else {
+                labels = ["No Data"];
+                series = [0];
+            }
+
+            setRadialChartData(prevData => ({
+                ...prevData,
+                series: series,
+                options: {
+                    ...prevData.options,
+                    labels: labels
+                }
+            }));
+        } catch (error) {
+            console.error("Error fetching hospital bill status data:", error);
+            setRadialChartData(prevData => ({
+                ...prevData,
+                series: [0],
+                options: {
+                    ...prevData.options,
+                    labels: ["No Data"]
+                }
+            }));
+        }
+    };
+
+    const fetchBurialAssistancePettyCash = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_burial_assistance_petty_cash", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    municipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+            /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
+            const data = await response.json();
+
+            setPettyCashAmount(data.totalAmount);
+
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+
+    const fetchBurialAssistanceBarangay = async (filterNamePatientMunicipality, reportClassification) => {
+        try {
+            const response = await fetch("http://localhost:5000/retrieve_total_burial_assistance_barangay", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    patientMunicipality: filterNamePatientMunicipality,
+                    reportClassification: reportClassification
+                }),
+            });
+
+            const data = await response.json();
+
+            // Check if the data contains any entries
+            const hasData = data.length > 0;
+
+            // Use real data if available, otherwise provide fallback
+            const labels = hasData
+                ? data.map(item => item.client_barangay)
+                : ["No Data"];
+
+            const series = hasData
+                ? data.map(item => item.clientBarangay ?? 0)
+                : [0];
+
+            // Update pie chart data
+            setPieChartData(prevData => ({
+                ...prevData,
+                options: {
+                    ...prevData.options,
+                    labels: labels
+                },
+                series: series,
+            }));
+
+            console.log("Updated Labels123:", labels);
+            console.log("Updated Series:123", series);
+
+        } catch (error) {
+            console.error("Error fetching hospital bills:", error);
+        }
+    };
+
+    // Burial Assistance
+
+
     function formatToPesos(amount) {
         return new Intl.NumberFormat('en-PH', {
             minimumFractionDigits: 0
@@ -804,7 +1037,7 @@ function ReportStatisticsContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                
+
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between align-items-center">
                                                         <h5 className="card-title">Manage Reports</h5>
@@ -889,15 +1122,15 @@ function ReportStatisticsContent() {
                                                                 <div className="input-group">
 
                                                                 </div>
-                                                            </div> 
-
                                                             </div>
+
                                                         </div>
-
                                                     </div>
-                                                </div>
 
-                                                { filterName === "Hospital Bill" &&
+                                                </div>
+                                            </div>
+
+                                            {filterName === "Hospital Bill" &&
                                                 <>
                                                     <div >
 
@@ -920,7 +1153,7 @@ function ReportStatisticsContent() {
 
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Patient Number <span>| {reportClassification}</span></h5>
-                                                                        <br/>
+                                                                        <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                                                                 <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
@@ -951,7 +1184,7 @@ function ReportStatisticsContent() {
 
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
-                                                                        <br/>
+                                                                        <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                                                                 <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
@@ -964,10 +1197,10 @@ function ReportStatisticsContent() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            
+
 
                                                             <div className="col-lg-8">
-                                                                <br/>
+                                                                <br />
                                                                 <div className="card">
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Patient Records</h5><br />
@@ -978,7 +1211,7 @@ function ReportStatisticsContent() {
 
 
                                                             <div className="col-lg-4">
-                                                                <br/>
+                                                                <br />
                                                                 <div className="card">
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Hospital Bill Status</h5><br />
@@ -1030,7 +1263,7 @@ function ReportStatisticsContent() {
                                             }
 
 
-                                            { filterName === "Alay Pagdamay" &&
+                                            {filterName === "Alay Pagdamay" &&
                                                 <>
                                                     <div >
 
@@ -1053,7 +1286,7 @@ function ReportStatisticsContent() {
 
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Alay Pagdamay <span>| {reportClassification}</span></h5>
-                                                                        <br/>
+                                                                        <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                                                                 <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
@@ -1084,7 +1317,7 @@ function ReportStatisticsContent() {
 
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
-                                                                        <br/>
+                                                                        <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                                                                 <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
@@ -1097,9 +1330,9 @@ function ReportStatisticsContent() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            
+
                                                             <div className="col-lg-8">
-                                                                <br/>
+                                                                <br />
                                                                 <div className="card">
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Alay Pagdamay Records</h5><br />
@@ -1109,7 +1342,7 @@ function ReportStatisticsContent() {
                                                             </div>
 
                                                             <div className="col-lg-4">
-                                                                <br/>
+                                                                <br />
                                                                 <div className="card">
                                                                     <div className="card-body">
                                                                         <h5 className="card-title">Total Alay Pagdamay Status</h5><br />
@@ -1135,7 +1368,112 @@ function ReportStatisticsContent() {
                                                                     </div>
                                                                 </div>
                                                             </div>
- 
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </>
+                                            }
+
+                                            {filterName === "Burial Assistance" &&
+                                                <>
+                                                    <div >
+
+                                                        <div className="row">
+
+                                                            <div className="col-xxl-6 col-md-6">
+                                                                <div className="card info-card revenue-card h-100">
+                                                                    <div className="filter">
+                                                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                                            <li className="dropdown-header text-start">
+                                                                                <h6>Filter</h6>
+                                                                            </li>
+
+                                                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                                                        </ul>
+                                                                    </div>
+
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Burial Assistance <span>| {reportClassification}</span></h5>
+                                                                        <br />
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                                                <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
+                                                                            </div>
+                                                                            <div className="ps-3">
+                                                                                <h6 id="dashboardAmounts">{formatToPesos(burialAssistanceNumber)}</h6>
+                                                                                <span className="text-muted small pt-2 ps-1">total burial assistance</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-xxl-6 col-md-6">
+                                                                <div className="card info-card revenue-card h-100">
+                                                                    <div className="filter">
+                                                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                                            <li className="dropdown-header text-start">
+                                                                                <h6>Filter</h6>
+                                                                            </li>
+
+                                                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                                                        </ul>
+                                                                    </div>
+
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
+                                                                        <br />
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                                                            </div>
+                                                                            <div className="ps-3">
+                                                                                <h6 id="dashboardAmounts">₱ {formatToPesos(pettyCashAmount)}</h6>
+                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-12">
+                                                                <br />
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Alay Pagdamay Records</h5><br />
+                                                                        <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-6">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Alay Pagdamay Status</h5><br />
+                                                                        <Chart options={radialChartData.options} series={radialChartData.series} type="donut" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-6">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">Total Deceased Per Barangay</h5><br />
+                                                                        <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
 
 
                                                         </div>

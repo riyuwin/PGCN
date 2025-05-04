@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2';  
+import Swal from 'sweetalert2';
 
 function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const location = useLocation(); 
+    const location = useLocation();
 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -23,16 +23,16 @@ function LoginForm() {
         };
     }, [location]);
 
-    
+
     const handleLogin = async (e) => {
         e.preventDefault();
-    
+
         // Check if email and password are provided
         if (!email || !password) {
             setError("Please provide both email and password.");
             return;
         }
-    
+
         try {
             const response = await fetch("http://localhost:5000/login", {
                 method: "POST",
@@ -42,33 +42,33 @@ function LoginForm() {
                     password
                 })
             });
-    
+
             const data = await response.json();
-    
+
             if (!response.ok) {
                 throw new Error(data.error || "Login failed.");
             }
-    
+
             console.log("Login successful!", data);
             setSuccess("Login successful!");
-    
+
             // Show success message with SweetAlert
             Swal.fire({
                 icon: 'success',
                 title: 'Login Successful',
                 text: 'Welcome back!',
             });
-    
+
             // Optionally, store user data (e.g., token) in localStorage or context
             localStorage.setItem("user", JSON.stringify(data));
-            
+
             // Redirect user after successful login (adjust according to your app structure)
             setTimeout(() => navigate('/admin/dashboard'), 2000); // Navigate to a protected route like '/dashboard'
-    
+
         } catch (err) {
             console.error("Error:", err.message);
             setError(err.message);
-    
+
             // Show error message with SweetAlert
             Swal.fire({
                 icon: 'error',
@@ -78,18 +78,18 @@ function LoginForm() {
         }
     };
 
-    
+
     useEffect(() => {
         // Get user from localStorage
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             console.log("Stored User:", JSON.parse(storedUser));
-             
+
             navigate("/admin/dashboard");
         } else {
             navigate("/");
         }
-    
+
         // Fetch user session from backend
         fetch("http://localhost:5000/session", { credentials: "include" }) // Ensure cookies are sent
             .then((res) => res.json())
@@ -98,9 +98,9 @@ function LoginForm() {
             })
             .catch((err) => console.error("Error fetching session:", err));
     }, []);
-    
-    
-    
+
+
+
 
     return (
         <div className="login_page d-flex justify-content-center align-items-center vh-100">

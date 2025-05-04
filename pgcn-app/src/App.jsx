@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Auth Pages */}
-          <Route path="" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
           {/* Admin Pages */}

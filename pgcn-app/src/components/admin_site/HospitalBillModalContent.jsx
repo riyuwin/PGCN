@@ -1,16 +1,16 @@
 
-import { useState, useEffect } from "react"; 
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import { useState, useEffect } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function HospitalBillModalContent({
-        patientFirstName, patientMiddleName, patientLastName, patientExtName, 
-        patientProvince, patientMunicipality, patientBarangay, patientPurok, 
-        patientHospital, dateConfinement, claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName,
-        claimantRelationship, claimantContact, claimantAmount, hospitalBillStatus, checkedItems, remarks
-    }) {    
-        
-   // Variables for inputs ------------------------------------------------------------
- 
+    patientFirstName, patientMiddleName, patientLastName, patientExtName,
+    patientProvince, patientMunicipality, patientBarangay, patientPurok,
+    patientHospital, dateConfinement, claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName,
+    claimantRelationship, claimantContact, claimantAmount, hospitalBillStatus, checkedItems, remarks
+}) {
+
+    // Variables for inputs ------------------------------------------------------------
+
     const [formPage, setFormPage] = useState("Basic Information");
 
     const handleFormPageUpdate = (formPageNumber) => {
@@ -18,9 +18,9 @@ function HospitalBillModalContent({
     }
 
     return (
-        <> 
+        <>
             <div className="generateContainer">
-
+                <br />
                 <h5>Select Section: </h5>
                 <br />
                 <div className="row">
@@ -45,26 +45,30 @@ function HospitalBillModalContent({
                     </div>
 
 
-                </div> 
- 
+                </div>
+            </div>
 
-                { formPage == "Basic Information" && 
+
+            <div className="generateContainer">
+
+                {formPage == "Basic Information" &&
                     <>
 
-                        <div className="formContainer">
+                        <div >
+                            <br />
                             <h3>Patient Information</h3><br />
-                            <div className="row"> 
-                                <div className="col-3">               
+                            <div className="row">
+                                <div className="col-3">
                                     <label htmlFor="firstName" className="form-label">First Name:</label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="firstName"
-                                        value={patientFirstName} 
+                                        value={patientFirstName}
                                     />
                                 </div>
 
-                                <div className="col-3"> 
+                                <div className="col-3">
                                     <label htmlFor="middleName" className="form-label">Middle Name:</label>
                                     <input
                                         type="text"
@@ -73,8 +77,8 @@ function HospitalBillModalContent({
                                         value={patientMiddleName}
                                     />
                                 </div>
-                                
-                                <div className="col-3"> 
+
+                                <div className="col-3">
                                     <label htmlFor="lastName" className="form-label">Last Name:</label>
                                     <input
                                         type="text"
@@ -83,8 +87,8 @@ function HospitalBillModalContent({
                                         value={patientLastName}
                                     />
                                 </div>
-                                
-                                <div className="col-3"> 
+
+                                <div className="col-3">
                                     <label htmlFor="extName" className="form-label">Ext Name:</label>
                                     <input
                                         type="text"
@@ -122,10 +126,10 @@ function HospitalBillModalContent({
                                     <label className="form-label">Barangay:</label>
                                     <select
                                         className="form-control"
-                                        value={patientBarangay} 
+                                        value={patientBarangay}
                                     >
                                         <option value="">Select Barangay</option>
-                            
+
                                     </select>
                                 </div>
 
@@ -137,49 +141,49 @@ function HospitalBillModalContent({
                                         className="form-control"
                                         value={patientPurok}
                                     />
-                                </div>  
-                                
+                                </div>
+
                                 <div className="col-3">
-                                    <br /> 
+                                    <br />
                                     <label htmlFor="extName" className="form-label">Date of Confinement:</label>
-                                    
+
                                     <input
                                         type="date"
                                         className="form-control"
                                         value={dateConfinement}
                                     />
                                 </div>
-                                
+
                                 <div className="col-3">
-                                    <br /> 
+                                    <br />
                                     <label htmlFor="extName" className="form-label">Hospital:</label>
-                                    
+
 
                                     <select
                                         className="form-control"
-                                        id="hospital"   
+                                        id="hospital"
                                         value={patientHospital} >
-                                            <option value="">Select Hospital</option>
-                                            <option value="LEON D. HERNANDEZ MEMORIAL HOSPITAL">LEON D. HERNANDEZ MEMORIAL HOSPITAL</option>
-                                            <option value="DAET DOCTORS HOSPITAL">DAET DOCTORS HOSPITAL</option>
-                                            <option value="DR. MOISES V. CACAWA HOSPITAL">DR. MOISES V. CACAWA HOSPITAL</option>
-                                            <option value="OUR LADY OF LOURDES HOSPITAL">OUR LADY OF LOURDES HOSPITAL</option>
-                                            <option value="SANTISSIMA TRINIDAD OF DAET">SANTISSIMA TRINIDAD OF DAET</option>
-                                            <option value="RACELIS TIONGSON MEDICAL CLINIC">RACELIS TIONGSON MEDICAL CLINIC</option>
-                                            <option value="LIZASO HOSPITAL">LIZASO HOSPITAL</option>
-                                            <option value="DR. MIGUEL V. ALEGRE HOSPITAL">DR. MIGUEL V. ALEGRE HOSPITAL</option>
-                                            <option value="BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL">BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL</option>
-                                            <option value="JOSE PANGANIBAN PRIMARY HOSPITAL">JOSE PANGANIBAN PRIMARY HOSPITAL</option> 
+                                        <option value="">Select Hospital</option>
+                                        <option value="LEON D. HERNANDEZ MEMORIAL HOSPITAL">LEON D. HERNANDEZ MEMORIAL HOSPITAL</option>
+                                        <option value="DAET DOCTORS HOSPITAL">DAET DOCTORS HOSPITAL</option>
+                                        <option value="DR. MOISES V. CACAWA HOSPITAL">DR. MOISES V. CACAWA HOSPITAL</option>
+                                        <option value="OUR LADY OF LOURDES HOSPITAL">OUR LADY OF LOURDES HOSPITAL</option>
+                                        <option value="SANTISSIMA TRINIDAD OF DAET">SANTISSIMA TRINIDAD OF DAET</option>
+                                        <option value="RACELIS TIONGSON MEDICAL CLINIC">RACELIS TIONGSON MEDICAL CLINIC</option>
+                                        <option value="LIZASO HOSPITAL">LIZASO HOSPITAL</option>
+                                        <option value="DR. MIGUEL V. ALEGRE HOSPITAL">DR. MIGUEL V. ALEGRE HOSPITAL</option>
+                                        <option value="BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL">BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL</option>
+                                        <option value="JOSE PANGANIBAN PRIMARY HOSPITAL">JOSE PANGANIBAN PRIMARY HOSPITAL</option>
                                     </select>
                                 </div>
 
-                            </div> 
+                            </div>
                             <br />
-                            <hr /> 
-                            <br />  
+                            <hr />
+                            <br />
                             <h3>Claimant Information</h3><br />
                             <div className="row">
-                                <div className="col-3"> 
+                                <div className="col-3">
                                     <label htmlFor="firstName" className="form-label">First Name:</label>
                                     <input
                                         type="text"
@@ -189,7 +193,7 @@ function HospitalBillModalContent({
                                     />
                                 </div>
 
-                                <div className="col-3"> 
+                                <div className="col-3">
                                     <label htmlFor="middleName" className="form-label">Middle Name:</label>
                                     <input
                                         type="text"
@@ -198,35 +202,35 @@ function HospitalBillModalContent({
                                         value={claimantMiddlename}
                                     />
                                 </div>
-                                
-                                <div className="col-3"> 
+
+                                <div className="col-3">
                                     <label htmlFor="lastName" className="form-label">Last Name:</label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="lastName"
-                                        value={claimantLastname} 
+                                        value={claimantLastname}
                                     />
                                 </div>
-                                
-                                <div className="col-3">              
+
+                                <div className="col-3">
                                     <label htmlFor="extName" className="form-label">Ext Name:</label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="extName"
-                                        value={claimantExtName} 
+                                        value={claimantExtName}
                                     />
                                 </div>
 
-                                
+
                                 <div className="col-3">
                                     <br />
                                     <label htmlFor="relationship" className="form-label">Relationship:</label>
                                     <select
                                         className="form-control"
                                         id="relationship"
-                                        value={claimantRelationship} 
+                                        value={claimantRelationship}
                                     >
                                         <option value="">Select Relationship</option>
                                         <option value="Mother">Mother</option>
@@ -244,7 +248,7 @@ function HospitalBillModalContent({
                                     </select>
                                 </div>
 
-                                
+
                                 <div className="col-3">
                                     <br />
                                     <label htmlFor="extName" className="form-label">Contact:</label>
@@ -252,10 +256,10 @@ function HospitalBillModalContent({
                                         type="number"
                                         className="form-control"
                                         id="extName"
-                                        value={claimantContact} 
+                                        value={claimantContact}
                                     />
                                 </div>
-                                
+
                                 <div className="col-3">
                                     <br />
                                     <label htmlFor="extName" className="form-label">Amount:</label>
@@ -263,11 +267,11 @@ function HospitalBillModalContent({
                                         type="number"
                                         className="form-control"
                                         id="extName"
-                                        value={claimantAmount} 
+                                        value={claimantAmount}
                                     />
                                 </div>
-                                
-                                
+
+
                             </div>
 
                             <br />
@@ -275,69 +279,69 @@ function HospitalBillModalContent({
                         </div>
 
                     </>
-                } 
+                }
 
                 {formPage === "Checklist" && (
-                    <> 
-                        <div className="row"> 
+                    <>
+                        <div className="row">
                             <div className="col-12">
                                 <div className="formContainer">
-                                    <h3>Hospital Bill Status: </h3><br/>
-                                    <p>Current Status: <b>{hospitalBillStatus}</b></p><br/>  
+                                    <h3>Hospital Bill Status: </h3><br />
+                                    <p>Current Status: <b>{hospitalBillStatus}</b></p><br />
 
                                     <select
                                         className="form-control"
                                         id="relationship"
-                                        value={hospitalBillStatus} 
-                                    > 
+                                        value={hospitalBillStatus}
+                                    >
                                         <option value="Pending">Pending</option>
-                                        <option value="Completed">Completed</option> 
-                                        <option value="Cancelled">Cancelled</option> 
+                                        <option value="Completed">Completed</option>
+                                        <option value="Cancelled">Cancelled</option>
                                     </select>
 
                                 </div>
-                                <br/>
+                                <br />
                             </div>
 
-                            
-                            <div className="col-12">  
+
+                            <div className="col-12">
                                 <div className="formContainer">
-                                    <h3>Requirements Checklist:</h3>             
-                                    <br/>
+                                    <h3>Requirements Checklist:</h3>
+                                    <br />
                                     <ul className="list-group">
                                         <li className="list-group-item">
-                                            <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency" 
-                                                checked={checkedItems.checkBarangayIndigency}  />
+                                            <input className="form-check-input me-1" type="checkbox" id="checkBarangayIndigency"
+                                                checked={checkedItems.checkBarangayIndigency} />
                                             <label className="form-check-label" htmlFor="checkBarangayIndigency">&nbsp; Barangay Indigency (2 Original)</label>
                                         </li>
                                         <li className="list-group-item">
-                                            <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate" 
-                                                checked={checkedItems.checkMedCertificate}  />
+                                            <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate"
+                                                checked={checkedItems.checkMedCertificate} />
                                             <label className="form-check-label" htmlFor="checkMedicalCertificate">&nbsp; Medical Certificate or Medical Abstract (2 Copies)</label>
                                         </li>
                                         <li className="list-group-item">
-                                            <input className="form-check-input me-1" type="checkbox" id="checkFinalBill" 
+                                            <input className="form-check-input me-1" type="checkbox" id="checkFinalBill"
                                                 checked={checkedItems.checkFinalBill} />
                                             <label className="form-check-label" htmlFor="checkFinalBill">&nbsp; Hospital Bill (2 Copies)</label>
-                                        </li> 
+                                        </li>
                                         <li className="list-group-item">
-                                            <input className="form-check-input me-1" type="checkbox" id="checkValidId" 
+                                            <input className="form-check-input me-1" type="checkbox" id="checkValidId"
                                                 checked={checkedItems.checkValidId} />
                                             <label className="form-check-label" htmlFor="checkValidId">&nbsp; Valid Identification (2 Copies)</label>
                                         </li>
                                     </ul>
-                                </div> 
+                                </div>
                             </div>
-                            
+
                             <div className="col-12">
-                                <br/>
+                                <br />
                                 <div className="formContainer">
-                                    <h3>Remarks:</h3>             
-                                    <br/>
+                                    <h3>Remarks:</h3>
+                                    <br />
 
                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
                                         value={remarks}
-                                        onChange={(e) => setRemarks(e.target.value)} > 
+                                        onChange={(e) => setRemarks(e.target.value)} >
                                     </textarea>
 
                                 </div>
@@ -346,7 +350,7 @@ function HospitalBillModalContent({
                     </>
                 )}
 
-            </div>     
+            </div >
 
         </>
     )

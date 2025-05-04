@@ -6,7 +6,7 @@ import axios from "axios";
 function Sidebar({ isVisible }) {
     const navigate = useNavigate();
     const location = useLocation();
-    
+
     // Load dropdown state from localStorage
     const [isOpen, setIsOpen] = useState(
         JSON.parse(localStorage.getItem("burialDropdownState")) || false
@@ -21,7 +21,7 @@ function Sidebar({ isVisible }) {
 
     const isActive = (path) => location.pathname === path;
 
-    const handleLogout = async () => {
+    /* const handleLogout = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user && user.email) {
@@ -37,7 +37,27 @@ function Sidebar({ isVisible }) {
         } catch (error) {
             console.error("Logout failed:", error);
         }
+    }; */
+
+    const handleLogout = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (user && user.email) {
+            console.log("Logging out user:", user.email);
+        } else {
+            console.log("No user found in localStorage");
+        }
+
+        try {
+            await axios.post("http://localhost:5000/logout");
+            // Clear all items in localStorage
+            localStorage.clear();
+            navigate("/");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
+
 
     useEffect(() => {
         const storedDropdownState = JSON.parse(localStorage.getItem("burialDropdownState"));
@@ -65,7 +85,7 @@ function Sidebar({ isVisible }) {
 
                         <li className="nav-item">
                             <Link className={`nav-link ${isActive('/admin/hospital_bill') ? '' : 'collapsed'}`} to="/admin/hospital_bill">
-                                <i className="bx bxs-briefcase"></i> 
+                                <i className="bx bxs-briefcase"></i>
                                 <span>Hospital Bill</span>
                             </Link>
                         </li>
