@@ -373,22 +373,22 @@ body.sidebar-hidden #main {
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
-.logo {
+.logo_navbar {
   line-height: 1;
 }
 
 @media (min-width: 1200px) {
-  .logo {
+  .logo_navbar {
     width: 280px;
   }
 }
 
-.logo img {
+.logo_navbar img {
   max-height: 26px;
   margin-right: 6px;
 }
 
-.logo span {
+.logo_navbar span {
   font-size: 26px;
   font-weight: 700;
   color: #08533F;
@@ -1087,7 +1087,7 @@ hr {
   padding: 20px 0;
   font-size: 14px;
   transition: all 0.3s;
-  border-top: 1px solid #cddfff;
+  /* border-top: 1px solid #cddfff; */
 }
 
 .footer .copyright {

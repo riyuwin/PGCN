@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 function Sidebar({ isVisible }) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -131,7 +132,7 @@ function Sidebar({ isVisible }) {
                             </Link>
                         </li>
 
-                        <hr />
+                        {/* <hr />
                         <li className="nav-heading">CONFIGURATION</li>
 
                         <li className="nav-item">
@@ -139,7 +140,8 @@ function Sidebar({ isVisible }) {
                                 <i className="bx bxs-user-account"></i>
                                 <span>Manage User Accounts</span>
                             </Link>
-                        </li>
+                        </li> */}
+                        
                         <hr />
 
                         <li className="nav-item">

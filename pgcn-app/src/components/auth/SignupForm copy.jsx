@@ -97,34 +97,15 @@ function SignupForm() {
     return (
         <>
             <div className="signup_page d-flex justify-content-center align-items-center vh-150">
-                <div className="signup_wrapper_container"  >
- 
-                    <div className="row justify-content-center align-items-center ">
-                        <div className="login-form-wrapper-logo col-md-1">
-                            <div className="dong_tulong_logo_container">
-                                <img src='assets/img/dong_tulong_logo.jpg' className='dong_tulong_logo' />
-                            </div>
-                        </div>
+                <div className="signup_container"  >
 
-                        <div className="login-form-wrapper-column col-md-3">
-                            <h2 className="title">DONG TULONG</h2>
-                            <p className="subtitle">Provincial Government of Camarines Norte - Governor’s Office</p>
-                        </div>
-                        
-                        <div className="login-form-wrapper-column col-md-10">
-                            <hr/>
-                        </div>
-                        
-                        <div className="login-form-wrapper-column col-md-8 text-center">  
+                    <div className="signup_wrapper_container">
+                        <div className="signup-form-wrapper"  >
+                            <div className="signup_form_container" >
 
-                            <div className="login_form_container">
+                                <h2 className="title">Sign up</h2>
+                                <hr />
 
-                                <h2 className="title_text">SIGN UP</h2>
-                                {error && <p className="error">{error}</p>}
-                                {/* {success && <p className="success">{success}</p>} */}
-                            </div>
-
-                            <div>
                                 {/* Basic Information Form */}
                                 {step === 1 && (
                                     <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="form">
@@ -132,7 +113,7 @@ function SignupForm() {
                                             <div className="col-md-12">
                                                 <div className="p-3">
                                                     <div className="input-group">
-                                                        <label htmlFor="fName" className="label"><b>Step 1: Basic Information</b></label>
+                                                        <label htmlFor="fName" className="label"><b>Basic Information</b></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -220,7 +201,7 @@ function SignupForm() {
                                                             <option value="">Select Gender</option>
                                                             <option value="male">Male</option>
                                                             <option value="female">Female</option>
-                                                            <option value="other">Other</option>    
+                                                            <option value="other">Other</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -261,32 +242,22 @@ function SignupForm() {
                                             </div>
 
                                             {/* Address */}
-                                            <div className="col-md-8">
+                                            <div className="col-md-12">
                                                 <div className="p-3">
                                                     <div className="input-group">
                                                         <label htmlFor="address" className="label">Address</label>
-                                                        <input
-                                                            type="tel"
-                                                            id="address"
-                                                            className="input"
-                                                            placeholder="Address"
-                                                            value={address}
-                                                            onChange={(e) => setAddress(e.target.value)}
-                                                            required
-                                                        />
-                                                        {/* <textarea
+                                                        <textarea
                                                             id="address"
                                                             className="input"
                                                             placeholder="Enter your address"
                                                             value={address}
                                                             onChange={(e) => setAddress(e.target.value)}
                                                             required
-                                                        /> */}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <br/>
                                         <button type="submit" className="button">Next</button>
                                     </form>
                                 )}
@@ -316,8 +287,9 @@ function SignupForm() {
                                                             required
                                                         >
                                                             <option value="">Select Membership Type</option>
-                                                            <option value="Admin">Admin</option>
-                                                            <option value="Employee">Employee</option>
+                                                            <option value="AmbulancePersonnel">Ambulance Personnel</option>
+                                                            <option value="EmergencyPersonnel">Emergency Personnel</option>
+                                                            <option value="Admin">Hospital & MDDRM Admin Personnel</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -442,22 +414,21 @@ function SignupForm() {
                                         {/* <button type="submit" className="button">Sign up</button> */}
                                     </form>
                                 )}
-                                 
+
 
                                 <p className="footer">
                                     Already have an account? <a href="/" className="link">Login</a>
                                 </p>
 
                             </div>
-    
                         </div>
-    
-
-
                     </div>
 
                 </div>
+
             </div>
+
+
         </>
     );
 }

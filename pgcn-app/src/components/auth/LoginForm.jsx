@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import '../../css/LoginForm.css';
 
 function LoginForm() {
     const [email, setEmail] = useState('');
@@ -104,74 +105,79 @@ function LoginForm() {
 
     return (
         <div className="login_page d-flex justify-content-center align-items-center vh-100">
-            <div className="login_container">
-
-                <div className="container"  >
-                    <div className="login-form-wrapper"  >
-                        <div className="row">
-                            <div className="col-md-6 " >
-                                <div className="caption_container">
-                                    {/* <img src='assets/img/authbg/ambulance.gif'
-                                        className='ambulance_gif' /> */}
-
-                                    <h2 className="title">PGCN</h2>
-                                    <p className="subtitle">Real-Time Ambulance Patient Information Dissemination: An Application for Immediate Ambulance to Hospital Patient Data and Incident Report Transmission</p>
-                                </div>
-                            </div>
-
-                            <div className="col-md-6"  >
-                                {/* <img src='assets/img/authbg/ambulance.gif'
-                                    className='ambulance_gif' /> */}
-
-                                <div className="login_form_container">
-
-                                    <h2 className="title">LOGIN</h2>
-                                    <p className="subtitle">Login to continue</p>
-                                    {error && <p className="error">{error}</p>}
-                                    {/* {success && <p className="success">{success}</p>} */}
-
-                                    <form onSubmit={handleLogin} className="form">
-
-                                        <div className="input-group">
-                                            <label htmlFor="email" className="label">Email:</label>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                className="input"
-                                                placeholder="Enter your email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="input-group">
-                                            <label htmlFor="password" className="label">Password:</label>
-                                            <input
-                                                type="password"
-                                                id="password"
-                                                className="input"
-                                                placeholder="Enter your password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                required
-                                            />
-                                        </div>
-                                        <button type="submit" className="button">Log In</button>
-                                    </form>
-                                    <p className="footer">
-                                        Don't have an account? <a href="/signup" className="link">Sign up</a>
-                                    </p>
-
-                                </div>
-
-                            </div>
+            <div className="login-form-wrapper-header">
+                <div className="row justify-content-center align-items-center ">
+                    <div className="login-form-wrapper-logo col-md-1">
+                        <div className="dong_tulong_logo_container">
+                            <img src='assets/img/dong_tulong_logo.jpg' className='dong_tulong_logo' />
                         </div>
-
                     </div>
+
+                    <div className="login-form-wrapper-column col-md-3">
+                        <h2 className="title">DONG TULONG</h2>
+                        <p className="subtitle">Provincial Government of Camarines Norte - Governor’s Office</p>
+                    </div>
+                    
+                    <div className="login-form-wrapper-column col-md-10">
+                        <hr/>
+                    </div>
+                    
+                    <div className="login-form-wrapper-column col-md-5 text-center">  
+
+                        <div className="login_form_container">
+
+                            <h2 className="title_text">LOGIN</h2>
+                            <p className="subtitle">Login to continue</p>
+                            {error && <p className="error">{error}</p>}
+                            {/* {success && <p className="success">{success}</p>} */}
+
+                            <br/>
+
+                            <form onSubmit={handleLogin} className="form">
+
+                                <div className="input-group">
+                                    <label htmlFor="email" className="label">Email:</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        className="input"
+                                        placeholder="Enter your email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor="password" className="label">Password:</label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        className="input"
+                                        placeholder="Enter your password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <br/>
+                                
+                                <button type="submit" className="button">Log In</button>
+
+                            </form>
+
+                            <p className="footer">
+                                Don't have an account? <a href="/signup" className="link">Sign up</a>
+                            </p>
+
+                        </div>
+ 
+                    </div>
+ 
+
+
                 </div>
+            </div> 
 
-
-            </div>
         </div>
     );
 }

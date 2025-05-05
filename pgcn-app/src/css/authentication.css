@@ -28,22 +28,24 @@ body {
     width: 100%;
     /* height: 125vh; */
     /* background-image: url('../assets/img/authbg/auth-bg5.png'); */
+    background: linear-gradient(to bottom, #FFFFFF 80%, #b4e2c7 100%);
     background-color: #ffffff;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     font-family: Arial, sans-serif;
     color: #ffffff;
-}
+} 
 
 
 .login_page {
     margin: 0;
     padding: 10px;
     width: 100%;
+
     /* height: 100vh; */
     /* background-image: url('../assets/img/authbg/auth-bg5.png'); */ 
-    background-color: #ffffff;
+    background: linear-gradient(to bottom, #FFFFFF 80%, #b4e2c7 100%);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -72,6 +74,14 @@ body {
     border: 2px solid #ddd;
 }
 
+.login_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
 .container {
     display: flex;
     justify-content: center;
@@ -83,7 +93,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 120vh;
+    height: 100vh;
 }
 
 .caption_container {
@@ -105,7 +115,7 @@ body {
 
 
 .login_form_container {
-    padding: 25px;
+    padding: 25px; 
 }
 
 .signup_form_container {
@@ -131,6 +141,44 @@ body {
     background-image: url('../assets/img/authbg/form-bg.png');
     background-size: cover;
 }
+
+
+.login-form-wrapper-header {
+    margin: 20px; 
+    padding: 16px;
+    border-radius: 12px;
+    /* box-shadow: 0px 4px 15px #d6c5f6; */
+    max-width: 100%;
+    width: 100%;
+    text-align: left;
+    border-radius: 5px;
+    /* outline: 0.5px solid red;
+    box-shadow: 0px 4px 15px #bca0f0;
+    background-image: url('../assets/img/authbg/form-bg.png'); */
+    background-size: cover;
+}
+
+/* .login-form-wrapper-logo{
+    outline: 1px solid red; 
+} */
+
+/* .login-form-wrapper-column{
+    outline: 1px solid red;
+}
+ */
+.dong_tulong_logo_container {
+    height: 100%;
+    width: 100%; 
+    /* outline: 1px solid red; */
+}
+
+.dong_tulong_logo {
+    height: 100%;
+    width: 100%; 
+    /* height: 125px;
+    width: 130px;  */  
+}
+
 
 .login-form-wrapper {
     margin: 20px;
@@ -158,23 +206,32 @@ body {
     outline: 0.5px solid #d6c5f6;
     box-shadow: 0px 4px 15px #bca0f0;
     background-image: url('../assets/img/authbg/form-bg.png');
-    background-size: cover;
-    outline: '1px solid red'
+    background-size: cover; 
 }
 
 
 .title {
-    font-size: 1.8rem;
+    font-size: 40px;
     font-weight: 1000;
-    color: #333;
-    margin: 0 0 0.5rem;
+    color: #0C623A;  
+}
+
+.title_text{
+    font-size: 30px;
+    font-weight: 1000;
+    color: #0C623A;  
+}
+
+.login_text_title{
+    font-size: 30px;
+    font-weight: 900;
+    color: #0C623A; 
 }
 
 .subtitle {
-    font-size: 12px;
-    color: #666;
-    margin-bottom: 1.5rem;
-    font-weight: 100;
+    font-size: 20px;
+    color: #0C623A;
+    font-weight: 100;   
 }
 
 .form {
@@ -184,7 +241,7 @@ body {
 }
 
 .input-group {
-    text-align: left;
+    text-align: left; 
 }
 
 .label {
@@ -196,10 +253,11 @@ body {
 
 .input {
     width: 100%;
-    padding: 0.8rem;
-    font-size: 0.8rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    padding: 0.8rem; 
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #B2D6A8;
+    background-color: #F8FFF6;
     outline: none;
     transition: border-color 0.2s;
 }
@@ -209,19 +267,23 @@ body {
 }
 
 .button {
+    width: 50%;
+    margin: 0 auto;
     padding: 0.8rem;
     font-size: 1rem;
     font-weight: 600;
     color: #fff;
-    background-color: #aaa4fb;
+    background-color: #0C623A;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+    display: block;
 }
 
+
 .button:hover {
-    background-color: #736af4;
+    background-color: #0c623a7a;
 }
 
 .footer {

@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body.login-bg {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #ffffff 60%, #d7f5e6 100%);
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    outline: 1px solid yellow;
+}
+
+.logo {
+    width: 80px;  
+    padding: 16px;
+    margin-bottom: 10px;
+    outline: 1px solid red;
+}
+
+.email, .password, .forgot {
+    text-align: left;
+}
+.main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0c5c3c;
+    margin-bottom: 0;
+}
+
+.sub-title {
+    font-size: 16px;
+    color: #0c5c3c;
+    margin-bottom: 30px;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0c5c3c;
+    margin-bottom: 5px;
+}
+
+.login-subtext {
+    color: #0c5c3c;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-form input {
+    padding: 10px;
+    border: 1px solid #b6e1c8;
+    border-radius: 5px;
+    background-color: #f6fff8;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-form button {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #0c5c3c;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: #094f34;
+}
+
+.forgot {
+    text-align: right;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    margin-top: -10px;
+}
+
+.signup-text {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.signup-text a {
+    color: #0c5c3c;
+    font-weight: 600;
+    text-decoration: none;
+}
