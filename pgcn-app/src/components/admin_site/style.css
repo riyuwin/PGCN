@@ -386,46 +386,47 @@ body.sidebar-hidden #main {
 # Header
 --------------------------------------------------------------*/
 .logo_navbar {
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  width: 100%;
-  max-width: 1000px;
-  /* outline: 1px solid red; */
-  gap: 0px;
+  line-height: 1;
+  outline: 1px solid red;
+}
+
+.topHeaderNavbarContainer{
+  outline: 1px solid red;
+  width: 1000px;
+}
+
+.topHeaderNavbarContainerText{
+  width: 1000px;
+  outline: 1px solid yellow;
+}
+
+@media (min-width: 1200px) {
+  .logo_navbar {
+    width: 280px;
+  }
 }
 
 .logo_navbar img {
+  max-height: 26px;
+  margin-right: 6px;
+}
+
+.logo_navbar span {
+  font-size: 26px;
+  font-weight: 700;
+  color: #08533F;
+  font-family: "Nunito", sans-serif;
+}
+
+.logo-img{
   width: 50px;
   height: 50px;
-  flex-shrink: 0;
-}
-
-.navbarTextContainer {
-  flex-grow: 1;
-  /* outline: 1px solid greenyellow; */
-  word-break: break-word;
-}
-
-.navbarTextContainer p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.2;
-  font-family: "Nunito", sans-serif;
-  color: #08533F;
-}
-
-.navbarTextContainer span {
-  display: block;
-  font-size: 23px;
-  font-weight: 700;
 }
 
 .header {
   transition: all 0.5s;
   z-index: 997;
-  height: 80px;
+  height: 70px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
   background-color: #ffffff;
   padding-left: 40px;
@@ -674,10 +675,10 @@ body.sidebar-hidden #main {
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #0F4600;
+  background-color: #fff;
 }
 
-@media (max-width:   1199px) {
+@media (max-width: 1199px) {
   .sidebar {
     /* left: -300px; */
     left: 0px;
@@ -736,41 +737,10 @@ body.sidebar-hidden #main {
   margin-bottom: 5px;
 }
 
-.active-nav {
-  background-color: #c1ecb4;
-  color: #08533F;
-}
-
-.active-nav i {
-  color: #08533F;
-}
-
-.nav-link.active-nav span, .nav-link.active-nav i{
-  color: #08533F !important;
-}
-
-.nav .nav-link.active-nav link {
-  color: #08533F !important;
-}
-
-.reportbtn {
-  background-color: #08533F;
-  outline: #0F4600;
-  border-radius: 5px !important;
-  color: #fff;
-}
-
-.reportbtn:hover {
-  background-color: #71d862;
-  outline: #0F4600;
-  color: #fff;
-}
-
-
 .sidebar-nav .nav-heading {
   font-size: 11px;
   text-transform: uppercase;
-  color: #CCFFBE;
+  color: #899bbd;
   font-weight: 600;
   margin: 25px 0 5px 15px;
 }
@@ -780,8 +750,9 @@ body.sidebar-hidden #main {
   align-items: center;
   font-size: 15px;
   font-weight: 600;
-  color: #ffff;
+  color: #08533F;
   transition: 0.3;
+  background: #f6f9ff;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -789,29 +760,26 @@ body.sidebar-hidden #main {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #ffff;
+  color: #08533F;
 }
 
 .sidebar-nav .nav-link.collapsed {
-  color: #ffff;
+  color: #08533F;
+  background: #fff;
 }
 
 .sidebar-nav .nav-link.collapsed i {
-  color: #ffff;
+  color: #899bbd;
 }
 
 .sidebar-nav .nav-link:hover {
-  color: #0C623A;
-  background: #c1ecb4;
+  color: #08533F;
+  background: #f6f9ff;
 }
 
 .sidebar-nav .nav-link:hover i {
   color: #08533F;
 }
-
-
-
-
 
 .sidebar-nav .nav-link .bi-chevron-down {
   margin-right: 0;
@@ -1294,34 +1262,4 @@ hr {
 
 .headerFormText{
   font-weight: 600;
-}
-
-
-.addbutton {
-  background-color: #F2FFEE;
-  color: #0C623A;  
-  outline: 1px solid #0C623A;
-}
-
-.addbutton:hover {
-  background-color: #0C623A;
-  color: rgb(255, 255, 255);  
-  outline: 1px solid #07854a;
-}
-
-.nextprevbutton {
-  background-color: #F2FFEE;
-  color: #0C623A;  
-  outline: 1px solid #0000;
-}
-
-.nextprevbutton:hover {
-  background-color: #0C623A;
-  color: rgb(255, 255, 255);  
-  outline: 1px solid #0000;
-}
- 
-.input-group .form-control {
-  border-radius: 5px !important;
-
 }

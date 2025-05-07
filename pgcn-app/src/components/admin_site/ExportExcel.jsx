@@ -132,7 +132,7 @@ const ExcelExport = ({ data, fileName, buttonStatus }) => {
     <button
       onClick={exportToExcel}
       type="button"
-      className="btn btn-primary w-100"
+      className="reportbtn btn w-100"
       disabled={!buttonStatus}
     >
       Export to Excel

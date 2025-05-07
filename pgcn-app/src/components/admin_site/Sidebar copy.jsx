@@ -72,43 +72,43 @@ function Sidebar({ isVisible }) {
             {isVisible && (
                 <aside id="sidebar" className="sidebar">
                     <ul className="sidebar-nav" id="sidebar-nav">
-                        <li className="nav-heading">MENU</li>
+                        <li className="nav-heading">ADMIN TOOL</li>
 
                         <li className="nav-item">
-                            <Link className={`nav-link ${isActive('/admin/dashboard') ? 'active-nav' : 'collapsed'}`} to="/admin/dashboard">
+                            <Link className={`nav-link ${isActive('/admin/dashboard') ? '' : 'collapsed'}`} to="/admin/dashboard">
                                 <i className="bx bxs-dashboard"></i>
                                 <span>Dashboard</span>
                             </Link>
                         </li>
 
                         <hr />
-                        <li className="nav-heading">ASSISTANCE REGISTRY MANAGEMENT</li>
+                        <li className="nav-heading">MANAGE TRANSACTIONS</li>
 
                         <li className="nav-item">
-                            <Link className={`nav-link ${isActive('/admin/hospital_bill') ? 'active-nav' : 'collapsed'}`} to="/admin/hospital_bill">
-                                <i class='bx bxs-first-aid' ></i>
+                            <Link className={`nav-link ${isActive('/admin/hospital_bill') ? '' : 'collapsed'}`} to="/admin/hospital_bill">
+                                <i className="bx bxs-briefcase"></i>
                                 <span>Hospital Bill</span>
                             </Link>
                         </li>
 
-                        <li className="nav-item" >
+                        <li className="nav-item">
                             <div className={`nav-link ${isOpen ? '' : 'collapsed'}`} onClick={toggleDropdown} style={{ cursor: "pointer" }}>
                                 <i className="bx bxs-briefcase"></i>
-                                <span>&nbsp; Burial Transactions</span>
+                                <span>Burial</span>
                                 <i className={`bx ${isOpen ? 'bx-chevron-up' : 'bx-chevron-down'} ms-auto`}></i>
                             </div>
                             {isOpen && (
                                 <ul className="nav flex-column ps-3">
                                     <li className="nav-item">
-                                        <Link className={`nav-link ${isActive('/admin/alay_pagdamay') ? 'active-nav' : 'collapsed'}`} to="/admin/alay_pagdamay">
-                                        <i class='bx bxs-plus-square'></i>
-                                           <span> Alay Pagdamay </span>
+                                        <Link className={`nav-link ${isActive('/admin/alay_pagdamay') ? '' : 'collapsed'}`} to="/admin/alay_pagdamay">
+                                            <i className="bx bx-plus"></i>
+                                            Alay Pagdamay
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className={`nav-link ${isActive('/admin/manage_burial') ? 'active-nav' : 'collapsed'}`} to="/admin/manage_burial">
-                                        <i class='bx bxs-plus-square'></i>
-                                            <span>Burial Assistance</span>
+                                        <Link className={`nav-link ${isActive('/admin/manage_burial') ? '' : 'collapsed'}`} to="/admin/manage_burial">
+                                            <i className="bx bx-plus"></i>
+                                            Burial Assistance
                                         </Link>
                                     </li>
                                 </ul>
@@ -116,17 +116,17 @@ function Sidebar({ isVisible }) {
                         </li>
 
                         <hr />
-                        <li className="nav-heading">ASSISTANCE REGISTRY REPORTS</li>
+                        <li className="nav-heading">REPORTS</li>
 
                         <li className="nav-item">
-                            <Link className={`nav-link ${isActive('/admin/manage_report') ? 'active-nav' : 'collapsed'}`} to="/admin/manage_report">
+                            <Link className={`nav-link ${isActive('/admin/manage_report') ? '' : 'collapsed'}`} to="/admin/manage_report">
                                 <i className="bx bxs-report"></i>
-                                <span>General Masterlist</span>
+                                <span>Generate Masterlist</span>
                             </Link>
                         </li>
 
                         <li className="nav-item">
-                            <Link className={`nav-link ${isActive('/admin/report_statistics') ? 'active-nav' : 'collapsed'}`} to="/admin/report_statistics">
+                            <Link className={`nav-link ${isActive('/admin/report_statistics') ? '' : 'collapsed'}`} to="/admin/report_statistics">
                                 <i className="bx bx-line-chart"></i>
                                 <span>Reports and Statistics</span>
                             </Link>
@@ -143,13 +143,6 @@ function Sidebar({ isVisible }) {
                         </li> */}
                         
                         <hr />
-
-                        {/* <li className="nav-item">
-                            <Link className="nav-link" onClick={handleLogout} style={{ cursor: "pointer" }}>
-                                <i class='bx bxs-user-circle' ></i>
-                                <span>Profile</span>
-                            </Link>
-                        </li> */}
 
                         <li className="nav-item">
                             <Link className="nav-link" onClick={handleLogout} style={{ cursor: "pointer" }}>

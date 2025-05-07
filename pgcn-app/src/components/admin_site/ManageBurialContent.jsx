@@ -442,13 +442,16 @@ function ManageBurialContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Manage Burial Assistance</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Manage Burial Assistance</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item">
-                                <a>Admin</a>
+                            <li className="breadcrumb-item" style={{ fontWeight: 'lighter', color: '#08533F' }}>
+                                <a>Assistance Registry Management</a>
                             </li>
-                            <li className="breadcrumb-item active">Manage Burial Assistance</li>
+                            <li className="breadcrumb-item"style={{ fontWeight: 'lighter', color: '#08533F' }}>
+                                <a>Burial Transactions</a>
+                            </li>
+                            <li className="breadcrumb-item active"style={{ color: '#08533F' }}>Burial Assistance</li>
                         </ol>
                     </nav>
                 </div>
@@ -464,9 +467,9 @@ function ManageBurialContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <h5 className="card-title">List of Burial Assistance</h5>
+                                                        <h5 className="card-title"style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>List of Burial Assistance</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
@@ -486,7 +489,7 @@ function ManageBurialContent() {
                                                         <div className="col-sm-3">
                                                             <div className="input-group d-flex justify-content-end">
                                                                 <button
-                                                                    className="btn btn-primary btn-sm"
+                                                                    className="addbutton btn btn-sm"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#addBurialContentModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
@@ -530,16 +533,16 @@ function ManageBurialContent() {
                                                                                 <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}
                                                                                     /* data-bs-toggle="modal"
                                                                                     data-bs-target="#addBurialContentModal" */>
-                                                                                    <i className='bx bx-info-circle' ></i> View
+                                                                                    <i className='bx bx-info-circle' ></i>
                                                                                 </button>
                                                                                 <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#addBurialContentModal">
-                                                                                    <i className='bx bx-edit' ></i> Edit
+                                                                                    <i className='bx bx-edit' ></i>
                                                                                 </button>
                                                                                 <button className="btn btn-danger"
                                                                                     onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_assistance_id'])} >
-                                                                                    <i className='bx bx-trash' ></i> Delete
+                                                                                    <i className='bx bx-trash' ></i>
                                                                                 </button>
                                                                             </td>
                                                                         </tr>
@@ -557,7 +560,7 @@ function ManageBurialContent() {
                                                         {/* Pagination Controls */}
                                                         <div className="d-flex justify-content-between mt-3">
                                                             <button
-                                                                className="btn btn-secondary"
+                                                                className="nextprevbutton btn"
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                             >
@@ -565,7 +568,7 @@ function ManageBurialContent() {
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
                                                             <button
-                                                                className="btn btn-secondary"
+                                                                className="nextprevbutton btn"
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                             >

@@ -528,196 +528,217 @@ function DashboardContent() {
     }
 
     return (
-        <main id="main" className="main">
-            <div className="content">
-                <h1>Dashboard</h1>
-                <nav>
-                    <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a>Admin</a></li>
-                        <li className="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </nav>
-            </div>
-            <hr />
+        <>
+            <main id="main" className="main">
+                <div className="content">
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Dashboard</h1>
+                    <nav>
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item"style={{ fontWeight: 'lighter', color: '#08533F' }}>
+                                <a>Menu</a></li>
+                            <li className="breadcrumb-item active"style={{ color: '#08533F' }}>Dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+                <hr />
 
 
-            <div className="container-fluid">
-                <section className="section dashboard">
-                    <div className="row ">
+                <div className="container-fluid">
+                    <section className="section dashboard">
+                        <div className="row ">
 
-                        <div className="col-xxl-4 col-md-4">
-                            <div className="card info-card sales-card h-100">
-                                <div className="filter">
-                                    <Link
-                                        className="icon"
-                                        to="#"
-                                        data-bs-toggle="dropdown"
-                                    >
-                                        <i className="bi bi-three-dots"></i>
-                                    </Link>
-                                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li className="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-                                        <li>
-                                            <Link className="dropdown-item" to="#">
-                                                Today
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link className="dropdown-item" to="#">
-                                                This Month
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link className="dropdown-item" to="#">
-                                                This Year
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div className="col-xxl-4 col-md-4">
+                                <div className="card info-card sales-card h-100">
+                                    <div className="filter">
+                                        <Link
+                                            className="icon"
+                                            to="#"
+                                            data-bs-toggle="dropdown"
+                                        >
+                                            <i className="bi bi-three-dots"></i>
+                                        </Link>
+                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <li className="dropdown-header text-start">
+                                                <h6>Filter</h6>
+                                            </li>
+                                            <li>
+                                                <Link className="dropdown-item" to="#">
+                                                    Today
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link className="dropdown-item" to="#">
+                                                    This Month
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link className="dropdown-item" to="#">
+                                                    This Year
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                                <div className="card-body">
-                                    <h5 className="card-title">
-                                        Hospital Bill
-                                        <span> | This Month Report</span>
-                                    </h5><br />
-                                    <div className="d-flex align-items-center">
-                                        <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <img src="../../assets/img/med_logo.png" alt="1" className="dashboardSymbols" />
-                                        </div>
-                                        <div className="ps-3">
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>
+                                            Hospital Bill
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}} > | This Month Report</span>
+                                        </h5><br />
+                                        <div className="d-flex align-items-center">
+                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <img src="../../assets/img/med_logo.png" alt="1" className="dashboardSymbols" />
+                                            </div>
                                             <div className="ps-3">
-                                                <h6 id="dashboardAmounts">₱ {formatToPesos(hopitalBillPettyCashAmount)}</h6>
+                                                <div className="ps-3">
+                                                    <h6 id="dashboardAmounts">₱ {formatToPesos(hopitalBillPettyCashAmount)}</h6>
+                                                    <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div className="col-xxl-4 col-md-4">
+                                <div className="card info-card revenue-card h-100">
+                                    <div className="filter">
+                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <li className="dropdown-header text-start">
+                                                <h6>Filter</h6>
+                                            </li>
+
+                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="card-body">
+                                        <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month Report</span></h5>
+                                        <br />
+                                        <div className="d-flex align-items-center">
+                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <img src="../../assets/img/burial_icon.png" alt="1" className="dashboardSymbols" />
+                                            </div>
+                                            <div className="ps-3">
+                                                <h6 id="dashboardAmounts">₱ {formatToPesos(alayPagdamayCashAmount)}</h6>
                                                 <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                            <div className="col-lg-4 col-md-4">
+                                <div className="card info-card revenue-card h-100">
+                                    <div className="filter">
+                                        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
+                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <li className="dropdown-header text-start">
+                                                <h6>Filter</h6>
+                                            </li>
 
-                        <div className="col-xxl-4 col-md-4">
-                            <div className="card info-card revenue-card h-100">
-                                <div className="filter">
-                                    <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
-                                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li className="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-
-                                        <li><a className="dropdown-item" href="#">Today</a></li>
-                                        <li><a className="dropdown-item" href="#">This Month</a></li>
-                                        <li><a className="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div>
-
-                                <div className="card-body">
-                                    <h5 className="card-title">Alay Pagdamay <span>| This Month Report</span></h5>
-                                    <br />
-                                    <div className="d-flex align-items-center">
-                                        <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <img src="../../assets/img/burial_icon.png" alt="1" className="dashboardSymbols" />
-                                        </div>
-                                        <div className="ps-3">
-                                            <h6 id="dashboardAmounts">₱ {formatToPesos(alayPagdamayCashAmount)}</h6>
-                                            <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
-                                        </div>
+                                            <li><a className="dropdown-item" href="#">Today</a></li>
+                                            <li><a className="dropdown-item" href="#">This Month</a></li>
+                                            <li><a className="dropdown-item" href="#">This Year</a></li>
+                                        </ul>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="col-lg-4 col-md-4">
-                            <div className="card info-card revenue-card h-100">
-                                <div className="filter">
-                                    <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
-                                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li className="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-
-                                        <li><a className="dropdown-item" href="#">Today</a></li>
-                                        <li><a className="dropdown-item" href="#">This Month</a></li>
-                                        <li><a className="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div>
-
-                                <div className="card-body">
-                                    <h5 className="card-title">Burial Assistance <span>| This Month Report</span></h5>
-                                    <br />
-                                    <div className="d-flex align-items-center">
-                                        <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
-                                        </div>
-                                        <div className="ps-3">
-                                            <h6 id="dashboardAmounts"> ₱ {formatToPesos(burialAssistanceCashAmount)}</h6>
-                                            <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Burial Assistance 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month Report</span></h5>
+                                        <br />
+                                        <div className="d-flex align-items-center">
+                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                            </div>
+                                            <div className="ps-3">
+                                                <h6 id="dashboardAmounts"> ₱ {formatToPesos(burialAssistanceCashAmount)}</h6>
+                                                <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div className="col-lg-12 ">
+                                <br></br>
+                            </div>
+
+                            <div className="row align-items-stretch">
+                                <div className="col-lg-8">
+                                    <div className="card">
+                                        <div className="card-body">
+                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Dong Tulong Records 
+                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
+                                            <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-4">
+                                    <div className="card">
+                                        <div className="card-body">
+                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Number of Missing Barangay Indigency 
+                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
+                                            <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="row align-items-stretch">
+                                <div className="col-lg-4 mb-4">
+                                    <div className="card h-100">
+                                        <div className="card-body">
+                                            <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Hospital Bill Per Barangay 
+                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
+                                            <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-4 mb-4">
+                                    <div className="card h-100">
+                                        <div className="card-body">
+                                            <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay Per Barangay 
+                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
+                                            <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-4 mb-4">
+                                    <div className="card h-100">
+                                        <div className="card-body">
+                                            <h5 className="card-title" style={{fontWeight: 'bold    ', color: '#0C623A'}}>Burial Assistance Per Barangay 
+                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
+                                            <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="col-lg-12 m-12">
+                                    
+                                </div>
+                            </div>
+
+
                         </div>
+                    </section>
+                </div>
+                
+                
 
-                        <div className="col-lg-12 ">
-                            <br></br>
-                        </div>
+            </main>
 
-                        <div className="row align-items-stretch">
-                            <div className="col-lg-8">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <h5 className="card-title">Dong Tulong Records <span>| This Year</span></h5>
-                                        <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-4">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <h5 className="card-title">Number of Missing Barangay Indigency <span>| This Year</span></h5>
-                                        <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="row align-items-stretch">
-                            <div className="col-lg-4 mb-4">
-                                <div className="card h-100">
-                                    <div className="card-body">
-                                        <h5 className="card-title">Hospital Bill Per Barangay <span>| This Month</span></h5>
-                                        <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-4 mb-4">
-                                <div className="card h-100">
-                                    <div className="card-body">
-                                        <h5 className="card-title">Alay Pagdamay Per Barangay <span>| This Month</span></h5>
-                                        <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-4 mb-4">
-                                <div className="card h-100">
-                                    <div className="card-body">
-                                        <h5 className="card-title">Burial Assistance Per Barangay <span>| This Month</span></h5>
-                                        <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </section>
-            </div>
-        </main>
+            {/* <div className="admin_footer">
+                    
+            </div> */}
+        </>
     );
 }
 

@@ -104,6 +104,7 @@ function SignupForm() {
                             <div className="signup_form_container" >
 
                                 <h2 className="title">Sign up</h2>
+                                <p className="subtitle">Join our community!</p>
                                 <hr />
 
                                 {/* Basic Information Form */}
@@ -113,7 +114,7 @@ function SignupForm() {
                                             <div className="col-md-12">
                                                 <div className="p-3">
                                                     <div className="input-group">
-                                                        <label htmlFor="fName" className="label"><b>Basic Information</b></label>
+                                                        <label htmlFor="fName" className="label"><b>Step 1. Basic Information</b></label>
                                                     </div>
                                                 </div>
                                             </div>

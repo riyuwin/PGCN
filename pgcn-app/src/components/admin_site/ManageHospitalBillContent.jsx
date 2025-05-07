@@ -441,20 +441,20 @@ function ManageHospitalBillContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Manage Hospital Bill</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Manage Hospital Bill</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item">
-                                <a>Admin</a>
+                            <li className="breadcrumb-item" style={{ fontWeight: 'lighter', color: '#08533F' }}>
+                                <a>Assistance Registry Management</a>
                             </li>
-                            <li className="breadcrumb-item active">Manage Hospital Bill</li>
+                            <li className="breadcrumb-item active" style={{ color: '#08533F' }}>Hospital Bill</li>
                         </ol>
                     </nav>
                 </div>
 
                 <hr />
 
-                <main className="py-6  ">
+                <main className="py-6"  >
                     <div className="container-fluid">
                         <section className="section dashboard">
                             <div className="row">
@@ -463,9 +463,9 @@ function ManageHospitalBillContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <h5 className="card-title">List of Hospital Bill</h5>
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
+                                                    <div className="d-flex justify-content-between align-items-center" >
+                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>List of Hospital Bill</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
@@ -476,16 +476,16 @@ function ManageHospitalBillContent() {
                                                                     type="text"
                                                                     className="form-control"
                                                                     id="searchInput"
-                                                                    placeholder="Search Patient Name"
+                                                                    placeholder="Search Client Name"
                                                                 /* onChange={handleSearch} */
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-6"></div>
-                                                        <div className="col-sm-3">
-                                                            <div className="input-group d-flex justify-content-end">
+                                                        <div className="input-group-btn col-sm-3">
+                                                            <div className="input-group d-flex justify-content-end" >
                                                                 <button
-                                                                    className="btn btn-primary btn-sm"
+                                                                    className="addbutton btn btn-sm"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#addHospitalBillModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
@@ -494,6 +494,7 @@ function ManageHospitalBillContent() {
                                                                 </button>
                                                             </div>
                                                         </div>
+
                                                     </div>
 
                                                     <div className="table-responsive">
@@ -521,16 +522,16 @@ function ManageHospitalBillContent() {
                                                                                 <button className="btn btn-success" onClick={() => handleOpenModal(bill, true, "View")}
                                                                                     /* data-bs-toggle="modal"
                                                                                     data-bs-target="#addHospitalBillModal" */>
-                                                                                    <i className='bx bx-info-circle' ></i> View
+                                                                                    <i className='bx bx-info-circle' ></i>
                                                                                 </button>
                                                                                 <button className="btn btn-primary" onClick={() => handleOpenModal(bill, true, "Edit")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#addHospitalBillModal">
-                                                                                    <i className='bx bx-edit' ></i> Edit
+                                                                                    <i className='bx bx-edit' ></i>
                                                                                 </button>
                                                                                 <button className="btn btn-danger"
                                                                                     onClick={(e) => handleDeleteHospitalBill(e, bill['hospital_bill_id'])} >
-                                                                                    <i className='bx bx-trash' ></i> Delete
+                                                                                    <i className='bx bx-trash' ></i>
                                                                                 </button>
                                                                             </td>
                                                                         </tr>
@@ -548,7 +549,7 @@ function ManageHospitalBillContent() {
                                                         {/* Pagination Controls */}
                                                         <div className="d-flex justify-content-between mt-3">
                                                             <button
-                                                                className="btn btn-secondary"
+                                                                className="nextprevbutton btn"
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                             >
@@ -556,7 +557,7 @@ function ManageHospitalBillContent() {
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
                                                             <button
-                                                                className="btn btn-secondary"
+                                                                className="nextprevbutton btn"
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                             >

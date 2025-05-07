@@ -42,17 +42,13 @@ function NavBar() {
     return (
         <>
             <header id="header" className="header fixed-top d-flex align-items-center">
-            <i class='bx bx-menu toggle-sidebar-btn' onClick={toggleSidebar}></i>
                 <div className="d-flex align-items-center justify-content-center">
                     <Link to="/admin/dashboard" className="logo_navbar d-flex align-items-center mx-auto">
                         <img src="/assets/img/dong_tulong_logo.jpg" alt="Logo" />
-                        <div className="navbarTextContainer d-none d-lg-block">
-                            <p>
-                                <span>Dong Tulong</span>
-                                Provincial Government of Camarines Norte - Governor’s Office
-                            </p>
-                        </div>
+                        <p><span className="d-none d-lg-block">Dong Tulong </span>Provincial Government of Camarines Norte - Governor’s Office</p> 
                     </Link>
+                    {/* <i className="bi bi-list toggle-sidebar-btn" onClick={toggleSidebar}></i> */}
+                    <i class='bx bx-menu toggle-sidebar-btn' onClick={toggleSidebar}></i>
                 </div>
 
                 <nav className="header-nav ms-auto">

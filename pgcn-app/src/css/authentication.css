@@ -242,6 +242,8 @@ body {
 
 .input-group {
     text-align: left; 
+    border-radius: 5px !important;
+   
 }
 
 .label {
@@ -255,7 +257,7 @@ body {
     width: 100%;
     padding: 0.8rem; 
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 5px !important;
     border: 1px solid #B2D6A8;
     background-color: #F8FFF6;
     outline: none;

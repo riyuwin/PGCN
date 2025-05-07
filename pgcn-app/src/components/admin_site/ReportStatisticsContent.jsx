@@ -1018,11 +1018,12 @@ function ReportStatisticsContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Reports and Statistics</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Reports and Statistics</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Reports and Statistics</li>
+                            <li className="breadcrumb-item"style={{ fontWeight: 'lighter', color: '#08533F' }}>
+                                <a>Assistance Registry Reports</a></li>
+                            <li className="breadcrumb-item active"style={{ color: '#08533F' }}>Reports and Statistics</li>
                         </ol>
                     </nav>
                 </div>
@@ -1038,13 +1039,13 @@ function ReportStatisticsContent() {
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
 
-                                                <div className="card-body">
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <h5 className="card-title">Manage Reports</h5>
+                                                        <h5 className="card-title"style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>Filter Reports and Statistics</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
-                                                    <div className="filterContainer">
+                                                    <div className="filterContainer" style={{border: "1px solid #000000"}}>
                                                         <h5>Filter: </h5><hr />
 
                                                         <div className="row mb-3">
@@ -1112,7 +1113,7 @@ function ReportStatisticsContent() {
                                                                 <div className="input-group">
                                                                     <label className="form-label">Search: </label>
                                                                     <button onClick={retrieveFilter} type="button"
-                                                                        className="btn btn-primary w-100" >
+                                                                        className="reportbtn btn w-100" >
                                                                         Filter
                                                                     </button>
                                                                 </div>

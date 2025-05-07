@@ -526,11 +526,12 @@ function ManageReportContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Generate Masterlist</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>General Masterlist</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Generate Masterlist</li>
+                            <li className="breadcrumb-item" style={{ fontWeight: 'lighter', color: '#08533F' }}
+                            ><a>Assistance Registry Reports</a></li>
+                            <li className="breadcrumb-item active"style={{ color: '#08533F' }}>General Masterlist</li>
                         </ol>
                     </nav>
                 </div>
@@ -545,60 +546,67 @@ function ManageReportContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <h5 className="card-title">Manage Reports</h5>
+                                                        <h5 className="card-title"style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}  >General Masterlist</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
-                                                    <div className="row mb-3">
-                                                        <div className="col-sm-3">
-                                                            <div className="input-group">
-                                                                <label className="form-label">Select Transactions: </label>
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="hospital"
-                                                                    value={transactions}
-                                                                    onChange={(e) => setTransactions(e.target.value)} >
-                                                                    <option value="">Select Transactions</option>
-                                                                    <option value="Hospital Bill">Hospital Bill</option>
-                                                                    <option value="Alay Pagdamay">Alay Pagdamay</option>
-                                                                    <option value="Burial Assistance">Burial Assistance</option>
-                                                                </select>
+                                                    <div className="filterContainer" style={{border: "1px solid #000000"}}>
+                                                        
+                                                        <div className="row mb-3">
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Select Transactions: </label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        id="hospital"
+                                                                        value={transactions}
+                                                                        onChange={(e) => setTransactions(e.target.value)} >
+                                                                        <option value="">Select Transactions</option>
+                                                                        <option value="Hospital Bill">Hospital Bill</option>
+                                                                        <option value="Alay Pagdamay">Alay Pagdamay</option>
+                                                                        <option value="Burial Assistance">Burial Assistance</option>
+                                                                    </select>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        
+                                                    
+                                                            
 
-                                                        <div className="col-sm-3">
-                                                            <div className="input-group">
-                                                                <label className="form-label">Start Date: </label>
-                                                                <input
-                                                                    type="date"
-                                                                    className="form-control"
-                                                                    value={startDate}
-                                                                    onChange={(e) => setStartDate(e.target.value)}
-                                                                />
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Start Date: </label>
+                                                                    <input
+                                                                        type="date"
+                                                                        className="form-control"
+                                                                        value={startDate}
+                                                                        onChange={(e) => setStartDate(e.target.value)}
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div className="col-sm-3">
-                                                            <div className="input-group">
-                                                                <label className="form-label">End Date: </label>
-                                                                <input
-                                                                    type="date"
-                                                                    className="form-control"
-                                                                    value={endDate}
-                                                                    onChange={(e) => setEndDate(e.target.value)}
-                                                                />
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">End Date: </label>
+                                                                    <input
+                                                                        type="date"
+                                                                        className="form-control"
+                                                                        value={endDate}
+                                                                        onChange={(e) => setEndDate(e.target.value)}
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div className="col-sm-3">
-                                                            <div className="input-group">
-                                                                <label className="form-label">Generate Masterlist: </label>
-                                                                <ExcelExport data={currentRecords} fileName={transactions} buttonStatus={generateButton} />
+                                                            <div className="col-sm-3">
+                                                                <div className="input-group">
+                                                                    <label className="form-label">Export Masterlist: </label>
+                                                                    <ExcelExport data={currentRecords} fileName={transactions} buttonStatus={generateButton}/>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
+
+                                                        </div>
                                                     </div>
 
                                                     {transactions === "Hospital Bill" &&
@@ -612,7 +620,7 @@ function ManageReportContent() {
                                                                 </div>
 
 
-                                                                <div className="col-sm-3">
+                                                                <div className="col-3">
                                                                     <div className="input-group">
                                                                         <label className="form-label">Province: </label>
 
@@ -641,7 +649,7 @@ function ManageReportContent() {
                                                                     </select>
                                                                 </div>
 
-                                                                <div className="col-3">
+                                                                <div className="col-3 ">
                                                                     <label className="form-label">Barangay:</label>
                                                                     <select
                                                                         className="form-control"
@@ -702,7 +710,7 @@ function ManageReportContent() {
                                                                                     ))
                                                                                 ) : (
                                                                                     <tr>
-                                                                                        <td colSpan="8" className="text-center">No records found</td>
+                                                                                        <td colSpan="9" className="text-center">No records found</td>
                                                                                     </tr>
                                                                                 )}
 
@@ -714,7 +722,7 @@ function ManageReportContent() {
                                                                         {/* Pagination Controls */}
                                                                         <div className="d-flex justify-content-between mt-3">
                                                                             <button
-                                                                                className="btn btn-secondary"
+                                                                                className="nextprevbutton btn "
                                                                                 disabled={currentPage === 1}
                                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                                             >
@@ -722,7 +730,7 @@ function ManageReportContent() {
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
                                                                             <button
-                                                                                className="btn btn-secondary"
+                                                                                className="nextprevbutton btn btn-secondary"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                                             >
@@ -839,7 +847,7 @@ function ManageReportContent() {
                                                                                     ))
                                                                                 ) : (
                                                                                     <tr>
-                                                                                        <td colSpan="8" className="text-center">No records found</td>
+                                                                                        <td colSpan="9" className="text-center">No records found</td>
                                                                                     </tr>
                                                                                 )}
 
@@ -851,7 +859,7 @@ function ManageReportContent() {
                                                                         {/* Pagination Controls */}
                                                                         <div className="d-flex justify-content-between mt-3">
                                                                             <button
-                                                                                className="btn btn-secondary"
+                                                                                className="nextprevbutton btn"
                                                                                 disabled={currentPage === 1}
                                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                                             >
@@ -859,7 +867,7 @@ function ManageReportContent() {
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
                                                                             <button
-                                                                                className="btn btn-secondary"
+                                                                                className="nextprevbutton btn btn-secondary"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                                             >
@@ -973,7 +981,7 @@ function ManageReportContent() {
                                                                                     ))
                                                                                 ) : (
                                                                                     <tr>
-                                                                                        <td colSpan="10" className="text-center">No records found</td>
+                                                                                        <td colSpan="9" className="text-center">No records found</td>
                                                                                     </tr>
                                                                                 )}
                                                                             </tbody>
@@ -985,7 +993,7 @@ function ManageReportContent() {
                                                                         {/* Pagination Controls */}
                                                                         <div className="d-flex justify-content-between mt-3">
                                                                             <button
-                                                                                className="btn btn-secondary"
+                                                                                className="nextprevbutton btn "
                                                                                 disabled={currentPage === 1}
                                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                                             >
@@ -993,7 +1001,7 @@ function ManageReportContent() {
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
                                                                             <button
-                                                                                className="btn btn-secondary"
+                                                                                className="nextprevbutton btn btn-secondary"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                                             >
