@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '../../css/LoginForm.css';
+import * as port from "../ports/DatabaseRouting"
 
 function LoginForm() {
     const [email, setEmail] = useState('');
@@ -35,7 +36,7 @@ function LoginForm() {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/login", {
+            const response = await fetch(port.PortLogin, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -92,7 +93,7 @@ function LoginForm() {
         }
 
         // Fetch user session from backend
-        fetch("http://localhost:5000/session", { credentials: "include" }) // Ensure cookies are sent
+        fetch(port.PortSession, { credentials: "include" }) // Ensure cookies are sent
             .then((res) => res.json())
             .then((data) => {
                 console.log("Session Data:", data);

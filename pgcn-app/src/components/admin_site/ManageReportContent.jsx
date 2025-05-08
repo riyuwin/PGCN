@@ -15,6 +15,7 @@ import AlayPagdamayModalContent from "./AlayPagdamayModalContent";
 import BurialAssistanceModalContent from "./BurialAssistanceModalContent";
 import ManageHospitalBillContent from "./ManageHospitalBillContent";
 import HospitalBillModalContent from "./HospitalBillModalContent";
+import * as port from "../ports/DatabaseRouting" 
 
 function ManageReportContent() {
     const [transactions, setTransactions] = useState('');
@@ -214,7 +215,7 @@ function ManageReportContent() {
 
     const fetchBurialAssitance = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_burial_assistance");
+            const response = await fetch(port.PortRetrieveBurialAssistance);
             const data = await response.json();
             setBurialAsisstanceData(data);
         } catch (error) {
@@ -224,7 +225,7 @@ function ManageReportContent() {
 
     const fetchAlayPagdamay = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay");
+            const response = await fetch(port.PortRetrieveAlayPagdamay);
             const data = await response.json();
             setAlayPagdamay(data);
         } catch (error) {
@@ -234,7 +235,7 @@ function ManageReportContent() {
 
     const fetchHospitalBills = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_hospital_bill");
+            const response = await fetch(port.PortRetrieveHospitalBill);
             const data = await response.json();
             setHospitalBills(data);
         } catch (error) {

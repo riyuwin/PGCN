@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchLocalUserDetails from "./scripts/FetchLocalUser";
+import * as port from "../ports/DatabaseRouting" 
 
 function ManageBurialContent() {
     const { localUserDetails } = FetchLocalUserDetails();
@@ -86,7 +87,7 @@ function ManageBurialContent() {
         };
 
         try {
-            const response = await fetch("http://localhost:5000/insert_burial_assistance", {
+            const response = await fetch(port.PortInsertBurialAssistance, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
@@ -132,7 +133,7 @@ function ManageBurialContent() {
             if (swalResult.isConfirmed) {
                 try {
                     // Sending DELETE request to the backend
-                    const response = await fetch('http://localhost:5000/delete_burial_assistance', {
+                    const response = await fetch(port.PortDeleteBurialAssistance, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -177,7 +178,7 @@ function ManageBurialContent() {
         };
 
         try {
-            const response = await fetch("http://localhost:5000/update_burial_assistance", {
+            const response = await fetch(port.PortUpdateBurialAssistance, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(requestData),
@@ -211,7 +212,7 @@ function ManageBurialContent() {
 
     const fetchBurialAssistance = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_burial_assistance");
+            const response = await fetch(port.PortRetrieveBurialAssistance);
             const data = await response.json();
             setBurialAssitance(data);
 

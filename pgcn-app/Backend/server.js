@@ -30,7 +30,7 @@ db.getConnection((err, connection) => {
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: process.env.VITE_DB_FRONTEND_PORT,
         credentials: true,
     })
 );
@@ -458,11 +458,7 @@ app.post("/insert_alay_pagdamay", upload.single("deathCertificate"), (req, res) 
         barangayIndigency, checkDeathCertificate, funeralContract, validId, burialStatus,
         remarks, pettyCashAmount, deceasedCauseDeath,
         currentDateTime
-    } = req.body;
-
-    console.log(
-        contactPersonEncoded, 'Testttt'
-    )
+    } = req.body; 
 
     const deathCertificate = req.file ? req.file.path : null; // Store file path instead of binary
 
@@ -1449,8 +1445,7 @@ app.post("/retrieve_total_hospital_bill_hospital_name", (req, res) => {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results);
-        console.log("Test: ", results);
+        res.json(results); 
     });
 });
 
@@ -1498,8 +1493,7 @@ app.post("/retrieve_total_hospital_bill_barangay", (req, res) => {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results);
-        console.log("Barangay Result: ", results);
+        res.json(results); 
     });
 });
 
@@ -1702,8 +1696,7 @@ app.post("/retrieve_total_alay_pagdamay_funeral_name", (req, res) => {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results);
-        console.log("Test: ", results);
+        res.json(results); 
     });
 });
 
@@ -1751,8 +1744,7 @@ app.post("/retrieve_total_alay_pagdamay_barangay", (req, res) => {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results);
-        console.log("Barangay Result: ", results);
+        res.json(results); 
     });
 });
 
@@ -1956,8 +1948,7 @@ app.post("/retrieve_total_burial_assistance_barangay", (req, res) => {
             console.error("Error retrieving hospital bills:", err);
             return res.status(500).json({ error: "Database error." });
         }
-        res.json(results);
-        console.log("Barangay Result: ", results);
+        res.json(results); 
     });
 });
 app.get("/retrieve_all_assistance", (req, res) => {

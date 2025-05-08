@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap"; 
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import FetchLocalUserDetails from "./scripts/FetchLocalUser"; 
+import * as port from "../ports/DatabaseRouting" 
 
 function HospitalBillModal(){
     const { localUserDetails } = FetchLocalUserDetails();
@@ -69,7 +70,7 @@ function HospitalBillModal(){
         });
     
         try {
-            const response = await fetch("http://localhost:5000/insert_hospital_bill", {
+            const response = await fetch(port.PortInsertHospitalBill, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -123,7 +124,7 @@ function HospitalBillModal(){
             if (swalResult.isConfirmed) {
                 try {
                     // Sending DELETE request to the backend
-                    const response = await fetch('http://localhost:5000/delete_hospital_bill', {
+                    const response = await fetch(port.PortDeleteHospitalBill, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -165,7 +166,7 @@ function HospitalBillModal(){
         });
     
         try {
-            const response = await fetch("http://localhost:5000/update_hospital_bill", {
+            const response = await fetch(port.PortUpdateHospitalBill, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
