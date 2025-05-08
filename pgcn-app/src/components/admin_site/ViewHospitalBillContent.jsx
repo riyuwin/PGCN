@@ -86,7 +86,7 @@ function ViewHospitalBillContent() {
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
     const [typeOfAssistance, setTypeOfAssistance] = useState('');
-    const [member4Ps, setMember4Ps] = useState('');
+    const [member4Ps, setMember4Ps] = useState('No');
 
     const [formPage, setFormPage] = useState("Guarantee Letter");
 
@@ -149,7 +149,7 @@ function ViewHospitalBillContent() {
             setPatientPurok(interview.purok || '');
             setContactPersonTransactionName(interview.transaction_name || '');
             setTypeOfAssistance(interview.type_assistance || '');
-            setMember4Ps(interview.member_4ps || '');
+            setMember4Ps(interview.member_4ps || 'No');
 
             if (Array.isArray(PSWDOInterview.familyComposition)) {
                 const filledData = PSWDOInterview.familyComposition.map(member => ({
