@@ -11,6 +11,9 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
+import * as port from "../ports/DatabaseRouting" 
+import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
+import { RetrieveBurialAssistanceId } from "../ports/DatabaseRouting";
 
 function ViewBurialAssistanceContent() {
 
@@ -98,7 +101,7 @@ function ViewBurialAssistanceContent() {
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
     const [typeOfAssistance, setTypeOfAssistance] = useState('Burial Assistance');
-    const [member4Ps, setMember4Ps] = useState('');
+    const [member4Ps, setMember4Ps] = useState('No');
 
     // Variables for inputs ------------------------------------------------------------
 
@@ -144,7 +147,7 @@ function ViewBurialAssistanceContent() {
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
         const transactionName = "Burial Assistance";
         try {
-            const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
+            const response = await fetch(port.PortInsertPSWDOInterview, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -182,7 +185,7 @@ function ViewBurialAssistanceContent() {
         const transactionName = "Burial Assistance";
 
         try {
-            const response = await fetch("http://localhost:5000/update_pswdo_interview", {
+            const response = await fetch(port.PortUpdatePSDOInterview, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -239,7 +242,7 @@ function ViewBurialAssistanceContent() {
 
     const fetchPSWDOInterviewId = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?Id=${id}&transactionName=${transactionName}`);
+            const response = await fetch(RetrievePSWDOInterview(id, transactionName));
             const data = await response.json();
 
             console.log("Test: ", data)
@@ -261,7 +264,7 @@ function ViewBurialAssistanceContent() {
 
     const fetchBurialAssistance = async (burialId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_burial_assistance_id?burialId=${burialId}`);
+            const response = await fetch(RetrieveBurialAssistanceId(burialId));
             const data = await response.json();
 
             PopulateForms(data);
@@ -293,7 +296,7 @@ function ViewBurialAssistanceContent() {
             setContactPersonPurok(interview.purok || '');
             setContactPersonTransactionName(interview.transaction_name || '');
             setTypeOfAssistance(interview.type_assistance || '');
-            setMember4Ps(interview.member_4ps || '');
+            setMember4Ps(interview.member_4ps || 'No');
 
             if (Array.isArray(PSWDOInterview.familyComposition)) {
                 const filledData = PSWDOInterview.familyComposition.map(member => ({

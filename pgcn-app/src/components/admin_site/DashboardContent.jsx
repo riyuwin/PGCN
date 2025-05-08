@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Chart from "react-apexcharts";
-
+import * as port from "../ports/DatabaseRouting" 
+import { RetrieveAllAssistance } from "../ports/DatabaseRouting"; 
 
 function DashboardContent() {
 
@@ -189,9 +190,9 @@ function DashboardContent() {
     const fetchAllBarChartData = async (filterNamePatientMunicipality, reportClassification) => {
         try {
             const endpoints = {
-                hospital: "http://localhost:5000/retrieve_total_hospital_bill",
-                alay: "http://localhost:5000/retrieve_total_alay_pagdamay",
-                burial: "http://localhost:5000/retrieve_total_burial_assistance",
+                hospital: port.PortRetrieveTotalHospitalBill,
+                alay: port.PortRetrieveTotalAlayPagdamay,
+                burial: port.PortRetrieveTotalBurialAssistance,
             };
 
             const bodyData = JSON.stringify({
@@ -293,7 +294,7 @@ function DashboardContent() {
 
     const fetchHospitalBillPettyCash = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash", {
+            const response = await fetch(port.PortRetrieveHospitalBillPettyCash, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -302,8 +303,7 @@ function DashboardContent() {
                     municipality: filterNamePatientMunicipality,
                     reportClassification: reportClassification
                 }),
-            });
-            /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
+            }); 
             const data = await response.json();
 
             setHopitalBillPettyCashAmount(data.totalAmount);
@@ -315,7 +315,7 @@ function DashboardContent() {
 
     const fetchAlayPagdamayPettyCash = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay_petty_cash", {
+            const response = await fetch(port.PortRetrieveAlayPagdamayPettyCash, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -324,8 +324,7 @@ function DashboardContent() {
                     municipality: filterNamePatientMunicipality,
                     reportClassification: reportClassification
                 }),
-            });
-            /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
+            }); 
             const data = await response.json();
 
             setAlayPagdamayCashAmount(data.totalAmount);
@@ -337,7 +336,7 @@ function DashboardContent() {
 
     const fetchBurialAssistancePettyCash = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_burial_assistance_petty_cash", {
+            const response = await fetch(port.PortRetrieveBurialAssistancePettyCash, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -346,8 +345,7 @@ function DashboardContent() {
                     municipality: filterNamePatientMunicipality,
                     reportClassification: reportClassification
                 }),
-            });
-            /* const response = await fetch("http://localhost:5000/retrieve_hospital_bill_petty_cash"); */
+            }); 
             const data = await response.json();
 
             setBurialAssistanceCashAmount(data.totalAmount);
@@ -361,7 +359,8 @@ function DashboardContent() {
         try {
             const queryParam = encodeURIComponent(barangayIndigencyValue);
             const reportParam = encodeURIComponent(reportClassification);
-            const response = await fetch(`http://localhost:5000/retrieve_all_assistance?check_barangay_indigency=${queryParam}&reportClassification=${reportParam}`);
+
+            const response = await fetch(RetrieveAllAssistance(queryParam, reportParam));
 
             const counts = await response.json(); // { hospital: 10, alay: 5, burial: 7 }
 
@@ -387,7 +386,7 @@ function DashboardContent() {
 
     const fetchAlayPagdamayBarangay = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_total_alay_pagdamay_barangay", {
+            const response = await fetch(port.PortRetrieveTotalAlayPagdamayBarangay, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -432,7 +431,7 @@ function DashboardContent() {
 
     const fetchHospitalBillPatientBarangay = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_total_hospital_bill_barangay", {
+            const response = await fetch(port.PortRetrieveTotalHospitalBillBarangay, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -477,7 +476,7 @@ function DashboardContent() {
 
     const fetchBurialAssistanceBarangay = async (filterNamePatientMunicipality, reportClassification) => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_total_burial_assistance_barangay", {
+            const response = await fetch(port.PortRetrieveTotalBurialAssistanceBarangay, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

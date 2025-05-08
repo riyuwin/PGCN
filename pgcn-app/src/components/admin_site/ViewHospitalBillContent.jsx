@@ -12,6 +12,9 @@ import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
 import { PettyCashLayout } from "./reports/PettyCashLayout";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
+import * as port from "../ports/DatabaseRouting" 
+import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
+import { RetrieveHospitalBillId } from "../ports/DatabaseRouting";
 
 function ViewHospitalBillContent() {
     const transactionName = "Hospital Bill";
@@ -83,7 +86,7 @@ function ViewHospitalBillContent() {
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
     const [typeOfAssistance, setTypeOfAssistance] = useState('');
-    const [member4Ps, setMember4Ps] = useState('');
+    const [member4Ps, setMember4Ps] = useState('No');
 
     const [formPage, setFormPage] = useState("Guarantee Letter");
 
@@ -95,7 +98,7 @@ function ViewHospitalBillContent() {
 
     const fetchPSWDOInterviewId = async (hospitalId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?Id=${hospitalId}&transactionName=${transactionName}`);
+            const response = await fetch(RetrievePSWDOInterview(hospitalId, transactionName));
             const data = await response.json();
 
             console.log("Test: ", data)
@@ -116,7 +119,7 @@ function ViewHospitalBillContent() {
 
     const fetchHospitalBillAssistance = async (hospitalId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_hospital_bill_id?hospitalId=${hospitalId}`);
+            const response = await fetch(RetrieveHospitalBillId(hospitalId));
             const data = await response.json();
 
             PopulateForms(data);
@@ -146,7 +149,7 @@ function ViewHospitalBillContent() {
             setPatientPurok(interview.purok || '');
             setContactPersonTransactionName(interview.transaction_name || '');
             setTypeOfAssistance(interview.type_assistance || '');
-            setMember4Ps(interview.member_4ps || '');
+            setMember4Ps(interview.member_4ps || 'No');
 
             if (Array.isArray(PSWDOInterview.familyComposition)) {
                 const filledData = PSWDOInterview.familyComposition.map(member => ({
@@ -346,7 +349,7 @@ function ViewHospitalBillContent() {
         const hospitalId = id;
 
         try {
-            const response = await fetch("http://localhost:5000/update_pswdo_interview", {
+            const response = await fetch(port.PortUpdatePSDOInterview, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -409,7 +412,7 @@ function ViewHospitalBillContent() {
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
         const transactionName = "Hospital Bill";
         try {
-            const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
+            const response = await fetch(port.PortInsertPSWDOInterview, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

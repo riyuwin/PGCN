@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchLocalUserDetails from "./scripts/FetchLocalUser";
+import * as port from "../ports/DatabaseRouting" 
 
 function ManageHospitalBillContent() {
     const { localUserDetails } = FetchLocalUserDetails();
@@ -81,7 +82,7 @@ function ManageHospitalBillContent() {
         });
 
         try {
-            const response = await fetch("http://localhost:5000/insert_hospital_bill", {
+            const response = await fetch(port.PortInsertHospitalBill, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -141,7 +142,7 @@ function ManageHospitalBillContent() {
             if (swalResult.isConfirmed) {
                 try {
                     // Sending DELETE request to the backend
-                    const response = await fetch('http://localhost:5000/delete_hospital_bill', {
+                    const response = await fetch(port.PortDeleteHospitalBill, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -190,7 +191,7 @@ function ManageHospitalBillContent() {
         });
 
         try {
-            const response = await fetch("http://localhost:5000/update_hospital_bill", {
+            const response = await fetch(port.PortUpdateHospitalBill, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -232,7 +233,7 @@ function ManageHospitalBillContent() {
 
     const fetchHospitalBills = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_hospital_bill");
+            const response = await fetch(port.PortRetrieveHospitalBill);
             const data = await response.json();
             setHospitalBills(data);
 

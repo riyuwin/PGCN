@@ -11,6 +11,9 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
+import * as port from "../ports/DatabaseRouting" 
+import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
+import { RetrieveAlayPagdamayId } from "../ports/DatabaseRouting";
 
 function ViewAlayPagdamayContent() {
 
@@ -86,7 +89,7 @@ function ViewAlayPagdamayContent() {
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
     const [typeOfAssistance, setTypeOfAssistance] = useState('Alay Pagdamay');
-    const [member4Ps, setMember4Ps] = useState('');
+    const [member4Ps, setMember4Ps] = useState('No');
 
     // Variables for inputs ------------------------------------------------------------
 
@@ -130,7 +133,7 @@ function ViewAlayPagdamayContent() {
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
         const transactionName = "Alay Pagdamay";
         try {
-            const response = await fetch("http://localhost:5000/insert_pswdo_interview", {
+            const response = await fetch(port.PortInsertPSWDOInterview, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -169,7 +172,7 @@ function ViewAlayPagdamayContent() {
         const transactionName = "Alay Pagdamay";
 
         try {
-            const response = await fetch("http://localhost:5000/update_pswdo_interview", {
+            const response = await fetch(port.PortUpdatePSDOInterview, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -226,7 +229,7 @@ function ViewAlayPagdamayContent() {
 
     const fetchPSWDOInterviewId = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_pswdo_interview_id?Id=${id}&transactionName=${transactionName}`);
+            const response = await fetch(RetrievePSWDOInterview(id, transactionName));
             const data = await response.json();
 
             console.log("Test: ", data)
@@ -248,7 +251,7 @@ function ViewAlayPagdamayContent() {
 
     const fetchBurialAssistance = async (burialId) => {
         try {
-            const response = await fetch(`http://localhost:5000/retrieve_alay_pagdamay_id?burialId=${burialId}`);
+            const response = await fetch(RetrieveAlayPagdamayId(burialId));
             const data = await response.json();
 
             PopulateForms(data);
@@ -278,7 +281,7 @@ function ViewAlayPagdamayContent() {
             setContactPersonPurok(interview.purok || '');
             setContactPersonTransactionName(interview.transaction_name || '');
             setTypeOfAssistance(interview.type_assistance || '');
-            setMember4Ps(interview.member_4ps || '');
+            setMember4Ps(interview.member_4ps || 'No');
 
             if (Array.isArray(PSWDOInterview.familyComposition)) {
                 const filledData = PSWDOInterview.familyComposition.map(member => ({

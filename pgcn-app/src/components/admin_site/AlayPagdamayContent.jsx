@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchLocalUserDetails from "./scripts/FetchLocalUser";
+import * as port from "../ports/DatabaseRouting"
 
 function AlayPagdamayContent() {
     const { localUserDetails } = FetchLocalUserDetails();
@@ -142,7 +143,7 @@ function AlayPagdamayContent() {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/insert_alay_pagdamay", {
+            const response = await fetch(port.PortInsertAlayPagdamay, {
                 method: "POST",
                 body: formData // No need for `Content-Type`, fetch will set it automatically
             });
@@ -188,7 +189,7 @@ function AlayPagdamayContent() {
             if (swalResult.isConfirmed) {
                 try {
                     // Sending DELETE request to the backend
-                    const response = await fetch('http://localhost:5000/delete_alay_pagdamay', {
+                    const response = await fetch(port.PortDeleteAlayPagdamay, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -255,7 +256,7 @@ function AlayPagdamayContent() {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/update_alay_pagdamay", {
+            const response = await fetch(port.PortUpdateAlayPagdamay, {
                 method: "POST",
                 body: formData
             });
@@ -286,7 +287,7 @@ function AlayPagdamayContent() {
 
     const fetchBurialAssistance = async () => {
         try {
-            const response = await fetch("http://localhost:5000/retrieve_alay_pagdamay");
+            const response = await fetch(port.PortRetrieveAlayPagdamay);
             const data = await response.json();
             setBurialAssitance(data);
 

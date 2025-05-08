@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import * as port from "../ports/DatabaseRouting" 
 
 
 function Sidebar({ isVisible }) {
@@ -50,7 +51,7 @@ function Sidebar({ isVisible }) {
         }
 
         try {
-            await axios.post("http://localhost:5000/logout");
+            await axios.post(port.PortLogout);
             // Clear all items in localStorage
             localStorage.clear();
             navigate("/");

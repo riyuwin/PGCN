@@ -182,11 +182,11 @@ export const PSWDOLayout = ({
             position: 'absolute',
             top: 151,
             left: 450,
-            width: 35,
+            width: 60,
             textAlign: 'left',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            fontSize: 11
+            fontSize: 11 
         },
         addressContent: {
             position: 'absolute',
@@ -801,8 +801,8 @@ export const PSWDOLayout = ({
             fontWeight: 'bold',
         }
     });
-
-    console.log("He", contactPersonPettyAmount)
+    
+    
 
     const nameFontSize = getResponsiveFontSize(payeeName, maxWidth, baseFontSize);
     const addressFontSize = getResponsiveFontSize(addressName, 230, baseFontSize);
@@ -811,7 +811,7 @@ export const PSWDOLayout = ({
     const certifyNameFontSize = getResponsiveFontSize(payeeName, 160, 10);
     const amountFontSize = getResponsiveFontSize(contactPersonPettyAmount, 160, 11);
     const amountNumberFontSize = getResponsiveFontSize(contactPersonPettyAmount, maxWidth, baseFontSize);
-    const clientNameFontSize = getResponsiveFontSize(clientName, maxWidth, baseFontSize);
+    const clientNameFontSize = getResponsiveFontSize(payeeName, maxWidth, baseFontSize);
     const currentDataFontSize = getResponsiveFontSize(currentDate, 88, baseFontSize);
 
     return (
@@ -930,19 +930,19 @@ export const PSWDOLayout = ({
                             </View>
 
                             <View style={styles.age3Content}>
-                                <Text>{familyComposition[3].relationship}</Text>
+                                <Text>{familyComposition[2].age}</Text>
                             </View>
 
                             <View style={styles.civilStatus3Content}>
-                                <Text>{familyComposition[3].civilStatus}</Text>
+                                <Text>{familyComposition[2].civilStatus}</Text>
                             </View>
 
                             <View style={styles.occupation3Content}>
-                                <Text>{familyComposition[3].occupation}</Text>
+                                <Text>{familyComposition[2].occupation}</Text>
                             </View>
 
                             <View style={styles.monthlyIncome3Content}>
-                                <Text>{formatToPesos(familyComposition[3].monthlyIncome)}</Text>
+                                <Text>{formatToPesos(familyComposition[2].monthlyIncome)}</Text>
                             </View>
                         </>
                     }
@@ -1210,7 +1210,7 @@ export const PSWDOLayout = ({
                             <View style={[styles.eligbleToContent, styles.textContainer]}>
                                 {typeOfAssistance &&
                                     <>  
-                                        <Text >{typeOfAssistance}</Text>
+                                        <Text >Burial</Text>
                                     </>
                                 }
                             </View> 
@@ -1251,7 +1251,7 @@ export const PSWDOLayout = ({
 
                     <View style={[styles.clientCompleteNameContent, styles.textContainer]}>
                         <Text style={[{ fontSize: clientNameFontSize }, styles.boldLetter]}>
-                            {clientName}
+                            {payeeName}
                         </Text>
                     </View>
 

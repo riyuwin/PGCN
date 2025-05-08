@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  
 import '../../css/SignUpForm.css';  
+import * as port from "../ports/DatabaseRouting"
 
 function SignupForm() {
     const [step, setStep] = useState(1);
@@ -59,7 +60,7 @@ function SignupForm() {
         );
     
         try {
-            const response = await fetch("http://localhost:5000/create_account", {
+            const response = await fetch(port.PortSignup, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
