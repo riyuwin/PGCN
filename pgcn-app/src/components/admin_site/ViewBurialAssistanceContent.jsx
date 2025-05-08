@@ -482,11 +482,13 @@ function ViewBurialAssistanceContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Burial Assistance Details</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Burial Assistance Details</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Burial Assistance Details</li>
+                        <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Assistance Registry Management</a></li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Burial Transactions</a></li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Burial Assistance</a></li>
+                            <li className="breadcrumb-item active" style={{ fontWeight: 'Bold', color: '#08533F' }}>Burial Assistance Details</li>
                         </ol>
                     </nav>
                 </div>
@@ -502,7 +504,7 @@ function ViewBurialAssistanceContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -512,7 +514,7 @@ function ViewBurialAssistanceContent() {
                                                                 <div className="row">
 
                                                                     <div /* className="columnContainer" */>
-                                                                        <h5>Generate Reports</h5><br />
+                                                                        <h5 style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>Print Forms</h5><br />
 
                                                                         <div className="row">
                                                                             {/* <div className="col-4">
@@ -530,7 +532,7 @@ function ViewBurialAssistanceContent() {
                                                                             <div className="col-6">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("Petty Cash Voucher")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -542,7 +544,7 @@ function ViewBurialAssistanceContent() {
                                                                             <div className="col-6">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("PSWDO Interview")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -574,7 +576,7 @@ function ViewBurialAssistanceContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -586,16 +588,16 @@ function ViewBurialAssistanceContent() {
                                                                     <div /* className="columnContainer" */>
                                                                         {/* <h5>Burial Assistance Information</h5><br /> */}
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Burial Assistance Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Burial Assistance Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-4">
                                                                                     <div className="input-group">
-                                                                                        <label className="form-label">Burial Assistance Status:<br /><b>{burialStatus}</b></label>
+                                                                                        <label className="form-label" >Burial Assistance Status:<br /><b>{burialStatus}</b></label>
                                                                                     </div>
                                                                                 </div>
 
@@ -621,12 +623,12 @@ function ViewBurialAssistanceContent() {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
 
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Claimant Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Claimant Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -743,8 +745,8 @@ function ViewBurialAssistanceContent() {
                                                             <div className="col-sm-12">
                                                                 <div className="row">
                                                                     <div className="col-sm-12">
-                                                                        <div className="columnContainer">
-                                                                            <b className="form-label">Burial Requirements:</b>
+                                                                        <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                            <b className="form-label" style={{fontSize: '20px'}}>Burial Requirements:</b>
                                                                             <div className="col-sm-12">
                                                                                 <br />
                                                                                 <ul className="list-group">
@@ -783,8 +785,8 @@ function ViewBurialAssistanceContent() {
 
                                                                         </div>
 
-                                                                        <div className="columnContainer">
-                                                                            <b className="form-label">Death Certificate</b>
+                                                                        <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}} >
+                                                                            <b className="form-label" style={{fontSize: '20px'}}>Death Certificate</b>
 
                                                                             <div className="col-12 d-flex justify-content-end">
                                                                                 {deathCertificatePreview && (
@@ -825,7 +827,7 @@ function ViewBurialAssistanceContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -833,18 +835,18 @@ function ViewBurialAssistanceContent() {
                                                                 <br />
                                                                 <div className="row">
 
-                                                                    <div className="columnContainer">
-                                                                        <b className="form-label">PSWDO Interview</b>
-                                                                        <br /><hr />
+                                                                <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                    <b className="form-label" style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                        <hr />
 
                                                                         <div className="row">
 
                                                                             <div className="col-12">
-                                                                                <p htmlFor="firstName" className="form-label"><i>Claimant Information </i></p><br />
+                                                                                <p htmlFor="firstName" className="formtitle">Claimant Information</p>
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">First Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -857,7 +859,7 @@ function ViewBurialAssistanceContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Middle Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Middle Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -870,7 +872,7 @@ function ViewBurialAssistanceContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Last Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Last Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -883,7 +885,7 @@ function ViewBurialAssistanceContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Ext Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Ext Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -898,7 +900,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Age:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Age:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -911,7 +913,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Civil Status:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Civil Status:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonCivilStatus}
@@ -929,7 +931,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Occupation:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Occupation:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -942,7 +944,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Income:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Income:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -955,7 +957,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Gender:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Gender:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonGender}
@@ -968,7 +970,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Mobile Number:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Mobile Number:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -981,7 +983,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Petty Amount:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Petty Amount:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -998,20 +1000,20 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Province:</label>
+                                                                                <label className="interviewform">Province:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientProvince}
                                                                                     disabled
                                                                                 >
-                                                                                    <option value="Camarines Norte">Camarines Norte</option>
+                                                                                    <option value="interviewform">Camarines Norte</option>
                                                                                 </select>
                                                                             </div>
 
                                                                             {/* Municipality */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Municipality:</label>
+                                                                                <label className="interviewform">Municipality:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientMunicipality}
@@ -1029,7 +1031,7 @@ function ViewBurialAssistanceContent() {
                                                                             {/* Barangay */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Barangay:</label>
+                                                                                <label className="interviewform">Barangay:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientBarangay}
@@ -1048,7 +1050,7 @@ function ViewBurialAssistanceContent() {
                                                                             {/* Purok */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Purok:</label>
+                                                                                <label className="interviewform">Purok:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -1060,7 +1062,7 @@ function ViewBurialAssistanceContent() {
                                                                             <div className="col-12">
                                                                                 <br />
                                                                                 <hr />
-                                                                                <p htmlFor="firstName" className="form-label"><i>Type of Assistance </i></p>
+                                                                                <p htmlFor="firstName" className="formtitle"><i>Type of Assistance </i></p>
                                                                             </div>
 
                                                                             {/* <div className="col-12">
@@ -1083,7 +1085,7 @@ function ViewBurialAssistanceContent() {
 
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                
                                                                                 <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1096,8 +1098,8 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-12">
                                                                                 <br />
-                                                                                <hr />
-                                                                                <p htmlFor="firstName" className="form-label"><i>Family Composition </i></p>
+                                                                                <hr />  
+                                                                                <p htmlFor="firstName" className="formtitle">Family Composition</p>
                                                                             </div>
 
                                                                             <div className="col-12">
@@ -1131,8 +1133,8 @@ function ViewBurialAssistanceContent() {
                                                                             {familyComposition.map((member, index) => (
                                                                                 <Fragment key={member.id || index}>
                                                                                     <div className="col-12">
-                                                                                        <br />
-                                                                                        <label className="form-label"><i>Family Member {index + 1}</i></label>
+                                                                                        <br /> <hr/>
+                                                                                        <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1248,7 +1250,7 @@ function ViewBurialAssistanceContent() {
                                                                         {PSWDOInterviewStatus === true &&
                                                                             <>
                                                                                 <button
-                                                                                    className="btn btn-primary btn-sm w-100"
+                                                                                    className="btn editinterview btn-sm w-100"
                                                                                     type="submit"
                                                                                     onClick={handleUpdatePSWDOInterview}
                                                                                 >
@@ -1294,7 +1296,7 @@ function ViewBurialAssistanceContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal">
+                            <h5 className="modal-title" id="viewReportModal" style= {{color: '#08533F', fontWeight: 'bold', fontSize: '30px'}}>
                                 {formPage}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

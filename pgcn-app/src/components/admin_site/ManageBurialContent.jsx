@@ -494,7 +494,7 @@ function ManageBurialContent() {
                                                                     data-bs-target="#addBurialContentModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
                                                                 >
-                                                                    + Add Burial Assistance
+                                                                    + Add Record to Burial Assistance
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -560,7 +560,7 @@ function ManageBurialContent() {
                                                         {/* Pagination Controls */}
                                                         <div className="d-flex justify-content-between mt-3">
                                                             <button
-                                                                className="nextprevbutton btn"
+                                                                className="nextprevbutton btn" style={{width: '10%'}}
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                             >
@@ -568,7 +568,7 @@ function ManageBurialContent() {
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
                                                             <button
-                                                                className="nextprevbutton btn"
+                                                                className="nextprevbutton btn" style={{width: '10%'}}
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                             >
@@ -597,23 +597,22 @@ function ManageBurialContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="addHospitalBillModalLabel">
-                                + Bukas ang Pag-asa
+                            <h5 className="modal-title" id="addHospitalBillModalLabel" style={{fontWeight: 'bold', color: '#0C623A', fontSize: '30px'}}>
+                            &nbsp;&nbsp; Add Record to Burial Assistance
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <form>
 
-                                <div className="generateContainer">
-
-                                    <h5>Select Section: </h5>
+                                <div className="generateContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                     <br />
+                                    <h5>Select Section: </h5>
                                     <div className="row">
                                         <div className="col-6">
                                             <button
                                                 type="button"
-                                                className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`}
+                                                className={`btn w-100 ${formPage === "Basic Information" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Basic Information")}
                                             >
                                                 <i class="bi bi-person-vcard"></i> Basic Information
@@ -623,7 +622,7 @@ function ManageBurialContent() {
                                         <div className="col-6">
                                             <button
                                                 type="button"
-                                                className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
+                                                className={`btn w-100 ${formPage === "Checklist" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Checklist")}
                                             >
                                                 <i class="bi bi-card-checklist"></i> Burial Requirements
@@ -634,333 +633,332 @@ function ManageBurialContent() {
                                     </div>
                                 </div>
 
-                                <div className="generateContainer">
-
-                                    <br/>
+                               
 
                                     {formPage == "Basic Information" &&
                                         <>
 
-                                            <h3>Client Information</h3><br />
-                                            <div className="row">
-                                                <div className="col-3">
-                                                    <label htmlFor="firstName" className="form-label">First Name:</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="firstName"
-                                                        value={clientFirstName}
-                                                        onChange={(e) => setClientFirstName(e.target.value)}
-                                                        placeholder="First Name"
-                                                    />
-                                                </div>
+                                            <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Client Information</h3><br />
+                                                <div className="row">
+                                                    <div className="col-3">
+                                                        <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="firstName"
+                                                            value={clientFirstName}
+                                                            onChange={(e) => setClientFirstName(e.target.value)}
+                                                            placeholder="First Name"
+                                                        />
+                                                    </div>
 
-                                                <div className="col-3">
-                                                    <label htmlFor="middleName" className="form-label">Middle Name:</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="middleName"
-                                                        placeholder="Middle Name"
-                                                        value={clientMiddleName}
-                                                        onChange={(e) => setClientMiddleName(e.target.value)}
-                                                    />
-                                                </div>
+                                                    <div className="col-3">
+                                                        <label htmlFor="middleName" className="form-label">Middle Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="middleName"
+                                                            placeholder="Middle Name"
+                                                            value={clientMiddleName}
+                                                            onChange={(e) => setClientMiddleName(e.target.value)}
+                                                        />
+                                                    </div>
 
-                                                <div className="col-3">
-                                                    <label htmlFor="lastName" className="form-label">Last Name:</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="lastName"
-                                                        placeholder="Last Name"
-                                                        value={clientLastName}
-                                                        onChange={(e) => setClientLastName(e.target.value)}
-                                                    />
-                                                </div>
+                                                    <div className="col-3">
+                                                        <label htmlFor="lastName" className="form-label">Last Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="lastName"
+                                                            placeholder="Last Name"
+                                                            value={clientLastName}
+                                                            onChange={(e) => setClientLastName(e.target.value)}
+                                                        />
+                                                    </div>
 
-                                                <div className="col-3">
-                                                    <label htmlFor="extName" className="form-label">Ext Name:</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="extName"
-                                                        value={clientExtName}
-                                                        placeholder="Ext Name"
-                                                        onChange={(e) => setClientExtName(e.target.value)}
-                                                    />
-                                                </div>
+                                                    <div className="col-3">
+                                                        <label htmlFor="extName" className="form-label">Ext Name:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            id="extName"
+                                                            value={clientExtName}
+                                                            placeholder="Ext Name"
+                                                            onChange={(e) => setClientExtName(e.target.value)}
+                                                        />
+                                                    </div>
 
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label className="form-label">Province:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        value={clientProvince}
-                                                        disabled
-                                                    >
-                                                        <option value="Camarines Norte">Camarines Norte</option>
-                                                    </select>
-                                                </div>
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Province:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            value={clientProvince}
+                                                            disabled
+                                                        >
+                                                            <option value="Camarines Norte">Camarines Norte</option>
+                                                        </select>
+                                                    </div>
 
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label className="form-label">Municipality:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        value={clientMunicipality}
-                                                        onChange={handleMunicipalityChange}
-                                                    >
-                                                        <option value="">Select Municipality</option>
-                                                        {Object.keys(municipalityBarangays).map((municipality) => (
-                                                            <option key={municipality} value={municipality}>
-                                                                {municipality}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label className="form-label">Barangay:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        value={clientBarangay}
-                                                        onChange={(e) => setClientBarangay(e.target.value.trim())}
-                                                        disabled={barangayList.length === 1}
-                                                    >
-                                                        <option value="">Select Barangay</option>
-                                                        {(barangayList && Array.isArray(barangayList)) ? (
-                                                            barangayList.map((barangay) => (
-                                                                <option key={barangay} value={barangay}>
-                                                                    {barangay}
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Municipality:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            value={clientMunicipality}
+                                                            onChange={handleMunicipalityChange}
+                                                        >
+                                                            <option value="">Select Municipality</option>
+                                                            {Object.keys(municipalityBarangays).map((municipality) => (
+                                                                <option key={municipality} value={municipality}>
+                                                                    {municipality}
                                                                 </option>
-                                                            ))
-                                                        ) : (
-                                                            <option disabled>No barangays available</option>
-                                                        )}
+                                                            ))}
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Barangay:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            value={clientBarangay}
+                                                            onChange={(e) => setClientBarangay(e.target.value.trim())}
+                                                            disabled={barangayList.length === 1}
+                                                        >
+                                                            <option value="">Select Barangay</option>
+                                                            {(barangayList && Array.isArray(barangayList)) ? (
+                                                                barangayList.map((barangay) => (
+                                                                    <option key={barangay} value={barangay}>
+                                                                        {barangay}
+                                                                    </option>
+                                                                ))
+                                                            ) : (
+                                                                <option disabled>No barangays available</option>
+                                                            )}
 
 
-                                                    </select>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Purok:</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={clientPurok}
+                                                            onChange={(e) => setClientPurok(e.target.value)}
+                                                        />
+                                                    </div>
+
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="relationship" className="form-label">Relationship:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={clientRelationship}
+                                                            onChange={(e) => setClientRelationship(e.target.value)}
+                                                        >
+                                                            <option value="">Select Relationship</option>
+                                                            <option value="Parent">Parent</option>
+                                                            <option value="Sibling">Sibling</option>
+                                                            <option value="Spouse">Spouse</option>
+                                                            <option value="Child">Child</option>
+                                                            <option value="Grandparent">Grandparent</option>
+                                                            <option value="Relative">Relative</option>
+                                                            <option value="Friend">Friend</option>
+                                                            <option value="Guardian">Guardian</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label className="form-label">Contact Number:</label>
+                                                        <input
+                                                            type="number"
+                                                            className="form-control"
+                                                            value={clientContactNumber}
+                                                            onChange={(e) => setClientContactNumber(e.target.value)}
+                                                        />
+                                                    </div>
+
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Gender:</label>
+
+                                                        <select
+                                                            className="form-control"
+                                                            id="hospital"
+                                                            value={clientGender}
+                                                            onChange={(e) => setClientGender(e.target.value)} >
+                                                            <option value="">Select Gender</option>
+                                                            <option value="Male">Male</option>
+                                                            <option value="Female">Female</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Age:</label>
+
+                                                        <input
+                                                            type="number"
+                                                            className="form-control"
+                                                            value={clientAge}
+                                                            onChange={(e) => setClientAge(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-12">
+                                                        <br/>
+                                                        <hr/>
+                                                        <br />
+                                                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Burial Information</h3>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Deceased Date of Death:</label>
+
+                                                        <input
+                                                            type="date"
+                                                            className="form-control"
+                                                            value={clientDateDeath}
+                                                            onChange={(e) => setClientDateDeath(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Deceased Cause of Death:</label>
+
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={clientCauseDeath}
+                                                            onChange={(e) => setClientCauseDeath(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="extName" className="form-label">Petty Amount:</label>
+
+                                                        <input
+                                                            type="number"
+                                                            className="form-control"
+                                                            value={clientAmount}
+                                                            onChange={(e) => setClientAmount(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="relationship" className="form-label">Type of Assistance:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={clientTypeAssistance}
+                                                            onChange={(e) => setClientTypeAssistance(e.target.value)}
+                                                        >
+                                                            <option value="">Select Type of Assistance</option>
+                                                            <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
+                                                            <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Laboratory Test</option>
+                                                            <option value="Medical Assistance / Maintenance of Medicine">Medical Assistance / Maintenance of Medicine</option>
+                                                            <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Operation</option>
+                                                            <option value="Burial Assistance">Burial Assistance</option>
+                                                            <option value="Food Assistance">Food Assistance</option>
+                                                            <option value="Transportation Assistance">Transportation Assistance</option>
+                                                            <option value="Educational Assistance">Educational Assistance</option>
+                                                            <option value="Livelihood Assistance">Livelihood Assistance</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="relationship" className="form-label">Status / Remarks:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={clientStatusRemarks}
+                                                            onChange={(e) => setClientStatusRemarks(e.target.value)}
+                                                        >
+                                                            <option value="">Select Status / Remarks</option>
+                                                            <option value="Refer to PSWDO">Refer to PSWDO</option>
+                                                            <option value="Refer to Malasakit Center / MAIP">Refer to Malasakit Center / MAIP</option>
+                                                            <option value="Refer to CNPH">Refer to CNPH</option>
+                                                            <option value="Refer to OPAG">Refer to OPAG</option>
+                                                            <option value="Refer to Dong Tulong CNPH">Refer to Dong Tulong CNPH</option>
+                                                            <option value="Refer to Ako Bicol">Refer to Ako Bicol</option>
+                                                            <option value="Refer to Leon Hernandez MAIP from Senator Dela Rosa">Refer to Leon Hernandez MAIP from Senator Dela Rosa</option>
+                                                            <option value="Refer to Ako Bicol">Refer to PCSO</option>
+                                                            <option value="Refer to DSWD">Refer to Ako DSWD</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="relationship" className="form-label">Status of Application:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={clientApplication}
+                                                            onChange={(e) => setClientApplication(e.target.value)}
+                                                        >
+                                                            <option value="">Select Status of Application</option>
+                                                            <option value="Claimed / Released / Payout Governors Office">Claimed / Released / Payout Governors Office</option>
+                                                            <option value="Claimed / Released / Payout PSWDO">Claimed / Released / Payout PSWDO</option>
+                                                            <option value="Pending / Waiting">Pending / Waiting</option>
+                                                            <option value="MAIP / Guarantee Letter">MAIP / Guarantee Letter</option>
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div className="col-3">
+                                                        <br />
+                                                        <label htmlFor="relationship" className="form-label">Interviewer:</label>
+                                                        <select
+                                                            className="form-control"
+                                                            id="relationship"
+                                                            value={clientInterviewer}
+                                                            onChange={(e) => setClientInterviewer(e.target.value)}
+                                                        >
+                                                            <option value="">Select Interviewer</option>
+                                                            <option value="Dennis S. Ballosa">Dennis S. Ballosa</option>
+                                                            <option value="Marimar P. Llego">Marimar P. Llego</option>
+                                                            <option value="John Dave R. Buitre">John Dave R. Buitre</option>
+                                                            <option value="Charlene C. Mabeza">Charlene C. Mabeza</option>
+                                                            <option value="Madilyn M. Fresco">Madilyn M. Fresco</option>
+                                                            <option value="Wilma P. Soriano">Wilma P. Soriano</option>
+                                                            <option value="Mark Aedrian A. Baigan">Mark Aedrian A. Baigan</option>
+                                                            <option value="Nellie G. Araneta">Nellie G. Araneta</option>
+                                                            <option value="Dayang Euvee E. Talavera">Dayang Euvee E. Talavera</option>
+                                                            <option value="Mary Grace Magana">Mary Grace Magana</option>
+                                                            <option value="Marissa Buena">Marissa Buena</option>
+                                                            <option value="John Paul Aguirre">John Paul Aguirre</option>
+                                                            <option value="Aurea Pamela Tacalan (Panganiban)">Aurea Pamela Tacalan (Panganiban)</option>
+                                                            <option value="Ian Enero (Capalonga)">Ian Enero (Capalonga)</option>
+                                                            <option value="Realyn O. Luchavez (Capalonga)">Realyn O. Luchavez (Capalonga)</option>
+                                                            <option value="Venus Espina (Labo)">Venus Espina (Labo)</option>
+                                                            <option value="Dhanica Jean Delos Santos (Labo)">Dhanica Jean Delos Santos (Labo)</option>
+                                                            <option value="Carl James Gianan (Sta. Elena)">Carl James Gianan (Sta. Elena)</option>
+                                                            <option value="Sherwin Zafe (Sta. Elena)">Sherwin Zafe (Sta. Elena)</option>
+                                                            <option value="Keith Jasper Barnedo">Keith Jasper Barnedo</option>
+                                                            <option value="Loue Tolin">Loue Tolin</option>
+                                                        </select>
+                                                    </div>
+
+
                                                 </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label className="form-label">Purok:</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        value={clientPurok}
-                                                        onChange={(e) => setClientPurok(e.target.value)}
-                                                    />
-                                                </div>
-
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Relationship:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={clientRelationship}
-                                                        onChange={(e) => setClientRelationship(e.target.value)}
-                                                    >
-                                                        <option value="">Select Relationship</option>
-                                                        <option value="Parent">Parent</option>
-                                                        <option value="Sibling">Sibling</option>
-                                                        <option value="Spouse">Spouse</option>
-                                                        <option value="Child">Child</option>
-                                                        <option value="Grandparent">Grandparent</option>
-                                                        <option value="Relative">Relative</option>
-                                                        <option value="Friend">Friend</option>
-                                                        <option value="Guardian">Guardian</option>
-                                                        <option value="Other">Other</option>
-                                                    </select>
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label className="form-label">Contact Number:</label>
-                                                    <input
-                                                        type="number"
-                                                        className="form-control"
-                                                        value={clientContactNumber}
-                                                        onChange={(e) => setClientContactNumber(e.target.value)}
-                                                    />
-                                                </div>
-
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="extName" className="form-label">Gender:</label>
-
-                                                    <select
-                                                        className="form-control"
-                                                        id="hospital"
-                                                        value={clientGender}
-                                                        onChange={(e) => setClientGender(e.target.value)} >
-                                                        <option value="">Select Gender</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                    </select>
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="extName" className="form-label">Age:</label>
-
-                                                    <input
-                                                        type="number"
-                                                        className="form-control"
-                                                        value={clientAge}
-                                                        onChange={(e) => setClientAge(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <div className="col-12">
-                                                    <br/>
-                                                    <hr/>
-                                                    <br />
-                                                    <h3>Burial Information</h3>
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="extName" className="form-label">Deceased Date of Death:</label>
-
-                                                    <input
-                                                        type="date"
-                                                        className="form-control"
-                                                        value={clientDateDeath}
-                                                        onChange={(e) => setClientDateDeath(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="extName" className="form-label">Deceased Cause of Death:</label>
-
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        value={clientCauseDeath}
-                                                        onChange={(e) => setClientCauseDeath(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="extName" className="form-label">Petty Amount:</label>
-
-                                                    <input
-                                                        type="number"
-                                                        className="form-control"
-                                                        value={clientAmount}
-                                                        onChange={(e) => setClientAmount(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Type of Assistance:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={clientTypeAssistance}
-                                                        onChange={(e) => setClientTypeAssistance(e.target.value)}
-                                                    >
-                                                        <option value="">Select Type of Assistance</option>
-                                                        <option value="Medical Assistance / Hospital Bill">Medical Assistance / Hospital Bill</option>
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Laboratory Test</option>
-                                                        <option value="Medical Assistance / Maintenance of Medicine">Medical Assistance / Maintenance of Medicine</option>
-                                                        <option value="Medical Assistance / Request for Laboratory Test">Medical Assistance / Request for Operation</option>
-                                                        <option value="Burial Assistance">Burial Assistance</option>
-                                                        <option value="Food Assistance">Food Assistance</option>
-                                                        <option value="Transportation Assistance">Transportation Assistance</option>
-                                                        <option value="Educational Assistance">Educational Assistance</option>
-                                                        <option value="Livelihood Assistance">Livelihood Assistance</option>
-                                                        <option value="Others">Others</option>
-                                                    </select>
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Status / Remarks:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={clientStatusRemarks}
-                                                        onChange={(e) => setClientStatusRemarks(e.target.value)}
-                                                    >
-                                                        <option value="">Select Status / Remarks</option>
-                                                        <option value="Refer to PSWDO">Refer to PSWDO</option>
-                                                        <option value="Refer to Malasakit Center / MAIP">Refer to Malasakit Center / MAIP</option>
-                                                        <option value="Refer to CNPH">Refer to CNPH</option>
-                                                        <option value="Refer to OPAG">Refer to OPAG</option>
-                                                        <option value="Refer to Dong Tulong CNPH">Refer to Dong Tulong CNPH</option>
-                                                        <option value="Refer to Ako Bicol">Refer to Ako Bicol</option>
-                                                        <option value="Refer to Leon Hernandez MAIP from Senator Dela Rosa">Refer to Leon Hernandez MAIP from Senator Dela Rosa</option>
-                                                        <option value="Refer to Ako Bicol">Refer to PCSO</option>
-                                                        <option value="Refer to DSWD">Refer to Ako DSWD</option>
-                                                    </select>
-                                                </div>
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Status of Application:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={clientApplication}
-                                                        onChange={(e) => setClientApplication(e.target.value)}
-                                                    >
-                                                        <option value="">Select Status of Application</option>
-                                                        <option value="Claimed / Released / Payout Governors Office">Claimed / Released / Payout Governors Office</option>
-                                                        <option value="Claimed / Released / Payout PSWDO">Claimed / Released / Payout PSWDO</option>
-                                                        <option value="Pending / Waiting">Pending / Waiting</option>
-                                                        <option value="MAIP / Guarantee Letter">MAIP / Guarantee Letter</option>
-                                                    </select>
-                                                </div>
-
-
-                                                <div className="col-3">
-                                                    <br />
-                                                    <label htmlFor="relationship" className="form-label">Interviewer:</label>
-                                                    <select
-                                                        className="form-control"
-                                                        id="relationship"
-                                                        value={clientInterviewer}
-                                                        onChange={(e) => setClientInterviewer(e.target.value)}
-                                                    >
-                                                        <option value="">Select Interviewer</option>
-                                                        <option value="Dennis S. Ballosa">Dennis S. Ballosa</option>
-                                                        <option value="Marimar P. Llego">Marimar P. Llego</option>
-                                                        <option value="John Dave R. Buitre">John Dave R. Buitre</option>
-                                                        <option value="Charlene C. Mabeza">Charlene C. Mabeza</option>
-                                                        <option value="Madilyn M. Fresco">Madilyn M. Fresco</option>
-                                                        <option value="Wilma P. Soriano">Wilma P. Soriano</option>
-                                                        <option value="Mark Aedrian A. Baigan">Mark Aedrian A. Baigan</option>
-                                                        <option value="Nellie G. Araneta">Nellie G. Araneta</option>
-                                                        <option value="Dayang Euvee E. Talavera">Dayang Euvee E. Talavera</option>
-                                                        <option value="Mary Grace Magana">Mary Grace Magana</option>
-                                                        <option value="Marissa Buena">Marissa Buena</option>
-                                                        <option value="John Paul Aguirre">John Paul Aguirre</option>
-                                                        <option value="Aurea Pamela Tacalan (Panganiban)">Aurea Pamela Tacalan (Panganiban)</option>
-                                                        <option value="Ian Enero (Capalonga)">Ian Enero (Capalonga)</option>
-                                                        <option value="Realyn O. Luchavez (Capalonga)">Realyn O. Luchavez (Capalonga)</option>
-                                                        <option value="Venus Espina (Labo)">Venus Espina (Labo)</option>
-                                                        <option value="Dhanica Jean Delos Santos (Labo)">Dhanica Jean Delos Santos (Labo)</option>
-                                                        <option value="Carl James Gianan (Sta. Elena)">Carl James Gianan (Sta. Elena)</option>
-                                                        <option value="Sherwin Zafe (Sta. Elena)">Sherwin Zafe (Sta. Elena)</option>
-                                                        <option value="Keith Jasper Barnedo">Keith Jasper Barnedo</option>
-                                                        <option value="Loue Tolin">Loue Tolin</option>
-                                                    </select>
-                                                </div>
-
-
-                                            </div>
                                             <br />
-
+                                        </div>
                                         </>
                                     }
 
@@ -968,8 +966,8 @@ function ManageBurialContent() {
                                         <>
                                             <div className="row">
                                                 <div className="col-12">
-                                                    <div className="formContainer">
-                                                        <h3>Burial Assistance Status: </h3><br />
+                                                    <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Burial Assistance Status: </h3><br />
                                                         <p>Current Status: <b>{burialAssistanceStatus}</b></p><br />
 
                                                         <select
@@ -989,8 +987,8 @@ function ManageBurialContent() {
 
 
                                                 <div className="col-12">
-                                                    <div className="formContainer">
-                                                        <h3>Requirements Checklist:</h3>
+                                                    <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Requirements Checklist:</h3>
                                                         <br />
                                                         <ul className="list-group">
                                                             <li className="list-group-item">
@@ -1023,8 +1021,8 @@ function ManageBurialContent() {
 
                                                 <div className="col-12">
                                                     <br />
-                                                    <div className="formContainer">
-                                                        <h3>Remarks:</h3>
+                                                    <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Remarks:</h3>
                                                         <br />
 
                                                         <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
@@ -1039,13 +1037,13 @@ function ManageBurialContent() {
                                     )}
 
                                     <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                        <button type="button" className="btn closebtn" style={{width: '15%'}} data-bs-dismiss="modal" >
                                             Close
                                         </button>
 
                                         {modalName == "Add" &&
                                             <>
-                                                <button type="submit" className="btn btn-primary"
+                                                <button type="submit" className="btn savebtn" style={{width: '15%'}}
                                                     onClick={handleAddBurialAssistance}>
                                                     Save
                                                 </button>
@@ -1062,7 +1060,7 @@ function ManageBurialContent() {
                                         }
                                     </div>
 
-                                </div>
+                                
 
                             </form>
                         </div>

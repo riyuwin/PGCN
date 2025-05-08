@@ -447,11 +447,12 @@ function ViewHospitalBillContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Hospital Bill Details</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Hospital Bill Details</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Hospital Bill Details</li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Assistance Registry Management</a></li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Hospital Bill</a></li>
+                            <li className="breadcrumb-item active" style={{ fontWeight: 'Bold', color: '#08533F' }}>Hospital Bill Details</li>
                         </ol>
                     </nav>
                 </div>
@@ -467,23 +468,22 @@ function ViewHospitalBillContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
 
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-12" >
                                                                 <br />
                                                                 <div className="row">
 
-                                                                    <div /* className="columnContainer" */>
-                                                                        <h5>Generate Reports</h5><br />
-
+                                                                    <div /* className="columnContainer" */ >
+                                                                        <h5 style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>Print Forms</h5><br />
                                                                         <div className="row">
                                                                             <div className="col-4">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("Guarantee Letter")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -495,7 +495,7 @@ function ViewHospitalBillContent() {
                                                                             <div className="col-4">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("Petty Cash Voucher")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -507,7 +507,7 @@ function ViewHospitalBillContent() {
                                                                             <div className="col-4">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("PSWDO Interview")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -536,24 +536,24 @@ function ViewHospitalBillContent() {
                                 <div className="col-lg-7">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
-                                            <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                        <div className="card info-card sales-card" >
+                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
 
                                                     <div className="row mb-3">
-                                                        <div className="row">
+                                                        <div className="row"> 
 
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-12" >
                                                                 <br />
                                                                 <div className="row">
 
                                                                     <div /* className="columnContainer" */>
                                                                         {/* <h5>Burial Assistance Information</h5><br /> */}
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Hospital Bill Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}} >Hospital Bill Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-4">
@@ -582,13 +582,13 @@ function ViewHospitalBillContent() {
 
 
                                                                             </div>
-                                                                        </div>
+                                                                        </div><br/>
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Patient Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Patient Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -642,15 +642,15 @@ function ViewHospitalBillContent() {
                                                                                 </div>
 
                                                                             </div>
-                                                                        </div>
-                                                                        <br />
+                                                                        </div><br/>
+                                                                        
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
 
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Claimant Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Claimant Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -693,13 +693,13 @@ function ViewHospitalBillContent() {
 
                                                                             </div>
                                                                         </div>
-
-                                                                        <div className="infoContainer">
+                                                                                <br/>
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
 
 
                                                                             <div className="col-sm-12">
                                                                                 <div className="input-group">
-                                                                                    <b className="form-label">Hospital Bill Requirements</b>
+                                                                                    <b className="form-label" style={{fontSize: '20px'}}>Hospital Bill Requirements</b>
                                                                                 </div>
                                                                             </div>
 
@@ -762,7 +762,7 @@ function ViewHospitalBillContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -770,18 +770,18 @@ function ViewHospitalBillContent() {
                                                                 <br />
                                                                 <div className="row">
 
-                                                                    <div className="columnContainer">
-                                                                        <b className="form-label">PSWDO Interview</b>
-                                                                        <br /><hr />
+                                                                    <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <b className="form-label" style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                        <hr />
 
                                                                         <div className="row">
 
                                                                             <div className="col-12">
-                                                                                <p htmlFor="firstName" className="form-label"><i>Claimant Information </i></p><br />
+                                                                                <p htmlFor="firstName" className="formtitle">Claimant Information</p>
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">First Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -794,7 +794,7 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Middle Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Middle Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -807,7 +807,7 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Last Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Last Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -820,7 +820,7 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Ext Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Ext Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -835,7 +835,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Age:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Age:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -848,7 +848,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Civil Status:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Civil Status:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonCivilStatus}
@@ -866,7 +866,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Occupation:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Occupation:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -879,7 +879,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Income:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Income:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -892,7 +892,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Gender:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Gender:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonGender}
@@ -905,7 +905,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Mobile Number:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Mobile Number:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -918,7 +918,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Petty Amount:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Petty Amount:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -935,7 +935,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Province:</label>
+                                                                                <label className="interviewform">Province:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonProvince}
@@ -948,7 +948,7 @@ function ViewHospitalBillContent() {
                                                                             {/* Municipality */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Municipality:</label>
+                                                                                <label className="interviewform">Municipality:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientMunicipality}
@@ -966,7 +966,7 @@ function ViewHospitalBillContent() {
                                                                             {/* Barangay */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Barangay:</label>
+                                                                                <label className="interviewform">Barangay:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientBarangay}
@@ -985,7 +985,7 @@ function ViewHospitalBillContent() {
                                                                             {/* Purok */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Purok:</label>
+                                                                                <label className="interviewform">Purok:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -995,13 +995,13 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                
                                                                                 <hr />
-                                                                                <p htmlFor="firstName" className="form-label"><i>Type of Assistance </i></p>
+                                                                                <p htmlFor="firstName" className="formtitle">Type of Assistance</p>
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                
                                                                                 <label htmlFor="firstName" className="form-label">Select Type of Assistance:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1020,7 +1020,7 @@ function ViewHospitalBillContent() {
 
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                <br/>
                                                                                 <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1032,13 +1032,13 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                               
                                                                                 <hr />
-                                                                                <p htmlFor="firstName" className="form-label"><i>Family Composition </i></p>
+                                                                                <p htmlFor="firstName" className="formtitle">Family Composition</p>
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                
                                                                                 <label className="form-label">Number of Family Members:</label>
                                                                                 <input
                                                                                     type="number"
@@ -1068,12 +1068,12 @@ function ViewHospitalBillContent() {
                                                                             {familyComposition.map((member, index) => (
                                                                                 <Fragment key={member.id || index}>
                                                                                     <div className="col-12">
-                                                                                        <br />
-                                                                                        <label className="form-label"><i>Family Member {index + 1}</i></label>
+                                                                                        <br /> <hr/>
+                                                                                        <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                        <br />
+                                                                                         <br/>   
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1089,7 +1089,7 @@ function ViewHospitalBillContent() {
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                        <br />
+                                                                                        <br/>
                                                                                         <label className="form-label">Relationship:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1180,12 +1180,14 @@ function ViewHospitalBillContent() {
 
                                                                         </div>
 
-                                                                        <br />
+                                                                        <br/>
+                                                                        <hr/>
+
 
                                                                         {PSWDOInterviewStatus === true &&
                                                                             <>
                                                                                 <button
-                                                                                    className="btn btn-primary btn-sm w-100"
+                                                                                    className="editinterview btn btn-sm w-100"
                                                                                     type="submit"
                                                                                     onClick={handleUpdatePSWDOInterview}
                                                                                 >
@@ -1232,7 +1234,7 @@ function ViewHospitalBillContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal">
+                            <h5 className="modal-title" id="viewReportModal" style= {{color: '#08533F', fontWeight: 'bold', fontSize: '30px'}}>
                                 {formPage}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

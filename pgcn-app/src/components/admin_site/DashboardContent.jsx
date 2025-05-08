@@ -548,7 +548,7 @@ function DashboardContent() {
                         <div className="row ">
 
                             <div className="col-xxl-4 col-md-4">
-                                <div className="card info-card sales-card h-100">
+                                <div className="statscard card info-card sales-card h-100">
                                     <div className="filter">
                                         <Link
                                             className="icon"
@@ -601,7 +601,7 @@ function DashboardContent() {
 
 
                             <div className="col-xxl-4 col-md-4">
-                                <div className="card info-card revenue-card h-100">
+                                <div className="statscard card info-card revenue-card h-100">
                                     <div className="filter">
                                         <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -633,7 +633,7 @@ function DashboardContent() {
                             </div>
 
                             <div className="col-lg-4 col-md-4">
-                                <div className="card info-card revenue-card h-100">
+                                <div className="statscard card info-card revenue-card h-100">
                                     <div className="filter">
                                         <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -669,9 +669,9 @@ function DashboardContent() {
                             </div>
 
                             <div className="row align-items-stretch">
-                                <div className="col-lg-8">
+                                <div className="col-lg-8" >
                                     <div className="card">
-                                        <div className="card-body">
+                                        <div className="statscard card-body">
                                             <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Dong Tulong Records 
                                                 <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
                                             <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
@@ -681,8 +681,8 @@ function DashboardContent() {
 
                                 <div className="col-lg-4">
                                     <div className="card">
-                                        <div className="card-body">
-                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Number of Missing Barangay Indigency 
+                                        <div className="statscard card-body">
+                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A', padding: '12px'}}>Number of Missing Barangay Indigency 
                                                 <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
                                             <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
                                         </div>
@@ -693,7 +693,7 @@ function DashboardContent() {
                             <div className="row align-items-stretch">
                                 <div className="col-lg-4 mb-4">
                                     <div className="card h-100">
-                                        <div className="card-body">
+                                        <div className="statscard card-body">
                                             <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Hospital Bill Per Barangay 
                                                 <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
                                             <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
@@ -703,7 +703,7 @@ function DashboardContent() {
 
                                 <div className="col-lg-4 mb-4">
                                     <div className="card h-100">
-                                        <div className="card-body">
+                                        <div className="statscard card-body">
                                             <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay Per Barangay 
                                                 <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
                                             <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
@@ -713,7 +713,7 @@ function DashboardContent() {
 
                                 <div className="col-lg-4 mb-4">
                                     <div className="card h-100">
-                                        <div className="card-body">
+                                        <div className="statscard card-body">
                                             <h5 className="card-title" style={{fontWeight: 'bold    ', color: '#0C623A'}}>Burial Assistance Per Barangay 
                                                 <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
                                             <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />

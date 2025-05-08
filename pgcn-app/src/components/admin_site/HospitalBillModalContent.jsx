@@ -40,7 +40,7 @@ function HospitalBillModalContent({
                             className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
                             onClick={() => handleFormPageUpdate("Checklist")}
                         >
-                            <i class="bi bi-card-checklist"></i> Burial Requirements
+                            <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
                         </button>
                     </div>
 

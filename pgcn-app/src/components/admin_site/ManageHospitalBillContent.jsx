@@ -452,7 +452,7 @@ function ManageHospitalBillContent() {
                     </nav>
                 </div>
 
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}}/>
 
                 <main className="py-6"  >
                     <div className="container-fluid">
@@ -490,7 +490,7 @@ function ManageHospitalBillContent() {
                                                                     data-bs-target="#addHospitalBillModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
                                                                 >
-                                                                    + Add Hospital Bill
+                                                                    + Add Record to Hospital Bill
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -547,9 +547,9 @@ function ManageHospitalBillContent() {
                                                         <br />
 
                                                         {/* Pagination Controls */}
-                                                        <div className="d-flex justify-content-between mt-3">
+                                                        <div className="d-flex justify-content-between mt-3" >
                                                             <button
-                                                                className="nextprevbutton btn"
+                                                                className="nextprevbutton btn" style={{width: '10%'}}
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                             >
@@ -557,7 +557,7 @@ function ManageHospitalBillContent() {
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
                                                             <button
-                                                                className="nextprevbutton btn"
+                                                                className="nextprevbutton btn" style={{width: '10%'}}
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                             >
@@ -586,23 +586,23 @@ function ManageHospitalBillContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="addHospitalBillModalLabel">
-                                + Add Hospital Bill
+                            <h5 className="modal-title" id="addHospitalBillModalLabel" style={{fontWeight: 'bold', color: '#0C623A', fontSize: '30px'}}> 
+                            &nbsp;&nbsp;&nbsp;Add Record to Hospital Bill
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <form>
 
-                                <div className="generateContainer">
-
-                                    <h5>Select Section: </h5>
+                                <div className="generateContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                     <br />
+                                    <h5 style={{color: '#0C623A'}}>Select Section: </h5>
+                                    
                                     <div className="row">
                                         <div className="col-6">
                                             <button
                                                 type="button"
-                                                className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`}
+                                                className={`btn w-100 ${formPage === "Basic Information" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Basic Information")}
                                             >
                                                 <i class="bi bi-person-vcard"></i> Basic Information
@@ -612,7 +612,7 @@ function ManageHospitalBillContent() {
                                         <div className="col-6">
                                             <button
                                                 type="button"
-                                                className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
+                                                className={`btn w-100 ${formPage === "Checklist" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Checklist")}
                                             >
                                                 <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
@@ -626,8 +626,8 @@ function ManageHospitalBillContent() {
                                 {formPage == "Basic Information" &&
                                     <>
 
-                                        <div className="formContainer">
-                                            <h3>Patient Information</h3><br />
+                                        <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                            <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Patient Information</h3><br />
                                             <div className="row">
                                                 <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -774,9 +774,9 @@ function ManageHospitalBillContent() {
 
                                             </div>
                                             <br />
-                                            <hr />
+                                            <hr/>
                                             <br />
-                                            <h3>Claimant Information</h3><br />
+                                            <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Claimant Information</h3><br />
                                             <div className="row">
                                                 <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -827,7 +827,7 @@ function ManageHospitalBillContent() {
                                                     <br />
                                                     <label htmlFor="relationship" className="form-label">Relationship:</label>
                                                     <select
-                                                        className="form-control"
+                                                        className="form-control"                  
                                                         id="relationship"
                                                         value={claimantRelationship}
                                                         onChange={(e) => setClaimantRelationship(e.target.value)}
@@ -887,9 +887,9 @@ function ManageHospitalBillContent() {
                                     <>
                                         <div className="row">
                                             <div className="col-12">
-                                                <div className="formContainer">
-                                                    <h3>Hospital Bill Status: </h3><br />
-                                                    <p>Current Status: <b>{hospitalBillStatus}</b></p><br />
+                                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Hospital Bill Status: </h3><br />
+                                                    <p style={{color: '#0C623A'}}>Current Status: <b>{hospitalBillStatus}</b></p>
 
                                                     <select
                                                         className="form-control"
@@ -908,8 +908,8 @@ function ManageHospitalBillContent() {
 
 
                                             <div className="col-12">
-                                                <div className="formContainer">
-                                                    <h3>Requirements Checklist:</h3>
+                                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Requirements Checklist:</h3>
                                                     <br />
                                                     <ul className="list-group">
                                                         <li className="list-group-item">
@@ -942,8 +942,8 @@ function ManageHospitalBillContent() {
 
                                             <div className="col-12">
                                                 <br />
-                                                <div className="formContainer">
-                                                    <h3>Remarks:</h3>
+                                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}> 
+                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Remarks:</h3>
                                                     <br />
 
                                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
@@ -959,13 +959,13 @@ function ManageHospitalBillContent() {
 
                                 <div className="modal-footer">
 
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                        Close
+                                    <button type="button" className="btn closebtn " style={{width: '15%'}} data-bs-dismiss="modal">
+                                        Cancel
                                     </button>
 
                                     {modalName == "Add" &&
                                         <>
-                                            <button type="submit" className="btn btn-primary"
+                                            <button type="submit" className="btn savebtn " style={{width: '15%'}} 
                                                 onClick={handleAddHospitalBill}>
                                                 Save
                                             </button>
@@ -974,7 +974,7 @@ function ManageHospitalBillContent() {
 
                                     {modalName == "Edit" &&
                                         <>
-                                            <button type="submit" className="btn btn-primary"
+                                            <button type="submit" className="btn savebtn " style={{width: '15%'}} 
                                                 onClick={handleUpdateHospitalBill}>
                                                 Save
                                             </button>

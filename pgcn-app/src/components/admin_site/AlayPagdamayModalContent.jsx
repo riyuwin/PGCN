@@ -51,7 +51,7 @@ function AlayPagdamayModalContent({
                             className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
                             onClick={() => handleFormPageUpdate("Checklist")}
                         >
-                            <i class="bi bi-card-checklist"></i> Burial Requirements
+                            <i class="bi bi-card-checklist"></i> Alay Pagdamay Requirements
                         </button>
                     </div>
 
@@ -229,7 +229,7 @@ function AlayPagdamayModalContent({
                             </div>
 
                         </div>
-                        <br />
+                        
                         <h3>Contact Person</h3><br />
                         <div className="row">
                             <div className="col-3">

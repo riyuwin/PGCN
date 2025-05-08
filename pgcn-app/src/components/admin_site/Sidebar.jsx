@@ -118,12 +118,7 @@ function Sidebar({ isVisible }) {
                         <hr />
                         <li className="nav-heading">ASSISTANCE REGISTRY REPORTS</li>
 
-                        <li className="nav-item">
-                            <Link className={`nav-link ${isActive('/admin/manage_report') ? 'active-nav' : 'collapsed'}`} to="/admin/manage_report">
-                                <i className="bx bxs-report"></i>
-                                <span>General Masterlist</span>
-                            </Link>
-                        </li>
+                        
 
                         <li className="nav-item">
                             <Link className={`nav-link ${isActive('/admin/report_statistics') ? 'active-nav' : 'collapsed'}`} to="/admin/report_statistics">
@@ -131,6 +126,13 @@ function Sidebar({ isVisible }) {
                                 <span>Reports and Statistics</span>
                             </Link>
                         </li>
+
+                        <li className="nav-item">
+                            <Link className={`nav-link ${isActive('/admin/manage_report') ? 'active-nav' : 'collapsed'}`} to="/admin/manage_report">
+                                <i className="bx bxs-report"></i>
+                                <span>Generate Reports</span>
+                            </Link>
+                        </li>   
 
                         {/* <hr />
                         <li className="nav-heading">CONFIGURATION</li>
