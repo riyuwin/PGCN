@@ -5,9 +5,9 @@ export const PortSignup = 'http://192.168.1.11:5000/create_account';
 export const PortLogout = 'http://192.168.1.11:5000/logout';
 
 // Fetch Total Records
-export const PortRetrieveTotalHospitalBill = "http://localhost:5000/retrieve_total_hospital_bill";
-export const PortRetrieveTotalAlayPagdamay = "http://localhost:5000/retrieve_total_alay_pagdamay";
-export const PortRetrieveTotalBurialAssistance = "http://localhost:5000/retrieve_total_burial_assistance";
+export const PortRetrieveTotalHospitalBill = "http://192.168.1.11:5000/retrieve_total_hospital_bill";
+export const PortRetrieveTotalAlayPagdamay = "http://192.168.1.11:5000/retrieve_total_alay_pagdamay";
+export const PortRetrieveTotalBurialAssistance = "http://192.168.1.11:5000/retrieve_total_burial_assistance";
 export const PortRetrieveHospitalBillPettyCash = 'http://192.168.1.11:5000/retrieve_hospital_bill_petty_cash';
 export const PortRetrieveAlayPagdamayPettyCash = 'http://192.168.1.11:5000/retrieve_alay_pagdamay_petty_cash';
 export const PortRetrieveBurialAssistancePettyCash = 'http://192.168.1.11:5000/retrieve_burial_assistance_petty_cash';
@@ -29,7 +29,7 @@ export function RetrieveAllAssistance(queryParam, reportParam) {
   
 // Hospital Bill 
 export const PortInsertHospitalBill = 'http://192.168.1.11:5000/insert_hospital_bill';
-export const PortDeleteHospitalBill = 'http://localhost:5000/delete_hospital_bill';
+export const PortDeleteHospitalBill = 'http://192.168.1.11:5000/delete_hospital_bill';
 export const PortUpdateHospitalBill = 'http://192.168.1.11:5000/update_hospital_bill';
 export const PortRetrieveHospitalBill = 'http://192.168.1.11:5000/retrieve_hospital_bill';
 
