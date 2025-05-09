@@ -91,6 +91,12 @@ const currentDate = new Date().toLocaleDateString("en-US", {
     day: "numeric",
 });
 
+function formatToPesos(amount) {
+    return new Intl.NumberFormat('en-PH', {
+        minimumFractionDigits: 0
+    }).format(Math.abs(amount));
+} 
+
 export const PettyCashLayout = ({ claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, patientPurok, patientBarangay, patientMunicipality, patientProvince, claimantAmount, transactionName }) => (
     <Document>
         <Page size="A4" style={styles.page}>
@@ -121,7 +127,7 @@ export const PettyCashLayout = ({ claimantFirstname, claimantMiddlename, claiman
                         </View>
                         <View style={styles.tableRow}>
                             <View style={styles.tableColParticulars}><Text style={[styles.boldLetter, styles.centeredText]}>{transactionName}</Text></View>
-                            <View style={styles.tableColAmount}><Text style={[styles.boldLetter, styles.centeredText]}>{claimantAmount}</Text></View>
+                            <View style={styles.tableColAmount}><Text style={[styles.boldLetter, styles.centeredText]}>{formatToPesos(claimantAmount)}</Text></View>
                         </View>
                     </View>
 

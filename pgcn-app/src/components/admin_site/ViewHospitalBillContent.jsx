@@ -75,7 +75,7 @@ function ViewHospitalBillContent() {
     const [hospitalStatus, setHospitalStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false,
-        checkDeathCertificate: false,
+        checkMedCertificate: false,
         checkFuneralContract: false,
         checkValidId: false
     });
@@ -85,13 +85,19 @@ function ViewHospitalBillContent() {
 
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
-    const [typeOfAssistance, setTypeOfAssistance] = useState('');
+    const [typeOfAssistance, setTypeOfAssistance] = useState('Medical');
     const [member4Ps, setMember4Ps] = useState('No');
 
     const [formPage, setFormPage] = useState("Guarantee Letter");
 
     // Variables for inputs ------------------------------------------------------------
 
+    function formatToPesos(amount) {
+        return new Intl.NumberFormat('en-PH', {
+            minimumFractionDigits: 0
+        }).format(Math.abs(amount));
+    }
+    
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
@@ -148,7 +154,7 @@ function ViewHospitalBillContent() {
             setPatientBarangay(interview.barangay || '');
             setPatientPurok(interview.purok || '');
             setContactPersonTransactionName(interview.transaction_name || '');
-            setTypeOfAssistance(interview.type_assistance || '');
+            setTypeOfAssistance(interview.type_assistance || 'Medical');
             setMember4Ps(interview.member_4ps || 'No');
 
             if (Array.isArray(PSWDOInterview.familyComposition)) {
@@ -243,10 +249,10 @@ function ViewHospitalBillContent() {
         setRemarks(bill['remarks']);
 
         setCheckedItems({
-            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,
-            checkMedCertificate: bill['check_med_certificate'] == 1,
-            checkFinalBill: bill['check_hospital_bill'] == 1,
-            checkValidId: bill['check_valid_id'] == 1,
+            checkBarangayIndigency: bill['check_barangay_indigency'] == "1",
+            checkMedCertificate: bill['check_med_certificate'] == "1",
+            checkFinalBill: bill['check_hospital_bill'] == "1",
+            checkValidId: bill['check_valid_id'] == "1",
         });
 
     };
@@ -693,6 +699,12 @@ function ViewHospitalBillContent() {
                                                                                         <label className="form-label">Claimant Relationship:<br /> <b>{contactPersonRelationship}</b></label>
                                                                                     </div>
                                                                                 </div>
+                                                                                
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Claimant Amount:<br /> <b>PHP {formatToPesos(contactPersonAmount)}</b></label>
+                                                                                    </div>
+                                                                                </div>
 
                                                                             </div>
                                                                         </div>
@@ -804,7 +816,7 @@ function ViewHospitalBillContent() {
                                                                                     id="firstName"
                                                                                     value={contactPersonMiddlename}
                                                                                     onChange={(e) => setContactPersonMname(e.target.value)}
-                                                                                    placeholder="First Name"
+                                                                                    placeholder="Middle Name"
                                                                                     disabled={true}
                                                                                 />
                                                                             </div>
@@ -817,7 +829,7 @@ function ViewHospitalBillContent() {
                                                                                     id="firstName"
                                                                                     value={contactPersonLastname}
                                                                                     onChange={(e) => setContactPersonLname(e.target.value)}
-                                                                                    placeholder="First Name"
+                                                                                    placeholder="Last Name"
                                                                                     disabled={true}
                                                                                 />
                                                                             </div>
@@ -830,7 +842,7 @@ function ViewHospitalBillContent() {
                                                                                     id="firstName"
                                                                                     value={contactPersonExtName}
                                                                                     onChange={(e) => setContactPersonExtName(e.target.value)}
-                                                                                    placeholder="First Name"
+                                                                                    placeholder="Ext"
                                                                                     disabled={true}
                                                                                 />
                                                                             </div>
@@ -860,10 +872,9 @@ function ViewHospitalBillContent() {
                                                                                     <option value="Single">Single</option>
                                                                                     <option value="Married">Married</option>
                                                                                     <option value="Widowed">Widowed</option>
-                                                                                    <option value="Widowed">Separed</option>
-                                                                                    <option value="Widowed">Common-Law Married</option>
-                                                                                    <option value="Widowed">Lived-in-Partener</option>
-                                                                                    <option value=""></option>
+                                                                                    <option value="Separated">Separated</option>
+                                                                                    <option value="Common-Law Married">Common-Law Married</option>
+                                                                                    <option value="Lived-in-Partener">Lived-in-Partener</option> 
                                                                                 </select>
                                                                             </div>
 
@@ -882,14 +893,14 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="interviewform">Income:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Monthly Income:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
                                                                                     id="firstName"
                                                                                     value={contactPersonIncome}
                                                                                     onChange={(e) => setContactPersonIncome(e.target.value)}
-                                                                                    placeholder="Income"
+                                                                                    placeholder="Monthly  Income"
                                                                                 />
                                                                             </div>
 
@@ -926,9 +937,10 @@ function ViewHospitalBillContent() {
                                                                                     type="number"
                                                                                     className="form-control"
                                                                                     id="firstName"
-                                                                                    value={contactPersonPettyAmount}
+                                                                                    disabled={true}
+                                                                                    value={contactPersonAmount}
                                                                                     onChange={(e) => setContactPersonPettyAmount(e.target.value)}
-                                                                                    placeholder="Income"
+                                                                                    placeholder="Petty Amount"
                                                                                 />
                                                                             </div>
 
@@ -955,7 +967,7 @@ function ViewHospitalBillContent() {
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientMunicipality}
-                                                                                    onChange={handleMunicipalityChange}
+                                                                                    onChange={handleMunicipalityChange} 
                                                                                 >
                                                                                     <option value="">Select Municipality</option>
                                                                                     {Object.keys(municipalityBarangays).map((municipality) => (
@@ -1000,10 +1012,10 @@ function ViewHospitalBillContent() {
                                                                             <div className="col-12">
                                                                                 
                                                                                 <hr />
-                                                                                <p htmlFor="firstName" className="formtitle">Type of Assistance</p>
+                                                                                {/* <p htmlFor="firstName" className="formtitle">Type of Assistance</p> */}
                                                                             </div>
 
-                                                                            <div className="col-12">
+                                                                            {/* <div className="col-12">
                                                                                 
                                                                                 <label htmlFor="firstName" className="form-label">Select Type of Assistance:</label>
                                                                                 <select
@@ -1019,7 +1031,7 @@ function ViewHospitalBillContent() {
                                                                                     <option value="Emergency Shelter">Emergency Shelter</option>
                                                                                     <option value="Others">Others</option>
                                                                                 </select>
-                                                                            </div>
+                                                                            </div> */}
 
 
                                                                             <div className="col-12">
@@ -1059,7 +1071,7 @@ function ViewHospitalBillContent() {
                                                                                             relationship: '',
                                                                                             age: '',
                                                                                             civilStatus: '',
-                                                                                            purok: '',
+                                                                                            monthlyIncome: '',
                                                                                         });
                                                                                         setFamilyComposition(newComposition);
                                                                                     }}
@@ -1091,7 +1103,7 @@ function ViewHospitalBillContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br/>
                                                                                         <label className="form-label">Relationship:</label>
                                                                                         <input
@@ -1105,6 +1117,35 @@ function ViewHospitalBillContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                    
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Relationship:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.relationship || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Relationship</option>
+                                                                                            <option value="Mother">Mother</option>
+                                                                                            <option value="Father">Father</option>
+                                                                                            <option value="Child">Child</option>
+                                                                                            <option value="Father">Self</option>
+                                                                                            <option value="Parent">Parent</option>
+                                                                                            <option value="Sibling">Sibling</option>
+                                                                                            <option value="Spouse">Spouse</option>
+                                                                                            <option value="Grandparent">Grandparent</option>
+                                                                                            <option value="Relative">Relative</option>
+                                                                                            <option value="Friend">Friend</option>
+                                                                                            <option value="Guardian">Guardian</option>
+                                                                                            <option value="Other">Other</option>
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1124,7 +1165,7 @@ function ViewHospitalBillContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
                                                                                         <input
@@ -1138,6 +1179,29 @@ function ViewHospitalBillContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                            
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Civil Status:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.civilStatus || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Civil Status</option>
+                                                                                            <option value="Single">Single</option>
+                                                                                            <option value="Married">Married</option>
+                                                                                            <option value="Widowed">Widowed</option>
+                                                                                            <option value="Separated">Separated</option>
+                                                                                            <option value="Common-Law Married">Common-Law Married</option>
+                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1332,7 +1396,6 @@ function ViewHospitalBillContent() {
 
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
-
                                         
                                         <PDFViewer style={{ width: "100%", height: "800px" }}>
                                             <PettyCashLayout

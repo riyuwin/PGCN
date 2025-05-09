@@ -14,6 +14,7 @@ import { PSWDOLayout } from "./reports/PSWDOLayout";
 import * as port from "../ports/DatabaseRouting" 
 import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
 import { RetrieveAlayPagdamayId } from "../ports/DatabaseRouting";
+import { PettyCashLayout } from "./reports/PettyCashLayout";
 
 function ViewAlayPagdamayContent() {
 
@@ -333,10 +334,10 @@ function ViewAlayPagdamayContent() {
 
         setBurialStatus(burial['burial_status']);
         setCheckedItems({
-            checkBarangayIndigency: burial['check_barangay_indigency'] === 1 || burial['check_barangay_indigency'] === "true",
-            checkDeathCertificate: burial['check_death_certificate'] === 1 || burial['check_death_certificate'] === "true",
-            checkFuneralContract: burial['check_funeral_contract'] === 1 || burial['check_funeral_contract'] === "true",
-            checkValidId: burial['check_valid_id'] === 1 || burial['check_valid_id'] === "true",
+            checkBarangayIndigency: burial['check_barangay_indigency'] === "1" || burial['check_barangay_indigency'] === "true",
+            checkDeathCertificate: burial['check_death_certificate'] === "1" || burial['check_death_certificate'] === "true",
+            checkFuneralContract: burial['check_funeral_contract'] === "1" || burial['check_funeral_contract'] === "true",
+            checkValidId: burial['check_valid_id'] === "1" || burial['check_valid_id'] === "true",
         });
 
         setPettyCash(burial['petty_cash']);
@@ -1125,7 +1126,7 @@ function ViewAlayPagdamayContent() {
                                                                                             relationship: '',
                                                                                             age: '',
                                                                                             civilStatus: '',
-                                                                                            purok: '',
+                                                                                            monthlyIncome: '',
                                                                                         });
                                                                                         setFamilyComposition(newComposition);
                                                                                     }}
@@ -1142,7 +1143,7 @@ function ViewAlayPagdamayContent() {
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                        <br />
+                                                                                            <br/>   
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1157,8 +1158,8 @@ function ViewAlayPagdamayContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
+                                                                                    {/* <div className="col-4">
+                                                                                        <br/>
                                                                                         <label className="form-label">Relationship:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1171,6 +1172,35 @@ function ViewAlayPagdamayContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                    
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Relationship:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.relationship || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Relationship</option>
+                                                                                            <option value="Mother">Mother</option>
+                                                                                            <option value="Father">Father</option>
+                                                                                            <option value="Child">Child</option>
+                                                                                            <option value="Father">Self</option>
+                                                                                            <option value="Parent">Parent</option>
+                                                                                            <option value="Sibling">Sibling</option>
+                                                                                            <option value="Spouse">Spouse</option>
+                                                                                            <option value="Grandparent">Grandparent</option>
+                                                                                            <option value="Relative">Relative</option>
+                                                                                            <option value="Friend">Friend</option>
+                                                                                            <option value="Guardian">Guardian</option>
+                                                                                            <option value="Other">Other</option>
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1190,7 +1220,7 @@ function ViewAlayPagdamayContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
                                                                                         <input
@@ -1204,6 +1234,29 @@ function ViewAlayPagdamayContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                            
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Civil Status:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.civilStatus || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Civil Status</option>
+                                                                                            <option value="Single">Single</option>
+                                                                                            <option value="Married">Married</option>
+                                                                                            <option value="Widowed">Widowed</option>
+                                                                                            <option value="Separated">Separated</option>
+                                                                                            <option value="Common-Law Married">Common-Law Married</option>
+                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1245,9 +1298,10 @@ function ViewAlayPagdamayContent() {
                                                                                 </Fragment>
                                                                             ))}
 
-
+ 
 
                                                                         </div>
+
 
                                                                         
 
@@ -1311,74 +1365,26 @@ function ViewAlayPagdamayContent() {
                             <div className="generateContainer">
                                 <br />
 
-                                {formPage == "Guarantee Letter" &&
-                                    <>
-
-                                        <div  >
-                                            <div className="col-12 d-flex justify-content-end">
-                                                <button
-                                                    type="button"
-                                                    className={`btn w-500  btn-secondary`}
-                                                    onClick={handleDownload}
-                                                >
-                                                    <i className='bx bxs-file-pdf' ></i> Download
-                                                </button>
-                                            </div><br />
-
-
-                                            <div className="formContainer">
-                                                <div className="row">
-
-
-                                                    <div className="col-4 d-flex justify-content-center">
-                                                        <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container" />
-                                                    </div>
-
-                                                    <div className="col-4 d-flex flex-column align-items-center header_form">
-                                                        <p className="d-flex flex-column align-items-center text-center m-auto">
-                                                            Republic of the Philippines<br />
-                                                            Province of Camarines Norte<br />
-                                                            Dong Tulong
-                                                        </p>
-                                                    </div>
-
-                                                    <div className="col-4 d-flex justify-content-center">
-                                                        <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container" />
-                                                    </div>
-
-                                                    <div className="col-12">
-                                                        <br /><hr /><br />
-                                                    </div>
-
-
-                                                    <div className="col-12  d-flex flex-column align-items-start body_form">
-                                                        <div className="body_container">
-                                                            <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br />
-                                                            <h4 className="headerFormText">GUARANTEE LETTER</h4><br />
-                                                            <h5 className="headerFormText">{currentDate}</h5><br /><br />
-                                                            <p className="guaranteeLetterContent">
-                                                                Respectfully referred to <b>{deceasedFirstName} {deceasedMiddleName} {deceasedLastName} {deceasedExtName}</b>, the herein attached approved request of <b>MR/MS. {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b> from Purok - {deceasedPurok}, Barangay {deceasedBarangay}, {deceasedMunicipality}, {deceasedMunicipality} for hospital bill assistance stated below:
-                                                            </p><br /><br />
-
-                                                            <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
-                                                            {/* <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/> */}
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
-                                    </>
-
-                                }
-
+                                 
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
 
-                                        <div className="formContent">
+                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                            <PettyCashLayout
+                                                claimantFirstname={contactPersonFirstname}
+                                                claimantMiddlename={contactPersonMiddlename}
+                                                claimantLastname={contactPersonLastname}
+                                                claimantExtName={contactPersonExtName}
+                                                patientPurok={patientPurok}
+                                                patientBarangay={patientBarangay}
+                                                patientMunicipality={patientMunicipality}
+                                                patientProvince={patientProvince}
+                                                claimantAmount={pettyCash}
+                                                transactionName={transactionName}
+                                            />
+                                        </PDFViewer>
+
+                                        {/* <div className="formContent">
 
                                             <div className="col-12 d-flex justify-content-end">
                                                 <button
@@ -1468,7 +1474,7 @@ function ViewAlayPagdamayContent() {
                                                 </tbody>
                                             </table>
 
-                                        </div>
+                                        </div> */}
 
                                     </>
                                 }
