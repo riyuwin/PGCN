@@ -532,7 +532,7 @@ function AlayPagdamayContent() {
                     </nav>
                 </div>
 
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}}/>
 
                 <main className="py-6  ">
                     <div className="container-fluid">

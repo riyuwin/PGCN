@@ -703,7 +703,8 @@ function ManageReportContent() {
                                                                                                 <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(bill, transactions)}
                                                                                                     data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    data-bs-target="#viewReportModal"
+                                                                                                    style={{fontWeight: 'lighter', color: '#08533F'}} >
                                                                                                     View
                                                                                                 </button>
                                                                                             </td>
@@ -731,7 +732,7 @@ function ManageReportContent() {
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
                                                                             <button
-                                                                                className="nextprevbutton btn btn-secondary"
+                                                                                className="nextprevbutton btn"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                                             >
@@ -750,7 +751,7 @@ function ManageReportContent() {
                                                             <div className="row">
 
                                                                 <div className="col-sm-12">
-                                                                    <hr /><br />
+                                                                    <hr style= {{border: '1px solid #0A3622'}}/><br />
                                                                     <label className="form-label mb-0">Filter Address:</label>
                                                                     <br /><br />
                                                                 </div>
@@ -840,7 +841,9 @@ function ManageReportContent() {
                                                                                                 <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    data-bs-target="#viewReportModal"
+                                                                                                    style={{fontWeight: 'lighter', color: '#08533F'}} >
+
                                                                                                     View
                                                                                                 </button>
                                                                                             </td>
@@ -974,7 +977,8 @@ function ManageReportContent() {
                                                                                                 <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    data-bs-target="#viewReportModal"
+                                                                                                    style={{fontWeight: 'lighter', color: '#08533F'}} >
                                                                                                     View
                                                                                                 </button>
                                                                                             </td>
@@ -1033,13 +1037,13 @@ function ManageReportContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal">
-                                View Reports
+                            <h5 className="modal-title" id="viewReportModal" style={{fontWeight: 'bold', color: '#0C623A', fontSize: '30px'}}>
+                              &nbsp;  View Reports
                             </h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            
                         </div>
 
-                        <div className="modal-body">
+                        <div className="modal-body" style={{color: '#0C623A'}} >
 
                             {transactions === "Hospital Bill" &&
                                 <>
@@ -1135,7 +1139,7 @@ function ManageReportContent() {
                         </div>
 
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" className="btn closebtn" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>

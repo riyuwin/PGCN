@@ -1409,6 +1409,35 @@ hr {
 }
 
 .statscard {
-  border: 2px solid #0A3622
+  border: 1px solid #0A3622
 }
 
+.iconcard {
+  background: #E0F8E9;
+}
+
+.custom-input {
+  background-color: #F2FFEE;
+  border-radius: 25px;
+  border: 1px solid #A9D9A3;
+  color: #08533F;
+}
+
+.label-form {
+  font-weight: 500;
+  color: #08533F;
+}
+
+.card {
+  border: 1px solid #C5E4C3;
+  border-radius: 10px;
+}
+
+.profile-icon i {
+  font-size: 60px;
+}
+
+.pictureborder {
+  border: 10px solid #E0F8E9;
+  border-radius: 10px;
+}

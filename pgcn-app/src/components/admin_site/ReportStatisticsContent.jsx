@@ -326,7 +326,7 @@ function ReportStatisticsContent() {
         options: {
             chart: { type: "bar", height: 350 },
             xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "October", "November", "December"] },
-            colors: ["#2196F3"],
+            colors: ["#0C623A", "#6EAE5C", "#FFEA03"],
         }
     });
 
@@ -335,7 +335,7 @@ function ReportStatisticsContent() {
         options: {
             chart: { type: "pie", height: 350 },
             labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            colors: ["#0C623A", "#6EAE5C", "#F9F7DC", "#9EBC63", "#C5D86D", "#82AA57", "#F2EFBB"],
             legend: { position: "bottom" }
         }
     });
@@ -345,8 +345,8 @@ function ReportStatisticsContent() {
         options: {
             chart: { type: "pie", height: 350 },
             labels: [],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
-            legend: { position: "right" }
+            colors: ["#0C623A", "#6EAE5C", "#9EBC63", "#C5D86D", "#82AA57"],
+            legend: { position: "bottom" }
         }
     });
 
@@ -356,7 +356,7 @@ function ReportStatisticsContent() {
         options: {
             chart: { type: "radialBar", height: 350 },
             labels: ["Petty Cash"],
-            colors: ["#FF6384", "#36A2EB", "#FFCE56",],
+            colors: ["#0C623A", "#6EAE5C", "#FFEA03"],
             legend: { position: "bottom" },
             plotOptions: {
                 radialBar: {
@@ -1026,7 +1026,7 @@ function ReportStatisticsContent() {
                     </nav>
                 </div>
 
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}}/>
 
                 <main className="py-6">
                     <div className="container-fluid">
@@ -1043,8 +1043,8 @@ function ReportStatisticsContent() {
                                                     </div>
 
                                                     {/* Filter and Search Section */}
-                                                    <div className="filterContainer" style={{border: "1px solid #000000"}}>
-                                                        <h5>Filter: </h5><hr />
+                                                    <div className="filterContainer" style={{border: "1px solid #000000"}} >
+                                                        <h5 style={{fontWeight: 'bold', color: '#08533F'}} >Filter: </h5><hr style= {{border: '1px solid #0A3622'}}/>
 
                                                         <div className="row mb-3">
 
@@ -1136,11 +1136,11 @@ function ReportStatisticsContent() {
                                                         <div className="row">
 
                                                             <div className="col-xxl-6 col-md-6">
-                                                                <div className="card info-card revenue-card h-100">
+                                                                <div className="statscard card info-card revenue-card h-100">
                                                                     <div className="filter">
                                                                         <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
                                                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                                            <li className="dropdown-header text-start">
+                                                                            <li className="dropdown-header text-start" >
                                                                                 <h6>Filter</h6>
                                                                             </li>
 
@@ -1151,15 +1151,15 @@ function ReportStatisticsContent() {
                                                                     </div>
 
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Patient Number <span>| {reportClassification}</span></h5>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}} >Total Client Number <span style={{fontWeight: 'lighter', color: '#08533F'}} >| {reportClassification}</span></h5>
                                                                         <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                                <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
+                                                                                <img src="../../assets/img/payee_icon.png" alt="1" className="dashboardSymbols" />
                                                                             </div>
                                                                             <div className="ps-3">
                                                                                 <h6 id="dashboardAmounts">{formatToPesos(totalPatientNumber)}</h6>
-                                                                                <span className="text-muted small pt-2 ps-1">total patient number</span>
+                                                                                <span className="text-muted small pt-2 ps-1" style={{fontWeight: 'lighter', color: '#08533F'}}>total client number</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1167,8 +1167,8 @@ function ReportStatisticsContent() {
                                                             </div>
 
                                                             <div className="col-xxl-6 col-md-6">
-                                                                <div className="card info-card revenue-card h-100">
-                                                                    <div className="filter">
+                                                                <div className="statscard card info-card revenue-card h-100">
+                                                                    <div className="filter" >
                                                                         <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
                                                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                                                             <li className="dropdown-header text-start">
@@ -1182,15 +1182,15 @@ function ReportStatisticsContent() {
                                                                     </div>
 
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}} >Total Petty Cash <span style={{fontWeight: 'lighter', color: '#08533F'}} >| {reportClassification}</span></h5>
                                                                         <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                                                                <img src="../../assets/img/pettycash_icon.png" alt="1" className="dashboardSymbols" />
                                                                             </div>
                                                                             <div className="ps-3">
                                                                                 <h6 id="dashboardAmounts">₱ {formatToPesos(pettyCashAmount)}</h6>
-                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash</span>
+                                                                                <span className="text-muted small pt-2 ps-1"style={{fontWeight: 'lighter', color: '#08533F'}} >total amount of petty cash given to beneficiaries</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1200,9 +1200,9 @@ function ReportStatisticsContent() {
 
                                                             <div className="col-lg-8">
                                                                 <br />
-                                                                <div className="card">
+                                                                <div className="statscard card">
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Patient Records</h5><br />
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}} > Total Client Records</h5><br />
                                                                         <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
                                                                     </div>
                                                                 </div>
@@ -1211,9 +1211,9 @@ function ReportStatisticsContent() {
 
                                                             <div className="col-lg-4">
                                                                 <br />
-                                                                <div className="card">
+                                                                <div className="statscard card">
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Hospital Bill Status</h5><br />
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}} > Total Hospital Bill Status</h5><br />
                                                                         <Chart options={radialChartData.options} series={radialChartData.series} type="donut" height={400} />
                                                                     </div>
                                                                 </div>
@@ -1222,18 +1222,18 @@ function ReportStatisticsContent() {
 
 
                                                             <div className="col-lg-8">
-                                                                <div className="card">
+                                                                <div className="statscard card">
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Patient Per Hospital</h5><br />
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}} >Total Patient Per Hospital</h5><br />
                                                                         <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                             <div className="col-lg-4">
-                                                                <div className="card">
+                                                                <div className="statscard card">
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Patient Per Barangay</h5><br />
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}} >Total Client Per Barangay</h5><br />
                                                                         <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
                                                                     </div>
 
@@ -1283,16 +1283,16 @@ function ReportStatisticsContent() {
                                                                         </ul>
                                                                     </div>
 
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Alay Pagdamay <span>| {reportClassification}</span></h5>
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Client Number <span style={{fontWeight: 'lighter', color: '#08533F'}}>| {reportClassification}</span></h5>
                                                                         <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                                <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
+                                                                                <img src="../../assets/img/payee_icon.png" alt="1" className="dashboardSymbols" />
                                                                             </div>
                                                                             <div className="ps-3">
                                                                                 <h6 id="dashboardAmounts">{formatToPesos(alayPagdamayNumber)}</h6>
-                                                                                <span className="text-muted small pt-2 ps-1">total alay pagdamay</span>
+                                                                                <span className="text-muted small pt-2 ps-1">total client number</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1314,16 +1314,16 @@ function ReportStatisticsContent() {
                                                                         </ul>
                                                                     </div>
 
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Petty Cash <span style={{fontWeight: 'lighter', color: '#08533F'}}>| {reportClassification}</span></h5>
                                                                         <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                                                                <img src="../../assets/img/pettycash_icon.png" alt="1" className="dashboardSymbols" />
                                                                             </div>
                                                                             <div className="ps-3">
                                                                                 <h6 id="dashboardAmounts">₱ {formatToPesos(pettyCashAmount)}</h6>
-                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash</span>
+                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash given to beneficiaries</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1333,8 +1333,8 @@ function ReportStatisticsContent() {
                                                             <div className="col-lg-8">
                                                                 <br />
                                                                 <div className="card">
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Alay Pagdamay Records</h5><br />
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Alay Pagdamay Records</h5><br />
                                                                         <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
                                                                     </div>
                                                                 </div>
@@ -1343,8 +1343,8 @@ function ReportStatisticsContent() {
                                                             <div className="col-lg-4">
                                                                 <br />
                                                                 <div className="card">
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Alay Pagdamay Status</h5><br />
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Alay Pagdamay Status</h5><br />
                                                                         <Chart options={radialChartData.options} series={radialChartData.series} type="donut" height={400} />
                                                                     </div>
                                                                 </div>
@@ -1352,8 +1352,8 @@ function ReportStatisticsContent() {
 
                                                             <div className="col-lg-8">
                                                                 <div className="card">
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Deceased Per Funeral</h5><br />
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Deceased Per Funeral</h5><br />
                                                                         <Chart options={piePolarChartData.options} series={piePolarChartData.series} type="polarArea" height={400} />
                                                                     </div>
                                                                 </div>
@@ -1361,8 +1361,8 @@ function ReportStatisticsContent() {
 
                                                             <div className="col-lg-4">
                                                                 <div className="card">
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Deceased Per Barangay</h5><br />
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Deceased Per Barangay</h5><br />
                                                                         <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
                                                                     </div>
                                                                 </div>
@@ -1398,16 +1398,16 @@ function ReportStatisticsContent() {
                                                                         </ul>
                                                                     </div>
 
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Burial Assistance <span>| {reportClassification}</span></h5>
+                                                                    <div className="card-body"  style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Client Number <span style={{fontWeight: 'lighter',  color: '#08533F'}}>| {reportClassification}</span></h5>
                                                                         <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                                <img src="../../assets/img/patient_logo.png" alt="1" className="dashboardSymbols" />
+                                                                                <img src="../../assets/img/payee_icon.png" alt="1" className="dashboardSymbols" />
                                                                             </div>
                                                                             <div className="ps-3">
                                                                                 <h6 id="dashboardAmounts">{formatToPesos(burialAssistanceNumber)}</h6>
-                                                                                <span className="text-muted small pt-2 ps-1">total burial assistance</span>
+                                                                                <span className="text-muted small pt-2 ps-1">total client number</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1429,16 +1429,16 @@ function ReportStatisticsContent() {
                                                                         </ul>
                                                                     </div>
 
-                                                                    <div className="card-body">
-                                                                        <h5 className="card-title">Total Petty Cash <span>| {reportClassification}</span></h5>
+                                                                    <div className="card-body" style= {{border: '1px solid #0A3622'}}>
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Petty Cash <span style={{fontWeight: 'lighter',  color: '#08533F'}}>| {reportClassification}</span></h5>
                                                                         <br />
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                                                                <img src="../../assets/img/pettycash_icon.png" alt="1" className="dashboardSymbols" />
                                                                             </div>
                                                                             <div className="ps-3">
                                                                                 <h6 id="dashboardAmounts">₱ {formatToPesos(pettyCashAmount)}</h6>
-                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash</span>
+                                                                                <span className="text-muted small pt-2 ps-1">total amount of petty cash given to beneficiaries</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1447,27 +1447,27 @@ function ReportStatisticsContent() {
 
                                                             <div className="col-lg-12">
                                                                 <br />
-                                                                <div className="card">
+                                                                <div className="card" style= {{border: '1px solid #0A3622'}}>
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Alay Pagdamay Records</h5><br />
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Alay Pagdamay Records</h5><br />
                                                                         <Chart options={barChartData.options} series={barChartData.series} type="bar" height={400} />
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                             <div className="col-lg-6">
-                                                                <div className="card">
+                                                                <div className="card" style= {{border: '1px solid #0A3622'}}>
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Alay Pagdamay Status</h5><br />
+                                                                        <h5 className="card-title"style={{fontWeight: 'bold', color: '#08533F'}}>Total Alay Pagdamay Status</h5><br />
                                                                         <Chart options={radialChartData.options} series={radialChartData.series} type="donut" height={400} />
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                             <div className="col-lg-6">
-                                                                <div className="card">
+                                                                <div className="card" style= {{border: '1px solid #0A3622'}}>
                                                                     <div className="card-body">
-                                                                        <h5 className="card-title">Total Deceased Per Barangay</h5><br />
+                                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F'}}>Total Deceased Per Barangay</h5><br />
                                                                         <Chart options={pieChartData.options} series={pieChartData.series} type="donut" height={400} />
                                                                     </div>
                                                                 </div>
