@@ -34,12 +34,12 @@ function ManageHospitalBillContent() {
     const [claimantContact, setClaimantContact] = useState('');
     const [claimantAmount, setClaimantAmount] = useState('');
 
-    const [hospitalBillStatus, setHospitalBillStatus] = useState('');
+    const [hospitalBillStatus, setHospitalBillStatus] = useState('Pending');
     const [checkedItems, setCheckedItems] = useState({
-        checkBarangayIndigency: false,
-        checkMedCertificate: false,
-        checkFinalBill: false,
-        checkValidId: false
+        checkBarangayIndigency: 0,
+        checkMedicalCertificate: 0,
+        checkFinalBill: 0,
+        checkValidId: 0
     });
 
     const [remarks, setRemarks] = useState('');
@@ -91,7 +91,7 @@ function ManageHospitalBillContent() {
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                     claimantAmount, hospitalBillStatus,
                     barangayIndigency: checkedItems.checkBarangayIndigency,
-                    checkMedicalCertificate: checkedItems.checkMedCertificate,
+                    checkMedicalCertificate: checkedItems.checkMedicalCertificate,
                     checkFinalBill: checkedItems.checkFinalBill,
                     validId: checkedItems.checkValidId,
                     remarks,
@@ -183,7 +183,7 @@ function ManageHospitalBillContent() {
             claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
             claimantAmount, hospitalBillStatus,
             barangayIndigency: checkedItems.checkBarangayIndigency,
-            checkMedicalCertificate: checkedItems.checkMedCertificate,
+            checkMedicalCertificate: checkedItems.checkMedicalCertificate,
             checkFinalBill: checkedItems.checkFinalBill,
             validId: checkedItems.checkValidId,
             remarks,
@@ -201,7 +201,7 @@ function ManageHospitalBillContent() {
                     claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
                     claimantAmount, hospitalBillStatus,
                     barangayIndigency: checkedItems.checkBarangayIndigency,
-                    checkMedicalCertificate: checkedItems.checkMedCertificate,
+                    checkMedicalCertificate: checkedItems.checkMedicalCertificate,
                     checkFinalBill: checkedItems.checkFinalBill,
                     validId: checkedItems.checkValidId,
                     remarks,
@@ -288,7 +288,8 @@ function ManageHospitalBillContent() {
         setPatientPurok(bill['patient_purok']);
         setPatientBarangay(bill['patient_barangay']);
         setPatientMunicipality(bill['patient_municipality']);
-        setPatientProvince(bill['patient_province']);
+        setPatientProvince(bill['patient_province']);setDateConfinement(new Date(bill['date_confinement']).toISOString().split('T')[0]);
+        setDateConfinement(new Date(bill['date_confinement']).toISOString().split('T')[0]);
         setPatientHospital(bill['patient_hospital']);
         setClaimantFname(bill['claimant_fname']);
         setClaimantMname(bill['claimant_mname']);
@@ -305,10 +306,10 @@ function ManageHospitalBillContent() {
 
         setHospitalBillStatus(bill['hospital_bill_status']);
         setCheckedItems({
-            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,
-            checkMedCertificate: bill['check_med_certificate'] == 1,
-            checkFinalBill: bill['check_hospital_bill'] == 1,
-            checkValidId: bill['check_valid_id'] == 1,
+            checkBarangayIndigency: bill['check_barangay_indigency'] == "1",
+            checkMedicalCertificate: bill['check_med_certificate'] == "1",
+            checkFinalBill: bill['check_hospital_bill'] == "1",
+            checkValidId: bill['check_valid_id'] == "1",
         });
 
         setRemarks(bill['remarks']);
@@ -335,10 +336,10 @@ function ManageHospitalBillContent() {
         setClaimantAmount('');
         setHospitalBillStatus('');
         setCheckedItems({
-            checkBarangayIndigency: false,
-            checkMedCertificate: false,
-            checkHospitalBill: false,
-            checkValidId: false,
+            checkBarangayIndigency: 0,
+            checkMedicalCertificate: 0,
+            checkFinalBill: 0,
+            checkValidId: 0,
         });
         setRemarks('');
 
@@ -432,9 +433,12 @@ function ManageHospitalBillContent() {
     const handleCheckboxChange = (event) => {
         const { id, checked } = event.target;
         setCheckedItems((prevState) => ({
-            ...prevState,
-            [id]: checked
+            ...prevState, 
+            [id]: checked ? 1 : 0
         }));
+
+        console.log("ID: ", id, " Checked: ", checked )
+
     };
 
 
@@ -512,37 +516,38 @@ function ManageHospitalBillContent() {
                                                             </thead>
                                                             <tbody>
                                                                 {currentRecords.length > 0 ? (
-                                                                    currentRecords.map((bill, index) => (
-                                                                        <tr key={bill.id}>
-                                                                            <td>{indexOfFirstRecord + index + 1}</td>
-                                                                            <td>{`${bill.patient_fname} ${bill.patient_mname} ${bill.patient_lname} ${bill.patient_ext_name || ""}`}</td>
-                                                                            <td>{`${bill.claimant_fname} ${bill.claimant_mname} ${bill.claimant_lname} ${bill.claimant_extname || ""}`}</td>
-                                                                            <td>{bill.claimant_contact}</td>
-                                                                            <td>{new Date(bill.datetime_added).toLocaleString()}</td>
-                                                                            <td>
-                                                                                <button className="btn btn-success" onClick={() => handleOpenModal(bill, true, "View")}
-                                                                                    /* data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal" */>
-                                                                                    <i className='bx bx-info-circle' ></i>
-                                                                                </button>
-                                                                                <button className="btn btn-primary" onClick={() => handleOpenModal(bill, true, "Edit")}
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal">
-                                                                                    <i className='bx bx-edit' ></i>
-                                                                                </button>
-                                                                                <button className="btn btn-danger"
-                                                                                    onClick={(e) => handleDeleteHospitalBill(e, bill['hospital_bill_id'])} >
-                                                                                    <i className='bx bx-trash' ></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))
+                                                                    [...currentRecords]
+                                                                        .sort((a, b) => new Date(b.datetime_added) - new Date(a.datetime_added)) // Sort by latest first
+                                                                        .map((bill, index) => (
+                                                                            <tr key={bill.id}>
+                                                                                <td>{indexOfFirstRecord + index + 1}</td>
+                                                                                <td>{`${bill.patient_fname} ${bill.patient_mname} ${bill.patient_lname} ${bill.patient_ext_name || ""}`}</td>
+                                                                                <td>{`${bill.claimant_fname} ${bill.claimant_mname} ${bill.claimant_lname} ${bill.claimant_extname || ""}`}</td>
+                                                                                <td>{bill.claimant_contact}</td>
+                                                                                <td>{new Date(bill.datetime_added).toISOString().split('T')[0]}</td>
+                                                                                <td>
+                                                                                    <button className="btn btn-success" onClick={() => handleOpenModal(bill, true, "View")}>
+                                                                                        <i className='bx bx-info-circle'></i>
+                                                                                    </button>
+                                                                                    <button className="btn btn-primary" onClick={() => handleOpenModal(bill, true, "Edit")}
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#addHospitalBillModal">
+                                                                                        <i className='bx bx-edit'></i>
+                                                                                    </button>
+                                                                                    <button className="btn btn-danger"
+                                                                                        onClick={(e) => handleDeleteHospitalBill(e, bill['hospital_bill_id'])}>
+                                                                                        <i className='bx bx-trash'></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))
                                                                 ) : (
                                                                     <tr>
                                                                         <td colSpan="6" className="text-center">No records found</td>
                                                                     </tr>
                                                                 )}
                                                             </tbody>
+
                                                         </table>
 
                                                         <br />
@@ -637,7 +642,7 @@ function ManageHospitalBillContent() {
                                                         className="form-control"
                                                         id="firstName"
                                                         value={patientFirstName}
-                                                        onChange={(e) => setPatientFirstName(e.target.value.trim())}
+                                                        onChange={(e) => setPatientFirstName(e.target.value)}
                                                     />
                                                 </div>
 
@@ -648,7 +653,7 @@ function ManageHospitalBillContent() {
                                                         className="form-control"
                                                         id="middleName"
                                                         value={patientMiddleName}
-                                                        onChange={(e) => setPatientMiddleName(e.target.value.trim())}
+                                                        onChange={(e) => setPatientMiddleName(e.target.value)}
                                                     />
                                                 </div>
 
@@ -659,7 +664,7 @@ function ManageHospitalBillContent() {
                                                         className="form-control"
                                                         id="lastName"
                                                         value={patientLastName}
-                                                        onChange={(e) => setPatientLastName(e.target.value.trim())}
+                                                        onChange={(e) => setPatientLastName(e.target.value)}
                                                     />
                                                 </div>
 
@@ -745,8 +750,12 @@ function ManageHospitalBillContent() {
                                                         type="date"
                                                         className="form-control"
                                                         value={dateConfinement}
-                                                        onChange={(e) => setDateConfinement(e.target.value)}
+                                                        onChange={(e) => {
+                                                            setDateConfinement(e.target.value);
+                                                            console.log(e.target.value);
+                                                        }}
                                                     />
+
                                                 </div>
 
                                                 <div className="col-3">
@@ -920,8 +929,8 @@ function ManageHospitalBillContent() {
                                                             <label className="form-check-label" htmlFor="checkBarangayIndigency">&nbsp; Barangay Indigency (2 Original)</label>
                                                         </li>
                                                         <li className="list-group-item">
-                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedCertificate"
-                                                                checked={checkedItems.checkMedCertificate}
+                                                            <input className="form-check-input me-1" type="checkbox" id="checkMedicalCertificate"
+                                                                checked={checkedItems.checkMedicalCertificate}
                                                                 onChange={handleCheckboxChange} />
                                                             <label className="form-check-label" htmlFor="checkMedicalCertificate">&nbsp; Medical Certificate or Medical Abstract (2 Copies)</label>
                                                         </li>

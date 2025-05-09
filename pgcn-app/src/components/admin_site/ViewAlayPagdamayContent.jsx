@@ -14,6 +14,7 @@ import { PSWDOLayout } from "./reports/PSWDOLayout";
 import * as port from "../ports/DatabaseRouting" 
 import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
 import { RetrieveAlayPagdamayId } from "../ports/DatabaseRouting";
+import { PettyCashLayout } from "./reports/PettyCashLayout";
 
 function ViewAlayPagdamayContent() {
 
@@ -1311,74 +1312,26 @@ function ViewAlayPagdamayContent() {
                             <div className="generateContainer">
                                 <br />
 
-                                {formPage == "Guarantee Letter" &&
-                                    <>
-
-                                        <div  >
-                                            <div className="col-12 d-flex justify-content-end">
-                                                <button
-                                                    type="button"
-                                                    className={`btn w-500  btn-secondary`}
-                                                    onClick={handleDownload}
-                                                >
-                                                    <i className='bx bxs-file-pdf' ></i> Download
-                                                </button>
-                                            </div><br />
-
-
-                                            <div className="formContainer">
-                                                <div className="row">
-
-
-                                                    <div className="col-4 d-flex justify-content-center">
-                                                        <img src="/assets/img/cam_norte_logo.png" className="seal_logo_container" />
-                                                    </div>
-
-                                                    <div className="col-4 d-flex flex-column align-items-center header_form">
-                                                        <p className="d-flex flex-column align-items-center text-center m-auto">
-                                                            Republic of the Philippines<br />
-                                                            Province of Camarines Norte<br />
-                                                            Dong Tulong
-                                                        </p>
-                                                    </div>
-
-                                                    <div className="col-4 d-flex justify-content-center">
-                                                        <img src="/assets/img/dong_tulong_logo.jpg" className="seal_logo_container" />
-                                                    </div>
-
-                                                    <div className="col-12">
-                                                        <br /><hr /><br />
-                                                    </div>
-
-
-                                                    <div className="col-12  d-flex flex-column align-items-start body_form">
-                                                        <div className="body_container">
-                                                            <h2 className="headerFormText">OFFICE OF THE GOVERNOR</h2><br />
-                                                            <h4 className="headerFormText">GUARANTEE LETTER</h4><br />
-                                                            <h5 className="headerFormText">{currentDate}</h5><br /><br />
-                                                            <p className="guaranteeLetterContent">
-                                                                Respectfully referred to <b>{deceasedFirstName} {deceasedMiddleName} {deceasedLastName} {deceasedExtName}</b>, the herein attached approved request of <b>MR/MS. {contactPersonFirstname} {contactPersonMiddlename} {contactPersonLastname} {contactPersonExtName}</b> from Purok - {deceasedPurok}, Barangay {deceasedBarangay}, {deceasedMunicipality}, {deceasedMunicipality} for hospital bill assistance stated below:
-                                                            </p><br /><br />
-
-                                                            <h5 >AMOUNT OF THE HOSPITAL BILL ASSISTANCE</h5>
-                                                            {/* <h3 className="headerFormText">P {Number(contactPersonAmount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</h3><br/> */}
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
-                                    </>
-
-                                }
-
+                                 
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
 
-                                        <div className="formContent">
+                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                            <PettyCashLayout
+                                                claimantFirstname={contactPersonFirstname}
+                                                claimantMiddlename={contactPersonMiddlename}
+                                                claimantLastname={contactPersonLastname}
+                                                claimantExtName={contactPersonExtName}
+                                                patientPurok={patientPurok}
+                                                patientBarangay={patientBarangay}
+                                                patientMunicipality={patientMunicipality}
+                                                patientProvince={patientProvince}
+                                                claimantAmount={pettyCash}
+                                                transactionName={transactionName}
+                                            />
+                                        </PDFViewer>
+
+                                        {/* <div className="formContent">
 
                                             <div className="col-12 d-flex justify-content-end">
                                                 <button
@@ -1468,7 +1421,7 @@ function ViewAlayPagdamayContent() {
                                                 </tbody>
                                             </table>
 
-                                        </div>
+                                        </div> */}
 
                                     </>
                                 }

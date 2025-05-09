@@ -591,38 +591,39 @@ function AlayPagdamayContent() {
                                                             </thead>
                                                             <tbody>
                                                                 {currentRecords.length > 0 ? (
-                                                                    currentRecords.map((burial, index) => (
-                                                                        <tr key={burial.id}>
-                                                                            <td>{indexOfFirstRecord + index + 1}</td>
-                                                                            <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
-                                                                            <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
-                                                                            <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
-                                                                            <td>{burial.contact_number}</td>
-                                                                            <td>{new Date(burial.savedAt).toLocaleString()}</td>
-                                                                            <td>
-                                                                                <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}
-                                                                                    /* data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal" */>
-                                                                                    <i className='bx bx-info-circle' ></i>
-                                                                                </button>
-                                                                                <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal">
-                                                                                    <i className='bx bx-edit' ></i>
-                                                                                </button>
-                                                                                <button className="btn btn-danger"
-                                                                                    onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_id'])} >
-                                                                                    <i className='bx bx-trash' ></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))
+                                                                    [...currentRecords]
+                                                                        .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt)) // Sort from latest to oldest
+                                                                        .map((burial, index) => (
+                                                                            <tr key={burial.id}>
+                                                                                <td>{indexOfFirstRecord + index + 1}</td>
+                                                                                <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
+                                                                                <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
+                                                                                <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
+                                                                                <td>{burial.contact_number}</td>
+                                                                                <td>{new Date(burial.savedAt).toLocaleString()}</td>
+                                                                                <td>
+                                                                                    <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}>
+                                                                                        <i className='bx bx-info-circle'></i>
+                                                                                    </button>
+                                                                                    <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#addHospitalBillModal">
+                                                                                        <i className='bx bx-edit'></i>
+                                                                                    </button>
+                                                                                    <button className="btn btn-danger"
+                                                                                        onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_id'])}>
+                                                                                        <i className='bx bx-trash'></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))
                                                                 ) : (
                                                                     <tr>
                                                                         <td colSpan="7" className="text-center">No records found</td>
                                                                     </tr>
                                                                 )}
                                                             </tbody>
+
                                                         </table>
 
                                                         <br />

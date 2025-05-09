@@ -29,7 +29,7 @@ export function RetrieveAllAssistance(queryParam, reportParam) {
   
 // Hospital Bill 
 export const PortInsertHospitalBill = 'http://localhost:5000/insert_hospital_bill';
-export const PortDeleteHospitalBill = 'http://localhostlocalhost:5000/delete_hospital_bill';
+export const PortDeleteHospitalBill = 'http://localhost:5000/delete_hospital_bill';
 export const PortUpdateHospitalBill = 'http://localhost:5000/update_hospital_bill';
 export const PortRetrieveHospitalBill = 'http://localhost:5000/retrieve_hospital_bill';
 

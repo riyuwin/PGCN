@@ -14,6 +14,7 @@ import { PSWDOLayout } from "./reports/PSWDOLayout";
 import * as port from "../ports/DatabaseRouting" 
 import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
 import { RetrieveBurialAssistanceId } from "../ports/DatabaseRouting";
+import { PettyCashLayout } from "./reports/PettyCashLayout";
 
 function ViewBurialAssistanceContent() {
 
@@ -1376,8 +1377,22 @@ function ViewBurialAssistanceContent() {
 
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
+                                        <PDFViewer style={{ width: "100%", height: "800px" }}>
+                                            <PettyCashLayout
+                                                claimantFirstname={contactPersonFirstname}
+                                                claimantMiddlename={contactPersonMiddlename}
+                                                claimantLastname={contactPersonLastname}
+                                                claimantExtName={contactPersonExtName}
+                                                patientPurok={patientPurok}
+                                                patientBarangay={patientBarangay}
+                                                patientMunicipality={patientMunicipality}
+                                                patientProvince={patientProvince}
+                                                claimantAmount={pettyCash}
+                                                transactionName={transactionName}
+                                            />
+                                        </PDFViewer>
 
-                                        <div className="formContent">
+                                        {/* <div className="formContent">
 
                                             <div className="col-12 d-flex justify-content-end">
                                                 <button
@@ -1467,7 +1482,7 @@ function ViewBurialAssistanceContent() {
                                                 </tbody>
                                             </table>
 
-                                        </div>
+                                        </div> */}
 
                                     </>
                                 }
