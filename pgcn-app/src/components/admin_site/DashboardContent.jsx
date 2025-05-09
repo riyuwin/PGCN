@@ -663,67 +663,72 @@ function DashboardContent() {
                                 </div>
                             </div>
 
-                            <div className="col-lg-12 ">
-                                <br></br>
-                            </div>
+                            <div className="col-lg-12 col-md-12">
+                                <br/><br/>
+                            </div> 
 
-                            <div className="row align-items-stretch">
-                                <div className="col-lg-8" >
-                                    <div className="card">
-                                        <div className="statscard card-body">
-                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Dong Tulong Records 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
-                                            <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-4">
-                                    <div className="card">
-                                        <div className="statscard card-body">
-                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A', padding: '12px'}}>Number of Missing Barangay Indigency 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
-                                            <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
-                                        </div>
+                            <div className="col-lg-8 col-md-8">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Dong Tulong Records  
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
+                                        <br />
+                                        
+                                        <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="row align-items-stretch">
-                                <div className="col-lg-4 mb-4">
-                                    <div className="card h-100">
-                                        <div className="statscard card-body">
-                                            <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Hospital Bill Per Barangay 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
-                                            <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
-                                        </div>
+                            
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Number of Missing Barangay Indigency  
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year Report</span></h5>
+                                        <br />
+                                        
+                                        <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
                                     </div>
                                 </div>
+                            </div> 
 
-                                <div className="col-lg-4 mb-4">
-                                    <div className="card h-100">
-                                        <div className="statscard card-body">
-                                            <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay Per Barangay 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
-                                            <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
-                                        </div>
+                            <div className="col-lg-12 col-md-12">
+                                <br/><br/>
+                            </div> 
+                            
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Hospital Bill Per Barangay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
+                                        <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
                                     </div>
                                 </div>
-
-                                <div className="col-lg-4 mb-4">
-                                    <div className="card h-100">
-                                        <div className="statscard card-body">
-                                            <h5 className="card-title" style={{fontWeight: 'bold    ', color: '#0C623A'}}>Burial Assistance Per Barangay 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
-                                            <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />
-                                        </div>
+                            </div> 
+                            
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay Per Barangay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
+                                        <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
                                     </div>
                                 </div>
-                                
-                                <div className="col-lg-12 m-12">
-                                    
+                            </div> 
+ 
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold    ', color: '#0C623A'}}>Burial Assistance Per Barangay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
+                                        <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />
+                                    </div>
                                 </div>
-                            </div>
+                            </div> 
+
+                             
+                            <div className="col-lg-12 col-md-12">
+                                <br/><br/><br/>
+                            </div> 
 
 
                         </div>

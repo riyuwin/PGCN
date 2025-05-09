@@ -30,7 +30,7 @@ db.getConnection((err, connection) => {
 
 app.use(
     cors({
-        origin: process.env.VITE_DB_FRONTEND_PORT,
+        origin: process.env.VITE_DB_FRONTEND_HOST,
         credentials: true,
     })
 );
