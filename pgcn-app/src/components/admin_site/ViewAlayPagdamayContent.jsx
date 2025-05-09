@@ -334,10 +334,10 @@ function ViewAlayPagdamayContent() {
 
         setBurialStatus(burial['burial_status']);
         setCheckedItems({
-            checkBarangayIndigency: burial['check_barangay_indigency'] === 1 || burial['check_barangay_indigency'] === "true",
-            checkDeathCertificate: burial['check_death_certificate'] === 1 || burial['check_death_certificate'] === "true",
-            checkFuneralContract: burial['check_funeral_contract'] === 1 || burial['check_funeral_contract'] === "true",
-            checkValidId: burial['check_valid_id'] === 1 || burial['check_valid_id'] === "true",
+            checkBarangayIndigency: burial['check_barangay_indigency'] === "1" || burial['check_barangay_indigency'] === "true",
+            checkDeathCertificate: burial['check_death_certificate'] === "1" || burial['check_death_certificate'] === "true",
+            checkFuneralContract: burial['check_funeral_contract'] === "1" || burial['check_funeral_contract'] === "true",
+            checkValidId: burial['check_valid_id'] === "1" || burial['check_valid_id'] === "true",
         });
 
         setPettyCash(burial['petty_cash']);
@@ -1126,7 +1126,7 @@ function ViewAlayPagdamayContent() {
                                                                                             relationship: '',
                                                                                             age: '',
                                                                                             civilStatus: '',
-                                                                                            purok: '',
+                                                                                            monthlyIncome: '',
                                                                                         });
                                                                                         setFamilyComposition(newComposition);
                                                                                     }}
@@ -1143,7 +1143,7 @@ function ViewAlayPagdamayContent() {
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                        <br />
+                                                                                            <br/>   
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1158,8 +1158,8 @@ function ViewAlayPagdamayContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
+                                                                                    {/* <div className="col-4">
+                                                                                        <br/>
                                                                                         <label className="form-label">Relationship:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1172,6 +1172,35 @@ function ViewAlayPagdamayContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                    
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Relationship:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.relationship || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Relationship</option>
+                                                                                            <option value="Mother">Mother</option>
+                                                                                            <option value="Father">Father</option>
+                                                                                            <option value="Child">Child</option>
+                                                                                            <option value="Father">Self</option>
+                                                                                            <option value="Parent">Parent</option>
+                                                                                            <option value="Sibling">Sibling</option>
+                                                                                            <option value="Spouse">Spouse</option>
+                                                                                            <option value="Grandparent">Grandparent</option>
+                                                                                            <option value="Relative">Relative</option>
+                                                                                            <option value="Friend">Friend</option>
+                                                                                            <option value="Guardian">Guardian</option>
+                                                                                            <option value="Other">Other</option>
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1191,7 +1220,7 @@ function ViewAlayPagdamayContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
                                                                                         <input
@@ -1205,6 +1234,29 @@ function ViewAlayPagdamayContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                            
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Civil Status:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.civilStatus || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Civil Status</option>
+                                                                                            <option value="Single">Single</option>
+                                                                                            <option value="Married">Married</option>
+                                                                                            <option value="Widowed">Widowed</option>
+                                                                                            <option value="Separated">Separated</option>
+                                                                                            <option value="Common-Law Married">Common-Law Married</option>
+                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1246,9 +1298,10 @@ function ViewAlayPagdamayContent() {
                                                                                 </Fragment>
                                                                             ))}
 
-
+ 
 
                                                                         </div>
+
 
                                                                         
 

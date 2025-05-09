@@ -43,7 +43,13 @@ function ManageHospitalBillContent() {
     });
 
     const [remarks, setRemarks] = useState('');
+    const [searchTerm, setSearchTerm] = useState("");
 
+    const handleSearch = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchTerm(value);
+    };
+    
     // Variables for inputs ------------------------------------------------------------
 
     // Variables for hospital bills -------------------------------
@@ -252,10 +258,22 @@ function ManageHospitalBillContent() {
     }, []);
 
     // Pagination Logic
-    const indexOfLastRecord = currentPage * recordsPerPage;
+    /* const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = hospitalBills.slice(indexOfFirstRecord, indexOfLastRecord);
-    const totalPages = Math.ceil(hospitalBills.length / recordsPerPage);
+    const totalPages = Math.ceil(hospitalBills.length / recordsPerPage); */
+
+    const filteredRecords = hospitalBills.filter((bill) => {
+        const fullName = `${bill.patient_fname} ${bill.patient_mname} ${bill.patient_lname} ${bill.patient_ext_name || ""}`.toLowerCase();
+        return fullName.includes(searchTerm);
+    });
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
+
+    
 
     // Open modal and set selected bill
     const handleOpenModal = (bill, editMode = false, modalName) => {
@@ -482,7 +500,7 @@ function ManageHospitalBillContent() {
                                                                     className="form-control"
                                                                     id="searchInput"
                                                                     placeholder="Search Client Name"
-                                                                /* onChange={handleSearch} */
+                                                                    onChange={handleSearch}
                                                                 />
                                                             </div>
                                                         </div>

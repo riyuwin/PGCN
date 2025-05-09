@@ -44,7 +44,7 @@ function AlayPagdamayContent() {
     const [pettyCashAmount, setPettyCashAmount] = useState('');
     const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');
 
-    const [burialStatus, setBurialStatus] = useState('');
+    const [burialStatus, setBurialStatus] = useState('Pending');
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false,
         checkDeathCertificate: false,
@@ -308,11 +308,29 @@ function AlayPagdamayContent() {
     }, []);
 
     // Pagination Logic
-    const indexOfLastRecord = currentPage * recordsPerPage;
+    /* const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = burialAssitance.slice(indexOfFirstRecord, indexOfLastRecord);
-    const totalPages = Math.ceil(burialAssitance.length / recordsPerPage);
+    const totalPages = Math.ceil(burialAssitance.length / recordsPerPage); */
 
+    
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchTerm(value);
+    };
+    
+    const filteredRecords = burialAssitance.filter((burial) => {
+        const fullName = `${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`.toLowerCase();
+        return fullName.includes(searchTerm);
+    });
+    
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+    
     // Open modal and set selected bill
     const handleOpenModal = (burial, editMode = false, modalName) => {
         setSelectedBurial(burial);
@@ -557,7 +575,7 @@ function AlayPagdamayContent() {
                                                                     className="form-control"
                                                                     id="searchInput"
                                                                     placeholder="Search Patient Name"
-                                                                /* onChange={handleSearch} */
+                                                                    onChange={handleSearch}
                                                                 />
                                                             </div>
                                                         </div>

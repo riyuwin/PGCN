@@ -1071,7 +1071,7 @@ function ViewHospitalBillContent() {
                                                                                             relationship: '',
                                                                                             age: '',
                                                                                             civilStatus: '',
-                                                                                            purok: '',
+                                                                                            monthlyIncome: '',
                                                                                         });
                                                                                         setFamilyComposition(newComposition);
                                                                                     }}
@@ -1103,7 +1103,7 @@ function ViewHospitalBillContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br/>
                                                                                         <label className="form-label">Relationship:</label>
                                                                                         <input
@@ -1117,6 +1117,35 @@ function ViewHospitalBillContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                    
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Relationship:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.relationship || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Relationship</option>
+                                                                                            <option value="Mother">Mother</option>
+                                                                                            <option value="Father">Father</option>
+                                                                                            <option value="Child">Child</option>
+                                                                                            <option value="Father">Self</option>
+                                                                                            <option value="Parent">Parent</option>
+                                                                                            <option value="Sibling">Sibling</option>
+                                                                                            <option value="Spouse">Spouse</option>
+                                                                                            <option value="Grandparent">Grandparent</option>
+                                                                                            <option value="Relative">Relative</option>
+                                                                                            <option value="Friend">Friend</option>
+                                                                                            <option value="Guardian">Guardian</option>
+                                                                                            <option value="Other">Other</option>
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1136,7 +1165,7 @@ function ViewHospitalBillContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
                                                                                         <input
@@ -1150,7 +1179,7 @@ function ViewHospitalBillContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
-                                                                                    </div>
+                                                                                    </div> */}
 
                                                                                             
                                                                                     <div className="col-4">

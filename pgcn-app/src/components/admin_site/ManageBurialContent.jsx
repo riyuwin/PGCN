@@ -233,10 +233,22 @@ function ManageBurialContent() {
     }, []);
 
     // Pagination Logic
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchTerm(value);
+    };
+    
+    const filteredRecords = burialAssitance.filter((burial) => {
+        const fullName = `${burial.client_fname} ${burial.client_mname} ${burial.client_lname} ${burial.client_ext_name || ""}`.toLowerCase();
+        return fullName.includes(searchTerm);
+    });
+
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    const currentRecords = burialAssitance.slice(indexOfFirstRecord, indexOfLastRecord);
-    const totalPages = Math.ceil(burialAssitance.length / recordsPerPage);
+    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
 
     // Open modal and set selected bill
     const handleOpenModal = (burial, editMode = false, modalName) => {
@@ -482,7 +494,7 @@ function ManageBurialContent() {
                                                                     className="form-control"
                                                                     id="searchInput"
                                                                     placeholder="Search Patient Name"
-                                                                /* onChange={handleSearch} */
+                                                                    onChange={handleSearch}
                                                                 />
                                                             </div>
                                                         </div>
