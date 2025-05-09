@@ -95,7 +95,7 @@ function formatToPesos(amount) {
     return new Intl.NumberFormat('en-PH', {
         minimumFractionDigits: 0
     }).format(Math.abs(amount));
-}
+} 
 
 export const PettyCashLayout = ({ claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, patientPurok, patientBarangay, patientMunicipality, patientProvince, claimantAmount, transactionName }) => (
     <Document>
