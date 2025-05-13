@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as port from "../ports/DatabaseRouting" 
-
+import { RetrievePortAccountSession } from '../ports/DatabaseRouting';
 
 function Sidebar({ isVisible }) {
     
@@ -11,6 +11,16 @@ function Sidebar({ isVisible }) {
 
     const navigate = useNavigate();
     const location = useLocation();
+ 
+    const [firstName, setFirstName] = useState('');
+    const [middleName, setMiddleName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [extName, setExtName] = useState('');
+    const [gender, setGender] = useState('');
+    const [bdate, setBdate] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+    const [email, setEmail] = useState('');
 
     // Load dropdown state from localStorage
     const [isOpen, setIsOpen] = useState(
@@ -70,6 +80,38 @@ function Sidebar({ isVisible }) {
             setIsOpen(storedDropdownState);
         }
     }, []);
+ 
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+    
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            console.log("Stored User123:", parsedUser);
+
+            setEmail(parsedUser.email)
+    
+            const fetchAccountDetails = async () => {
+                console.log("Account Id: ", parsedUser.account_id);
+                const accountDetails = await RetrievePortAccountSession(parsedUser.account_id); 
+                PopulateForms(accountDetails)
+            };
+    
+            fetchAccountDetails();
+        } else {
+            console.log("No user found");
+        }
+    }, []);
+
+    const PopulateForms = (data) => {
+        setFirstName(data[0].fname); 
+        setMiddleName(data[0].mname); 
+        setLastName(data[0].lname); 
+        setExtName(data[0].ext); 
+        setGender(data[0].gender); 
+        setBdate(data[0].bdate); 
+        setPhoneNumber(data[0].phoneNumber);
+        setAddress(data[0].address); 
+    }  
 
     return (
         <>
@@ -211,11 +253,11 @@ function Sidebar({ isVisible }) {
                                                 </div>
 
                                                 <p className="text-center" style={{ fontSize: '20px', fontWeight: 'bold', color: '#08533F'}}>
-                                                    First Name, Last Name
+                                                    {firstName} {lastName}
                                                 </p>
 
                                                 <p className="text-center" style={{ fontSize: '17px', color: '#08533F' }}>
-                                                    gmail.com
+                                                    {email}
                                                 </p>
 
 
@@ -224,35 +266,35 @@ function Sidebar({ isVisible }) {
                                                     <div className="row g-3">
                                                     <div className="col-md-4">
                                                         <label className="label-form">First Name:</label>
-                                                        <input type="text" className="form-control custom-input" value="John Erwin" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={firstName} readOnly />
                                                     </div>
                                                     <div className="col-md-4">
                                                         <label className="label-form">Middle Name:</label>
-                                                        <input type="text" className="form-control custom-input" value="Sayno" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={middleName} readOnly />
                                                     </div>
                                                     <div className="col-md-4">
                                                         <label className="label-form">Last Name:</label>
-                                                        <input type="text" className="form-control custom-input" value="Albos" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={lastName} readOnly />
                                                     </div>
                                                     <div className="col-md-4">
                                                         <label className="label-form">Ext. Name:</label>
-                                                        <input type="text" className="form-control custom-input" value="" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={extName} readOnly />
                                                     </div>
                                                     <div className="col-md-4">
                                                         <label className="label-form">Gender:</label>
-                                                        <input type="text" className="form-control custom-input" value="Male" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={gender} readOnly />
                                                     </div>
                                                     <div className="col-md-4">
                                                         <label className="label-form">Birthdate:</label>
-                                                        <input type="text" className="form-control custom-input" value="mm/dd/yyyy" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={bdate} readOnly />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="label-form">Phone Number:</label>
-                                                        <input type="text" className="form-control custom-input" value="johnerwinalbos@gmail.com" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={phoneNumber} readOnly />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="label-form">Address:</label>
-                                                        <input type="text" className="form-control custom-input" value="Barangay Camambugan, Daet, Camarines Norte" readOnly />
+                                                        <input type="text" className="form-control custom-input" value={address} readOnly />
                                                     </div>
                                             </div>
                                         </div>
@@ -292,9 +334,18 @@ function Sidebar({ isVisible }) {
                                                         <h5 style={{fontWeight: 'bold', color:'#08533F'}}>Wendee D. Postre</h5>
                                                         <p style={{color:'#08533F'}}>Frontend Developer</p>
                                                         </div>
+ 
 
-                                                        <hr style= {{border: '1px solid #0A3622'}}>
-                                                        </hr>
+                                                        <div className="col-md-12 mb-12">
+                                                            
+                                                            <hr style= {{border: '1px solid #0A3622'}}>
+                                                            </hr>
+
+                                                            <br/>
+                                                             
+                                                        </div>
+                                                        
+
                                                         
                                                         {/* cnsc logo */}
                                                         <div className="col-md-4 mb-4">

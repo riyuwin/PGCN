@@ -3,6 +3,18 @@ export const PortLogin = 'http://localhost:5000/login';
 export const PortSession = 'http://localhost:5000/session';
 export const PortSignup = 'http://localhost:5000/create_account';
 export const PortLogout = 'http://localhost:5000/logout';
+export const PortAccountSession = 'http://localhost:5000/accounts_id';
+ 
+export async function RetrievePortAccountSession(accountId) {
+    try {
+        const response = await fetch(`http://localhost:5000/accounts_id?accountId=${accountId}`); // Sending accountId as query parameter
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to retrieve account details:", error);
+        return null;
+    }
+}
 
 // Fetch Total Records
 export const PortRetrieveTotalHospitalBill = "http://localhost:5000/retrieve_total_hospital_bill";
