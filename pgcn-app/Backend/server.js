@@ -30,7 +30,7 @@ db.getConnection((err, connection) => {
 
 app.use(
     cors({
-        origin: process.env.VITE_DB_FRONTEND_PORT,
+        origin: process.env.VITE_DB_FRONTEND_HOST,
         credentials: true,
     })
 );
@@ -45,6 +45,25 @@ app.use(session({
         sameSite: "lax"
     }
 }));
+
+app.get("/accounts_id", (req, res) => {
+    const { accountId } = req.query;  // Change to req.query to get query parameters
+
+    // Ensure that accountId exists in the request query
+    if (!accountId) {
+        return res.status(400).json({ error: "accountId is required" });
+    }
+
+    // Use parameterized query to prevent SQL injection
+    const query = "SELECT * FROM basic_information WHERE account_id = ?";
+    db.query(query, [accountId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);  // Send back the results as JSON
+    });
+});
+
 
 app.get("/accounts", (req, res) => {
     db.query("SELECT * FROM accounts", (err, results) => {

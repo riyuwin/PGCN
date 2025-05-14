@@ -206,7 +206,7 @@ function ViewHospitalBillContent() {
                     </nav>
                 </div>
 
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}}/>
 
                 <main className="py-6">
                     <div className="container-fluid">
@@ -445,7 +445,7 @@ function ViewHospitalBillContent() {
                                                                         <div className="columnContainer">
                                                                             <b className="form-label">PSWDO Interview</b>
                                                                             <br/>
-                                                                            <hr/>
+                                                                            <hr style= {{border: '1px solid #0A3622'}}/>
 
                                                                             
                                                                             <div className="row"> 
@@ -703,12 +703,12 @@ function ViewHospitalBillContent() {
                                                                                 {familyComposition.map((member, index) => (
                                                                                 <Fragment key={index}>
                                                                                     <div className="col-12">
-                                                                                        <br/>
+                                                                                        
                                                                                         <label className="form-label"><i>Family Member {index + 1}</i></label>
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                        <br/>
+                                                                                        
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"

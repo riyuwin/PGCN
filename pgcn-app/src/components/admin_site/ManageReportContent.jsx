@@ -528,17 +528,17 @@ function ManageReportContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>General Masterlist</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Generate Reports</h1>
                     <nav>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item" style={{ fontWeight: 'lighter', color: '#08533F' }}
                             ><a>Assistance Registry Reports</a></li>
-                            <li className="breadcrumb-item active"style={{ color: '#08533F' }}>General Masterlist</li>
+                            <li className="breadcrumb-item active"style={{ color: '#08533F' }}>Generate Reports</li>
                         </ol>
                     </nav>
                 </div>
 
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}} />
 
                 <main className="py-6">
                     <div className="container-fluid">
@@ -550,7 +550,7 @@ function ManageReportContent() {
                                             <div className="card info-card sales-card">
                                                 <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
                                                     <div className="d-flex justify-content-between align-items-center">
-                                                        <h5 className="card-title"style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}  >General Masterlist</h5>
+                                                        <h5 className="card-title"style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}  >Generate Reports</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
@@ -616,8 +616,8 @@ function ManageReportContent() {
                                                             <div className="row">
 
                                                                 <div className="col-sm-12">
-                                                                    <hr /><br />
-                                                                    <label className="form-label mb-0">Filter Address:</label>
+                                                                    <hr style= {{border: '1px solid #0A3622'}}/><br />
+                                                                    <label className="form-label mb-0" style= {{fontSize: '20px', fontWeight: 'bold'}}>Filter Address:</label>
                                                                     <br /><br />
                                                                 </div>
 
@@ -704,7 +704,8 @@ function ManageReportContent() {
                                                                                                 <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(bill, transactions)}
                                                                                                     data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    data-bs-target="#viewReportModal"
+                                                                                                    style={{fontWeight: 'lighter', color: '#08533F'}} >
                                                                                                     View
                                                                                                 </button>
                                                                                             </td>
@@ -732,7 +733,7 @@ function ManageReportContent() {
                                                                             </button>
                                                                             <span>Page {currentPage} of {totalPages}</span>
                                                                             <button
-                                                                                className="nextprevbutton btn btn-secondary"
+                                                                                className="nextprevbutton btn"
                                                                                 disabled={currentPage === totalPages}
                                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                                             >
@@ -751,7 +752,7 @@ function ManageReportContent() {
                                                             <div className="row">
 
                                                                 <div className="col-sm-12">
-                                                                    <hr /><br />
+                                                                    <hr style= {{border: '1px solid #0A3622'}}/><br />
                                                                     <label className="form-label mb-0">Filter Address:</label>
                                                                     <br /><br />
                                                                 </div>
@@ -841,7 +842,9 @@ function ManageReportContent() {
                                                                                                 <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    data-bs-target="#viewReportModal"
+                                                                                                    style={{fontWeight: 'lighter', color: '#08533F'}} >
+
                                                                                                     View
                                                                                                 </button>
                                                                                             </td>
@@ -887,7 +890,7 @@ function ManageReportContent() {
                                                             <div className="row">
 
                                                                 <div className="col-sm-12">
-                                                                    <hr /><br />
+                                                                    <hr style= {{border: '1px solid #0A3622'}}/><br />
                                                                     <label className="form-label mb-0">Filter Address:</label>
                                                                     <br /><br />
                                                                 </div>
@@ -975,7 +978,8 @@ function ManageReportContent() {
                                                                                                 <button className="btn btn-link"
                                                                                                     onClick={() => handlePopulateDetails(burial, transactions)}
                                                                                                     data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewReportModal">
+                                                                                                    data-bs-target="#viewReportModal"
+                                                                                                    style={{fontWeight: 'lighter', color: '#08533F'}} >
                                                                                                     View
                                                                                                 </button>
                                                                                             </td>
@@ -1034,13 +1038,13 @@ function ManageReportContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal">
-                                View Reports
+                            <h5 className="modal-title" id="viewReportModal" style={{fontWeight: 'bold', color: '#0C623A', fontSize: '30px'}}>
+                              &nbsp;  View Reports
                             </h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            
                         </div>
 
-                        <div className="modal-body">
+                        <div className="modal-body" style={{color: '#0C623A'}} >
 
                             {transactions === "Hospital Bill" &&
                                 <>
@@ -1136,7 +1140,7 @@ function ManageReportContent() {
                         </div>
 
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" className="btn closebtn" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>

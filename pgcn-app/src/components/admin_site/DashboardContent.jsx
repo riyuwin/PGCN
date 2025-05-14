@@ -40,7 +40,7 @@ function DashboardContent() {
                 }
             },
             labels: ["Hospital Bill", "Alay Pagdamay", "Burial Assistance"],
-            colors: ["#2196F3", "#4CAF50", "#FF5722"]
+            colors: ["#0C623A", "#6EAE5C", "#FFEA03"]
         }
     });
 
@@ -63,7 +63,7 @@ function DashboardContent() {
         options: {
             chart: { type: "donut", height: 350 },
             labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            colors: ["#0C623A", "#6EAE5C", "#F9F7DC", "#9EBC63", "#C5D86D", "#82AA57", "#F2EFBB"],
             legend: { position: "bottom" }
         }
     });
@@ -73,7 +73,7 @@ function DashboardContent() {
         options: {
             chart: { type: "pie", height: 350 },
             labels: ["Hospital Bill", "Alay Pagdamay", "Burial Assistance",],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            colors: ["#0C623A", "#6EAE5C", "#F9F7DC", "#9EBC63", "#C5D86D", "#82AA57", "#F2EFBB"],
             legend: { position: "right" }
         }
     });
@@ -83,7 +83,7 @@ function DashboardContent() {
         options: {
             chart: { type: "pie", height: 250 },
             labels: ["Hospital Bill", "Alay Pagdamay", "Burial Assistance",],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            colors: ["#0C623A", "#6EAE5C", "#F9F7DC", "#9EBC63", "#C5D86D", "#82AA57", "#F2EFBB"],
             legend: { position: "right" }
         }
     });
@@ -93,7 +93,7 @@ function DashboardContent() {
         options: {
             chart: { type: "pie", height: 250 },
             labels: ["Hospital Bill", "Alay Pagdamay", "Burial Assistance",],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            colors: ["#0C623A", "#6EAE5C", "#F9F7DC", "#9EBC63", "#C5D86D", "#82AA57", "#F2EFBB"],
             legend: { position: "right" }
         }
     });
@@ -103,7 +103,7 @@ function DashboardContent() {
         options: {
             chart: { type: "pie", height: 250 },
             labels: ["Hospital Bill", "Alay Pagdamay", "Burial Assistance",],  // Pie chart labels
-            colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#8E44AD", "#E74C3C", "#2E86C1"],
+            colors: ["#0C623A", "#6EAE5C", "#F9F7DC", "#9EBC63", "#C5D86D", "#82AA57", "#F2EFBB"],
             legend: { position: "right" }
         }
     });
@@ -134,6 +134,7 @@ function DashboardContent() {
             {
                 name: "Burial Assistance Records",
                 data: [10, 5, 8, 15, 12, 10, 20],
+                
             },
         ],
         options: {
@@ -157,7 +158,7 @@ function DashboardContent() {
             xaxis: {
                 categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
             },
-            colors: ["#2196F3", "#FFC107", "#4CAF50"],
+            colors: ["#0C623A", "#6EAE5C", "#FFEA03"],
             plotOptions: {
                 bar: {
                     horizontal: false,
@@ -539,15 +540,16 @@ function DashboardContent() {
                         </ol>
                     </nav>
                 </div>
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}}/><br/>
 
 
                 <div className="container-fluid">
                     <section className="section dashboard">
-                        <div className="row ">
+                        <div className="row align-items-stretch">
 
-                            <div className="col-xxl-4 col-md-4">
-                                <div className="card info-card sales-card h-100">
+                            {/* {<div className="col-xxl-4 col-md-4"> } */}
+                                <div className="col-lg-4 mb-0.5">
+                                <div className="statscard card info-card sales-card h-100">
                                     <div className="filter">
                                         <Link
                                             className="icon"
@@ -584,23 +586,25 @@ function DashboardContent() {
                                             <span style={{fontWeight: 'lighter', color: '#0C623A'}} > | This Month Report</span>
                                         </h5><br />
                                         <div className="d-flex align-items-center">
-                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                <img src="../../assets/img/med_logo.png" alt="1" className="dashboardSymbols" />
+                                            <div className="iconcard rounded-circle d-flex align-items-center justify-content-center">
+                                                <img src="../../assets/img/dashboard_hospitalbill_icon.png" alt="1" className="dashboardSymbols" />
                                             </div>
-                                            <div className="ps-3">
+                                            
                                                 <div className="ps-3">
                                                     <h6 id="dashboardAmounts">₱ {formatToPesos(hopitalBillPettyCashAmount)}</h6>
-                                                    <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
+                                                    <span className="text-muted small pt-2 ps-1" style={{fontWeight: 'lighter', color: '#0C623A'}}>total amount of cash given to beneficiaries</span>
                                                 </div>
-                                            </div>
+                                           
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
 
-                            <div className="col-xxl-4 col-md-4">
-                                <div className="card info-card revenue-card h-100">
+                            
+                            {/* <{div className="col-xxl-4 col-md-4">} */}
+                                <div className="col-lg-4 mb-0.5">
+                                <div className="statscard card info-card revenue-card h-100">
                                     <div className="filter">
                                         <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -619,20 +623,21 @@ function DashboardContent() {
                                             <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month Report</span></h5>
                                         <br />
                                         <div className="d-flex align-items-center">
-                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                <img src="../../assets/img/burial_icon.png" alt="1" className="dashboardSymbols" />
+                                            <div className="iconcard rounded-circle d-flex align-items-center justify-content-center">
+                                                <img src="../../assets/img/dashboard_alaypagdamay_icon.png" alt="1" className="dashboardSymbols" />
                                             </div>
                                             <div className="ps-3">
                                                 <h6 id="dashboardAmounts">₱ {formatToPesos(alayPagdamayCashAmount)}</h6>
-                                                <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
+                                                <span className="text-muted small pt-2 ps-1">total amount of cash given to beneficiaries</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="col-lg-4 col-md-4">
-                                <div className="card info-card revenue-card h-100">
+                            {/* {<div className="col-lg-4 col-md-4">} */}
+                                <div className="col-lg-4 mb-0.5">
+                                <div className="statscard card info-card revenue-card h-100">
                                     <div className="filter">
                                         <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -646,84 +651,91 @@ function DashboardContent() {
                                         </ul>
                                     </div>
 
+                                <div className="row align-items-stretch"></div>
                                     <div className="card-body">
                                         <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Burial Assistance 
                                             <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month Report</span></h5>
                                         <br />
                                         <div className="d-flex align-items-center">
-                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                <img src="../../assets/img/financial_icon.png" alt="1" className="dashboardSymbols" />
+                                            <div className="iconcard rounded-circle d-flex align-items-center justify-content-center">
+                                                <img src="../../assets/img/dashboard_burialasst_icon.png" alt="1" className="dashboardSymbols" />
                                             </div>
                                             <div className="ps-3">
                                                 <h6 id="dashboardAmounts"> ₱ {formatToPesos(burialAssistanceCashAmount)}</h6>
-                                                <span className="text-muted small pt-2 ps-1">total amount of cash beneficiaries</span>
+                                                <span className="text-muted small pt-2 ps-1">total amount of cash given to beneficiaries</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
 
-                            <div className="col-lg-12 ">
-                                <br></br>
-                            </div>
+                            <div className="col-lg-12 col-md-12">
+                                <br/><br/>
+                            </div> 
 
-                            <div className="row align-items-stretch">
-                                <div className="col-lg-8">
-                                    <div className="card">
-                                        <div className="card-body">
-                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Dong Tulong Records 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
-                                            <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-4">
-                                    <div className="card">
-                                        <div className="card-body">
-                                            <h5 className="card-title"style={{fontWeight: 'bold', color: '#0C623A'}}>Number of Missing Barangay Indigency 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
-                                            <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
-                                        </div>
+                            <div className="col-lg-8 col-md-8">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Dong Tulong Records  
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year</span></h5>
+                                        <br />
+                                        
+                                        <Chart options={barChartData.options} series={barChartData.series} type="bar" height={350} />
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="row align-items-stretch">
-                                <div className="col-lg-4 mb-4">
-                                    <div className="card h-100">
-                                        <div className="card-body">
-                                            <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Hospital Bill Per Barangay 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
-                                            <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
-                                        </div>
+                            
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Number of Missing Barangay Indigency  
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Year Report</span></h5>
+                                        <br />
+                                        
+                                        <Chart options={multipleRadialBarChartData.options} series={multipleRadialBarChartData.series} type="radialBar" height={350} />
                                     </div>
                                 </div>
+                            </div> 
 
-                                <div className="col-lg-4 mb-4">
-                                    <div className="card h-100">
-                                        <div className="card-body">
-                                            <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay Per Barangay 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
-                                            <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
-                                        </div>
+                            <div className="col-lg-12 col-md-12">
+                                <br/><br/>
+                            </div> 
+                            
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#0C623A'}}>Hospital Bill Per Barangay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5><br/>
+                                        <Chart options={hospitalPieChartData.options} series={hospitalPieChartData.series} type="pie" height={250} />
                                     </div>
                                 </div>
-
-                                <div className="col-lg-4 mb-4">
-                                    <div className="card h-100">
-                                        <div className="card-body">
-                                            <h5 className="card-title" style={{fontWeight: 'bold    ', color: '#0C623A'}}>Burial Assistance Per Barangay 
-                                                <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5>
-                                            <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />
-                                        </div>
+                            </div> 
+                            
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title "style={{fontWeight: 'bold', color: '#0C623A'}}>Alay Pagdamay Per Barangay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5><br/>
+                                        <Chart options={alayPagdamayPieChartData.options} series={alayPagdamayPieChartData.series} type="pie" height={250} />
                                     </div>
                                 </div>
-                                
-                                <div className="col-lg-12 m-12">
-                                    
+                            </div> 
+ 
+                            <div className="col-lg-4 col-md-4">
+                                <div className="statscard card info-card revenue-card h-100"> 
+                                    <div className="card-body">
+                                        <h5 className="card-title" style={{fontWeight: 'bold    ', color: '#0C623A'}}>Burial Assistance Per Barangay 
+                                            <span style={{fontWeight: 'lighter', color: '#0C623A'}}> | This Month</span></h5><br/>
+                                        <Chart options={burialAssistancePieChartData.options} series={burialAssistancePieChartData.series} type="pie" height={250} />
+                                    </div>
                                 </div>
-                            </div>
+                            </div> 
+
+                             
+                            <div className="col-lg-12 col-md-12">
+                                <br/><br/><br/>
+                            </div> 
 
 
                         </div>

@@ -44,7 +44,7 @@ function AlayPagdamayContent() {
     const [pettyCashAmount, setPettyCashAmount] = useState('');
     const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');
 
-    const [burialStatus, setBurialStatus] = useState('');
+    const [burialStatus, setBurialStatus] = useState('Pending');
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false,
         checkDeathCertificate: false,
@@ -308,11 +308,29 @@ function AlayPagdamayContent() {
     }, []);
 
     // Pagination Logic
-    const indexOfLastRecord = currentPage * recordsPerPage;
+    /* const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = burialAssitance.slice(indexOfFirstRecord, indexOfLastRecord);
-    const totalPages = Math.ceil(burialAssitance.length / recordsPerPage);
+    const totalPages = Math.ceil(burialAssitance.length / recordsPerPage); */
 
+    
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchTerm(value);
+    };
+    
+    const filteredRecords = burialAssitance.filter((burial) => {
+        const fullName = `${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`.toLowerCase();
+        return fullName.includes(searchTerm);
+    });
+    
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+    
     // Open modal and set selected bill
     const handleOpenModal = (burial, editMode = false, modalName) => {
         setSelectedBurial(burial);
@@ -532,7 +550,7 @@ function AlayPagdamayContent() {
                     </nav>
                 </div>
 
-                <hr />
+                <hr style= {{border: '1px solid #0A3622'}}/>
 
                 <main className="py-6  ">
                     <div className="container-fluid">
@@ -557,7 +575,7 @@ function AlayPagdamayContent() {
                                                                     className="form-control"
                                                                     id="searchInput"
                                                                     placeholder="Search Patient Name"
-                                                                /* onChange={handleSearch} */
+                                                                    onChange={handleSearch}
                                                                 />
                                                             </div>
                                                         </div>
@@ -570,7 +588,7 @@ function AlayPagdamayContent() {
                                                                     data-bs-target="#addHospitalBillModal"
                                                                     onClick={() => handleAddRecord(true, "Add")}
                                                                 >
-                                                                    + Add Alay Pagdamay
+                                                                    + Add Record to Alay Pagdamay
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -591,38 +609,39 @@ function AlayPagdamayContent() {
                                                             </thead>
                                                             <tbody>
                                                                 {currentRecords.length > 0 ? (
-                                                                    currentRecords.map((burial, index) => (
-                                                                        <tr key={burial.id}>
-                                                                            <td>{indexOfFirstRecord + index + 1}</td>
-                                                                            <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
-                                                                            <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
-                                                                            <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
-                                                                            <td>{burial.contact_number}</td>
-                                                                            <td>{new Date(burial.savedAt).toLocaleString()}</td>
-                                                                            <td>
-                                                                                <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}
-                                                                                    /* data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal" */>
-                                                                                    <i className='bx bx-info-circle' ></i>
-                                                                                </button>
-                                                                                <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#addHospitalBillModal">
-                                                                                    <i className='bx bx-edit' ></i>
-                                                                                </button>
-                                                                                <button className="btn btn-danger"
-                                                                                    onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_id'])} >
-                                                                                    <i className='bx bx-trash' ></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))
+                                                                    [...currentRecords]
+                                                                        .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt)) // Sort from latest to oldest
+                                                                        .map((burial, index) => (
+                                                                            <tr key={burial.id}>
+                                                                                <td>{indexOfFirstRecord + index + 1}</td>
+                                                                                <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
+                                                                                <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
+                                                                                <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
+                                                                                <td>{burial.contact_number}</td>
+                                                                                <td>{new Date(burial.savedAt).toLocaleString()}</td>
+                                                                                <td>
+                                                                                    <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}>
+                                                                                        <i className='bx bx-info-circle'></i>
+                                                                                    </button>
+                                                                                    <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#addHospitalBillModal">
+                                                                                        <i className='bx bx-edit'></i>
+                                                                                    </button>
+                                                                                    <button className="btn btn-danger"
+                                                                                        onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_id'])}>
+                                                                                        <i className='bx bx-trash'></i>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))
                                                                 ) : (
                                                                     <tr>
                                                                         <td colSpan="7" className="text-center">No records found</td>
                                                                     </tr>
                                                                 )}
                                                             </tbody>
+
                                                         </table>
 
                                                         <br />
@@ -630,7 +649,7 @@ function AlayPagdamayContent() {
                                                         {/* Pagination Controls */}
                                                         <div className="d-flex justify-content-between mt-3">
                                                             <button
-                                                                className="nextprevbutton btn"
+                                                                className="nextprevbutton btn" style={{width: '10%'}}
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                             >
@@ -638,7 +657,7 @@ function AlayPagdamayContent() {
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
                                                             <button
-                                                                className="nextprevbutton btn"
+                                                                className="nextprevbutton btn" style={{width: '10%'}}
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                             >
@@ -667,23 +686,23 @@ function AlayPagdamayContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="addHospitalBillModalLabel">
-                                + RECORD OF DECEASED SERVICE  BY ALAY PAG-DAMAY
+                            <h5 className="modal-title" id="addHospitalBillModalLabel" style={{fontWeight: 'bold', color: '#0C623A', fontSize: '30px'}}>
+                            &nbsp;&nbsp;&nbsp;Add Record of Deceased to Alay Pagdamay
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <form>
 
-                                <div className="generateContainer">
-
-                                    <h5>Select Section: </h5>
+                            <div className="generateContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                     <br />
+                                    <h5 style={{color: '#0C623A'}}>Select Section: </h5>
+                                    
                                     <div className="row">
                                         <div className="col-6">
                                             <button
                                                 type="button"
-                                                className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`}
+                                                className={`btn w-100 ${formPage === "Basic Information" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Basic Information")}
                                             >
                                                 <i class="bi bi-person-vcard"></i> Basic Information
@@ -693,10 +712,10 @@ function AlayPagdamayContent() {
                                         <div className="col-6">
                                             <button
                                                 type="button"
-                                                className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
+                                                className={`btn w-100 ${formPage === "Checklist" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Checklist")}
                                             >
-                                                <i class="bi bi-card-checklist"></i> Burial Requirements
+                                                <i class="bi bi-card-checklist"></i> Burial Assistance Requirements
                                             </button>
                                         </div>
 
@@ -704,12 +723,13 @@ function AlayPagdamayContent() {
                                     </div>
                                 </div>
 
-                                <div className="generateContainer">
+                                
 
                                     {formPage == "Basic Information" &&
-                                        <>
+                                        
 
-                                            <h3>Deceased Information</h3><br />
+                                        <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                            <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Deceased Information</h3><br />
                                             <div className="row">
                                                 <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -904,7 +924,8 @@ function AlayPagdamayContent() {
 
                                             </div>
                                             <br />
-                                            <h3>Contact Person</h3><br />
+                                            <hr/>
+                                            <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Contact Person</h3><br />
                                             <div className="row">
                                                 <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -1062,8 +1083,8 @@ function AlayPagdamayContent() {
                                             </div>
 
                                             <br />
-
-                                        </>
+                                        </div>                
+                                        
                                     }
 
                                     {formPage === "Checklist" && (
@@ -1071,8 +1092,8 @@ function AlayPagdamayContent() {
                                             <div className="row">
                                                 <div className="col-12">
                                                     <div className="formContainer">
-                                                        <h3>Burial Status: </h3><br />
-                                                        <p>Current Status: <b>{burialStatus}</b></p><br />
+                                                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Burial Status: </h3><br />
+                                                        <p style={{color: '#0C623A'}}>Current Status: <b>{burialStatus}</b></p>
 
                                                         <select
                                                             className="form-control"
@@ -1092,7 +1113,7 @@ function AlayPagdamayContent() {
 
                                                 <div className="col-12">
                                                     <div className="formContainer">
-                                                        <h3>Requirements Checklist:</h3>
+                                                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Requirements Checklist:</h3>
                                                         <br />
                                                         <ul className="list-group">
                                                             <li className="list-group-item">
@@ -1111,7 +1132,7 @@ function AlayPagdamayContent() {
                                                                 <input className="form-check-input me-1" type="checkbox" id="checkFuneralContract"
                                                                     checked={checkedItems.checkFuneralContract}
                                                                     onChange={handleCheckboxChange} />
-                                                                <label className="form-check-label" htmlFor="checkFuneralContract">&nbsp; Funeral Contract (2 Copies)</label>
+                                                                <label className="form-check-label" htmlFor="checkFuneralContract">&nbsp; Funeral Contract/ Balance (2 Copies)</label>
                                                             </li>
                                                             <li className="list-group-item">
                                                                 <input className="form-check-input me-1" type="checkbox" id="checkValidId"
@@ -1126,7 +1147,7 @@ function AlayPagdamayContent() {
                                                 <div className="col-12">
                                                     <br />
                                                     <div className="formContainer">
-                                                        <h3>Remarks:</h3>
+                                                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Remarks:</h3>
                                                         <br />
 
                                                         <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
@@ -1141,13 +1162,13 @@ function AlayPagdamayContent() {
                                     )}
 
                                     <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                            Close
+                                        <button type="button" className="btn closebtn" style={{width: '15%'}} data-bs-dismiss="modal">
+                                            Cancel
                                         </button>
 
                                         {modalName == "Add" &&
                                             <>
-                                                <button type="submit" className="btn btn-primary"
+                                                <button type="submit" className="btn savebtn" style={{width: '15%'}}
                                                     onClick={handleAddBurialAssistance}>
                                                     Save
                                                 </button>
@@ -1156,7 +1177,7 @@ function AlayPagdamayContent() {
 
                                         {modalName == "Edit" &&
                                             <>
-                                                <button type="submit" className="btn btn-primary"
+                                                <button type="submit" className="btn savebtn" style={{width: '15%'}}
                                                     onClick={handleUpdateBurialAssistance}>
                                                     Save
                                                 </button>
@@ -1164,7 +1185,7 @@ function AlayPagdamayContent() {
                                         }
                                     </div>
 
-                                </div>
+                                
 
                             </form>
                         </div>

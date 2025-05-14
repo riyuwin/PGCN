@@ -8,9 +8,10 @@ body {
   /* background: 
                 url('../../public/assets/img/admin_bg.png') no-repeat center center;
   background-size: cover; */
-  background: white;
+  background: rgb(243, 255, 248);
   color: #444444;
   height: 100%;
+  
 }
 
 /* .admin_footer {
@@ -65,6 +66,7 @@ h6 {
   margin-top: 80px;
   padding: 20px 30px 20px 30px;
   transition: all 0.3s;
+  /* background: linear-gradient(to bottom, #FFFFFF 60%, #b4e2c7 100%); */
 }
 
 @media (max-width: 1199px) {
@@ -277,6 +279,7 @@ body.sidebar-hidden #main {
 
 .card-body {
   padding: 20px 40px 20px 40px;
+  border-radius: 5px;
 }
 
 .card-img-overlay {
@@ -1324,4 +1327,117 @@ hr {
 .input-group .form-control {
   border-radius: 5px !important;
 
+}
+
+.selebtn{
+  background-color: #6EAE5C;
+  color: #F2FFEE;  
+  border: 1.5px solid #0A3622;
+  font-weight: bold;
+}
+
+
+.selebtn:hover, .selesuccbtn:hover{
+  background-color: #F2FFEE;
+  color: #0C623A;  
+  border: 1.5px solid #0A3622;
+  font-weight: bold;
+}
+
+
+.selesuccbtn {
+  background-color: #F2FFEE;
+  color: #0C623A;  
+  border: 1.5px solid #0A3622;
+  font-weight: bold;
+}
+
+.list-group-item {
+  color: #0C623A;
+  background-color: #F8FFF6;
+  border: 1px solid #B2D6A8;
+}
+
+.closebtn {
+  color: #0C623A;
+  background-color: #F2FFEE;
+  border: 1px solid #0A3622;
+}
+
+.closebtn:hover, .savebtn:hover {
+  color: #F2FFEE;
+  background-color: #5ec53f;
+  border: 1px solid #0A3622;
+}
+
+.savebtn {
+  color: #F2FFEE;
+  background-color: #0C623A;
+  border: 1px solid #0A3622;
+}
+
+.form-label {
+  color: #08533F;
+}
+
+.interviewform {
+  font-size: 14px;
+  color: #08533F;
+
+}
+
+ .formtitle{
+  font-size: 18px;
+  color: #08533F;
+  font-weight: bold;
+}
+
+.editinterview, .btn-reports,
+.btn-download, .btn-download:hover {
+  background-color: #0C623A;
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #0A3622;
+}
+
+.editinterview:hover, .btn-reports:hover {
+  background-color: #5ec53f;
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #0A3622;
+
+}
+
+.statscard {
+  border: 1px solid #0A3622
+}
+
+.iconcard {
+  background: #E0F8E9;
+}
+
+.custom-input {
+  background-color: #F2FFEE;
+  border-radius: 25px;
+  border: 1px solid #A9D9A3;
+  color: #08533F;
+}
+
+.label-form {
+  font-weight: 500;
+  color: #08533F;
+}
+
+.card {
+  border: 1px solid #C5E4C3;
+  border-radius: 10px;
+}
+
+.profile-icon i {
+  font-size: 60px;
+}
+
+.pictureborder {
+  border: 10px solid #E0F8E9;
+  border-radius: 10px;
 }

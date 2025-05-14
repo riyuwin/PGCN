@@ -44,7 +44,7 @@ function BurialAssistanceModalContent({
                             className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
                             onClick={() => handleFormPageUpdate("Checklist")}
                         >
-                            <i class="bi bi-card-checklist"></i> Burial Requirements
+                            <i class="bi bi-card-checklist"></i> Burial Assistance Requirements
                         </button>
                     </div>
 

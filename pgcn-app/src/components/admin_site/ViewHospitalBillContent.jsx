@@ -75,7 +75,7 @@ function ViewHospitalBillContent() {
     const [hospitalStatus, setHospitalStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
         checkBarangayIndigency: false,
-        checkDeathCertificate: false,
+        checkMedCertificate: false,
         checkFuneralContract: false,
         checkValidId: false
     });
@@ -85,13 +85,19 @@ function ViewHospitalBillContent() {
 
     const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
     const [PSWDOId, setPSWDOId] = useState("");
-    const [typeOfAssistance, setTypeOfAssistance] = useState('');
+    const [typeOfAssistance, setTypeOfAssistance] = useState('Medical');
     const [member4Ps, setMember4Ps] = useState('No');
 
     const [formPage, setFormPage] = useState("Guarantee Letter");
 
     // Variables for inputs ------------------------------------------------------------
 
+    function formatToPesos(amount) {
+        return new Intl.NumberFormat('en-PH', {
+            minimumFractionDigits: 0
+        }).format(Math.abs(amount));
+    }
+    
     const handleFormPageUpdate = (formPageNumber) => {
         setFormPage(formPageNumber);
     }
@@ -148,7 +154,7 @@ function ViewHospitalBillContent() {
             setPatientBarangay(interview.barangay || '');
             setPatientPurok(interview.purok || '');
             setContactPersonTransactionName(interview.transaction_name || '');
-            setTypeOfAssistance(interview.type_assistance || '');
+            setTypeOfAssistance(interview.type_assistance || 'Medical');
             setMember4Ps(interview.member_4ps || 'No');
 
             if (Array.isArray(PSWDOInterview.familyComposition)) {
@@ -243,10 +249,10 @@ function ViewHospitalBillContent() {
         setRemarks(bill['remarks']);
 
         setCheckedItems({
-            checkBarangayIndigency: bill['check_barangay_indigency'] == 1,
-            checkMedCertificate: bill['check_med_certificate'] == 1,
-            checkFinalBill: bill['check_hospital_bill'] == 1,
-            checkValidId: bill['check_valid_id'] == 1,
+            checkBarangayIndigency: bill['check_barangay_indigency'] == "1",
+            checkMedCertificate: bill['check_med_certificate'] == "1",
+            checkFinalBill: bill['check_hospital_bill'] == "1",
+            checkValidId: bill['check_valid_id'] == "1",
         });
 
     };
@@ -450,11 +456,12 @@ function ViewHospitalBillContent() {
         <>
             <main id="main" className="main">
                 <div className="content">
-                    <h1>Hospital Bill Details</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Hospital Bill Details</h1>
                     <nav>
                         <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a>Admin</a></li>
-                            <li className="breadcrumb-item active">Hospital Bill Details</li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Assistance Registry Management</a></li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Hospital Bill</a></li>
+                            <li className="breadcrumb-item active" style={{ fontWeight: 'Bold', color: '#08533F' }}>Hospital Bill Details</li>
                         </ol>
                     </nav>
                 </div>
@@ -470,23 +477,22 @@ function ViewHospitalBillContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
 
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-12" >
                                                                 <br />
                                                                 <div className="row">
 
-                                                                    <div /* className="columnContainer" */>
-                                                                        <h5>Generate Reports</h5><br />
-
+                                                                    <div /* className="columnContainer" */ >
+                                                                        <h5 style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>Print Forms</h5><br />
                                                                         <div className="row">
                                                                             <div className="col-4">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("Guarantee Letter")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -498,7 +504,7 @@ function ViewHospitalBillContent() {
                                                                             <div className="col-4">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("Petty Cash Voucher")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -510,7 +516,7 @@ function ViewHospitalBillContent() {
                                                                             <div className="col-4">
                                                                                 <button
                                                                                     type="button"
-                                                                                    className={`btn w-100 btn-success`}
+                                                                                    className={`btn w-100 btn-reports`}
                                                                                     onClick={() => handleFormPageUpdate("PSWDO Interview")}
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#viewReportModal"
@@ -539,24 +545,24 @@ function ViewHospitalBillContent() {
                                 <div className="col-lg-7">
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
-                                            <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                        <div className="card info-card sales-card" >
+                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
 
                                                     <div className="row mb-3">
-                                                        <div className="row">
+                                                        <div className="row"> 
 
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-12" >
                                                                 <br />
                                                                 <div className="row">
 
                                                                     <div /* className="columnContainer" */>
                                                                         {/* <h5>Burial Assistance Information</h5><br /> */}
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Hospital Bill Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}} >Hospital Bill Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-4">
@@ -585,13 +591,13 @@ function ViewHospitalBillContent() {
 
 
                                                                             </div>
-                                                                        </div>
+                                                                        </div><br/>
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Patient Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Patient Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -645,15 +651,15 @@ function ViewHospitalBillContent() {
                                                                                 </div>
 
                                                                             </div>
-                                                                        </div>
-                                                                        <br />
+                                                                        </div><br/>
+                                                                        
 
-                                                                        <div className="infoContainer">
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
                                                                             <div className="row">
 
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label">Claimant Information</b> <hr />
+                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Claimant Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -693,16 +699,22 @@ function ViewHospitalBillContent() {
                                                                                         <label className="form-label">Claimant Relationship:<br /> <b>{contactPersonRelationship}</b></label>
                                                                                     </div>
                                                                                 </div>
+                                                                                
+                                                                                <div className="col-sm-3">
+                                                                                    <div className="input-group">
+                                                                                        <label className="form-label">Claimant Amount:<br /> <b>PHP {formatToPesos(contactPersonAmount)}</b></label>
+                                                                                    </div>
+                                                                                </div>
 
                                                                             </div>
                                                                         </div>
-
-                                                                        <div className="infoContainer">
+                                                                                <br/>
+                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
 
 
                                                                             <div className="col-sm-12">
                                                                                 <div className="input-group">
-                                                                                    <b className="form-label">Hospital Bill Requirements</b>
+                                                                                    <b className="form-label" style={{fontSize: '20px'}}>Hospital Bill Requirements</b>
                                                                                 </div>
                                                                             </div>
 
@@ -765,7 +777,7 @@ function ViewHospitalBillContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body">
+                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -773,18 +785,18 @@ function ViewHospitalBillContent() {
                                                                 <br />
                                                                 <div className="row">
 
-                                                                    <div className="columnContainer">
-                                                                        <b className="form-label">PSWDO Interview</b>
-                                                                        <br /><hr />
+                                                                    <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <b className="form-label" style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                        <hr />
 
                                                                         <div className="row">
 
                                                                             <div className="col-12">
-                                                                                <p htmlFor="firstName" className="form-label"><i>Claimant Information </i></p><br />
+                                                                                <p htmlFor="firstName" className="formtitle">Claimant Information</p>
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">First Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">First Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -797,40 +809,40 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Middle Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Middle Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
                                                                                     id="firstName"
                                                                                     value={contactPersonMiddlename}
                                                                                     onChange={(e) => setContactPersonMname(e.target.value)}
-                                                                                    placeholder="First Name"
+                                                                                    placeholder="Middle Name"
                                                                                     disabled={true}
                                                                                 />
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Last Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Last Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
                                                                                     id="firstName"
                                                                                     value={contactPersonLastname}
                                                                                     onChange={(e) => setContactPersonLname(e.target.value)}
-                                                                                    placeholder="First Name"
+                                                                                    placeholder="Last Name"
                                                                                     disabled={true}
                                                                                 />
                                                                             </div>
 
                                                                             <div className="col-3">
-                                                                                <label htmlFor="firstName" className="form-label">Ext Name:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Ext Name:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
                                                                                     id="firstName"
                                                                                     value={contactPersonExtName}
                                                                                     onChange={(e) => setContactPersonExtName(e.target.value)}
-                                                                                    placeholder="First Name"
+                                                                                    placeholder="Ext"
                                                                                     disabled={true}
                                                                                 />
                                                                             </div>
@@ -838,7 +850,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Age:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Age:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -851,7 +863,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Civil Status:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Civil Status:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonCivilStatus}
@@ -860,16 +872,15 @@ function ViewHospitalBillContent() {
                                                                                     <option value="Single">Single</option>
                                                                                     <option value="Married">Married</option>
                                                                                     <option value="Widowed">Widowed</option>
-                                                                                    <option value="Widowed">Separed</option>
-                                                                                    <option value="Widowed">Common-Law Married</option>
-                                                                                    <option value="Widowed">Lived-in-Partener</option>
-                                                                                    <option value=""></option>
+                                                                                    <option value="Separated">Separated</option>
+                                                                                    <option value="Common-Law Married">Common-Law Married</option>
+                                                                                    <option value="Lived-in-Partener">Lived-in-Partener</option> 
                                                                                 </select>
                                                                             </div>
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Occupation:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Occupation:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -882,20 +893,20 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Income:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Monthly Income:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
                                                                                     id="firstName"
                                                                                     value={contactPersonIncome}
                                                                                     onChange={(e) => setContactPersonIncome(e.target.value)}
-                                                                                    placeholder="Income"
+                                                                                    placeholder="Monthly  Income"
                                                                                 />
                                                                             </div>
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Gender:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Gender:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonGender}
@@ -908,7 +919,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Mobile Number:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Mobile Number:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
@@ -921,14 +932,15 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label htmlFor="firstName" className="form-label">Petty Amount:</label>
+                                                                                <label htmlFor="firstName" className="interviewform">Petty Amount:</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     className="form-control"
                                                                                     id="firstName"
-                                                                                    value={contactPersonPettyAmount}
+                                                                                    disabled={true}
+                                                                                    value={contactPersonAmount}
                                                                                     onChange={(e) => setContactPersonPettyAmount(e.target.value)}
-                                                                                    placeholder="Income"
+                                                                                    placeholder="Petty Amount"
                                                                                 />
                                                                             </div>
 
@@ -938,7 +950,7 @@ function ViewHospitalBillContent() {
 
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Province:</label>
+                                                                                <label className="interviewform">Province:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={contactPersonProvince}
@@ -951,11 +963,11 @@ function ViewHospitalBillContent() {
                                                                             {/* Municipality */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Municipality:</label>
+                                                                                <label className="interviewform">Municipality:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientMunicipality}
-                                                                                    onChange={handleMunicipalityChange}
+                                                                                    onChange={handleMunicipalityChange} 
                                                                                 >
                                                                                     <option value="">Select Municipality</option>
                                                                                     {Object.keys(municipalityBarangays).map((municipality) => (
@@ -969,7 +981,7 @@ function ViewHospitalBillContent() {
                                                                             {/* Barangay */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Barangay:</label>
+                                                                                <label className="interviewform">Barangay:</label>
                                                                                 <select
                                                                                     className="form-control"
                                                                                     value={patientBarangay}
@@ -988,7 +1000,7 @@ function ViewHospitalBillContent() {
                                                                             {/* Purok */}
                                                                             <div className="col-3">
                                                                                 <br />
-                                                                                <label className="form-label">Purok:</label>
+                                                                                <label className="interviewform">Purok:</label>
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
@@ -998,13 +1010,13 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                
                                                                                 <hr />
-                                                                                <p htmlFor="firstName" className="form-label"><i>Type of Assistance </i></p>
+                                                                                {/* <p htmlFor="firstName" className="formtitle">Type of Assistance</p> */}
                                                                             </div>
 
-                                                                            <div className="col-12">
-                                                                                <br />
+                                                                            {/* <div className="col-12">
+                                                                                
                                                                                 <label htmlFor="firstName" className="form-label">Select Type of Assistance:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1019,11 +1031,11 @@ function ViewHospitalBillContent() {
                                                                                     <option value="Emergency Shelter">Emergency Shelter</option>
                                                                                     <option value="Others">Others</option>
                                                                                 </select>
-                                                                            </div>
+                                                                            </div> */}
 
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                <br/>
                                                                                 <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1035,13 +1047,13 @@ function ViewHospitalBillContent() {
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                               
                                                                                 <hr />
-                                                                                <p htmlFor="firstName" className="form-label"><i>Family Composition </i></p>
+                                                                                <p htmlFor="firstName" className="formtitle">Family Composition</p>
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                <br />
+                                                                                
                                                                                 <label className="form-label">Number of Family Members:</label>
                                                                                 <input
                                                                                     type="number"
@@ -1059,7 +1071,7 @@ function ViewHospitalBillContent() {
                                                                                             relationship: '',
                                                                                             age: '',
                                                                                             civilStatus: '',
-                                                                                            purok: '',
+                                                                                            monthlyIncome: '',
                                                                                         });
                                                                                         setFamilyComposition(newComposition);
                                                                                     }}
@@ -1071,12 +1083,12 @@ function ViewHospitalBillContent() {
                                                                             {familyComposition.map((member, index) => (
                                                                                 <Fragment key={member.id || index}>
                                                                                     <div className="col-12">
-                                                                                        <br />
-                                                                                        <label className="form-label"><i>Family Member {index + 1}</i></label>
+                                                                                        <br /> <hr/>
+                                                                                        <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                        <br />
+                                                                                         <br/>   
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1091,8 +1103,8 @@ function ViewHospitalBillContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
-                                                                                        <br />
+                                                                                    {/* <div className="col-4">
+                                                                                        <br/>
                                                                                         <label className="form-label">Relationship:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1105,6 +1117,35 @@ function ViewHospitalBillContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                    
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Relationship:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.relationship || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, relationship: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Relationship</option>
+                                                                                            <option value="Mother">Mother</option>
+                                                                                            <option value="Father">Father</option>
+                                                                                            <option value="Child">Child</option>
+                                                                                            <option value="Father">Self</option>
+                                                                                            <option value="Parent">Parent</option>
+                                                                                            <option value="Sibling">Sibling</option>
+                                                                                            <option value="Spouse">Spouse</option>
+                                                                                            <option value="Grandparent">Grandparent</option>
+                                                                                            <option value="Relative">Relative</option>
+                                                                                            <option value="Friend">Friend</option>
+                                                                                            <option value="Guardian">Guardian</option>
+                                                                                            <option value="Other">Other</option>
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1124,7 +1165,7 @@ function ViewHospitalBillContent() {
                                                                                         />
                                                                                     </div>
 
-                                                                                    <div className="col-4">
+                                                                                    {/* <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
                                                                                         <input
@@ -1138,6 +1179,29 @@ function ViewHospitalBillContent() {
                                                                                                 setFamilyComposition(updated);
                                                                                             }}
                                                                                         />
+                                                                                    </div> */}
+
+                                                                                            
+                                                                                    <div className="col-4">
+                                                                                        <br />
+                                                                                        <label className="form-label">Civil Status:</label>
+                                                                                        <select
+                                                                                            className="form-control"
+                                                                                            value={member.civilStatus || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = familyComposition.map((item, i) =>
+                                                                                                    i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                                );
+                                                                                                setFamilyComposition(updated);
+                                                                                            }}>
+                                                                                            <option value="">Select Civil Status</option>
+                                                                                            <option value="Single">Single</option>
+                                                                                            <option value="Married">Married</option>
+                                                                                            <option value="Widowed">Widowed</option>
+                                                                                            <option value="Separated">Separated</option>
+                                                                                            <option value="Common-Law Married">Common-Law Married</option>
+                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                        </select>
                                                                                     </div>
 
                                                                                     <div className="col-4">
@@ -1183,12 +1247,14 @@ function ViewHospitalBillContent() {
 
                                                                         </div>
 
-                                                                        <br />
+                                                                        <br/>
+                                                                        <hr/>
+
 
                                                                         {PSWDOInterviewStatus === true &&
                                                                             <>
                                                                                 <button
-                                                                                    className="btn btn-primary btn-sm w-100"
+                                                                                    className="editinterview btn btn-sm w-100"
                                                                                     type="submit"
                                                                                     onClick={handleUpdatePSWDOInterview}
                                                                                 >
@@ -1235,7 +1301,7 @@ function ViewHospitalBillContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal">
+                            <h5 className="modal-title" id="viewReportModal" style= {{color: '#08533F', fontWeight: 'bold', fontSize: '30px'}}>
                                 {formPage}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1330,7 +1396,6 @@ function ViewHospitalBillContent() {
 
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
-
                                         
                                         <PDFViewer style={{ width: "100%", height: "800px" }}>
                                             <PettyCashLayout

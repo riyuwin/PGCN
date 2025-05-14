@@ -30,15 +30,15 @@ function AlayPagdamayModalContent({
 
     return (
         <>
-            <div className="generateContainer">
+            <div className="generateContainer" style={{border: '1.5px solid #CDCDCD'}}>
                 <br />
-                <h5>Select Section: </h5>
+                <h5 >Select Section: </h5>
                 <br />
                 <div className="row">
                     <div className="col-6">
                         <button
                             type="button"
-                            className={`btn w-100 ${formPage === "Basic Information" ? "btn-secondary" : "btn-success"}`}
+                            className={`btn w-100 ${formPage === "Basic Information" ? "selebtn" : "selesuccbtn"}`}
                             onClick={() => handleFormPageUpdate("Basic Information")}
                         >
                             <i class="bi bi-person-vcard"></i> Basic Information
@@ -48,10 +48,10 @@ function AlayPagdamayModalContent({
                     <div className="col-6">
                         <button
                             type="button"
-                            className={`btn w-100 ${formPage === "Checklist" ? "btn-secondary" : "btn-success"}`}
+                            className={`btn w-100 ${formPage === "Checklist" ? "selebtn" : "selesuccbtn"}`}
                             onClick={() => handleFormPageUpdate("Checklist")}
                         >
-                            <i class="bi bi-card-checklist"></i> Burial Requirements
+                            <i class="bi bi-card-checklist"></i> Alay Pagdamay Requirements
                         </button>
                     </div>
 
@@ -59,12 +59,12 @@ function AlayPagdamayModalContent({
                 </div>
             </div>
 
-            <div className="generateContainer">
+            <div className="generateContainer" style={{border: '1.5px solid #CDCDCD'}}>
 
                 {formPage == "Basic Information" &&
-                    <>
+                    <><br/>
 
-                        <h3>Deceased Information</h3><br />
+                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Deceased Information</h3><br />
                         <div className="row">
                             <div className="col-3">
                                 <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -229,8 +229,9 @@ function AlayPagdamayModalContent({
                             </div>
 
                         </div>
-                        <br />
-                        <h3>Contact Person</h3><br />
+                        <br /> 
+                        <hr style= {{border: '1px solid #0A3622'}}/>
+                        <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Contact Person</h3><br />
                         <div className="row">
                             <div className="col-3">
                                 <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -393,11 +394,11 @@ function AlayPagdamayModalContent({
                 }
 
                 {formPage === "Checklist" && (
-                    <>
+                    <><br/>
                         <div className="row">
                             <div className="col-12">
-                                <div className="formContainer">
-                                    <h3>Burial Status: </h3><br />
+                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Burial Status: </h3><br />
                                     <p>Current Status: <b>{burialStatus}</b></p><br />
 
                                     <select
@@ -417,8 +418,8 @@ function AlayPagdamayModalContent({
 
 
                             <div className="col-12">
-                                <div className="formContainer">
-                                    <h3>Requirements Checklist:</h3>
+                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Requirements Checklist:</h3>
                                     <br />
                                     <ul className="list-group">
                                         <li className="list-group-item">
@@ -447,8 +448,8 @@ function AlayPagdamayModalContent({
 
                             <div className="col-12">
                                 <br />
-                                <div className="formContainer">
-                                    <h3>Remarks:</h3>
+                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Remarks:</h3>
                                     <br />
 
                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}

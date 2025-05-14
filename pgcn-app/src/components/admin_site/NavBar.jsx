@@ -4,12 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import * as port from "../ports/DatabaseRouting" 
 
 function NavBar() {
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     const [account, setAccount] = useState(null); // Track user account details
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Check if the user is logged in
     const navigate = useNavigate();
+
 
     // Dropdown initialization once the component has mounted
     useEffect(() => {
@@ -38,6 +40,7 @@ function NavBar() {
             .then(() => navigate('/login'))
             .catch((error) => console.error("Logout error: ", error));
     };
+
 
     return (
         <>
