@@ -227,6 +227,7 @@ function ManageReportContent() {
         try {
             const response = await fetch(port.PortRetrieveAlayPagdamay);
             const data = await response.json();
+            console.log("ASFFSA", data)
             setAlayPagdamay(data);
         } catch (error) {
             console.error("Error fetching alay pagdamay details:", error);
