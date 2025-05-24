@@ -253,7 +253,25 @@ app.post("/insert_hospital_bill", (req, res) => {
     } = req.body;
 
     const sanitizedHospital = patientHospital && patientHospital.trim() !== "" ? patientHospital : null;
-    const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    // const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    const currentDateTimePH = new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Manila",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
+
+    // Convert MM/DD/YYYY, HH:MM:SS format to YYYY-MM-DD HH:MM:SS
+    const [month, day, yearAndTime] = currentDateTimePH.split('/');
+    const [year, time] = yearAndTime.split(', ');
+    const currentDateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${time}`; 
+
 
     const insertHospitalBillQuery = `
         INSERT INTO hospital_bill
@@ -336,7 +354,24 @@ app.post("/update_hospital_bill", (req, res) => {
     }
 
     const sanitizedHospital = patientHospital?.trim() || null;
-    const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+    // const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    
+    const currentDateTimePH = new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Manila",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
+
+    // Convert MM/DD/YYYY, HH:MM:SS format to YYYY-MM-DD HH:MM:SS
+    const [month, day, yearAndTime] = currentDateTimePH.split('/');
+    const [year, time] = yearAndTime.split(', ');
+    const currentDateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${time}`; 
 
     const updateHospitalBillQuery = `
         UPDATE hospital_bill
@@ -832,7 +867,10 @@ app.post("/insert_burial_assistance", (req, res) => {
                     }
 
                     connection.release();
-                    res.json({ message: "Burial assistance added successfully!" });
+                    res.json({
+                        message: "Burial assistance added successfully!",
+                        burial_assistance_id: result.insertId
+                    });
                 });
             });
         });
@@ -906,6 +944,8 @@ app.post("/insert_pswdo_interview", (req, res) => {
         familyComposition = [], transactionName, typeOfAssistance, member4Ps
     } = req.body;
 
+    console.log("BURIAL ASSISTANCE ID: ", burialAssistanceID)
+
     const savedAt = new Date().toISOString().slice(0, 19).replace("T", " ");
 
     const insertInterviewQuery = `
@@ -943,6 +983,8 @@ app.post("/insert_pswdo_interview", (req, res) => {
                 }
 
                 const interviewId = result.insertId;
+
+                console.log("Test interviewID: ", interviewId)
 
                 // Prepare bulk family insert values
                 const familyValues = familyComposition.map(member => [

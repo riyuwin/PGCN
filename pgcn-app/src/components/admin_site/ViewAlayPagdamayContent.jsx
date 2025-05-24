@@ -231,9 +231,7 @@ function ViewAlayPagdamayContent() {
     const fetchPSWDOInterviewId = async (id) => {
         try {
             const response = await fetch(RetrievePSWDOInterview(id, transactionName));
-            const data = await response.json();
-
-            console.log("Test: ", data)
+            const data = await response.json(); 
             PopulatePSWDOInterview(data);
 
         } catch (error) {
@@ -295,21 +293,12 @@ function ViewAlayPagdamayContent() {
                 }));
 
                 setFamilyCount(filledData.length);
-                setFamilyComposition(filledData);
-
-                console.log("Family Composition:", filledData);
+                setFamilyComposition(filledData); 
             }
-        }
-
-
-        console.log("Testtt: ", PSWDOInterviewStatus)
-
-
+        }  
     };
 
-    const PopulateForms = (burial) => {
-        console.log("Populating forms with:", burial); // Check all values 
-
+    const PopulateForms = (burial) => { 
         setBurialId(burial['burial_id']);
         setDeceasedFirstName(burial['deceased_fname']);
         setDeceasedMiddleName(burial['deceased_mname']);

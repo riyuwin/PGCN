@@ -105,9 +105,7 @@ function ViewHospitalBillContent() {
     const fetchPSWDOInterviewId = async (hospitalId) => {
         try {
             const response = await fetch(RetrievePSWDOInterview(hospitalId, transactionName));
-            const data = await response.json();
-
-            console.log("Test: ", data)
+            const data = await response.json(); 
             PopulatePSWDOInterview(data);
 
         } catch (error) {
@@ -168,16 +166,9 @@ function ViewHospitalBillContent() {
                 }));
 
                 setFamilyCount(filledData.length);
-                setFamilyComposition(filledData);
-
-                console.log("Family Composition:", filledData);
+                setFamilyComposition(filledData); 
             }
-        }
-
-
-        console.log("Testtt: ", PSWDOInterviewStatus)
-
-
+        }  
     };
 
     const handleDownload = async () => {
@@ -220,9 +211,7 @@ function ViewHospitalBillContent() {
         saveAs(blob, 'Petty-Cash-Voucer.pdf');
     };
 
-    const PopulateForms = (bill) => {
-        console.log("Populating forms with:", bill); // Check all values 
-
+    const PopulateForms = (bill) => { 
         setHospitalId(bill['hospital_bill_id']);
         setClientFirstName(bill['patient_fname']);
         setClientMiddleName(bill['patient_mname']);
@@ -448,9 +437,7 @@ function ViewHospitalBillContent() {
                 text: err.message || "An error occurred.",
             });
         }
-    };
-
-
+    }; 
 
     return (
         <>
@@ -1527,7 +1514,7 @@ function ViewHospitalBillContent() {
                                                 familyComposition={familyComposition}
                                                 claimantRelationship={contactPersonRelationship}
                                                 dateOfDeath={dateConfinement}
-                                                typeOfAssistance={typeOfAssistance}
+                                                typeOfAssistance={contactPersonTransactionName}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
                                                 beneFirstname={clientFirstName} 

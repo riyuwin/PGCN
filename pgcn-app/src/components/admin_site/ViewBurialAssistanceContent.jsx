@@ -245,8 +245,7 @@ function ViewBurialAssistanceContent() {
         try {
             const response = await fetch(RetrievePSWDOInterview(id, transactionName));
             const data = await response.json();
-
-            console.log("Test: ", data)
+ 
             PopulatePSWDOInterview(data);
 
         } catch (error) {
@@ -275,8 +274,7 @@ function ViewBurialAssistanceContent() {
     };
 
     const PopulatePSWDOInterview = (PSWDOInterview) => {
-
-        console.log("Testtt123: ", PSWDOInterview)
+ 
         
         if (!PSWDOInterview?.error) {
             const interview = PSWDOInterview.interview || {};
@@ -311,20 +309,13 @@ function ViewBurialAssistanceContent() {
 
                 setFamilyCount(filledData.length);
                 setFamilyComposition(filledData);
-
-                console.log("Family Composition:", filledData);
+ 
             }
         }
-
-
-        console.log("Testtt: ", PSWDOInterviewStatus)
-
-
+ 
     };
 
-    const PopulateForms = (burial) => {
-        console.log("Populating forms with:", burial); // Check all values 
-
+    const PopulateForms = (burial) => {  
         setBurialId(burial['burial_assistance_id']);
         /* setDeceasedFirstName(burial['deceased_fname']);
         setDeceasedMiddleName(burial['deceased_mname']);

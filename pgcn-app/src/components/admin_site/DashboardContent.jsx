@@ -363,10 +363,8 @@ function DashboardContent() {
 
             const response = await fetch(RetrieveAllAssistance(queryParam, reportParam));
 
-            const counts = await response.json(); // { hospital: 10, alay: 5, burial: 7 }
-
-            console.log("HAHAHA: ", counts);
-
+            const counts = await response.json(); 
+            
             setMultipleRadialBarChartData(prevData => ({
                 ...prevData,
                 series: [
@@ -421,10 +419,7 @@ function DashboardContent() {
                 },
                 series: series,
             }));
-
-            console.log("Updated Labels123:", labels);
-            console.log("Updated Series:123", series);
-
+ 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -466,10 +461,7 @@ function DashboardContent() {
                 },
                 series: series,
             }));
-
-            console.log("Updated Labels123:", labels);
-            console.log("Updated Series:123", series);
-
+ 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -510,10 +502,7 @@ function DashboardContent() {
                     labels: labels
                 },
                 series: series,
-            }));
-
-            console.log("Updated Labels123:", labels);
-            console.log("Updated Series:123", series);
+            })); 
 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);

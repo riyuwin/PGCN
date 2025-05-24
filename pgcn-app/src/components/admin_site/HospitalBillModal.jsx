@@ -60,14 +60,7 @@ function HospitalBillModal(){
         e.preventDefault();
     
         // Get current date-time in yyyy-mm-dd HH:mm:ss format
-        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-    
-        console.log("Submitting hospital bill with data:", {
-            account_id, patientFirstName, patientMiddleName, patientLastName, patientExtName, 
-            patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital,
-            claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-            claimantAmount, currentDateTime
-        });
+        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");    
     
         try {
             const response = await fetch(port.PortInsertHospitalBill, {
@@ -107,9 +100,7 @@ function HospitalBillModal(){
     }; 
 
     const handleDeleteHospitalBill = async (e, billId) => {
-        e.preventDefault();
-    
-        console.log("Testtt", billId); // Ensure billId is being passed correctly
+        e.preventDefault(); 
     
         Swal.fire({
             title: 'Are you sure?',
@@ -157,14 +148,7 @@ function HospitalBillModal(){
     
         // Get current date-time in yyyy-mm-dd HH:mm:ss format
         const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
-    
-        console.log("Submitting hospital bill with data:", {
-            billId, account_id,
-            patientFirstName, patientMiddleName, patientLastName, patientExtName, patientAddress, patientHospital,
-            claimantFirstname, claimantMiddlename, claimantLastname, claimantExtName, claimantRelationship, claimantContact,
-            claimantAmount, currentDateTime
-        });
-    
+     
         try {
             const response = await fetch(port.PortUpdateHospitalBill, {
                 method: "POST",
@@ -211,9 +195,7 @@ function HospitalBillModal(){
         setSelectedBill(bill);
         setIsEditMode(editMode);
         setModalName(modalName);
-        PopulateForms(bill);
-
-        console.log("ID:", bill['hospital_bill_id'])
+        PopulateForms(bill); 
     };
  
     const handleAddRecord = (editMode = false, modalName) => { 
@@ -282,9 +264,7 @@ function HospitalBillModal(){
     }  
 
     useEffect(() => {
-        if (localUserDetails){
-            console.log("Test: ", localUserDetails['account_id']);
-
+        if (localUserDetails){ 
             setLocalUserId(localUserDetails['account_id']);
         }
     })

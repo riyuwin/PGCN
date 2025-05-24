@@ -30,6 +30,9 @@ export const PSWDOLayout = ({
     dateOfDeath, typeOfAssistance, member4Ps, contactPersonPettyAmount, assistanceReason,
     beneFirstname, beneMiddleName, beneLastName, beneExtName, location
     }) => {
+
+
+    console.log("Type of Assistance: ". typeOfAssistance)
     
     const [selectBriefBackground, setSelectBriefBackground] = useState('Option 1');
 
@@ -1083,8 +1086,7 @@ export const PSWDOLayout = ({
                                     The client came to ask for help for his/her <Text style={styles.boldLetter}>{claimantRelationship}</Text>. His/Her died last
                                     <Text style={styles.boldLetter}> {claimantRelationship}</Text> which is the patient is only a <Text style={styles.boldLetter}> {claimantOccupation}, </Text>
                                     and that is their main source of income. Because his/her <Text style={styles.boldLetter}>{claimantRelationship}</Text> was admitted to the hospital, they need help
-                                    for hospital bill. The client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> was admitted last <Text style={styles.boldLetter}>{dateOfDeath}</Text>
-                                    based on the medical certificate presented. 
+                                    for hospital bill. The client’s <Text style={styles.boldLetter}>{claimantRelationship}</Text> was admitted last <Text style={styles.boldLetter}>{formatDate(dateOfDeath)}</Text> based on the medical certificate presented. 
                                 </Text>
                             </>
                         }

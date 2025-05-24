@@ -57,8 +57,7 @@ function ReportStatisticsContent() {
             fetchHospitalBillHospitalName(municipalityFilter, reportClassification);
             fetchHospitalBillPatientBarangay(municipalityFilter, reportClassification);
 
-            setFilterName('Hospital Bill');
-            console.log("Hey:", barChartData);
+            setFilterName('Hospital Bill'); 
         } else if (
             transactions === "Alay Pagdamay" &&
             ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
@@ -74,8 +73,7 @@ function ReportStatisticsContent() {
             fetchAlayPagdamayFuneralName(municipalityFilter, reportClassification);
             fetchAlayPagdamayBarangay(municipalityFilter, reportClassification);
 
-            setFilterName('Alay Pagdamay');
-            console.log("Hey:", barChartData);
+            setFilterName('Alay Pagdamay'); 
         } else if (
             transactions === "Burial Assistance" &&
             ["Annual Report", "This Month Report", "This Week Report"].includes(reportClassification)
@@ -90,24 +88,12 @@ function ReportStatisticsContent() {
             fetchBurialAssistancePettyCash(municipalityFilter, reportClassification);
             fetchBurialAssistanceBarangay(municipalityFilter, reportClassification);
 
-            setFilterName('Burial Assistance');
-            console.log("Hey:", barChartData);
-        } else {
-            console.log("No matching filter conditions.");
+            setFilterName('Burial Assistance'); 
+        } else { 
             setFilterName('');
             setFilterPatientMunicipality('');
         }
-    };
-
-    /* useEffect(() => {
-        if (transactions !== "" && startDate !== "" && endDate !== "") {
-            setGenerateButton(true);  
-
-            console.log("Hey: ", barChartData);
-        } else {
-            setGenerateButton(false);
-        }
-    }, [transactions, startDate, endDate]); */
+    }; 
 
     const fetchHospitalBillStatus = async (filterNamePatientMunicipality, reportClassification) => {
         try {
@@ -123,9 +109,7 @@ function ReportStatisticsContent() {
             });
 
             const data = await response.json();
-
-            console.log("Hospital Bill Status Data: ", data);
-
+ 
             let labels = [];
             let series = [];
 
@@ -186,8 +170,7 @@ function ReportStatisticsContent() {
         }
     };
 
-    const fetchHospitalBills = async (filterNamePatientMunicipality) => {
-        console.log("HEHEHE: ", filterNamePatientMunicipality)
+    const fetchHospitalBills = async (filterNamePatientMunicipality) => { 
         try {
             const response = await fetch(port.PortRetrieveHospitalBill, {
                 method: "POST",
@@ -241,10 +224,7 @@ function ReportStatisticsContent() {
                     labels: labels
                 },
                 series: series,
-            }));
-
-            console.log("Updated Labels:", labels);
-            console.log("Updated Series:", series);
+            })); 
 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
@@ -288,10 +268,7 @@ function ReportStatisticsContent() {
                     labels: labels
                 },
                 series: series,
-            }));
-
-            console.log("Updated Labels123:", labels);
-            console.log("Updated Series:123", series);
+            })); 
 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
@@ -613,9 +590,7 @@ function ReportStatisticsContent() {
             });
 
             const data = await response.json();
-
-            console.log("Hospital Bill Status Data: ", data);
-
+ 
             let labels = [];
             let series = [];
 
@@ -710,10 +685,7 @@ function ReportStatisticsContent() {
                     labels: labels
                 },
                 series: series,
-            }));
-
-            console.log("Updated Labels:", labels);
-            console.log("Updated Series:", series);
+            })); 
 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
@@ -755,11 +727,7 @@ function ReportStatisticsContent() {
                     labels: labels
                 },
                 series: series,
-            }));
-
-            console.log("Updated Labels123:", labels);
-            console.log("Updated Series:123", series);
-
+            })); 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -893,9 +861,7 @@ function ReportStatisticsContent() {
             });
 
             const data = await response.json();
-
-            console.log("Hospital Bill Status Data: ", data);
-
+ 
             let labels = [];
             let series = [];
 
@@ -992,10 +958,7 @@ function ReportStatisticsContent() {
                 },
                 series: series,
             }));
-
-            console.log("Updated Labels123:", labels);
-            console.log("Updated Series:123", series);
-
+ 
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }

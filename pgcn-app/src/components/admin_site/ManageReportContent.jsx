@@ -226,8 +226,7 @@ function ManageReportContent() {
     const fetchAlayPagdamay = async () => {
         try {
             const response = await fetch(port.PortRetrieveAlayPagdamay);
-            const data = await response.json();
-            console.log("ASFFSA", data)
+            const data = await response.json(); 
             setAlayPagdamay(data);
         } catch (error) {
             console.error("Error fetching alay pagdamay details:", error);
@@ -245,9 +244,12 @@ function ManageReportContent() {
     };
 
     const [filteredRecords, setAssistanceRecord] = useState([]);
+
     useEffect(() => {
+        let records = [];
+
         if (transactions === "Hospital Bill") {
-            const records = hospitalBills.filter((bill) => {
+            records = hospitalBills.filter((bill) => {
                 const billDate = new Date(bill.datetime_added);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
@@ -256,15 +258,15 @@ function ManageReportContent() {
                     (!start || billDate >= start) &&
                     (!end || billDate <= end) &&
                     (patientMunicipality === "All" || bill.patient_municipality === patientMunicipality || patientMunicipality === "") &&
-                    (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "")
+                    (patientBarangay === "All" || bill.patient_barangay === patientBarangay || patientBarangay === "") &&
+                    (patientHospital === "All" || bill.patient_hospital === patientHospital || patientHospital === "")
                 );
             });
-
-            console.log("Test hospital: ", records)
-            setAssistanceRecord(records);
+ 
         }
+
         else if (transactions === "Alay Pagdamay") {
-            const records = alayPagdamay.filter((burial) => {
+            records = alayPagdamay.filter((burial) => {
                 const burialDate = new Date(burial.savedAt);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
@@ -273,17 +275,15 @@ function ManageReportContent() {
                     (!start || burialDate >= start) &&
                     (!end || burialDate <= end) &&
                     (patientMunicipality === "All" || burial.deceased_municipality === patientMunicipality || patientMunicipality === "") &&
-                    (patientBarangay === "All" || burial.deceased_barangay === patientBarangay || patientBarangay === "")
+                    (patientBarangay === "All" || burial.deceased_barangay === patientBarangay || patientBarangay === "") &&
+                    (contactPersonFuneralService === "All" || burial.contact_funeral_service === contactPersonFuneralService || contactPersonFuneralService === "")
                 );
             });
-
-            console.log("Test burial: ", records)
-
-            setAssistanceRecord(records);
+ 
         }
 
         else if (transactions === "Burial Assistance") {
-            const records = burialAssistance.filter((burial) => {
+            records = burialAssistance.filter((burial) => {
                 const burialDate = new Date(burial.savedAt);
                 const start = startDate ? new Date(startDate) : null;
                 const end = endDate ? new Date(endDate) : null;
@@ -295,12 +295,23 @@ function ManageReportContent() {
                     (patientBarangay === "All" || burial.client_barangay === patientBarangay || patientBarangay === "")
                 );
             });
-
-            console.log("Test burial: ", records)
-
-            setAssistanceRecord(records);
+ 
         }
-    }, [transactions, hospitalBills, burialAssistance, startDate, endDate, patientMunicipality, patientBarangay, deceasedMunicipality, deceasedBarangay]);
+
+        setAssistanceRecord(records);
+
+    }, [
+        transactions,
+        hospitalBills,
+        alayPagdamay,
+        burialAssistance,
+        startDate,
+        endDate,
+        patientMunicipality,
+        patientBarangay,
+        patientHospital,
+        contactPersonFuneralService
+    ]);
 
 
     /* filteredRecords = hospitalBills.filter((bill) => {
@@ -366,9 +377,7 @@ function ManageReportContent() {
 
             setRemarks(data['remarks']);
 
-        } else if (transactionName === "Alay Pagdamay") {
-
-            console.log("Hey", data);
+        } else if (transactionName === "Alay Pagdamay") { 
 
             setBurialId(data['burial_id']);
             setDeceasedFirstName(data['deceased_fname']);
@@ -509,8 +518,7 @@ function ManageReportContent() {
             month: "long",
             day: "2-digit",
         });
-
-        console.log("Formatted Date:", formattedDate); // Debugging
+ 
         setCurrentDateToday(formattedDate);
     }, []);
 
@@ -673,6 +681,28 @@ function ManageReportContent() {
                                                                     </select>
                                                                 </div>
 
+                                                                <div className="col-3 ">
+                                                                    <label className="form-label">Hospital Name:</label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        value={patientHospital}
+                                                                        onChange={(e) => setPatientHospital(e.target.value.trim())} 
+                                                                    >
+                                                                        <option value="">All</option> 
+                                                                        <option value="LEON D. HERNANDEZ MEMORIAL HOSPITAL">LEON D. HERNANDEZ MEMORIAL HOSPITAL</option>
+                                                                        <option value="DAET DOCTORS HOSPITAL">DAET DOCTORS HOSPITAL</option>
+                                                                        <option value="DR. MOISES V. CACAWA HOSPITAL">DR. MOISES V. CACAWA HOSPITAL</option>
+                                                                        <option value="OUR LADY OF LOURDES HOSPITAL">OUR LADY OF LOURDES HOSPITAL</option>
+                                                                        <option value="SANTISSIMA TRINIDAD OF DAET">SANTISSIMA TRINIDAD OF DAET</option>
+                                                                        <option value="RACELIS TIONGSON MEDICAL CLINIC">RACELIS TIONGSON MEDICAL CLINIC</option>
+                                                                        <option value="LIZASO HOSPITAL">LIZASO HOSPITAL</option>
+                                                                        <option value="DR. MIGUEL V. ALEGRE HOSPITAL">DR. MIGUEL V. ALEGRE HOSPITAL</option>
+                                                                        <option value="BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL">BARRIOS-BUSIÑOS MEDICAL CLINIC AND HOSPITAL</option>
+                                                                        <option value="JOSE PANGANIBAN PRIMARY HOSPITAL">JOSE PANGANIBAN PRIMARY HOSPITAL</option>
+
+                                                                    </select>
+                                                                </div>
+
                                                                 <div className="col-sm-12">
                                                                     <br />
                                                                     <div className="table-responsive">
@@ -684,6 +714,7 @@ function ManageReportContent() {
                                                                                     <th>Claimant Name</th>
                                                                                     <th>Municipality</th>
                                                                                     <th>Barangay</th>
+                                                                                    <th>Hospital Name</th>
                                                                                     <th>Contact</th>
                                                                                     <th>Date Registered</th>
                                                                                     <th>Action</th>
@@ -698,6 +729,7 @@ function ManageReportContent() {
                                                                                             <td>{`${bill.claimant_fname} ${bill.claimant_mname} ${bill.claimant_lname} ${bill.claimant_extname || ""}`}</td>
                                                                                             <td>{bill.patient_municipality}</td>
                                                                                             <td>{bill.patient_barangay}</td>
+                                                                                            <td>{bill.patient_hospital}</td>
                                                                                             <td>{bill.claimant_contact}</td>
                                                                                             <td>{new Date(bill.datetime_added).toLocaleString()}</td>
                                                                                             <td>
@@ -809,6 +841,23 @@ function ManageReportContent() {
                                                                     </select>
                                                                 </div>
 
+                                                                <div className="col-3 ">
+                                                                    <label className="form-label">Funeral Service:</label>
+                                                                    <select
+                                                                        className="form-control"
+                                                                        id="relationship"
+                                                                        value={contactPersonFuneralService}
+                                                                        onChange={(e) => setContactPersonFuneralCovered(e.target.value)}
+                                                                    >
+                                                                        <option value="">All</option>
+                                                                        <option value="SAAVEDRA FUNERAL">SAAVEDRA FUNERAL</option>
+                                                                        <option value="ARANA FUNERAL">ARANA FUNERAL</option>
+                                                                        <option value="BELMONTE DAET">BELMONTE DAET</option>
+                                                                        <option value="ADEA OF JOSE PANGANIBAN">ADEA OF JOSE PANGANIBAN</option>
+                                                                        <option value="ST RAPHAEL FUNERARIA">ST RAPHAEL FUNERARIA</option>
+                                                                    </select>
+                                                                </div>
+
                                                                 <div className="col-sm-12">
                                                                     <br />
                                                                     <div className="table-responsive">
@@ -822,6 +871,7 @@ function ManageReportContent() {
                                                                                     <th>Deceased Barangay</th>
                                                                                     <th>Contact Person</th>
                                                                                     <th>Contact Number</th>
+                                                                                    <th>Funeral Services</th>
                                                                                     <th>Date Registered</th>
                                                                                     <th>Action</th>
                                                                                 </tr>
@@ -837,6 +887,7 @@ function ManageReportContent() {
                                                                                             <td>{burial.deceased_barangay}</td>
                                                                                             <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_ext_name || ""}`}</td>
                                                                                             <td>{burial.contact_number}</td>
+                                                                                            <td>{burial.contact_funeral_service}</td>
                                                                                             <td>{new Date(burial.savedAt).toLocaleString()}</td>
                                                                                             <td>
                                                                                                 <button className="btn btn-link"

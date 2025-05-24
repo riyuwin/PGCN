@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
@@ -68,43 +68,51 @@ function AlayPagdamayContent() {
     const [isEditMode, setIsEditMode] = useState(false);
     const [modalName, setModalName] = useState();
     // Variables for pagination -------------------------------
+ 
+    const [PSWDOInterviewId, setPSWDOInterviewId] = useState('');
+    const [contactPersonAge, setContactPersonAge] = useState('');
+    const [contactPersonCivilStatus, setContactPersonCivilStatus] = useState('');
+    const [contactPersonOccupation, setContactPersonOccupation] = useState('');
+    const [contactPersonIncome, setContactPersonIncome] = useState('');
+    const [contactPersonGender, setContactPersonGender] = useState('');
+    const [contactPersonMobileNum, setContactPersonMobileNum] = useState('');
+    const [contactPersonPettyAmount, setContactPersonPettyAmount] = useState('');
+    const [contactPersonTransactionName, setContactPersonTransactionName] = useState('');
+    const [contactPersonRelationship, setContactPersonRelationship] = useState('');
+    const [contactPersonProvince, setContactPersonProvince] = useState('Camarines Norte');
+    const [contactPersonMunicipality, setContactPersonMunicipality] = useState('');
+    const [contactPersonBarangay, setContactPersonBarangay] = useState('');
+    const [contactPersonPurok, setContactPersonPurok] = useState('');
+    const [contactBarangayList, setContactBarangayList] = useState([]);
+
+    const [PSWDOInterviewStatus, setPSWDOInterviewStatus] = useState(false);
+    const [PSWDOId, setPSWDOId] = useState("");
+    const [typeOfAssistance, setTypeOfAssistance] = useState('Burial');
+    const [member4Ps, setMember4Ps] = useState('No');
+
+    const [familyCount, setFamilyCount] = useState(0);
+    const [familyComposition, setFamilyComposition] = useState([]);
 
     const [formPage, setFormPage] = useState("Basic Information");
 
     const handleAddBurialAssistance = async (e) => {
-        e.preventDefault();
+        e.preventDefault();  
+        
+        const currentDateTimePH = new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Manila",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+        });
 
-        console.log("Test Add: ",
-            {
-                account_id: account_id,
-                deceasedFirstName: deceasedFirstName,
-                deceasedMiddleName: deceasedMiddleName,
-                deceasedLastName: deceasedLastName,
-                deceasedExtName: deceasedExtName,
-                deceasedPurok: deceasedPurok,
-                deceasedBarangay: deceasedBarangay,
-                deceasedMunicipality: deceasedMunicipality,
-                deceasedProvince: deceasedProvince,
-                deceasedGender: deceasedGender,
-                deceasedDeathDate: deceasedDeathDate,
-                contactPersonFirstname: contactPersonFirstname,
-                contactPersonMiddlename: contactPersonMiddlename,
-                contactPersonLastname: contactPersonLastname,
-                contactPersonExtName: contactPersonExtName,
-                contactNumber: contactNumber,
-                contactPersonServiceCovered: contactPersonServiceCovered,
-                contactPersonFuneralService: contactPersonFuneralService,
-                contactPersonEncoded: contactPersonEncoded,
-                burialStatus: burialStatus,
-                barangayIndigency: checkedItems.checkBarangayIndigency,
-                deathCertificate: checkedItems.checkDeathCertificate,
-                funeralContract: checkedItems.checkFuneralContract,
-                validId: checkedItems.checkValidId,
-                remarks: remarks,
-                deceasedCauseDeath: deceasedCauseDeath
-            }
-        );
-
+        // Convert MM/DD/YYYY, HH:MM:SS format to YYYY-MM-DD HH:MM:SS
+        const [month, day, yearAndTime] = currentDateTimePH.split('/');
+        const [year, time] = yearAndTime.split(', ');
+        const currentDateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${time}`; 
 
         const formData = new FormData();
         formData.append("account_id", account_id);
@@ -128,38 +136,72 @@ function AlayPagdamayContent() {
         formData.append("contactPersonFuneralService", contactPersonFuneralService);
         formData.append("contactPersonEncoded", contactPersonEncoded);
         formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
-        formData.append("checkDeathCertificate", checkedItems.checkDeathCertificate);
+        formData.append("deathCertificateStatus", checkedItems.checkDeathCertificate);
         formData.append("funeralContract", checkedItems.checkFuneralContract);
         formData.append("validId", checkedItems.checkValidId);
         formData.append("burialStatus", burialStatus);
         formData.append("remarks", remarks);
         formData.append("pettyCashAmount", pettyCashAmount);
         formData.append("deceasedCauseDeath", deceasedCauseDeath);
-        formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
+        formData.append("currentDateTime", currentDateTime);
 
-        // Append the file (deathCertificate should be from an <input type="file"> element)
         if (deathCertificate) {
             formData.append("deathCertificate", deathCertificate);
         }
 
         try {
-            const response = await fetch(port.PortInsertAlayPagdamay, {
+            const burialResponse = await fetch(port.PortInsertAlayPagdamay, {
                 method: "POST",
-                body: formData // No need for `Content-Type`, fetch will set it automatically
+                body: formData
             });
 
-            const data = await response.json();
+            if (!burialResponse.ok) {
+                const errorData = await burialResponse.json();
+                throw new Error(errorData.error || "Failed to insert burial assistance.");
+            }
 
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to insert hospital bill.");
+            const burialData = await burialResponse.json();
+            const burialId = burialData.burial_id; 
+            const hospitalId = null;
+            const transactionName = "Alay Pagdamay"; 
+
+            const interviewPayload = {
+                hospitalId,
+                alayPagDamayID: burialId,
+                contactPersonAge,
+                contactPersonCivilStatus,
+                contactPersonOccupation,
+                contactPersonIncome,
+                contactPersonGender,
+                contactPersonMobileNum: contactNumber,
+                contactPersonPettyAmount: pettyCashAmount,
+                patientProvince: deceasedProvince,
+                patientMunicipality: deceasedMunicipality,
+                patientBarangay: deceasedBarangay,
+                patientPurok: deceasedPurok,
+                familyComposition,
+                transactionName,
+                typeOfAssistance,
+                member4Ps
+            };
+
+            const interviewResponse = await fetch(port.PortInsertPSWDOInterview, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(interviewPayload)
+            });
+
+            if (!interviewResponse.ok) {
+                const interviewError = await interviewResponse.json();
+                throw new Error(interviewError.error || "Failed to insert PSWDO interview.");
             }
 
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
-                text: "Hospital bill has been recorded successfully!",
+                text: "Burial assistance has been recorded successfully!",
             }).then(() => {
-                ResetForms(); // Reset the forms after success
+                ResetForms();
             });
 
         } catch (err) {
@@ -167,11 +209,61 @@ function AlayPagdamayContent() {
             Swal.fire({
                 icon: "error",
                 title: "Transaction Failed",
-                text: err.message || "An error occurred while saving the hospital bill.",
+                text: err.message || "An error occurred while saving the burial assistance.",
             });
         }
     };
+    
+    const fetchPSWDOInterviewId = async (burialId) => { 
+        try {
+            const response = await fetch(port.RetrievePSWDOInterview(burialId, "Alay Pagdamay"));
+            const data = await response.json();
+ 
+            PopulatePSWDOInterview(data);
 
+        } catch (error) {
+            console.error("Error fetching hospital bill assistance:", error); // Fix the log message
+        }
+    };
+
+    const PopulatePSWDOInterview = (PSWDOInterview) => {
+
+        if (!PSWDOInterview?.error) {
+            const interview = PSWDOInterview.interview || {};
+
+            setPSWDOInterviewStatus(true);
+
+            setPSWDOId(interview.pswdo_interview_id || '');
+            setContactPersonAge(interview.age || '');
+            setContactPersonCivilStatus(interview.civil_status || '');
+            setContactPersonOccupation(interview.occupation || '');
+            setContactPersonIncome(interview.monthly_income || '');
+            setContactPersonGender(interview.gender || '');
+            setContactPersonMobileNum(interview.mobile_num || '');
+            setContactPersonPettyAmount(interview.petty_amount || '');
+            setContactPersonProvince(interview.province || '');
+            setContactPersonMunicipality(interview.municipality || '');
+            setContactPersonBarangay(interview.barangay || '');
+            setContactPersonPurok(interview.purok || '');
+            setContactPersonTransactionName(interview.transaction_name || '');
+            setTypeOfAssistance(interview.type_assistance || 'Alay Pagdamay');
+            setMember4Ps(interview.member_4ps || 'No');
+
+            if (Array.isArray(PSWDOInterview.familyComposition)) {
+                const filledData = PSWDOInterview.familyComposition.map(member => ({
+                    name: member.family_member_name || '',
+                    relationship: member.relationship || '',
+                    age: member.age || '',
+                    civilStatus: member.civil_status || '',
+                    occupation: member.occupation || '',
+                    monthlyIncome: member.monthly_income || '',
+                }));
+
+                setFamilyCount(filledData.length);
+                setFamilyComposition(filledData); 
+            }
+        }  
+    };
 
     const handleDeleteBurialAssistance = async (e, burialId) => {
         e.preventDefault();
@@ -219,63 +311,124 @@ function AlayPagdamayContent() {
     const handleUpdateBurialAssistance = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("burialId", burialId);
-        formData.append("account_id", account_id);
-        formData.append("deceasedFirstName", deceasedFirstName);
-        formData.append("deceasedMiddleName", deceasedMiddleName);
-        formData.append("deceasedLastName", deceasedLastName);
-        formData.append("deceasedExtName", deceasedExtName);
-        formData.append("deceasedPurok", deceasedPurok);
-        formData.append("deceasedBarangay", deceasedBarangay);
-        formData.append("deceasedMunicipality", deceasedMunicipality);
-        formData.append("deceasedProvince", deceasedProvince);
-        formData.append("deceasedGender", deceasedGender);
-        formData.append("deceasedDeathDate", deceasedDeathDate);
-        formData.append("contactPersonFirstname", contactPersonFirstname);
-        formData.append("contactPersonMiddlename", contactPersonMiddlename);
-        formData.append("contactPersonLastname", contactPersonLastname);
-        formData.append("contactPersonExtName", contactPersonExtName);
-        formData.append("contactNumber", contactNumber);
-        formData.append("contactRelationship", contactRelationship);
-        formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
-        formData.append("contactPersonFuneralService", contactPersonFuneralService);
-        formData.append("contactPersonEncoded", contactPersonEncoded);
-        formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
-        formData.append("checkDeathCertificate", checkedItems.checkDeathCertificate);
-        formData.append("funeralContract", checkedItems.checkFuneralContract);
-        formData.append("validId", checkedItems.checkValidId);
-        formData.append("burialStatus", burialStatus);
-        formData.append("remarks", remarks);
-        formData.append("pettyCashAmount", pettyCashAmount);
-        formData.append("deceasedCauseDeath", deceasedCauseDeath);
-        formData.append("currentDateTime", new Date().toISOString().slice(0, 19).replace("T", " "));
-
-        if (deathCertificate) {
-            formData.append("deathCertificate", deathCertificate);
-        }
-
         try {
+            
+            const currentDateTimePH = new Date().toLocaleString("en-US", {
+                timeZone: "Asia/Manila",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
+            });
+
+            // Convert MM/DD/YYYY, HH:MM:SS format to YYYY-MM-DD HH:MM:SS
+            const [month, day, yearAndTime] = currentDateTimePH.split('/');
+            const [year, time] = yearAndTime.split(', ');
+            const currentDateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${time}`; 
+            
+            // 🔹 Create FormData for burial assistance update
+            const formData = new FormData();
+            formData.append("burialId", burialId);
+            formData.append("account_id", account_id);
+            formData.append("deceasedFirstName", deceasedFirstName);
+            formData.append("deceasedMiddleName", deceasedMiddleName);
+            formData.append("deceasedLastName", deceasedLastName);
+            formData.append("deceasedExtName", deceasedExtName);
+            formData.append("deceasedPurok", deceasedPurok);
+            formData.append("deceasedBarangay", deceasedBarangay);
+            formData.append("deceasedMunicipality", deceasedMunicipality);
+            formData.append("deceasedProvince", deceasedProvince);
+            formData.append("deceasedGender", deceasedGender);
+            formData.append("deceasedDeathDate", deceasedDeathDate);
+            formData.append("contactPersonFirstname", contactPersonFirstname);
+            formData.append("contactPersonMiddlename", contactPersonMiddlename);
+            formData.append("contactPersonLastname", contactPersonLastname);
+            formData.append("contactPersonExtName", contactPersonExtName);
+            formData.append("contactNumber", contactNumber);
+            formData.append("contactRelationship", contactRelationship);
+            formData.append("contactPersonServiceCovered", contactPersonServiceCovered);
+            formData.append("contactPersonFuneralService", contactPersonFuneralService);
+            formData.append("contactPersonEncoded", contactPersonEncoded);
+            formData.append("barangayIndigency", checkedItems.checkBarangayIndigency);
+            formData.append("deathCertificate", checkedItems.checkDeathCertificate);
+            formData.append("funeralContract", checkedItems.checkFuneralContract);
+            formData.append("validId", checkedItems.checkValidId);
+            formData.append("burialStatus", burialStatus);
+            formData.append("remarks", remarks);
+            formData.append("pettyCashAmount", pettyCashAmount);
+            formData.append("deceasedCauseDeath", deceasedCauseDeath);
+            formData.append("currentDateTime", currentDateTime);
+
+            if (deathCertificate) {
+                formData.append("deathCertificateFile", deathCertificate); // Ensure it's the file input
+            }
+
+            // 🔹 Send POST request to update burial assistance
             const response = await fetch(port.PortUpdateAlayPagdamay, {
                 method: "POST",
                 body: formData
             });
 
-            const data = await response.json();
+            const data = await response.json(); 
 
             if (!response.ok) {
                 throw new Error(data.error || "Failed to update burial assistance.");
-            }
+            } 
 
+            // 🔹 Prepare payload for PSWDO interview update
+            const interviewPayload = {
+                id: burialId,
+                PSWDOId,
+                contactPersonAge,
+                contactPersonCivilStatus,
+                contactPersonOccupation,
+                contactPersonIncome,
+                contactPersonGender,
+                contactPersonMobileNum: contactNumber,
+                contactPersonPettyAmount: pettyCashAmount,
+                patientProvince: deceasedProvince,
+                patientMunicipality: deceasedMunicipality,
+                patientBarangay: deceasedBarangay,
+                patientPurok: deceasedPurok,
+                typeOfAssistance,
+                member4Ps,
+                transactionName: "Alay Pagdamay",
+                familyComposition: familyComposition.map(member => ({
+                    id: member.family_id || null,
+                    name: member.name,
+                    relationship: member.relationship,
+                    age: member.age,
+                    civilStatus: member.civilStatus,
+                    occupation: member.occupation,
+                    monthlyIncome: member.monthlyIncome,
+                })),
+            };
+
+            // 🔹 Send PUT request to update PSWDO Interview
+            const interviewResponse = await fetch(port.PortUpdatePSDOInterview, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(interviewPayload),
+            });
+
+            const interviewData = await interviewResponse.json();
+
+            if (!interviewResponse.ok) {
+                throw new Error(interviewData.error || "Failed to update PSWDO interview.");
+            } 
+
+            // 🔹 Show success message
             Swal.fire({
                 icon: "success",
                 title: "Transaction Successful",
                 text: "Burial assistance has been updated successfully!",
-            }).then(() => {
-                /* window.location.reload(); */
             });
+
         } catch (err) {
-            console.error("Error:", err.message);
+            console.error("❌ Update Error:", err.message);
             Swal.fire({
                 icon: "error",
                 title: "Transaction Failed",
@@ -285,14 +438,13 @@ function AlayPagdamayContent() {
     };
 
 
+
+
     const fetchBurialAssistance = async () => {
         try {
             const response = await fetch(port.PortRetrieveAlayPagdamay);
             const data = await response.json();
-            setBurialAssitance(data);
-
-            console.log("Test123", data)
-
+            setBurialAssitance(data);  
         } catch (error) {
             console.error("Error fetching hospital bills:", error);
         }
@@ -321,7 +473,7 @@ function AlayPagdamayContent() {
         setSearchTerm(value);
     };
     
-    const filteredRecords = burialAssitance.filter((burial) => {
+    /* const filteredRecords = burialAssitance.filter((burial) => {
         const fullName = `${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`.toLowerCase();
         return fullName.includes(searchTerm);
     });
@@ -329,7 +481,22 @@ function AlayPagdamayContent() {
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage); */
+
+    const sortedRecords = [...burialAssitance].sort(
+        (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
+    );
+
+    const filteredRecords = sortedRecords.filter((burial) => {
+        const fullName = `${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`.toLowerCase();
+        return fullName.includes(searchTerm.toLowerCase());
+    });
+
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
     const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
     
     // Open modal and set selected bill
     const handleOpenModal = (burial, editMode = false, modalName) => {
@@ -337,6 +504,7 @@ function AlayPagdamayContent() {
         setIsEditMode(editMode);
         setModalName(modalName);
         PopulateForms(burial);
+        fetchPSWDOInterviewId(burial['burial_id']) 
 
         if (modalName == "View") {
 
@@ -350,9 +518,7 @@ function AlayPagdamayContent() {
         setModalName(modalName)
     };
 
-    const PopulateForms = (burial) => {
-        console.log("Populating forms with:", burial); // Check all values 
-
+    const PopulateForms = (burial) => { 
         setBurialId(burial['burial_id']);
         setDeceasedFirstName(burial['deceased_fname']);
         setDeceasedMiddleName(burial['deceased_mname']);
@@ -428,9 +594,7 @@ function AlayPagdamayContent() {
     }
 
     useEffect(() => {
-        if (localUserDetails) {
-            console.log("Test: ", localUserDetails['account_id']);
-
+        if (localUserDetails) { 
             setLocalUserId(localUserDetails['account_id']);
         }
     })
@@ -506,6 +670,13 @@ function AlayPagdamayContent() {
         setDeceasedMunicipality(selectedMunicipality);
         setDeceasedBarangay(''); // Reset barangay selection
         setBarangayList(municipalityBarangays[selectedMunicipality] || []);
+    };
+    
+    const handleMunicipalityCliamantChange = (e) => {
+        const selectedMunicipality = e.target.value.trim();
+        setContactPersonMunicipality(selectedMunicipality);
+        setContactPersonBarangay(''); // Reset barangay selection
+        setContactBarangayList(municipalityBarangays[selectedMunicipality] || []);
     };
 
     const handleFileChange = (e) => {
@@ -609,37 +780,37 @@ function AlayPagdamayContent() {
                                                             </thead>
                                                             <tbody>
                                                                 {currentRecords.length > 0 ? (
-                                                                    [...currentRecords]
-                                                                        .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt)) // Sort from latest to oldest
-                                                                        .map((burial, index) => (
-                                                                            <tr key={burial.id}>
-                                                                                <td>{indexOfFirstRecord + index + 1}</td>
-                                                                                <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
-                                                                                <td>{new Date(burial.deceased_deathdate).toLocaleString()}</td>
-                                                                                <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
-                                                                                <td>{burial.contact_number}</td>
-                                                                                <td>{new Date(burial.savedAt).toLocaleString()}</td>
-                                                                                <td>
-                                                                                    <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}>
-                                                                                        <i className='bx bx-info-circle'></i>
-                                                                                    </button>
-                                                                                    <button className="btn btn-primary" onClick={() => handleOpenModal(burial, true, "Edit")}
+                                                                    currentRecords.map((burial, index) => (
+                                                                        <tr key={burial.id}>
+                                                                            <td>{indexOfFirstRecord + index + 1}</td>
+                                                                            <td>{`${burial.deceased_fname} ${burial.deceased_mname} ${burial.deceased_lname} ${burial.deceased_ext_name || ""}`}</td>
+                                                                            <td>{new Date(burial.deceased_deathdate).toLocaleDateString()}</td>
+                                                                            <td>{`${burial.contact_fname} ${burial.contact_mname} ${burial.contact_lname} ${burial.contact_extname || ""}`}</td>
+                                                                            <td>{burial.contact_number}</td>
+                                                                            <td>{new Date(burial.savedAt).toLocaleString()}</td>
+                                                                            <td>
+                                                                                <button className="btn btn-success" onClick={() => handleOpenModal(burial, true, "View")}>
+                                                                                    <i className='bx bx-info-circle'></i>
+                                                                                </button>
+                                                                                <button className="btn btn-primary"
+                                                                                        onClick={() => handleOpenModal(burial, true, "Edit")}
                                                                                         data-bs-toggle="modal"
                                                                                         data-bs-target="#addHospitalBillModal">
-                                                                                        <i className='bx bx-edit'></i>
-                                                                                    </button>
-                                                                                    <button className="btn btn-danger"
+                                                                                    <i className='bx bx-edit'></i>
+                                                                                </button>
+                                                                                <button className="btn btn-danger"
                                                                                         onClick={(e) => handleDeleteBurialAssistance(e, burial['burial_id'])}>
-                                                                                        <i className='bx bx-trash'></i>
-                                                                                    </button>
-                                                                                </td>
-                                                                            </tr>
-                                                                        ))
+                                                                                    <i className='bx bx-trash'></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))
                                                                 ) : (
                                                                     <tr>
                                                                         <td colSpan="7" className="text-center">No records found</td>
                                                                     </tr>
                                                                 )}
+
                                                             </tbody>
 
                                                         </table>
@@ -699,7 +870,8 @@ function AlayPagdamayContent() {
                                     <h5 style={{color: '#0C623A'}}>Select Section: </h5>
                                     
                                     <div className="row">
-                                        <div className="col-6">
+                                        
+                                        <div className="col-4">
                                             <button
                                                 type="button"
                                                 className={`btn w-100 ${formPage === "Basic Information" ? "selebtn" : "selesuccbtn"}`}
@@ -709,13 +881,23 @@ function AlayPagdamayContent() {
                                             </button>
                                         </div>
 
-                                        <div className="col-6">
+                                        <div className="col-4">
                                             <button
                                                 type="button"
                                                 className={`btn w-100 ${formPage === "Checklist" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Checklist")}
                                             >
-                                                <i class="bi bi-card-checklist"></i> Burial Assistance Requirements
+                                                <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
+                                            </button>
+                                        </div>
+ 
+                                        <div className="col-4">
+                                            <button
+                                                type="button"
+                                                className={`btn w-100 ${formPage === "PSWDO Interview" ? "selebtn" : "selesuccbtn"}`}
+                                                onClick={() => handleFormPageUpdate("PSWDO Interview")}
+                                            >
+                                                <i class="bi bi-card-checklist"></i> PSWDO Interview
                                             </button>
                                         </div>
 
@@ -1158,6 +1340,472 @@ function AlayPagdamayContent() {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </>
+                                    )}
+
+                                    {formPage === "PSWDO Interview" && (
+                                        <> 
+    
+                                            <div className="col-lg-12">
+                                                <div className="row">
+                                                    <div className="col-xxl-12 col-md-12">
+                                                        <div className="card info-card sales-card">
+                                                            <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
+    
+                                                                <br/>
+                
+                                                                <div >
+                                                                    <b className="form-label" style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                    <hr />
+    
+                                                                    <div className="row">
+    
+                                                                        <div className="col-12">
+                                                                            <p htmlFor="firstName" className="formtitle">Claimant Information</p>
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <label htmlFor="firstName" className="interviewform">First Name:</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonFirstname}
+                                                                                onChange={(e) => setContactPersonFname(e.target.value)}
+                                                                                placeholder="First Name"
+                                                                                disabled={true}
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <label htmlFor="firstName" className="interviewform">Middle Name:</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonMiddlename}
+                                                                                onChange={(e) => setContactPersonMname(e.target.value)}
+                                                                                placeholder="Middle Name"
+                                                                                disabled={true}
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <label htmlFor="firstName" className="interviewform">Last Name:</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonLastname}
+                                                                                onChange={(e) => setContactPersonLname(e.target.value)}
+                                                                                placeholder="Last Name"
+                                                                                disabled={true}
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <label htmlFor="firstName" className="interviewform">Ext Name:</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonExtName}
+                                                                                onChange={(e) => setContactPersonExtName(e.target.value)}
+                                                                                placeholder="Ext"
+                                                                                disabled={true}
+                                                                            />
+                                                                        </div>
+    
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Age:</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonAge}
+                                                                                onChange={(e) => setContactPersonAge(e.target.value)}
+                                                                                placeholder="Age"
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Civil Status:</label>
+                                                                            <select
+                                                                                className="form-control"
+                                                                                value={contactPersonCivilStatus}
+                                                                                onChange={(e) => setContactPersonCivilStatus(e.target.value)}>
+                                                                                <option value="">Select Civil Status</option>
+                                                                                <option value="Single">Single</option>
+                                                                                <option value="Married">Married</option>
+                                                                                <option value="Widowed">Widowed</option>
+                                                                                <option value="Separated">Separated</option>
+                                                                                <option value="Common-Law Married">Common-Law Married</option>
+                                                                                <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                            </select>
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Occupation:</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonOccupation}
+                                                                                onChange={(e) => setContactPersonOccupation(e.target.value)}
+                                                                                placeholder="Occupation"
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Monthly Income:</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactPersonIncome}
+                                                                                onChange={(e) => setContactPersonIncome(e.target.value)}
+                                                                                placeholder="Monthly  Income"
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Gender:</label>
+                                                                            <select
+                                                                                className="form-control"
+                                                                                value={contactPersonGender}
+                                                                                onChange={(e) => setContactPersonGender(e.target.value)} >
+                                                                                <option value="">Select Gender</option>
+                                                                                <option value="Male">Male</option>
+                                                                                <option value="Female">Female</option>
+                                                                            </select>
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Mobile Number:</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                value={contactNumber}
+                                                                                onChange={(e) => setContactNumber(e.target.value)}
+                                                                                placeholder="Mobile Number"
+                                                                                disabled={true}
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label htmlFor="firstName" className="interviewform">Petty Amount:</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control"
+                                                                                id="firstName"
+                                                                                disabled={true}
+                                                                                value={pettyCashAmount}
+                                                                                onChange={(e) => setPettyCashAmount(e.target.value)}
+                                                                                placeholder="Petty Amount" 
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                        </div>
+    
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label className="interviewform">Province:</label>
+                                                                            <select
+                                                                                className="form-control"
+                                                                                value={contactPersonProvince}
+                                                                                disabled
+                                                                            >
+                                                                                <option value="Camarines Norte">Camarines Norte</option>
+                                                                            </select>
+                                                                        </div>
+    
+                                                                        {/* Municipality */}
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label className="interviewform">Municipality:</label>
+                                                                            <select
+                                                                                className="form-control"
+                                                                                value={contactPersonMunicipality}
+                                                                                onChange={handleMunicipalityCliamantChange}
+                                                                            >
+                                                                                <option value="">Select Municipality</option>
+                                                                                {Object.keys(municipalityBarangays).map((municipality) => (
+                                                                                    <option key={municipality} value={municipality}>
+                                                                                        {municipality}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                        </div>
+    
+                                                                        {/* Barangay */}
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label className="interviewform">Barangay:</label>
+                                                                            <select
+                                                                                className="form-control"
+                                                                                value={contactPersonBarangay}
+                                                                                onChange={(e) => setContactPersonBarangay(e.target.value.trim())}
+                                                                                disabled={contactBarangayList.length === 0}
+                                                                            >
+                                                                                <option value="">Select Barangay</option>
+                                                                                {contactBarangayList.map((barangay) => (
+                                                                                    <option key={barangay} value={barangay}>
+                                                                                        {barangay}
+                                                                                    </option>
+                                                                                ))} : {
+                                                                                    <option key={contactPersonBarangay} value={contactPersonBarangay}>
+                                                                                        {contactPersonBarangay}
+                                                                                    </option>
+                                                                                }
+
+                                                                            </select>
+                                                                        </div>
+    
+                                                                        {/* Purok */}
+                                                                        <div className="col-3">
+                                                                            <br />
+                                                                            <label className="interviewform">Purok:</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control"
+                                                                                value={contactPersonPurok}
+                                                                                onChange={(e) => setContactPersonPurok(e.target.value)}
+                                                                            />
+                                                                        </div>
+    
+                                                                        <div className="col-12"> 
+                                                                            <hr /> 
+                                                                        </div>
+    
+                                                                        <div className="col-12">
+                                                                            <br/>
+                                                                            <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
+                                                                            <select
+                                                                                className="form-control"
+                                                                                value={member4Ps}
+                                                                                onChange={(e) => setMember4Ps(e.target.value)}>
+                                                                                <option value="No">No</option>
+                                                                                <option value="Yes">Yes</option>
+                                                                            </select>
+                                                                        </div>
+    
+                                                                        <div className="col-12">
+                                                                            
+                                                                            <hr />
+                                                                            <p htmlFor="firstName" className="formtitle">Family Composition</p>
+                                                                        </div>
+    
+                                                                        <div className="col-12">
+                                                                            
+                                                                            <label className="form-label">Number of Family Members:</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control"
+                                                                                min="0"
+                                                                                max="6"
+                                                                                value={familyCount}
+                                                                                onChange={(e) => {
+                                                                                    const count = Math.min(Math.max(Number(e.target.value), 0), 6); // keep between 0-6
+                                                                                    setFamilyCount(count);
+    
+                                                                                    // initialize composition with empty objects
+                                                                                    const newComposition = Array.from({ length: count }, (_, i) => familyComposition[i] || {
+                                                                                        name: '',
+                                                                                        relationship: '',
+                                                                                        age: '',
+                                                                                        civilStatus: '',
+                                                                                        monthlyIncome: '',
+                                                                                    });
+                                                                                    setFamilyComposition(newComposition);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+    
+    
+                                                                        {/* --------- */}
+                                                                        {familyComposition.map((member, index) => (
+                                                                            <Fragment key={member.id || index}>
+                                                                                <div className="col-12">
+                                                                                    <br /> <hr/>
+                                                                                    <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
+                                                                                </div>
+    
+                                                                                <div className="col-4">
+                                                                                        <br/>   
+                                                                                    <label className="form-label">Family Member:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={member.name || ''}
+                                                                                        onChange={(e) => {
+                                                                                            const updated = familyComposition.map((item, i) =>
+                                                                                                i === index ? { ...item, name: e.target.value } : item
+                                                                                            );
+                                                                                            setFamilyComposition(updated);
+                                                                                        }}
+                                                                                    />
+                                                                                </div>       
+                                                                                
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Relationship:</label>
+                                                                                    <select
+                                                                                        className="form-control"
+                                                                                        value={member.relationship || ''}
+                                                                                        onChange={(e) => {
+                                                                                            const updated = familyComposition.map((item, i) =>
+                                                                                                i === index ? { ...item, relationship: e.target.value } : item
+                                                                                            );
+                                                                                            setFamilyComposition(updated);
+                                                                                        }}>
+                                                                                        <option value="">Select Relationship</option>
+                                                                                        <option value="Mother">Mother</option>
+                                                                                        <option value="Father">Father</option>
+                                                                                        <option value="Child">Child</option>
+                                                                                        <option value="Father">Self</option>
+                                                                                        <option value="Parent">Parent</option>
+                                                                                        <option value="Sibling">Sibling</option>
+                                                                                        <option value="Spouse">Spouse</option>
+                                                                                        <option value="Grandparent">Grandparent</option>
+                                                                                        <option value="Relative">Relative</option>
+                                                                                        <option value="Friend">Friend</option>
+                                                                                        <option value="Guardian">Guardian</option>
+                                                                                        <option value="Other">Other</option>
+                                                                                    </select>
+                                                                                </div>
+    
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Age:</label>
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="form-control"
+                                                                                        min="0"
+                                                                                        value={member.age || ''}
+                                                                                        onChange={(e) => {
+                                                                                            const updated = familyComposition.map((item, i) =>
+                                                                                                i === index ? { ...item, age: e.target.value } : item
+                                                                                            );
+                                                                                            setFamilyComposition(updated);
+                                                                                        }}
+                                                                                    />
+                                                                                </div> 
+                                                                                        
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Civil Status:</label>
+                                                                                    <select
+                                                                                        className="form-control"
+                                                                                        value={member.civilStatus || ''}
+                                                                                        onChange={(e) => {
+                                                                                            const updated = familyComposition.map((item, i) =>
+                                                                                                i === index ? { ...item, civilStatus: e.target.value } : item
+                                                                                            );
+                                                                                            setFamilyComposition(updated);
+                                                                                        }}>
+                                                                                        <option value="">Select Civil Status</option>
+                                                                                        <option value="Single">Single</option>
+                                                                                        <option value="Married">Married</option>
+                                                                                        <option value="Widowed">Widowed</option>
+                                                                                        <option value="Separated">Separated</option>
+                                                                                        <option value="Common-Law Married">Common-Law Married</option>
+                                                                                        <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                    </select>
+                                                                                </div>
+    
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Occupation:</label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        value={member.occupation || ''}
+                                                                                        onChange={(e) => {
+                                                                                            const updated = familyComposition.map((item, i) =>
+                                                                                                i === index ? { ...item, occupation: e.target.value } : item
+                                                                                            );
+                                                                                            setFamilyComposition(updated);
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
+    
+                                                                                <div className="col-4">
+                                                                                    <br />
+                                                                                    <label className="form-label">Monthly Income:</label>
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="form-control"
+                                                                                        value={member.monthlyIncome || ''}
+                                                                                        onChange={(e) => {
+                                                                                            const updated = familyComposition.map((item, i) =>
+                                                                                                i === index ? { ...item, monthlyIncome: e.target.value } : item
+                                                                                            );
+                                                                                            setFamilyComposition(updated);
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
+    
+                                                                                <div className="col-12">
+                                                                                    <br />
+                                                                                    <hr />
+                                                                                </div>
+                                                                            </Fragment>
+                                                                        ))}
+    
+    
+    
+                                                                    </div>
+    
+                                                                    <br/>
+                                                                    <hr/>
+    
+    
+                                                                    {/* {PSWDOInterviewStatus === true &&
+                                                                        <>
+                                                                            <button
+                                                                                className="editinterview btn btn-sm w-100"
+                                                                                type="submit"
+                                                                                onClick={handleUpdatePSWDOInterview}
+                                                                            >
+                                                                                Edit PSWDO Interview Details
+                                                                            </button>
+                                                                        </>
+                                                                    }
+    
+                                                                    {PSWDOInterviewStatus === false &&
+                                                                        <>
+                                                                            <button
+                                                                                className="btn btn-primary btn-sm w-100"
+                                                                                type="submit"
+                                                                                onClick={handleAddPSWDOInterview}
+                                                                            >
+                                                                                Save PSWDO Interview Details
+                                                                            </button>
+                                                                        </>
+                                                                    } */}
+                                                                    
+    
+    
+                                                                </div>
+                                                                <br/>
+                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+    
                                         </>
                                     )}
 
