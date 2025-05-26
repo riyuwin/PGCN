@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FetchLocalUserDetails from "./scripts/FetchLocalUser";
-import * as port from "../ports/DatabaseRouting" 
+import * as port from "../ports/DatabaseRouting"
 
 function ManageHospitalBillContent() {
     const { localUserDetails } = FetchLocalUserDetails();
@@ -49,7 +49,7 @@ function ManageHospitalBillContent() {
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
     };
-    
+
     // Variables for inputs ------------------------------------------------------------
 
     const [contactPersonFirstname, setContactPersonFname] = useState('');
@@ -98,7 +98,7 @@ function ManageHospitalBillContent() {
     // Variables for pagination -------------------------------
 
     const [formPage, setFormPage] = useState("Basic Information");
- 
+
     const handleAddHospitalBill = async (e) => {
         e.preventDefault();
 
@@ -118,7 +118,7 @@ function ManageHospitalBillContent() {
                 validId: checkedItems.checkValidId,
                 remarks,
                 currentDateTime
-            }; 
+            };
 
             // 🔹 Step 1: Insert Hospital Bill
             const billResponse = await fetch(port.PortInsertHospitalBill, {
@@ -136,17 +136,38 @@ function ManageHospitalBillContent() {
             const hospitalId = billData.bill_id;
             if (!hospitalId) {
                 throw new Error("Hospital ID not returned from server.");
-            } 
+            }
 
             const contactPersonMobileNum = claimantContact;
 
             // 🔹 Step 2: Insert PSWDO Interview
-            const interviewPayload = {
+            /* const interviewPayload = {
                 hospitalId, alayPagDamayID, contactPersonAge, contactPersonCivilStatus, contactPersonOccupation,
                 contactPersonIncome, contactPersonGender, contactPersonMobileNum, contactPersonPettyAmount: claimantAmount,
-                patientProvince, patientMunicipality, patientBarangay, patientPurok,
+                patientProvince: contactPersonProvince, patientMunicipality: contactPersonMunicipality, patientBarangay: contactPersonBarangay, patientPurok: contactPersonPurok,
                 familyComposition, transactionName, typeOfAssistance, member4Ps
+            }; */
+
+            const interviewPayload = {
+                hospitalId: hospitalId,
+                alayPagDamayID: alayPagDamayID,
+                contactPersonAge: contactPersonAge,
+                contactPersonCivilStatus: contactPersonCivilStatus,
+                contactPersonOccupation: contactPersonOccupation,
+                contactPersonIncome: contactPersonIncome,
+                contactPersonGender: contactPersonGender,
+                contactPersonMobileNum: contactPersonMobileNum,
+                contactPersonPettyAmount: claimantAmount,
+                patientProvince: contactPersonProvince,
+                patientMunicipality: contactPersonMunicipality,
+                patientBarangay: contactPersonBarangay,
+                patientPurok: contactPersonPurok,
+                familyComposition: familyComposition,
+                transactionName: transactionName,
+                typeOfAssistance: typeOfAssistance,
+                member4Ps: member4Ps
             };
+
 
             const interviewResponse = await fetch(port.PortInsertPSWDOInterview, {
                 method: "POST",
@@ -177,10 +198,10 @@ function ManageHospitalBillContent() {
                 text: err.message || "An error occurred while saving the data.",
             });
         }
-    };  
+    };
 
     const handleDeleteHospitalBill = async (e, billId) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         Swal.fire({
             title: 'Are you sure?',
@@ -226,7 +247,7 @@ function ManageHospitalBillContent() {
     const handleUpdateHospitalBill = async (e) => {
         e.preventDefault();
 
-        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " "); 
+        const currentDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
 
         try {
             // 🔹 Update Hospital Bill
@@ -272,10 +293,10 @@ function ManageHospitalBillContent() {
                     contactPersonGender,
                     contactPersonMobileNum,
                     contactPersonPettyAmount,
-                    patientProvince,
-                    patientMunicipality,
-                    patientBarangay,
-                    patientPurok,
+                    patientProvince: contactPersonProvince,
+                    patientMunicipality: contactPersonMunicipality,
+                    patientBarangay: contactPersonBarangay,
+                    patientPurok: contactPersonPurok,
                     typeOfAssistance,
                     member4Ps,
                     transactionName,
@@ -372,21 +393,21 @@ function ManageHospitalBillContent() {
         try {
             const response = await fetch(port.RetrievePSWDOInterview(hospitalId, "Hospital Bill"));
             const data = await response.json();
- 
+
             PopulatePSWDOInterview(data);
 
         } catch (error) {
             console.error("Error fetching hospital bill assistance:", error); // Fix the log message
         }
     };
-    
+
 
     // Open modal and set selected bill
     const handleOpenModal = (bill, editMode = false, modalName) => {
         setSelectedBill(bill);
         setIsEditMode(editMode);
         setModalName(modalName);
-        PopulateForms(bill); 
+        PopulateForms(bill);
         fetchPSWDOInterviewId(bill['hospital_bill_id'])
 
         if (modalName == "View") {
@@ -401,7 +422,7 @@ function ManageHospitalBillContent() {
         setModalName(modalName)
     };
 
-    const PopulateForms = (bill) => { 
+    const PopulateForms = (bill) => {
         setHospitalId(bill['hospital_bill_id']);
         setPatientFirstName(bill['patient_fname']);
         setPatientMiddleName(bill['patient_mname']);
@@ -410,7 +431,7 @@ function ManageHospitalBillContent() {
         setPatientPurok(bill['patient_purok']);
         setPatientBarangay(bill['patient_barangay']);
         setPatientMunicipality(bill['patient_municipality']);
-        setPatientProvince(bill['patient_province']);setDateConfinement(new Date(bill['date_confinement']).toISOString().split('T')[0]);
+        setPatientProvince(bill['patient_province']); setDateConfinement(new Date(bill['date_confinement']).toISOString().split('T')[0]);
         setDateConfinement(new Date(bill['date_confinement']).toISOString().split('T')[0]);
         setPatientHospital(bill['patient_hospital']);
         setClaimantFname(bill['claimant_fname']);
@@ -434,7 +455,7 @@ function ManageHospitalBillContent() {
             checkValidId: bill['check_valid_id'] == "1",
         });
 
-        setRemarks(bill['remarks']); 
+        setRemarks(bill['remarks']);
     };
 
     const PopulatePSWDOInterview = (PSWDOInterview) => {
@@ -442,7 +463,6 @@ function ManageHospitalBillContent() {
         if (!PSWDOInterview?.error) {
             const interview = PSWDOInterview.interview || {};
 
-            console.log(PSWDOInterview)
 
             setPSWDOInterviewStatus(true);
 
@@ -473,9 +493,9 @@ function ManageHospitalBillContent() {
                 }));
 
                 setFamilyCount(filledData.length);
-                setFamilyComposition(filledData); 
+                setFamilyComposition(filledData);
             }
-        }  
+        }
     };
 
     const ResetForms = () => {
@@ -522,13 +542,13 @@ function ManageHospitalBillContent() {
         setContactPersonTransactionName('');
         setTypeOfAssistance('Medical');
         setMember4Ps('No');
- 
+
         setFamilyCount(0);
 
     }
 
     useEffect(() => {
-        if (localUserDetails) { 
+        if (localUserDetails) {
             setLocalUserId(localUserDetails['account_id']);
         }
     })
@@ -596,7 +616,7 @@ function ManageHospitalBillContent() {
             "Pinagtigasan", "Sabang", "Santo Domingo", "Singi", "Sula"
         ]
 
-    }; 
+    };
 
     const handleMunicipalityChange = (e) => {
         const selectedMunicipality = e.target.value.trim();
@@ -619,9 +639,9 @@ function ManageHospitalBillContent() {
     const handleCheckboxChange = (event) => {
         const { id, checked } = event.target;
         setCheckedItems((prevState) => ({
-            ...prevState, 
+            ...prevState,
             [id]: checked ? 1 : 0
-        })); 
+        }));
     };
 
 
@@ -640,7 +660,7 @@ function ManageHospitalBillContent() {
                     </nav>
                 </div>
 
-                <hr style= {{border: '1px solid #0A3622'}}/>
+                <hr style={{ border: '1px solid #0A3622' }} />
 
                 <main className="py-6"  >
                     <div className="container-fluid">
@@ -651,9 +671,9 @@ function ManageHospitalBillContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
+                                                <div className="card-body" style={{ backgroundColor: '#F2FFEE' }}>
                                                     <div className="d-flex justify-content-between align-items-center" >
-                                                        <h5 className="card-title" style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>List of Hospital Bill</h5>
+                                                        <h5 className="card-title" style={{ fontWeight: 'bold', color: '#08533F', fontSize: '25px' }}>List of Hospital Bill</h5>
                                                     </div>
 
                                                     {/* Filter and Search Section */}
@@ -738,7 +758,7 @@ function ManageHospitalBillContent() {
                                                         {/* Pagination Controls */}
                                                         <div className="d-flex justify-content-between mt-3" >
                                                             <button
-                                                                className="nextprevbutton btn" style={{width: '10%'}}
+                                                                className="nextprevbutton btn" style={{ width: '10%' }}
                                                                 disabled={currentPage === 1 || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage - 1)}
                                                             >
@@ -746,7 +766,7 @@ function ManageHospitalBillContent() {
                                                             </button>
                                                             <span>Page {totalPages > 0 ? currentPage : 0} of {totalPages}</span>
                                                             <button
-                                                                className="nextprevbutton btn" style={{width: '10%'}}
+                                                                className="nextprevbutton btn" style={{ width: '10%' }}
                                                                 disabled={currentPage === totalPages || totalPages === 0}
                                                                 onClick={() => setCurrentPage(currentPage + 1)}
                                                             >
@@ -775,18 +795,18 @@ function ManageHospitalBillContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="addHospitalBillModalLabel" style={{fontWeight: 'bold', color: '#0C623A', fontSize: '30px'}}> 
-                            &nbsp;&nbsp;&nbsp;Add Record to Hospital Bill
+                            <h5 className="modal-title" id="addHospitalBillModalLabel" style={{ fontWeight: 'bold', color: '#0C623A', fontSize: '30px' }}>
+                                &nbsp;&nbsp;&nbsp;Add Record to Hospital Bill
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <form>
 
-                                <div className="generateContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                <div className="generateContainer" style={{ border: '1.5px solid #CDCDCD' }}>
                                     <br />
-                                    <h5 style={{color: '#0C623A'}}>Select Section: </h5>
-                                    
+                                    <h5 style={{ color: '#0C623A' }}>Select Section: </h5>
+
                                     <div className="row">
                                         <div className="col-4">
                                             <button
@@ -807,7 +827,7 @@ function ManageHospitalBillContent() {
                                                 <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
                                             </button>
                                         </div>
- 
+
                                         <div className="col-4">
                                             <button
                                                 type="button"
@@ -825,8 +845,8 @@ function ManageHospitalBillContent() {
                                 {formPage == "Basic Information" &&
                                     <>
 
-                                        <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                            <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Patient Information</h3><br />
+                                        <div className="formContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                            <h3 style={{ fontWeight: 'bold', color: '#0C623A', fontSize: '26px' }}>Patient Information</h3><br />
                                             <div className="row">
                                                 <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -944,7 +964,7 @@ function ManageHospitalBillContent() {
                                                         className="form-control"
                                                         value={dateConfinement}
                                                         onChange={(e) => {
-                                                            setDateConfinement(e.target.value); 
+                                                            setDateConfinement(e.target.value);
                                                         }}
                                                     />
 
@@ -976,9 +996,9 @@ function ManageHospitalBillContent() {
 
                                             </div>
                                             <br />
-                                            <hr/>
+                                            <hr />
                                             <br />
-                                            <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Claimant Information</h3><br />
+                                            <h3 style={{ fontWeight: 'bold', color: '#0C623A', fontSize: '26px' }}>Claimant Information</h3><br />
                                             <div className="row">
                                                 <div className="col-3">
                                                     <label htmlFor="firstName" className="form-label">First Name:</label>
@@ -1029,7 +1049,7 @@ function ManageHospitalBillContent() {
                                                     <br />
                                                     <label htmlFor="relationship" className="form-label">Relationship:</label>
                                                     <select
-                                                        className="form-control"                  
+                                                        className="form-control"
                                                         id="relationship"
                                                         value={claimantRelationship}
                                                         onChange={(e) => setClaimantRelationship(e.target.value)}
@@ -1089,9 +1109,9 @@ function ManageHospitalBillContent() {
                                     <>
                                         <div className="row">
                                             <div className="col-12">
-                                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Hospital Bill Status: </h3><br />
-                                                    <p style={{color: '#0C623A'}}>Current Status: <b>{hospitalBillStatus}</b></p>
+                                                <div className="formContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                    <h3 style={{ fontWeight: 'bold', color: '#0C623A', fontSize: '26px' }}>Hospital Bill Status: </h3><br />
+                                                    <p style={{ color: '#0C623A' }}>Current Status: <b>{hospitalBillStatus}</b></p>
 
                                                     <select
                                                         className="form-control"
@@ -1110,8 +1130,8 @@ function ManageHospitalBillContent() {
 
 
                                             <div className="col-12">
-                                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Requirements Checklist:</h3>
+                                                <div className="formContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                    <h3 style={{ fontWeight: 'bold', color: '#0C623A', fontSize: '26px' }}>Requirements Checklist:</h3>
                                                     <br />
                                                     <ul className="list-group">
                                                         <li className="list-group-item">
@@ -1144,8 +1164,8 @@ function ManageHospitalBillContent() {
 
                                             <div className="col-12">
                                                 <br />
-                                                <div className="formContainer" style={{border: '1.5px solid #CDCDCD'}}> 
-                                                    <h3 style={{fontWeight: 'bold', color: '#0C623A', fontSize: '26px'}}>Remarks:</h3>
+                                                <div className="formContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                    <h3 style={{ fontWeight: 'bold', color: '#0C623A', fontSize: '26px' }}>Remarks:</h3>
                                                     <br />
 
                                                     <textarea className="form-control" id="remarks" placeholder="Enter your remarks here" rows={5}
@@ -1160,18 +1180,18 @@ function ManageHospitalBillContent() {
                                 )}
 
                                 {formPage === "PSWDO Interview" && (
-                                    <> 
+                                    <>
 
                                         <div className="col-lg-12">
                                             <div className="row">
                                                 <div className="col-xxl-12 col-md-12">
                                                     <div className="card info-card sales-card">
-                                                        <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
+                                                        <div className="card-body" style={{ border: '1.5px solid #CDCDCD' }}>
 
-                                                            <br/>
-         
+                                                            <br />
+
                                                             <div >
-                                                                <b className="form-label" style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                <b className="form-label" style={{ fontSize: '20px' }}>PSWDO Interview</b>
                                                                 <hr />
 
                                                                 <div className="row">
@@ -1259,7 +1279,7 @@ function ManageHospitalBillContent() {
                                                                             <option value="Widowed">Widowed</option>
                                                                             <option value="Separated">Separated</option>
                                                                             <option value="Common-Law Married">Common-Law Married</option>
-                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option>
                                                                         </select>
                                                                     </div>
 
@@ -1353,7 +1373,7 @@ function ManageHospitalBillContent() {
                                                                         <select
                                                                             className="form-control"
                                                                             value={contactPersonMunicipality}
-                                                                            onChange={handleMunicipalityClaimantChange} 
+                                                                            onChange={handleMunicipalityClaimantChange}
                                                                         >
                                                                             <option value="">Select Municipality</option>
                                                                             {Object.keys(municipalityBarangays).map((municipality) => (
@@ -1399,12 +1419,12 @@ function ManageHospitalBillContent() {
                                                                         />
                                                                     </div>
 
-                                                                    <div className="col-12"> 
-                                                                        <hr /> 
+                                                                    <div className="col-12">
+                                                                        <hr />
                                                                     </div>
 
                                                                     <div className="col-12">
-                                                                        <br/>
+                                                                        <br />
                                                                         <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
                                                                         <select
                                                                             className="form-control"
@@ -1416,13 +1436,13 @@ function ManageHospitalBillContent() {
                                                                     </div>
 
                                                                     <div className="col-12">
-                                                                        
+
                                                                         <hr />
                                                                         <p htmlFor="firstName" className="formtitle">Family Composition</p>
                                                                     </div>
 
                                                                     <div className="col-12">
-                                                                        
+
                                                                         <label className="form-label">Number of Family Members:</label>
                                                                         <input
                                                                             type="number"
@@ -1452,12 +1472,12 @@ function ManageHospitalBillContent() {
                                                                     {familyComposition.map((member, index) => (
                                                                         <Fragment key={member.id || index}>
                                                                             <div className="col-12">
-                                                                                <br /> <hr/>
-                                                                                <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
+                                                                                <br /> <hr />
+                                                                                <label className="form-label" style={{ fontWeight: 'bold' }}>Family Member {index + 1}</label>
                                                                             </div>
 
                                                                             <div className="col-4">
-                                                                                    <br/>   
+                                                                                <br />
                                                                                 <label className="form-label">Family Member:</label>
                                                                                 <input
                                                                                     type="text"
@@ -1470,8 +1490,8 @@ function ManageHospitalBillContent() {
                                                                                         setFamilyComposition(updated);
                                                                                     }}
                                                                                 />
-                                                                            </div>       
-                                                                            
+                                                                            </div>
+
                                                                             <div className="col-4">
                                                                                 <br />
                                                                                 <label className="form-label">Relationship:</label>
@@ -1515,8 +1535,8 @@ function ManageHospitalBillContent() {
                                                                                         setFamilyComposition(updated);
                                                                                     }}
                                                                                 />
-                                                                            </div> 
-                                                                                    
+                                                                            </div>
+
                                                                             <div className="col-4">
                                                                                 <br />
                                                                                 <label className="form-label">Civil Status:</label>
@@ -1535,7 +1555,7 @@ function ManageHospitalBillContent() {
                                                                                     <option value="Widowed">Widowed</option>
                                                                                     <option value="Separated">Separated</option>
                                                                                     <option value="Common-Law Married">Common-Law Married</option>
-                                                                                    <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                    <option value="Lived-in-Partener">Lived-in-Partener</option>
                                                                                 </select>
                                                                             </div>
 
@@ -1582,8 +1602,8 @@ function ManageHospitalBillContent() {
 
                                                                 </div>
 
-                                                                <br/>
-                                                                <hr/>
+                                                                <br />
+                                                                <hr />
 
 
                                                                 {/* {PSWDOInterviewStatus === true &&
@@ -1609,12 +1629,12 @@ function ManageHospitalBillContent() {
                                                                         </button>
                                                                     </>
                                                                 } */}
-                                                                
+
 
 
                                                             </div>
-                                                            <br/>
-         
+                                                            <br />
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1626,13 +1646,13 @@ function ManageHospitalBillContent() {
 
                                 <div className="modal-footer">
 
-                                    <button type="button" className="btn closebtn " style={{width: '15%'}} data-bs-dismiss="modal">
+                                    <button type="button" className="btn closebtn " style={{ width: '15%' }} data-bs-dismiss="modal">
                                         Cancel
                                     </button>
 
                                     {modalName == "Add" &&
                                         <>
-                                            <button type="submit" className="btn savebtn " style={{width: '15%'}} 
+                                            <button type="submit" className="btn savebtn " style={{ width: '15%' }}
                                                 onClick={handleAddHospitalBill}>
                                                 Save
                                             </button>
@@ -1641,7 +1661,7 @@ function ManageHospitalBillContent() {
 
                                     {modalName == "Edit" &&
                                         <>
-                                            <button type="submit" className="btn savebtn " style={{width: '15%'}} 
+                                            <button type="submit" className="btn savebtn " style={{ width: '15%' }}
                                                 onClick={handleUpdateHospitalBill}>
                                                 Save
                                             </button>

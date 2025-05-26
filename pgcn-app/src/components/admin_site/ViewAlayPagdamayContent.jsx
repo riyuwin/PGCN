@@ -11,7 +11,7 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
-import * as port from "../ports/DatabaseRouting" 
+import * as port from "../ports/DatabaseRouting"
 import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
 import { RetrieveAlayPagdamayId } from "../ports/DatabaseRouting";
 import { PettyCashLayout } from "./reports/PettyCashLayout";
@@ -72,7 +72,7 @@ function ViewAlayPagdamayContent() {
     const [patientPurok, setContactPersonPurok] = useState('');
     const [contactPersonBarangayList, setContactPersonBarangayList] = useState([]);
     const [pettyCash, setPettyCash] = useState('');
-    const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');  
+    const [deceasedCauseDeath, setDeceasedCauseDeath] = useState('');
 
     const [burialStatus, setBurialStatus] = useState('');
     const [checkedItems, setCheckedItems] = useState({
@@ -231,7 +231,7 @@ function ViewAlayPagdamayContent() {
     const fetchPSWDOInterviewId = async (id) => {
         try {
             const response = await fetch(RetrievePSWDOInterview(id, transactionName));
-            const data = await response.json(); 
+            const data = await response.json();
             PopulatePSWDOInterview(data);
 
         } catch (error) {
@@ -293,12 +293,12 @@ function ViewAlayPagdamayContent() {
                 }));
 
                 setFamilyCount(filledData.length);
-                setFamilyComposition(filledData); 
+                setFamilyComposition(filledData);
             }
-        }  
+        }
     };
 
-    const PopulateForms = (burial) => { 
+    const PopulateForms = (burial) => {
         setBurialId(burial['burial_id']);
         setDeceasedFirstName(burial['deceased_fname']);
         setDeceasedMiddleName(burial['deceased_mname']);
@@ -474,7 +474,7 @@ function ViewAlayPagdamayContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body" style={{backgroundColor: '#F2FFEE'}}>
+                                                <div className="card-body" style={{ backgroundColor: '#F2FFEE' }}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -484,7 +484,7 @@ function ViewAlayPagdamayContent() {
                                                                 <div className="row">
 
                                                                     <div /* className="columnContainer" */>
-                                                                        <h5 style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>Print Forms</h5><br />
+                                                                        <h5 style={{ fontWeight: 'bold', color: '#08533F', fontSize: '25px' }}>Print Forms</h5><br />
 
                                                                         <div className="row">
                                                                             {/* <div className="col-4">
@@ -546,7 +546,7 @@ function ViewAlayPagdamayContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
+                                                <div className="card-body" style={{ border: '1.5px solid #CDCDCD' }}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -557,11 +557,11 @@ function ViewAlayPagdamayContent() {
                                                                     <div /* className="columnContainer" */>
                                                                         {/* <h5>Burial Assistance Information</h5><br /> */}
 
-                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <div className="infoContainer" style={{ border: '1.5px solid #CDCDCD' }}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Burial Assistance Information</b> <hr />
+                                                                                        <b className="form-label" style={{ fontSize: '20px' }}>Burial Assistance Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-4">
@@ -592,11 +592,11 @@ function ViewAlayPagdamayContent() {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <div className="infoContainer" style={{ border: '1.5px solid #CDCDCD' }}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Deceased Information</b> <hr />
+                                                                                        <b className="form-label" style={{ fontSize: '20px' }}>Deceased Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -648,7 +648,7 @@ function ViewAlayPagdamayContent() {
                                                                                         <label className="form-label">Province:<br /> <b>{deceasedProvince}</b></label>
                                                                                     </div>
                                                                                 </div>
-                                                                                 
+
                                                                                 <div className="col-sm-12">
                                                                                     <br />
                                                                                 </div>
@@ -662,12 +662,12 @@ function ViewAlayPagdamayContent() {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <div className="infoContainer" style={{ border: '1.5px solid #CDCDCD' }}>
                                                                             <div className="row">
 
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Claimant Information</b> <hr />
+                                                                                        <b className="form-label" style={{ fontSize: '20px' }}>Claimant Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -737,9 +737,9 @@ function ViewAlayPagdamayContent() {
                                                                     <div className="col-sm-12">
 
 
-                                                                        <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <div className="columnContainer" style={{ border: '1.5px solid #CDCDCD' }}>
 
-                                                                            <b className="form-label" style={{fontSize: '20px'}}>Burial Requirements:</b>
+                                                                            <b className="form-label" style={{ fontSize: '20px' }}>Burial Requirements:</b>
 
                                                                             <div className="col-sm-12">
                                                                                 <br />
@@ -779,8 +779,8 @@ function ViewAlayPagdamayContent() {
 
                                                                         </div>
 
-                                                                        <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                                                            <b className="form-label"style={{fontSize: '20px'}} >Death Certificate</b>
+                                                                        <div className="columnContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                                            <b className="form-label" style={{ fontSize: '20px' }} >Death Certificate</b>
 
                                                                             <div className="col-12 d-flex justify-content-end">
                                                                                 {deathCertificatePreview && (
@@ -821,7 +821,7 @@ function ViewAlayPagdamayContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body"style={{border: '1.5px solid #CDCDCD'}}>
+                                                <div className="card-body" style={{ border: '1.5px solid #CDCDCD' }}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -829,8 +829,8 @@ function ViewAlayPagdamayContent() {
                                                                 <br />
                                                                 <div className="row">
 
-                                                                    <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                                                        <b className="form-label"style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                    <div className="columnContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                                        <b className="form-label" style={{ fontSize: '20px' }}>PSWDO Interview</b>
                                                                         <br /><hr />
 
                                                                         <div className="row">
@@ -1054,7 +1054,7 @@ function ViewAlayPagdamayContent() {
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                
+
                                                                                 <hr />
                                                                                 <p htmlFor="firstName" className="formtitle">Type of Assistance</p>
                                                                             </div>
@@ -1079,7 +1079,7 @@ function ViewAlayPagdamayContent() {
 
 
                                                                             <div className="col-12">
-                                                                                
+
                                                                                 <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1091,13 +1091,13 @@ function ViewAlayPagdamayContent() {
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                
+
                                                                                 <hr />
                                                                                 <p htmlFor="firstName" className="formtitle">Family Composition</p>
                                                                             </div>
 
                                                                             <div className="col-12">
-                                                                                
+
                                                                                 <label className="form-label">Number of Family Members:</label>
                                                                                 <input
                                                                                     type="number"
@@ -1127,12 +1127,12 @@ function ViewAlayPagdamayContent() {
                                                                             {familyComposition.map((member, index) => (
                                                                                 <Fragment key={member.id || index}>
                                                                                     <div className="col-12">
-                                                                                        <br /> <hr/>
-                                                                                        <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
+                                                                                        <br /> <hr />
+                                                                                        <label className="form-label" style={{ fontWeight: 'bold' }}>Family Member {index + 1}</label>
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                            <br/>   
+                                                                                        <br />
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1163,7 +1163,7 @@ function ViewAlayPagdamayContent() {
                                                                                         />
                                                                                     </div> */}
 
-                                                                                    
+
                                                                                     <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Relationship:</label>
@@ -1225,7 +1225,7 @@ function ViewAlayPagdamayContent() {
                                                                                         />
                                                                                     </div> */}
 
-                                                                                            
+
                                                                                     <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
@@ -1244,7 +1244,7 @@ function ViewAlayPagdamayContent() {
                                                                                             <option value="Widowed">Widowed</option>
                                                                                             <option value="Separated">Separated</option>
                                                                                             <option value="Common-Law Married">Common-Law Married</option>
-                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option>
                                                                                         </select>
                                                                                     </div>
 
@@ -1287,12 +1287,12 @@ function ViewAlayPagdamayContent() {
                                                                                 </Fragment>
                                                                             ))}
 
- 
+
 
                                                                         </div>
 
 
-                                                                        
+
 
                                                                         {PSWDOInterviewStatus === true &&
                                                                             <>
@@ -1343,7 +1343,7 @@ function ViewAlayPagdamayContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal" style= {{color: '#08533F', fontWeight: 'bold', fontSize: '30px'}}>
+                            <h5 className="modal-title" id="viewReportModal" style={{ color: '#08533F', fontWeight: 'bold', fontSize: '30px' }}>
                                 {formPage}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1354,7 +1354,7 @@ function ViewAlayPagdamayContent() {
                             <div className="generateContainer">
                                 <br />
 
-                                 
+
                                 {formPage == "Petty Cash Voucher" &&
                                     <>
 
@@ -1469,9 +1469,9 @@ function ViewAlayPagdamayContent() {
                                 }
 
                                 {formPage == "PSWDO Interview" &&
-                                    <> 
+                                    <>
 
-                                        {/* <h1>afasfsaf</h1> */} <br/>
+                                        {/* <h1>afasfsaf</h1> */} <br />
                                         <PDFViewer style={{ width: "100%", height: "800px" }}>
                                             <PSWDOLayout
                                                 claimantFirstname={contactPersonFirstname}
@@ -1490,11 +1490,11 @@ function ViewAlayPagdamayContent() {
                                                 familyComposition={familyComposition}
                                                 claimantRelationship={contactPersonRelationship}
                                                 dateOfDeath={deceasedDeathDate}
-                                                typeOfAssistance={typeOfAssistance}
+                                                typeOfAssistance={contactPersonTransactionName}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
-                                                assistanceReason={deceasedCauseDeath} 
-                                                beneFirstname={deceasedFirstName} 
+                                                assistanceReason={deceasedCauseDeath}
+                                                beneFirstname={deceasedFirstName}
                                                 beneMiddleName={deceasedMiddleName}
                                                 beneLastName={deceasedLastName}
                                                 beneExtName={deceasedExtName}

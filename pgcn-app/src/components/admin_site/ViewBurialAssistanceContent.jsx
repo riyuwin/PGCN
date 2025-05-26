@@ -11,7 +11,7 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { useParams } from "react-router-dom";
 import { PSWDOLayout } from "./reports/PSWDOLayout";
-import * as port from "../ports/DatabaseRouting" 
+import * as port from "../ports/DatabaseRouting"
 import { RetrievePSWDOInterview } from "../ports/DatabaseRouting";
 import { RetrieveBurialAssistanceId } from "../ports/DatabaseRouting";
 import { PettyCashLayout } from "./reports/PettyCashLayout";
@@ -182,7 +182,7 @@ function ViewBurialAssistanceContent() {
 
     const handleUpdatePSWDOInterview = async (e) => {
         e.preventDefault();
-        
+
         const transactionName = "Burial Assistance";
 
         try {
@@ -245,7 +245,7 @@ function ViewBurialAssistanceContent() {
         try {
             const response = await fetch(RetrievePSWDOInterview(id, transactionName));
             const data = await response.json();
- 
+
             PopulatePSWDOInterview(data);
 
         } catch (error) {
@@ -274,8 +274,8 @@ function ViewBurialAssistanceContent() {
     };
 
     const PopulatePSWDOInterview = (PSWDOInterview) => {
- 
-        
+
+
         if (!PSWDOInterview?.error) {
             const interview = PSWDOInterview.interview || {};
 
@@ -309,13 +309,13 @@ function ViewBurialAssistanceContent() {
 
                 setFamilyCount(filledData.length);
                 setFamilyComposition(filledData);
- 
+
             }
         }
- 
+
     };
 
-    const PopulateForms = (burial) => {  
+    const PopulateForms = (burial) => {
         setBurialId(burial['burial_assistance_id']);
         /* setDeceasedFirstName(burial['deceased_fname']);
         setDeceasedMiddleName(burial['deceased_mname']);
@@ -480,7 +480,7 @@ function ViewBurialAssistanceContent() {
                     <h1 style={{ fontWeight: 'bold', color: '#08533F' }}>Burial Assistance Details</h1>
                     <nav>
                         <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Assistance Registry Management</a></li>
+                            <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Assistance Registry Management</a></li>
                             <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Burial Transactions</a></li>
                             <li className="breadcrumb-item"><a style={{ fontWeight: 'lighter', color: '#08533F' }}>Burial Assistance</a></li>
                             <li className="breadcrumb-item active" style={{ fontWeight: 'Bold', color: '#08533F' }}>Burial Assistance Details</li>
@@ -499,7 +499,7 @@ function ViewBurialAssistanceContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body"style={{backgroundColor: '#F2FFEE'}}>
+                                                <div className="card-body" style={{ backgroundColor: '#F2FFEE' }}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -509,7 +509,7 @@ function ViewBurialAssistanceContent() {
                                                                 <div className="row">
 
                                                                     <div /* className="columnContainer" */>
-                                                                        <h5 style={{fontWeight: 'bold', color: '#08533F', fontSize: '25px'}}>Print Forms</h5><br />
+                                                                        <h5 style={{ fontWeight: 'bold', color: '#08533F', fontSize: '25px' }}>Print Forms</h5><br />
 
                                                                         <div className="row">
                                                                             {/* <div className="col-4">
@@ -571,7 +571,7 @@ function ViewBurialAssistanceContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
+                                                <div className="card-body" style={{ border: '1.5px solid #CDCDCD' }}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -583,11 +583,11 @@ function ViewBurialAssistanceContent() {
                                                                     <div /* className="columnContainer" */>
                                                                         {/* <h5>Burial Assistance Information</h5><br /> */}
 
-                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <div className="infoContainer" style={{ border: '1.5px solid #CDCDCD' }}>
                                                                             <div className="row">
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Burial Assistance Information</b> <hr />
+                                                                                        <b className="form-label" style={{ fontSize: '20px' }}>Burial Assistance Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-sm-4">
@@ -618,12 +618,12 @@ function ViewBurialAssistanceContent() {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="infoContainer" style={{border: '1.5px solid #CDCDCD'}}>
+                                                                        <div className="infoContainer" style={{ border: '1.5px solid #CDCDCD' }}>
                                                                             <div className="row">
 
                                                                                 <div className="col-sm-12">
                                                                                     <div className="input-group">
-                                                                                        <b className="form-label" style={{fontSize: '20px'}}>Claimant Information</b> <hr />
+                                                                                        <b className="form-label" style={{ fontSize: '20px' }}>Claimant Information</b> <hr />
                                                                                     </div>
                                                                                 </div>
 
@@ -740,8 +740,8 @@ function ViewBurialAssistanceContent() {
                                                             <div className="col-sm-12">
                                                                 <div className="row">
                                                                     <div className="col-sm-12">
-                                                                        <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                                                            <b className="form-label" style={{fontSize: '20px'}}>Burial Requirements:</b>
+                                                                        <div className="columnContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                                            <b className="form-label" style={{ fontSize: '20px' }}>Burial Requirements:</b>
                                                                             <div className="col-sm-12">
                                                                                 <br />
                                                                                 <ul className="list-group">
@@ -780,8 +780,8 @@ function ViewBurialAssistanceContent() {
 
                                                                         </div>
 
-                                                                        <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}} >
-                                                                            <b className="form-label" style={{fontSize: '20px'}}>Death Certificate</b>
+                                                                        <div className="columnContainer" style={{ border: '1.5px solid #CDCDCD' }} >
+                                                                            <b className="form-label" style={{ fontSize: '20px' }}>Death Certificate</b>
 
                                                                             <div className="col-12 d-flex justify-content-end">
                                                                                 {deathCertificatePreview && (
@@ -822,7 +822,7 @@ function ViewBurialAssistanceContent() {
                                     <div className="row">
                                         <div className="col-xxl-12 col-md-12">
                                             <div className="card info-card sales-card">
-                                                <div className="card-body" style={{border: '1.5px solid #CDCDCD'}}>
+                                                <div className="card-body" style={{ border: '1.5px solid #CDCDCD' }}>
 
                                                     <div className="row mb-3">
                                                         <div className="row">
@@ -830,8 +830,8 @@ function ViewBurialAssistanceContent() {
                                                                 <br />
                                                                 <div className="row">
 
-                                                                <div className="columnContainer" style={{border: '1.5px solid #CDCDCD'}}>
-                                                                    <b className="form-label" style={{fontSize: '20px'}}>PSWDO Interview</b>
+                                                                    <div className="columnContainer" style={{ border: '1.5px solid #CDCDCD' }}>
+                                                                        <b className="form-label" style={{ fontSize: '20px' }}>PSWDO Interview</b>
                                                                         <hr />
 
                                                                         <div className="row">
@@ -1080,7 +1080,7 @@ function ViewBurialAssistanceContent() {
 
 
                                                                             <div className="col-12">
-                                                                                
+
                                                                                 <label htmlFor="firstName" className="form-label">Are you a 4Ps Member?:</label>
                                                                                 <select
                                                                                     className="form-control"
@@ -1093,7 +1093,7 @@ function ViewBurialAssistanceContent() {
 
                                                                             <div className="col-12">
                                                                                 <br />
-                                                                                <hr />  
+                                                                                <hr />
                                                                                 <p htmlFor="firstName" className="formtitle">Family Composition</p>
                                                                             </div>
 
@@ -1128,12 +1128,12 @@ function ViewBurialAssistanceContent() {
                                                                             {familyComposition.map((member, index) => (
                                                                                 <Fragment key={member.id || index}>
                                                                                     <div className="col-12">
-                                                                                        <br /> <hr/>
-                                                                                        <label className="form-label" style={{fontWeight: 'bold'}}>Family Member {index + 1}</label>
+                                                                                        <br /> <hr />
+                                                                                        <label className="form-label" style={{ fontWeight: 'bold' }}>Family Member {index + 1}</label>
                                                                                     </div>
 
                                                                                     <div className="col-4">
-                                                                                            <br/>   
+                                                                                        <br />
                                                                                         <label className="form-label">Family Member:</label>
                                                                                         <input
                                                                                             type="text"
@@ -1164,7 +1164,7 @@ function ViewBurialAssistanceContent() {
                                                                                         />
                                                                                     </div> */}
 
-                                                                                    
+
                                                                                     <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Relationship:</label>
@@ -1226,7 +1226,7 @@ function ViewBurialAssistanceContent() {
                                                                                         />
                                                                                     </div> */}
 
-                                                                                            
+
                                                                                     <div className="col-4">
                                                                                         <br />
                                                                                         <label className="form-label">Civil Status:</label>
@@ -1245,7 +1245,7 @@ function ViewBurialAssistanceContent() {
                                                                                             <option value="Widowed">Widowed</option>
                                                                                             <option value="Separated">Separated</option>
                                                                                             <option value="Common-Law Married">Common-Law Married</option>
-                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option> 
+                                                                                            <option value="Lived-in-Partener">Lived-in-Partener</option>
                                                                                         </select>
                                                                                     </div>
 
@@ -1343,7 +1343,7 @@ function ViewBurialAssistanceContent() {
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="viewReportModal" style= {{color: '#08533F', fontWeight: 'bold', fontSize: '30px'}}>
+                            <h5 className="modal-title" id="viewReportModal" style={{ color: '#08533F', fontWeight: 'bold', fontSize: '30px' }}>
                                 {formPage}
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1550,15 +1550,15 @@ function ViewBurialAssistanceContent() {
                                                 familyComposition={familyComposition}
                                                 claimantRelationship={contactPersonRelationship}
                                                 dateOfDeath={clientDateDeath}
-                                                typeOfAssistance={typeOfAssistance}
+                                                typeOfAssistance={contactPersonTransactionName}
                                                 member4Ps={member4Ps}
                                                 contactPersonPettyAmount={contactPersonPettyAmount}
                                                 assistanceReason={clientCauseDeath}
-                                                beneFirstname={deceasedFirstName} 
+                                                beneFirstname={deceasedFirstName}
                                                 beneMiddleName={deceasedMiddleName}
                                                 beneLastName={deceasedLastName}
                                                 beneExtName={deceasedExtName}
-                                                location={null} 
+                                                location={null}
                                             />
                                         </PDFViewer>
 
