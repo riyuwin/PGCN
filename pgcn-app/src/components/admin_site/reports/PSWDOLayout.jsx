@@ -1231,9 +1231,9 @@ export const PSWDOLayout = ({
                         </>
                     }
 
-                    <View style={[styles.caseDateContent, styles.textContainer]}>
+                    {/* <View style={[styles.caseDateContent, styles.textContainer]}>
                         <Text style={{ fontSize: currentDataFontSize }}>{currentDate}</Text>
-                    </View>
+                    </View> */}
 
                     <View style={[styles.amountContent, styles.textContainer]}>
                         {contactPersonPettyAmount &&
