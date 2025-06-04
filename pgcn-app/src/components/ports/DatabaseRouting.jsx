@@ -1,13 +1,13 @@
 // AUTH
-export const PortLogin = 'http://192.168.1.4:5000/login';
-export const PortSession = 'http://192.168.1.4:5000/session';
-export const PortSignup = 'http://192.168.1.4:5000/create_account';
-export const PortLogout = 'http://192.168.1.4:5000/logout';
-export const PortAccountSession = 'http://192.168.1.4:5000/accounts_id';
+export const PortLogin = 'http://192.168.1.49:5000/login';
+export const PortSession = 'http://192.168.1.49:5000/session';
+export const PortSignup = 'http://192.168.1.49:5000/create_account';
+export const PortLogout = 'http://192.168.1.49:5000/logout';
+export const PortAccountSession = 'http://192.168.1.49:5000/accounts_id';
  
 export async function RetrievePortAccountSession(accountId) {
     try {
-        const response = await fetch(`http://192.168.1.4:5000/accounts_id?accountId=${accountId}`); // Sending accountId as query parameter
+        const response = await fetch(`http://192.168.1.49:5000/accounts_id?accountId=${accountId}`); // Sending accountId as query parameter
         const data = await response.json();
         return data;
     } catch (error) {
@@ -17,62 +17,62 @@ export async function RetrievePortAccountSession(accountId) {
 }
 
 // Fetch Total Records
-export const PortRetrieveTotalHospitalBill = "http://192.168.1.4:5000/retrieve_total_hospital_bill";
-export const PortRetrieveTotalAlayPagdamay = "http://192.168.1.4:5000/retrieve_total_alay_pagdamay";
-export const PortRetrieveTotalBurialAssistance = "http://192.168.1.4:5000/retrieve_total_burial_assistance";
-export const PortRetrieveHospitalBillPettyCash = 'http://192.168.1.4:5000/retrieve_hospital_bill_petty_cash';
-export const PortRetrieveAlayPagdamayPettyCash = 'http://192.168.1.4:5000/retrieve_alay_pagdamay_petty_cash';
-export const PortRetrieveBurialAssistancePettyCash = 'http://192.168.1.4:5000/retrieve_burial_assistance_petty_cash';
-export const PortRetrieveHospitalBillStatus = 'http://192.168.1.4:5000/retrieve_hospital_bill_status';  
-export const PortRetrieveHospitalBillHospitalName = 'http://192.168.1.4:5000/retrieve_total_hospital_bill_hospital_name';
-export const PortRetrieveAlayPagdamayStatus = 'http://192.168.1.4:5000/retrieve_alay_pagdamay_status';    
-export const PortRetrieveAlayPagdamayFuneralName = 'http://192.168.1.4:5000/retrieve_total_alay_pagdamay_funeral_name'; 
-export const PortRetrieveBurialAssistanceStatus = 'http://192.168.1.4:5000/retrieve_burial_assistance_status';       
+export const PortRetrieveTotalHospitalBill = "http://192.168.1.49:5000/retrieve_total_hospital_bill";
+export const PortRetrieveTotalAlayPagdamay = "http://192.168.1.49:5000/retrieve_total_alay_pagdamay";
+export const PortRetrieveTotalBurialAssistance = "http://192.168.1.49:5000/retrieve_total_burial_assistance";
+export const PortRetrieveHospitalBillPettyCash = 'http://192.168.1.49:5000/retrieve_hospital_bill_petty_cash';
+export const PortRetrieveAlayPagdamayPettyCash = 'http://192.168.1.49:5000/retrieve_alay_pagdamay_petty_cash';
+export const PortRetrieveBurialAssistancePettyCash = 'http://192.168.1.49:5000/retrieve_burial_assistance_petty_cash';
+export const PortRetrieveHospitalBillStatus = 'http://192.168.1.49:5000/retrieve_hospital_bill_status';  
+export const PortRetrieveHospitalBillHospitalName = 'http://192.168.1.49:5000/retrieve_total_hospital_bill_hospital_name';
+export const PortRetrieveAlayPagdamayStatus = 'http://192.168.1.49:5000/retrieve_alay_pagdamay_status';    
+export const PortRetrieveAlayPagdamayFuneralName = 'http://192.168.1.49:5000/retrieve_total_alay_pagdamay_funeral_name'; 
+export const PortRetrieveBurialAssistanceStatus = 'http://192.168.1.49:5000/retrieve_burial_assistance_status';       
 
 
-export const PortRetrieveTotalAlayPagdamayBarangay = 'http://192.168.1.4:5000/retrieve_total_alay_pagdamay_barangay'; 
-export const PortRetrieveTotalHospitalBillBarangay = 'http://192.168.1.4:5000/retrieve_total_hospital_bill_barangay';
-export const PortRetrieveTotalBurialAssistanceBarangay = 'http://192.168.1.4:5000/retrieve_total_burial_assistance_barangay';
+export const PortRetrieveTotalAlayPagdamayBarangay = 'http://192.168.1.49:5000/retrieve_total_alay_pagdamay_barangay'; 
+export const PortRetrieveTotalHospitalBillBarangay = 'http://192.168.1.49:5000/retrieve_total_hospital_bill_barangay';
+export const PortRetrieveTotalBurialAssistanceBarangay = 'http://192.168.1.49:5000/retrieve_total_burial_assistance_barangay';
 
 // apiEndpoints.js
 export function RetrieveAllAssistance(queryParam, reportParam) {
-    return `http://192.168.1.4:5000/retrieve_all_assistance?check_barangay_indigency=${encodeURIComponent(queryParam)}&reportClassification=${encodeURIComponent(reportParam)}`;
+    return `http://192.168.1.49:5000/retrieve_all_assistance?check_barangay_indigency=${encodeURIComponent(queryParam)}&reportClassification=${encodeURIComponent(reportParam)}`;
 }
   
 // Hospital Bill 
-export const PortInsertHospitalBill = 'http://192.168.1.4:5000/insert_hospital_bill';
-export const PortDeleteHospitalBill = 'http://192.168.1.4:5000/delete_hospital_bill';
-export const PortUpdateHospitalBill = 'http://192.168.1.4:5000/update_hospital_bill';
-export const PortRetrieveHospitalBill = 'http://192.168.1.4:5000/retrieve_hospital_bill';
+export const PortInsertHospitalBill = 'http://192.168.1.49:5000/insert_hospital_bill';
+export const PortDeleteHospitalBill = 'http://192.168.1.49:5000/delete_hospital_bill';
+export const PortUpdateHospitalBill = 'http://192.168.1.49:5000/update_hospital_bill';
+export const PortRetrieveHospitalBill = 'http://192.168.1.49:5000/retrieve_hospital_bill';
 
 // AlayPagdamay
-export const PortInsertAlayPagdamay = 'http://192.168.1.4:5000/insert_alay_pagdamay';
-export const PortDeleteAlayPagdamay = 'http://192.168.1.4:5000/delete_alay_pagdamay';
-export const PortUpdateAlayPagdamay = "http://192.168.1.4:5000/update_alay_pagdamay";
-export const PortRetrieveAlayPagdamay = "http://192.168.1.4:5000/retrieve_alay_pagdamay";
+export const PortInsertAlayPagdamay = 'http://192.168.1.49:5000/insert_alay_pagdamay';
+export const PortDeleteAlayPagdamay = 'http://192.168.1.49:5000/delete_alay_pagdamay';
+export const PortUpdateAlayPagdamay = "http://192.168.1.49:5000/update_alay_pagdamay";
+export const PortRetrieveAlayPagdamay = "http://192.168.1.49:5000/retrieve_alay_pagdamay";
 
 // Burial Assistance
-export const PortInsertBurialAssistance = 'http://192.168.1.4:5000/insert_burial_assistance';
-export const PortDeleteBurialAssistance = 'http://192.168.1.4:5000/delete_burial_assistance';
-export const PortUpdateBurialAssistance = "http://192.168.1.4:5000/update_burial_assistance";
-export const PortRetrieveBurialAssistance = "http://192.168.1.4:5000/retrieve_burial_assistance";
+export const PortInsertBurialAssistance = 'http://192.168.1.49:5000/insert_burial_assistance';
+export const PortDeleteBurialAssistance = 'http://192.168.1.49:5000/delete_burial_assistance';
+export const PortUpdateBurialAssistance = "http://192.168.1.49:5000/update_burial_assistance";
+export const PortRetrieveBurialAssistance = "http://192.168.1.49:5000/retrieve_burial_assistance";
 
 // PSWDO Interview
-export const PortInsertPSWDOInterview = "http://192.168.1.4:5000/insert_pswdo_interview";
-export const PortUpdatePSDOInterview = "http://192.168.1.4:5000/update_pswdo_interview"; 
+export const PortInsertPSWDOInterview = "http://192.168.1.49:5000/insert_pswdo_interview";
+export const PortUpdatePSDOInterview = "http://192.168.1.49:5000/update_pswdo_interview"; 
  
 export function RetrievePSWDOInterview(id, transactionName) {
-    return `http://192.168.1.4:5000/retrieve_pswdo_interview_id?Id=${encodeURIComponent(id)}&transactionName=${encodeURIComponent(transactionName)}` 
+    return `http://192.168.1.49:5000/retrieve_pswdo_interview_id?Id=${encodeURIComponent(id)}&transactionName=${encodeURIComponent(transactionName)}` 
 }
 
 export function RetrieveAlayPagdamayId(burialId) {
-    return `http://192.168.1.4:5000/retrieve_alay_pagdamay_id?burialId=${burialId}` 
+    return `http://192.168.1.49:5000/retrieve_alay_pagdamay_id?burialId=${burialId}` 
 }
 
 export function RetrieveBurialAssistanceId(burialId) {
-    return `http://192.168.1.4:5000/retrieve_burial_assistance_id?burialId=${burialId}` 
+    return `http://192.168.1.49:5000/retrieve_burial_assistance_id?burialId=${burialId}` 
 }
 
 export function RetrieveHospitalBillId(hospitalId) {
-    return `http://192.168.1.4:5000/retrieve_hospital_bill_id?hospitalId=${hospitalId}` 
+    return `http://192.168.1.49:5000/retrieve_hospital_bill_id?hospitalId=${hospitalId}` 
 }
