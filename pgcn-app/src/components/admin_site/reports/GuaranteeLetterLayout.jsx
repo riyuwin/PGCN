@@ -14,6 +14,7 @@ Font.register({
 import camNorteLogo from '/assets/img/cam_norte_logo.png'; // Ensure correct path
 import dongTulongLogo from '/assets/img/dong_tulong_logo.jpg'; // Ensure correct path
 import sampleSignature from '/assets/img/sample_signature.png'; // Ensure correct path
+import esign from '/assets/img/esign.png'; // Ensure correct path
 
 // Create styles
 const styles = StyleSheet.create({
@@ -165,7 +166,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                     Governor
                 </Text>
 
-                <Image style={styles.signature} src={sampleSignature} />
+                <Image style={styles.signature} src={esign} />
             </View>
 
 
@@ -218,7 +219,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                     Governor
                 </Text>
 
-                <Image style={styles.signature} src={sampleSignature} />
+                <Image style={styles.signature} src={esign} />
             </View>
 
         </Page>
