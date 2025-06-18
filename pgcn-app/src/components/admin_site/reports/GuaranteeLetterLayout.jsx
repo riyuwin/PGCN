@@ -13,8 +13,9 @@ Font.register({
 // Ensure images are accessible via absolute URLs or imported
 import camNorteLogo from '/assets/img/cam_norte_logo.png'; // Ensure correct path
 import dongTulongLogo from '/assets/img/dong_tulong_logo.jpg'; // Ensure correct path
-import sampleSignature from '/assets/img/sample_signature.png'; // Ensure correct path
-import esign from '/assets/img/esign.png'; // Ensure correct path
+// import sampleSignature from '/assets/img/sample_signature.png'; // Ensure correct path
+// import esign from '/assets/img/esign.png'; // Ensure correct path
+import gov_esign from '/assets/img/gov_esign.png'; // Ensure correct path
 
 // Create styles
 const styles = StyleSheet.create({
@@ -104,10 +105,10 @@ const styles = StyleSheet.create({
         marginRight:  40, 
     },
     signature: {
-        width: 150,
-        height: 80,
+        width: 250,
+        height: 130,
         alignSelf: 'center',
-        marginTop: -80,
+        marginTop: -115,
         marginLeft: 300,
     },
     boldLetter: {
@@ -166,7 +167,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                     Governor
                 </Text>
 
-                <Image style={styles.signature} src={esign} />
+                <Image style={styles.signature} src={gov_esign} />
             </View>
 
 
@@ -219,7 +220,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                     Governor
                 </Text>
 
-                <Image style={styles.signature} src={esign} />
+                <Image style={styles.signature} src={gov_esign} />
             </View>
 
         </Page>
