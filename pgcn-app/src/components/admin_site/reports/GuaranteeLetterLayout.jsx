@@ -123,7 +123,7 @@ const currentDate = new Date().toLocaleDateString("en-US", {
     day: "numeric",
   });
 
-export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, patientLastName, patientExtName, claimantFirstName, claimantMiddleName, claimantLastName, claimantExtName, patientPurok, patientBarangay, patientMunicipality, patientProvince, claimantAmount}) => (
+export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, patientLastName, patientExtName, claimantFirstName, claimantMiddleName, claimantLastName, claimantExtName, patientPurok, patientBarangay, patientMunicipality, patientProvince, patientHospital, claimantAmount}) => (
     <Document>
         <Page size="A4" style={styles.page}>
             
@@ -150,8 +150,8 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                 <Text style={[ styles.boldLetter, styles.header2]}>GUARANTEE LETTER</Text>
                 <Text style={[ styles.boldLetter, styles.dateText]}>{currentDate}</Text>
                 <Text style={styles.contentText}>
-                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
-                    MR/MS. <Text style={styles.boldLetter}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from <Text style={ styles.boldLetter }>Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} </Text> for hospital bill assistance stated below:
+                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientHospital}</Text>, the herein attached approved request of 
+                    MR/MS. <Text style={styles.boldLetter}>{claimantFirstName} {claimantMiddleName} {claimantLastName} {claimantExtName}</Text> from <Text style={ styles.boldLetter }>Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} </Text> for hospital bill assistance stated below:
                 </Text>
                 <Text style={styles.amountText}>
                     AMOUNT OF THE HOSPITAL BILL ASSISTANCE
@@ -203,7 +203,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                 <Text style={[ styles.boldLetter, styles.header2]}>GUARANTEE LETTER</Text>
                 <Text style={[ styles.boldLetter, styles.dateText]}>{currentDate}</Text>
                 <Text style={styles.contentText}>
-                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientFirstName} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
+                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientHospital} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
                     MR/MS. <Text style={styles.boldLetter}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from <Text style={ styles.boldLetter }>Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} </Text> for hospital bill assistance stated below:
                 </Text>
                 <Text style={styles.amountText}>

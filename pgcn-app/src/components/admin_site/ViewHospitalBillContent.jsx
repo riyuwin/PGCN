@@ -186,6 +186,7 @@ function ViewHospitalBillContent() {
                 patientBarangay={clientBarangay}
                 patientMunicipality={clientMunicipality}
                 patientProvince={clientProvince}
+                patientHospital={patientHospital}
                 claimantAmount={contactPersonAmount}
             />
         ).toBlob();
@@ -357,6 +358,7 @@ function ViewHospitalBillContent() {
                     contactPersonGender,
                     contactPersonMobileNum,
                     contactPersonPettyAmount,
+                    patientHospital,
                     patientProvince,
                     patientMunicipality,
                     patientBarangay,

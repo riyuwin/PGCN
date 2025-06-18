@@ -223,7 +223,7 @@ function AlayPagdamayContent() {
             PopulatePSWDOInterview(data);
 
         } catch (error) {
-            console.error("Error fetching hospital bill assistance:", error); // Fix the log message
+            console.error("Error fetching alay pagdamay assistance:", error); // Fix the log message
         }
     };
 
@@ -447,7 +447,7 @@ function AlayPagdamayContent() {
             const data = await response.json();
             setBurialAssitance(data);
         } catch (error) {
-            console.error("Error fetching hospital bills:", error);
+            console.error("Error fetching alay pagdamay records:", error);
         }
     };
 
@@ -919,7 +919,7 @@ function AlayPagdamayContent() {
                                                 className={`btn w-100 ${formPage === "Checklist" ? "selebtn" : "selesuccbtn"}`}
                                                 onClick={() => handleFormPageUpdate("Checklist")}
                                             >
-                                                <i class="bi bi-card-checklist"></i> Hospital Bill Requirements
+                                                <i class="bi bi-card-checklist"></i> Burial Assistance Requirements
                                             </button>
                                         </div>
 
