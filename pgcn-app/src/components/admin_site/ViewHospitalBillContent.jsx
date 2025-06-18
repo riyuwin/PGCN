@@ -1318,6 +1318,7 @@ function ViewHospitalBillContent() {
                                                 patientBarangay={clientBarangay}
                                                 patientMunicipality={clientMunicipality}
                                                 patientProvince={clientProvince}
+                                                patientHospital={patientHospital}
                                                 claimantAmount={contactPersonAmount}
                                             />
                                         </PDFViewer>

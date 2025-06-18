@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     },
     signature: {
         width: 250,
-        height: 130,
+        height: 110,
         alignSelf: 'center',
         marginTop: -115,
         marginLeft: 300,
@@ -203,7 +203,7 @@ export const GuaranteeLetterLayout = ({patientFirstName, patientMiddleName, pati
                 <Text style={[ styles.boldLetter, styles.header2]}>GUARANTEE LETTER</Text>
                 <Text style={[ styles.boldLetter, styles.dateText]}>{currentDate}</Text>
                 <Text style={styles.contentText}>
-                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientHospital} {patientMiddleName} {patientLastName}</Text>, the herein attached approved request of 
+                    Respectfully referred to <Text style={[styles.boldText, styles.boldLetter]}>{patientHospital}</Text>, the herein attached approved request of 
                     MR/MS. <Text style={styles.boldLetter}>{claimantFirstName} {claimantMiddleName} {claimantLastName}</Text> from <Text style={ styles.boldLetter }>Purok - {patientPurok}, Barangay {patientBarangay}, {patientMunicipality}, {patientProvince} </Text> for hospital bill assistance stated below:
                 </Text>
                 <Text style={styles.amountText}>
